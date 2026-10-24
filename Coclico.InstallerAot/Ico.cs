@@ -2,10 +2,6 @@ using Avalonia.Media;
 
 namespace Coclico.Installer;
 
-/// <summary>
-/// Palette EXACTE de l'installeur WPF original (App.xaml de Coclico.Installer),
-/// exposée en statique pour le code-behind (compatible NativeAOT, zéro réflexion).
-/// </summary>
 public static class AppBrushes
 {
     public static readonly IBrush BgBase = new SolidColorBrush(Color.FromRgb(0x07, 0x08, 0x0B));
@@ -25,11 +21,6 @@ public static class AppBrushes
     public static readonly IBrush Transparent = Brushes.Transparent;
 }
 
-/// <summary>
-/// Remplace les ui:SymbolIcon de WPF-UI (inexistants en Avalonia) :
-/// mêmes pictogrammes, tracés vectoriels simples (24x24).
-/// Utilisables en XAML via {x:Static ico:Ico.Xxx} et en code.
-/// </summary>
 public static class Ico
 {
     public static readonly Geometry CheckCircle = Geometry.Parse(

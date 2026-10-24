@@ -11,12 +11,6 @@ using Microsoft.Win32;
 
 namespace Coclico.Installer.Views;
 
-/// <summary>
-/// PORTAGE FIDÈLE de Views/UninstallWindow.xaml.cs (WPF) vers Avalonia 11.
-/// Logique identique : lecture du chemin d'installation (registre puis
-/// heuristiques), double case à cocher, désinstallation complète avec
-/// progression, annulation, écran de remerciement.
-/// </summary>
 public partial class UninstallWindow : Window
 {
     private readonly string _installPath;
@@ -51,8 +45,6 @@ public partial class UninstallWindow : Window
             : _installPath;
     }
 
-    // ============ BARRE DE TITRE CUSTOM ============
-
     private void TitleBar_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
         if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
@@ -60,7 +52,6 @@ public partial class UninstallWindow : Window
             return;
         }
 
-        // Ne pas déclencher le drag depuis le bouton fermer
         if (e.Source is Avalonia.Visual src &&
             (src is Button || src.GetVisualAncestors().Any(v => v is Button)))
         {
@@ -74,8 +65,6 @@ public partial class UninstallWindow : Window
     {
         Close();
     }
-
-    // ============ LOGIQUE (identique original) ============
 
     private string GetInstallationPath()
     {
@@ -144,7 +133,6 @@ public partial class UninstallWindow : Window
         if (ChkConfirmCompleteRemoval.IsChecked != true)
         {
             ChkConfirmCompleteRemoval.Focus();
-            // MessageBox WPF -> MessageDialog Avalonia
             await MessageDialog.ShowWarningAsync(this,
                 InstallerLocalization.Get("UnConfirmTitle"),
                 InstallerLocalization.Get("UnConfirmMsg"));

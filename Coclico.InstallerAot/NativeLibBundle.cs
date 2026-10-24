@@ -5,8 +5,6 @@ namespace Coclico.Installer;
 
 internal static class NativeLibBundle
 {
-    /// <summary>Extrait les DLL natives embarquées vers %TEMP% et les pré-charge
-    /// pour que l'exe fonctionne seul, sans les fichiers .dll à côté.</summary>
     public static void ExtractAndLoad()
     {
         string dir = Path.Combine(Path.GetTempPath(), "CoclicoInstaller");

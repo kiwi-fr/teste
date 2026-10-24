@@ -296,7 +296,6 @@ private static readonly (string Tag, Func<UIElement> Factory)[] ModuleRegistry =
 [
     ("Home", static () => ServiceContainer.GetOptional<DashboardView>() ?? new DashboardView()),
     ("Programs", static () => new ProgramsView()),
-    // ... 11 entrées au total
 ];
 ```
 

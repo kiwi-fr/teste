@@ -5,12 +5,6 @@ namespace Coclico.Installer.Services;
 
 public static class ShortcutHelper
 {
-    /// <summary>
-    /// Création de raccourci .lnk 100 % compatible NativeAOT.
-    /// La version WPF originale utilisait COM Interop dynamique (WScript.Shell),
-    /// incompatible avec PublishAot + BuiltInComInteropSupport=false.
-    /// Ici on délègue à powershell.exe (processus externe) qui, lui, peut utiliser COM.
-    /// </summary>
     public static void CreateShortcut(string targetExePath, string shortcutPath, string description, string? iconPath = null)
     {
         try

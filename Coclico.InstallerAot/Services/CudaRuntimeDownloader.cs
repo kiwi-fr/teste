@@ -1,10 +1,14 @@
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Win32.SafeHandles;
 
 namespace Coclico.Installer.Services;
 
@@ -26,6 +30,26 @@ public static class CudaRuntimeDownloader
 
     private static readonly byte[] DownloadBuffer = new byte[1_048_576];
     private static readonly byte[] CopyBuffer = new byte[81_920];
+
+    private const int MaxSegments = 8;                       
+    private const long SegmentThreshold = 8L * 1024 * 1024;  
+    private const int SegmentMaxRetries = 3;                  
+
+    private static readonly HttpClient Http = CreateHttpClient();
+
+    private static HttpClient CreateHttpClient()
+    {
+        var handler = new SocketsHttpHandler
+        {
+            PooledConnectionLifetime = TimeSpan.FromMinutes(10),
+            PooledConnectionIdleTimeout = TimeSpan.FromMinutes(5),
+            EnableMultipleHttp2Connections = true,
+            AutomaticDecompression = DecompressionMethods.All
+        };
+        var client = new HttpClient(handler) { Timeout = TimeSpan.FromHours(2) };
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("Coclico-Installer/2.1");
+        return client;
+    }
 
     public static async Task DownloadAsync(string installPath, IProgress<InstallProgressReport> progress, CancellationToken ct = default)
     {
@@ -197,19 +221,32 @@ public static class CudaRuntimeDownloader
         string url, string targetFile, string label,
         IProgress<InstallProgressReport> progress, CancellationToken ct)
     {
-        using var client = new HttpClient(new SocketsHttpHandler
-        {
-            PooledConnectionLifetime = TimeSpan.FromMinutes(10),
-            AutomaticDecompression = System.Net.DecompressionMethods.All
-        });
-        client.Timeout = TimeSpan.FromHours(2);
-
         progress.Report(new InstallProgressReport(0, $"Téléchargement : {label}", "Connexion au serveur..."));
 
-        using var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, ct).ConfigureAwait(false);
+        long totalBytes;
+        bool supportsRanges;
+
+        using (var probe = new HttpRequestMessage(HttpMethod.Get, url))
+        {
+            probe.Headers.Range = new RangeHeaderValue(0, 0);
+            using var probeResponse = await Http.SendAsync(probe, HttpCompletionOption.ResponseHeadersRead, ct).ConfigureAwait(false);
+            probeResponse.EnsureSuccessStatusCode();
+
+            supportsRanges = probeResponse.StatusCode == HttpStatusCode.PartialContent;
+            ContentRangeHeaderValue? contentRange = probeResponse.Content.Headers.ContentRange;
+            totalBytes = contentRange?.Length ?? probeResponse.Content.Headers.ContentLength ?? -1;
+        }
+
+        if (supportsRanges && totalBytes >= SegmentThreshold)
+        {
+            await DownloadSegmentedAsync(url, targetFile, totalBytes, label, progress, ct).ConfigureAwait(false);
+            return;
+        }
+        using var response = await Http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, ct).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
 
-        long? totalBytes = response.Content.Headers.ContentLength;
+        long? expectedBytes = totalBytes > 0 ? totalBytes : response.Content.Headers.ContentLength;
+
         using var stream = await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
         using var fileStream = new FileStream(targetFile, FileMode.Create, FileAccess.Write, FileShare.None, 1_048_576, useAsync: true);
 
@@ -223,14 +260,135 @@ public static class CudaRuntimeDownloader
             await fileStream.WriteAsync(buffer.AsMemory(0, read), ct).ConfigureAwait(false);
             totalRead += read;
 
-            double pct = totalBytes > 0 ? totalRead * 100.0 / totalBytes.Value : 0;
+            double pct = expectedBytes > 0 ? totalRead * 100.0 / expectedBytes.Value : 0;
             int pctNow = (int)pct;
             if (pctNow != lastReport)
             {
                 lastReport = pctNow;
                 progress.Report(new InstallProgressReport(
                     pct,
-                    $"Téléchargement : {label} ({totalRead / 1048576} Mo / {(totalBytes ?? 0) / 1048576} Mo)",
+                    $"Téléchargement : {label} ({totalRead / 1048576} Mo / {(expectedBytes ?? 0) / 1048576} Mo)",
+                    $"{pctNow}%"));
+            }
+        }
+    }
+
+    private static async Task DownloadSegmentedAsync(
+        string url, string targetFile, long totalBytes, string label,
+        IProgress<InstallProgressReport> progress, CancellationToken ct)
+    {
+        int segmentCount = (int)Math.Clamp(totalBytes / SegmentThreshold, 2, MaxSegments);
+        using (var preallocate = new FileStream(targetFile, FileMode.Create, FileAccess.Write, FileShare.None, 4096, FileOptions.None))
+        {
+            preallocate.SetLength(totalBytes);
+        }
+
+        using SafeFileHandle handle = File.OpenHandle(
+            targetFile, FileMode.Open, FileAccess.Write, FileShare.None, FileOptions.Asynchronous);
+
+        var counter = new SegmentProgress(totalBytes, label, progress);
+
+        long baseSize = totalBytes / segmentCount;
+        long remainder = totalBytes % segmentCount;
+
+        var tasks = new Task[segmentCount];
+        long from = 0;
+        for (int i = 0; i < segmentCount; i++)
+        {
+            long start = from;
+            long length = baseSize + (i < remainder ? 1 : 0);
+            long end = start + length - 1;
+            from += length;
+            tasks[i] = DownloadSegmentAsync(url, handle, start, end, counter, ct);
+        }
+
+        await Task.WhenAll(tasks).ConfigureAwait(false);
+
+        var info = new FileInfo(targetFile);
+        if (info.Length != totalBytes)
+        {
+            throw new InvalidDataException(
+                $"Téléchargement incomplet : {info.Length} octets reçus au lieu de {totalBytes}.");
+        }
+    }
+
+    private static async Task DownloadSegmentAsync(
+        string url, SafeFileHandle handle, long from, long to,
+        SegmentProgress counter, CancellationToken ct)
+    {
+        long position = from;
+        byte[] buffer = new byte[1_048_576];
+
+        for (int attempt = 0; ; attempt++)
+        {
+            ct.ThrowIfCancellationRequested();
+            if (position > to)
+            {
+                return;
+            }
+
+            try
+            {
+                using var request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Range = new RangeHeaderValue(position, to);
+
+                using var response = await Http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct).ConfigureAwait(false);
+                response.EnsureSuccessStatusCode();
+
+                if (response.StatusCode != HttpStatusCode.PartialContent)
+                {
+                    throw new InvalidDataException("Le serveur n'a pas honoré la requête de reprise.");
+                }
+
+                using Stream stream = await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
+                int read;
+                while ((read = await stream.ReadAsync(buffer.AsMemory(0, buffer.Length), ct).ConfigureAwait(false)) > 0)
+                {
+                    await RandomAccess.WriteAsync(handle, buffer.AsMemory(0, read), position, ct).ConfigureAwait(false);
+                    position += read;
+                    counter.Add(read);
+                }
+
+                if (position > to)
+                {
+                    return;
+                }
+
+                throw new EndOfStreamException("Connexion interrompue avant la fin du segment.");
+            }
+            catch (Exception ex) when (attempt < SegmentMaxRetries && !ct.IsCancellationRequested &&
+                                       ex is HttpRequestException or EndOfStreamException or InvalidDataException or IOException or SocketException)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(attempt + 1), ct).ConfigureAwait(false);
+            }
+        }
+    }
+
+    private sealed class SegmentProgress
+    {
+        private readonly long _totalBytes;
+        private readonly string _label;
+        private readonly IProgress<InstallProgressReport> _progress;
+        private long _totalRead;
+        private int _lastReport = -1;
+
+        public SegmentProgress(long totalBytes, string label, IProgress<InstallProgressReport> progress)
+        {
+            _totalBytes = totalBytes;
+            _label = label;
+            _progress = progress;
+        }
+
+        public void Add(long bytes)
+        {
+            long totalRead = Interlocked.Add(ref _totalRead, bytes);
+            int pctNow = (int)(totalRead * 100 / _totalBytes);
+            if (pctNow != _lastReport)
+            {
+                _lastReport = pctNow;
+                _progress.Report(new InstallProgressReport(
+                    pctNow,
+                    $"Téléchargement : {_label} ({totalRead / 1048576} Mo / {_totalBytes / 1048576} Mo)",
                     $"{pctNow}%"));
             }
         }

@@ -225,10 +225,6 @@ public static class InstallService
             string coclicoDir = Path.Combine(appData, "Coclico");
             Directory.CreateDirectory(coclicoDir);
             string settingsFile = Path.Combine(coclicoDir, "settings.json");
-
-            // PORTAGE AOT : la version WPF utilisait JsonSerializer.Serialize(Dictionary<string, object>),
-            // interdit en NativeAOT (serialization reflexive). JsonNode fonctionne sans reflexion
-            // ET preserve mieux les reglages existants (merge au lieu de re-serialisation).
             JsonNode? root = null;
             try
             {

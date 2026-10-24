@@ -15,10 +15,6 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        // Portage de App.xaml.cs original :
-        //   --uninstall  -> UninstallWindow
-        //   --silent     -> géré AVANT le démarrage Avalonia dans Program.cs (headless)
-        //   défaut       -> MainWindow (assistant 7 étapes)
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             Window main;

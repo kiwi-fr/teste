@@ -4,19 +4,6 @@ using System.IO;
 using System.Threading.Tasks;
 
 namespace Coclico.InstallerAot.Services;
-
-/// <summary>
-/// Cree les raccourcis .lnk (Bureau + Menu Demarrer).
-///
-/// ATTENTION NativeAOT : la creation classique de .lnk passe par COM
-/// (WScript.Shell / IShellLink), et COM n'est PAS utilisable dans un
-/// binaire NativeAOT (BuiltInComInteropSupport=false). La parade simple
-/// et fiable : invoquer PowerShell en processus externe. C'est leger,
-/// ca ne touche pas a votre exe, et Windows 10/11 a toujours PowerShell.
-///
-/// Alternative (plus propre a terme) : laisser Coclico creer ses
-/// raccourcis au premier lancement (cote application, pas installeur).
-/// </summary>
 public static class ShortcutService
 {
     public static Task CreateShortcutsAsync(string installDir, string exeName)

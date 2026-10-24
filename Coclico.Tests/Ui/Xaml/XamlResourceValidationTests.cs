@@ -5,7 +5,7 @@ namespace Coclico.Tests;
 
 public sealed class XamlResourceValidationTests
 {
-    private static readonly string[] ProjectNames = ["Coclico", "Coclico.Installer"];
+    private static readonly string[] ProjectNames = ["Coclico"];
 
     private static readonly Regex StaticResourceRegex = new(@"\{StaticResource\s+([A-Za-z0-9_.]+)", RegexOptions.Compiled);
     private static readonly Regex MergedDictionaryRegex = new(@"ResourceDictionary\s+Source=""([^""]+)""", RegexOptions.Compiled);

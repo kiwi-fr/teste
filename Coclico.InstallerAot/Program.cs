@@ -20,9 +20,6 @@ internal static class Program
         NativeLibBundle.ExtractAndLoad();
         AppDomain.CurrentDomain.UnhandledException += (s, e) => LogCrash(e.ExceptionObject as Exception);
         TaskScheduler.UnobservedTaskException += (s, e) => LogCrash(e.Exception);
-
-        // Mode silencieux : identique à l'original (App.xaml.cs RunSilent),
-        // 100 % headless, aucune interface n'est démarrée.
         if (IsSilentMode)
         {
             RunSilent();

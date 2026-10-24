@@ -31,12 +31,6 @@ public static class GpuDetector
     }
 
     private const string DisplayClassGuid = "{4D36E968-E325-11CE-BFC1-08002BE10318}";
-
-    /// <summary>
-    /// Détection GPU 100 % compatible NativeAOT : lecture directe du registre PCI
-    /// (VEN_10DE = NVIDIA, VEN_1002 = AMD, VEN_8086 = Intel + ClassGUID affichage).
-    /// La version WPF originale utilisait WMI (System.Management), incompatible AOT.
-    /// </summary>
     public static GpuInfo DetectGpu()
     {
         return DetectGpuFromRegistry();

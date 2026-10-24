@@ -15,15 +15,6 @@ using Coclico.Installer.Services;
 
 namespace Coclico.Installer;
 
-/// <summary>
-/// PORTAGE FIDÈLE de MainWindow.xaml.cs (WPF) vers Avalonia 11.
-/// Toute la logique originale est conservée : navigation 7 étapes, stepper,
-/// détection prérequis, langue FR/EN, licence MIT, choix dossier, composants
-/// CUDA/IA, résumé, installation avec progression, tips rotatifs, lancement final,
-/// vue désinstallation intégrée.
-/// Remplacements : MessageBox -> Views.MessageDialog, OpenFolderDialog ->
-/// StorageProvider, DispatcherTimer WPF -> DispatcherTimer Avalonia.
-/// </summary>
 public partial class MainWindow : Window
 { 
     private readonly InstallConfig _config = new();
@@ -63,7 +54,6 @@ public partial class MainWindow : Window
         TxtTip.Text = tips[_tipIndex];
     }
 
-    // ============ Window_Loaded -> Opened (Avalonia) ============
     private void Window_Opened(object? sender, EventArgs e)
     {
         LoadLicenseText();
@@ -94,15 +84,12 @@ public partial class MainWindow : Window
         InitializeAiModelComboBox();
     }
 
-    // ============ BARRE DE TITRE CUSTOM (drag + min/close) ============
     private void TitleBar_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
         if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
         {
             return;
         }
-
-        // Ne pas déclencher le drag depuis les boutons/pills interactifs
         if (e.Source is Visual src && IsInsideInteractive(src))
         {
             return;
@@ -134,8 +121,6 @@ public partial class MainWindow : Window
     {
         Close();
     }
-
-    // ============ INITIALISATION ============
 
     private void InitializeAiModelComboBox()
     {
@@ -264,8 +249,6 @@ public partial class MainWindow : Window
         TxtSpaceRequired.Text = string.Format(InstallerLocalization.Get("SpaceRequired"), reqMb);
     }
 
-    // ============ LANGUE FR / EN (identique original) ============
-
     private void ApplyLanguage(InstallerLanguage lang)
     {
         InstallerLocalization.CurrentLanguage = lang;
@@ -348,8 +331,6 @@ public partial class MainWindow : Window
 
         UpdateNextButtonText();
     }
-
-    // ============ NAVIGATION (identique original) ============
 
     private void GoToStep(int step)
     {
@@ -477,8 +458,6 @@ public partial class MainWindow : Window
         TxtSummaryTotalSpace.Text = string.Format(InstallerLocalization.Get("SpaceRequired"), _config.CalculateRequiredSpaceMb());
     }
 
-    // ============ BOUTONS ============
-
     private void BtnNext_Click(object? sender, RoutedEventArgs e)
     {
         if (_currentStep == 5)
@@ -519,7 +498,6 @@ public partial class MainWindow : Window
 
     private async void BtnBrowse_Click(object? sender, RoutedEventArgs e)
     {
-        // Portage de OpenFolderDialog (WPF) -> StorageProvider (Avalonia)
         try
         {
             var folders = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
@@ -544,9 +522,6 @@ public partial class MainWindow : Window
             Debug.WriteLine($"[MainWindow.Browse] {ex.Message}");
         }
     }
-
-    // ============ INSTALLATION (identique original) ============
-
     private void StartInstallation()
         => RunSafely(StartInstallationAsync, "MainWindow.StartInstallation");
 
@@ -590,8 +565,6 @@ public partial class MainWindow : Window
         {
             _tipsTimer.Stop();
             NavBar.IsVisible = true;
-
-            // MessageBox WPF -> MessageDialog Avalonia (même style sombre)
             await Views.MessageDialog.ShowErrorAsync(this,
                 "Installation Coclico",
                 $"Erreur d'installation : {ex.Message}");
@@ -642,8 +615,6 @@ public partial class MainWindow : Window
         ApplyLanguage(InstallerLanguage.English);
     }
 
-    // ============ DÉSINSTALLATION (vue intégrée, identique original) ============
-
     private void BtnDoUninstall_Click(object? sender, RoutedEventArgs e)
         => RunSafely(() => BtnDoUninstall_ClickAsync(), "MainWindow.BtnDoUninstall_Click");
 
@@ -674,9 +645,6 @@ public partial class MainWindow : Window
             TxtUninstallDesc.Text = $"Erreur : {ex.Message}";
         }
     }
-
-    // ============ HELPERS ============
-
     private static void RunSafely(Func<Task> handler, string operationName)
     {
         _ = RunSafelyAsync(handler, operationName);
