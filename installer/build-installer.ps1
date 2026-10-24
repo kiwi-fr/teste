@@ -125,38 +125,11 @@ function New-CoclicoArchive {
     }
 }
 
-function Invoke-DotnetPublish {
-    param(
-        [string]$Project,
-        [string]$Output,
-        [string]$Ver,
-        [hashtable]$ExtraProperties
-    )
-    $pubArgs = @(
-        "publish", $Project,
-        "--configuration", $Configuration,
-        "--runtime", "win-x64",
-        "--self-contained", "true",
-        "--output", $Output,
-        "-p:PublishSingleFile=true",
-        "-p:IncludeNativeLibrariesForSelfExtract=true",
-        "-p:EnableCompressionInSingleFile=true",
-        "-p:DebugSymbols=false",
-        "-p:DebugType=None",
-        "-p:Version=$Ver"
-    )
-
-    if ($ExtraProperties) {
-        foreach ($key in $ExtraProperties.Keys) {
-            $pubArgs += "-p:$key=$($ExtraProperties[$key])"
-        }
-    }
-    & dotnet $pubArgs | Out-Host
-    return $LASTEXITCODE
-}
-
 $rootDir = (Resolve-Path "$PSScriptRoot\..").Path
-$installerProjDir = "$rootDir\Coclico.Installer"
+# v2 : l'installeur est desormais Coclico.InstallerAot (Avalonia 11 + NativeAOT),
+# qui remplace le projet WPF Coclico.Installer. Le payload.zip est depose dans
+# son dossier de projet et embarque dans l'exe natif a la compilation.
+$installerProjDir = "$rootDir\Coclico.InstallerAot"
 
 try {
     Push-Location $rootDir
@@ -171,6 +144,10 @@ try {
 
     if (-not (Test-Path "$rootDir\Coclico\Coclico.csproj")) {
         throw "$(T "Coclico.csproj introuvable dans : " "Coclico.csproj not found in: ")$rootDir\Coclico"
+    }
+
+    if (-not (Test-Path "$installerProjDir\Coclico.InstallerAot.csproj")) {
+        throw "$(T "Coclico.InstallerAot.csproj introuvable dans : " "Coclico.InstallerAot.csproj not found in: ")$installerProjDir"
     }
 
     if ([string]::IsNullOrWhiteSpace($Version)) {
@@ -212,7 +189,7 @@ try {
         }
     }
 
-    Write-Section (T "COMPILATION DE L'INSTALLEUR COCLICO" "BUILDING COCLICO INSTALLER")
+    Write-Section (T "COMPILATION DE L'APPLICATION COCLICO" "BUILDING COCLICO APPLICATION")
 
     $publishDir = "$rootDir\publish"
     $mainExe = "$publishDir\Coclico.exe"
@@ -250,6 +227,8 @@ try {
 
     Write-Section (T "CREATION DU PAYLOAD" "CREATING PAYLOAD")
 
+    # v2 : payload.zip est depose directement dans Coclico.InstallerAot\
+    # ou il est embarque dans l'exe natif par le csproj (EmbeddedResource).
     $payloadZip = "$installerProjDir\payload.zip"
 
     Add-Type -AssemblyName System.IO.Compression -ErrorAction SilentlyContinue
@@ -293,17 +272,35 @@ try {
     $zipSizeMb = [math]::Round((Get-Item $payloadZip).Length / 1MB, 2)
     Write-Success "$(T "Archive payload.zip creee : $zipSizeMb Mo ($totalFiles fichiers)" "payload.zip created: $zipSizeMb MB ($totalFiles files)")"
 
-    Write-Section (T "COMPILATION DE COCLICO.INSTALLER" "BUILDING COCLICO.INSTALLER")
+    Write-Section (T "COMPILATION DE COCLICO.INSTALLER (AVALONIA NATIVEAOT)" "BUILDING COCLICO.INSTALLER (AVALONIA NATIVEAOT)")
 
-    Write-Step (T "Compilation en binaire autonome SingleFile..." "Building standalone SingleFile binary...")
+    Write-Step (T "Compilation en binaire natif unique (Avalonia + NativeAOT)..." "Building single native binary (Avalonia + NativeAOT)...")
+
+    # Le publish AOT produit un exe natif unique : le payload.zip ci-dessus et
+    # les DLL natives (libSkiaSharp, libHarfBuzzSharp, av_libglesv2) sont
+    # embarques dans l'exe via le csproj, et extraits au demarrage.
+    # Aucun fichier a copier manuellement a cote de l'exe final.
     $tempBuildDir = "$rootDir\artifacts\installer_build"
     if (Test-Path $tempBuildDir) { Remove-Item $tempBuildDir -Recurse -Force }
+    New-Item -ItemType Directory -Path $tempBuildDir -Force | Out-Null
 
-    if ((Invoke-DotnetPublish -Project "$installerProjDir\Coclico.Installer.csproj" -Output $tempBuildDir -Ver $Version) -ne 0) {
-        throw (T "Echec de compilation de Coclico.Installer" "Coclico.Installer build failed")
+    $aotArgs = @(
+        "publish", "$installerProjDir\Coclico.InstallerAot.csproj",
+        "--configuration", $Configuration,
+        "--runtime", "win-x64",
+        "--output", $tempBuildDir,
+        "-p:Version=$Version"
+    )
+    & dotnet @aotArgs
+    if ($LASTEXITCODE -ne 0) {
+        throw (T "Echec de compilation de Coclico.InstallerAot" "Coclico.InstallerAot build failed")
     }
 
-    Write-Success (T "Coclico.Installer compile" "Coclico.Installer compiled")
+    if (-not (Test-Path "$tempBuildDir\Coclico.Installer.exe")) {
+        throw (T "Coclico.Installer.exe absent apres le publish AOT." "Coclico.Installer.exe missing after AOT publish.")
+    }
+
+    Write-Success (T "Coclico.InstallerAot compile : exe natif unique (payload + DLL natives embarques)" "Coclico.InstallerAot compiled: single native exe (payload + native DLLs embedded)")
 
     Write-Section (T "FINALISATION" "FINALIZATION")
 
@@ -335,6 +332,7 @@ try {
     Write-Host "  [+] Uninstall system" -ForegroundColor Green
     Write-Host "  [+] Windows registry entry" -ForegroundColor Green
     Write-Host "  [+] Uninstall from Windows Settings / Control Panel" -ForegroundColor Green
+    Write-Host "  [+] Single native exe (Avalonia + NativeAOT, no .NET install needed)" -ForegroundColor Green
     Write-Host ""
     if (-not $IncludeCuda) {
         Write-Host (T "  Runtime CUDA et moteurs GPU : non embarques, telecharges lors de l'installation si carte NVIDIA." "  CUDA runtime and GPU engines: not bundled, downloaded during installation on NVIDIA cards.") -ForegroundColor DarkGray

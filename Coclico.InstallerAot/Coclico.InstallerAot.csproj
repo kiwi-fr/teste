@@ -86,11 +86,15 @@
       <LogicalName>Coclico.Installer.Assets.ai-models.json</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
-
+    <ItemGroup>
+    <PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="2.88.9" GeneratePathProperty="true" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.Win32" Version="8.3.1.1" GeneratePathProperty="true" />
+    <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.25547.20250602" GeneratePathProperty="true" />
+  </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="NativeLibs\libSkiaSharp.dll" LogicalName="libSkiaSharp.dll" />
-    <EmbeddedResource Include="NativeLibs\libHarfBuzzSharp.dll" LogicalName="libHarfBuzzSharp.dll" />
-    <EmbeddedResource Include="NativeLibs\av_libglesv2.dll" LogicalName="av_libglesv2.dll" />
+    <EmbeddedResource Include="$(PkgSkiaSharp_NativeAssets_Win32)\runtimes\win-x64\native\libSkiaSharp.dll" LogicalName="libSkiaSharp.dll" Link="NativeLibs\libSkiaSharp.dll" />
+    <EmbeddedResource Include="$(PkgHarfBuzzSharp_NativeAssets_Win32)\runtimes\win-x64\native\libHarfBuzzSharp.dll" LogicalName="libHarfBuzzSharp.dll" Link="NativeLibs\libHarfBuzzSharp.dll" />
+    <EmbeddedResource Include="$(PkgAvalonia_Angle_Windows_Natives)\runtimes\win-x64\native\av_libglesv2.dll" LogicalName="av_libglesv2.dll" Link="NativeLibs\av_libglesv2.dll" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="Resources\plage.png" Condition="Exists('Resources\plage.png')" />
