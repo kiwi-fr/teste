@@ -1,0 +1,99 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- ============================================================
+       COCLICO.INSTALLERAOT — Portage FIDÈLE de Coclico.Installer (WPF)
+       vers Avalonia 11 + NativeAOT.
+
+       TOUTES les fonctionnalités de l'installeur WPF original :
+       - Assistant 7 étapes (Bienvenue, Licence, Dossier, Composants & IA,
+         Résumé, Installation, Terminé) — même design, même palette
+       - Détection .NET 10 / GPU (registre, compatible AOT)
+       - Téléchargement runtime .NET 10 / CUDA 12 / modèles IA GGUF
+       - Raccourcis Bureau + Menu Démarrer (via PowerShell, compatible AOT)
+       - Clé de registre Uninstall (Applications et fonctionnalités)
+        - Fenêtre de désinstallation complète + modes silent et uninstall
+
+       PRÉREQUIS POUR COMPILER (NativeAOT) :
+       1. SDK .NET 10
+       2. Charge de travail C++ : "Desktop development with C++"
+          dans Visual Studio Installer / Build Tools (link.exe requis)
+
+       PUBLICATION (depuis la racine de la solution) :
+         dotnet publish Coclico.InstallerAot -c Release -r win-x64
+       → produit un SEUL .exe natif (~20-30 Mo, contre ~85 Mo en WPF).
+
+       AVANT LE PREMIER BUILD :
+         1. Copier payload.zip à la racine de ce dossier
+            (généré par installer/build-installer.ps1 — étape "payload").
+         2. Copier Coclico.Installer/Resources/plage.png dans ./Resources/
+            (un placeholder est fourni : remplacez-le par le vrai logo).
+       ============================================================ -->
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+
+    <!-- Le cœur de l'option D : compilation native Ahead-Of-Time -->
+    <PublishAot>true</PublishAot>
+    <PublishTrimmed>true</PublishTrimmed>
+    <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
+    <TrimMode>partial</TrimMode>
+
+    <!-- On garde les namespaces Coclico.Installer.* des sources originales -->
+    <RootNamespace>Coclico.Installer</RootNamespace>
+    <AssemblyName>Coclico.Installer</AssemblyName>
+
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Version>2.1.0</Version>
+    <Product>Coclico Setup</Product>
+    <Description>Installeur Coclico — Avalonia NativeAOT</Description>
+    <Copyright>© 2026 Coclico</Copyright>
+
+    <SatelliteResourceLanguages>fr</SatelliteResourceLanguages>
+    <DebugType>None</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+
+    <!-- Bindings compilés (obligatoire en AOT, et plus rapide) -->
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <!-- NativeAOT supprime les attributs d'assembly non référencés :
+       on force la conservation d'AssemblyInformationalVersionAttribute,
+       lu par InstallService.AppVersion. -->
+  <ItemGroup>
+    <TrimmerRootAttribute Include="System.Reflection.AssemblyInformationalVersionAttribute" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.2" />
+    <PackageReference Include="Tmds.DBus.Protocol" Version="0.21.3" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.2" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.2" />
+  </ItemGroup>
+
+  <!-- MÊME PRINCIPE QUE L'INSTALLEUR WPF ORIGINAL :
+       payload.zip (créé par build-installer.ps1) est embarqué puis extrait.
+       LogicalName = le NOM EXACT cherché par InstallService.GetPayloadStream(). -->
+  <ItemGroup>
+    <EmbeddedResource Include="payload.zip" Condition="Exists('payload.zip')">
+      <LogicalName>Coclico.Installer.payload.zip</LogicalName>
+    </EmbeddedResource>
+    <!-- Nom exact cherché par InstallerAiCatalog.LoadFromEmbeddedJson() -->
+    <EmbeddedResource Include="Assets\ai-models.json">
+      <LogicalName>Coclico.Installer.Assets.ai-models.json</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="NativeLibs\libSkiaSharp.dll" LogicalName="libSkiaSharp.dll" />
+    <EmbeddedResource Include="NativeLibs\libHarfBuzzSharp.dll" LogicalName="libHarfBuzzSharp.dll" />
+    <EmbeddedResource Include="NativeLibs\av_libglesv2.dll" LogicalName="av_libglesv2.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="Resources\plage.png" Condition="Exists('Resources\plage.png')" />
+  </ItemGroup>
+
+</Project>

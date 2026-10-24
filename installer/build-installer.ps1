@@ -70,6 +70,61 @@ function Write-ProgressBar {
     Write-Host "`r  [$bar] $pctTxt%  ($($Current + 1)/$Total) $Text        " -NoNewline -ForegroundColor Yellow
 }
 
+function New-CoclicoArchive {
+    param(
+        [string]$ZipPath,
+        [object[]]$Files,
+        [string]$BaseDir,
+        [bool]$ShowProgress = $true
+    )
+    if (Test-Path $ZipPath) { Remove-Item $ZipPath -Force }
+
+    $sevenZip = Get-Command 7z -ErrorAction SilentlyContinue
+    if ($sevenZip) {
+        Write-Host (T "  [*] 7-Zip detecte : compression Deflate niveau 9" "  [*] 7-Zip detected: Deflate level 9 compression") -ForegroundColor DarkGray
+        $stage = Join-Path ([System.IO.Path]::GetTempPath()) ("coclico_stage_" + [guid]::NewGuid().ToString("N"))
+        New-Item -ItemType Directory -Path $stage -Force | Out-Null
+        try {
+            $index = 0
+            foreach ($f in $Files) {
+                $rel = $f.FullName.Substring($BaseDir.Length) -replace '^[\\/]+', ''
+                $dest = Join-Path $stage $rel
+                $destDir = Split-Path $dest -Parent
+                if (-not (Test-Path $destDir)) { New-Item -ItemType Directory -Path $destDir -Force | Out-Null }
+                Copy-Item $f.FullName $dest -Force
+                if ($ShowProgress) { Write-ProgressBar -Current $index -Total $Files.Count -Text $f.Name }
+                $index++
+            }
+            if ($ShowProgress) { Write-Host "" }
+            & 7z a -tzip -mx=9 -- $ZipPath "$stage\*" | Out-Null
+            if ($LASTEXITCODE -ne 0) {
+                throw (T "7-Zip a echoue (code $LASTEXITCODE)." "7-Zip failed (code $LASTEXITCODE).")
+            }
+        }
+        finally {
+            Remove-Item $stage -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+    else {
+        Write-Host (T "  [-] 7-Zip absent : compression .NET standard (Deflate Optimal)" "  [-] 7-Zip not found: standard .NET compression (Deflate Optimal)") -ForegroundColor DarkGray
+        $zip = [System.IO.Compression.ZipFile]::Open($ZipPath, [System.IO.Compression.ZipArchiveMode]::Create)
+        $compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
+        try {
+            $index = 0
+            foreach ($f in $Files) {
+                $rel = $f.FullName.Substring($BaseDir.Length) -replace '^[\\/]+', ''
+                [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $f.FullName, $rel, $compressionLevel) | Out-Null
+                if ($ShowProgress) { Write-ProgressBar -Current $index -Total $Files.Count -Text $f.Name }
+                $index++
+            }
+        }
+        finally {
+            $zip.Dispose()
+        }
+        if ($ShowProgress) { Write-Host "" }
+    }
+}
+
 function Invoke-DotnetPublish {
     param(
         [string]$Project,
@@ -90,6 +145,7 @@ function Invoke-DotnetPublish {
         "-p:DebugType=None",
         "-p:Version=$Ver"
     )
+
     if ($ExtraProperties) {
         foreach ($key in $ExtraProperties.Keys) {
             $pubArgs += "-p:$key=$($ExtraProperties[$key])"
@@ -152,7 +208,7 @@ try {
         $tempBuildDir = "$rootDir\artifacts\installer_build"
         if (Test-Path $tempBuildDir) {
             Remove-Item $tempBuildDir -Recurse -Force -ErrorAction SilentlyContinue
-            Write-Success (T "Dossier installer_build nettoye" "installer_build folder cleaned")
+            Write-Success (T "Dossier installer_build nettoye" "installer_build cleaned")
         }
     }
 
@@ -180,7 +236,6 @@ try {
             "-p:PublishSingleFile=false",
             "-p:DebugSymbols=false",
             "-p:DebugType=None",
-            "-p:PublishReadyToRun=true",
             "-p:Version=$Version"
         )
         if ($IncludeCuda) {
@@ -196,11 +251,6 @@ try {
     Write-Section (T "CREATION DU PAYLOAD" "CREATING PAYLOAD")
 
     $payloadZip = "$installerProjDir\payload.zip"
-    if (Test-Path $payloadZip) {
-        Remove-Item $payloadZip -Force
-    }
-
-    Write-Step (T "Compression des fichiers Coclico dans payload.zip..." "Compressing Coclico files into payload.zip...")
 
     Add-Type -AssemblyName System.IO.Compression -ErrorAction SilentlyContinue
     Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction SilentlyContinue
@@ -238,22 +288,7 @@ try {
 
     $totalFiles = $files.Count
     Write-Step "$(T "Compression de $totalFiles fichiers..." "Compressing $totalFiles files...")"
-
-    $zip = [System.IO.Compression.ZipFile]::Open($payloadZip, [System.IO.Compression.ZipArchiveMode]::Create)
-    $compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
-    try {
-        $index = 0
-        foreach ($f in $files) {
-            $rel = $f.FullName.Substring($publishDir.Length) -replace '^[\\/]+', ''
-            [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $f.FullName, $rel, $compressionLevel) | Out-Null
-            Write-ProgressBar -Current $index -Total $totalFiles -Text $f.Name
-            $index++
-        }
-    }
-    finally {
-        $zip.Dispose()
-    }
-    Write-Host ""
+    New-CoclicoArchive -ZipPath $payloadZip -Files $files -BaseDir $publishDir
 
     $zipSizeMb = [math]::Round((Get-Item $payloadZip).Length / 1MB, 2)
     Write-Success "$(T "Archive payload.zip creee : $zipSizeMb Mo ($totalFiles fichiers)" "payload.zip created: $zipSizeMb MB ($totalFiles files)")"
@@ -324,7 +359,6 @@ try {
             "-p:PublishSingleFile=false",
             "-p:DebugSymbols=false",
             "-p:DebugType=None",
-            "-p:PublishReadyToRun=true",
             "-p:Version=$Version"
         )
         if ($IncludeCuda) {
@@ -338,9 +372,6 @@ try {
 
         Write-Step (T "Creation de l'archive portable..." "Creating portable archive...")
         $portableZip = "$finalOutputDir\Coclico-Portable-$Version$suffix.zip"
-        if (Test-Path $portableZip) {
-            Remove-Item $portableZip -Force
-        }
 
         $allPortableFiles = @(Get-ChildItem -Path $portableDir -Recurse -File)
         $portableFiles = @($allPortableFiles | Where-Object {
@@ -357,19 +388,8 @@ try {
         $totalPortable = $portableFiles.Count
         Write-Step "$(T "Compression de $totalPortable fichiers..." "Compressing $totalPortable files...")"
 
-        $zipPortable = [System.IO.Compression.ZipFile]::Open($portableZip, [System.IO.Compression.ZipArchiveMode]::Create)
-        try {
-            $index = 0
-            foreach ($f in $portableFiles) {
-                $rel = $f.FullName.Substring($portableDir.Length) -replace '^[\\\/]+', ''
-                [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zipPortable, $f.FullName, $rel, $compressionLevel) | Out-Null
-                Write-ProgressBar -Current $index -Total $totalPortable -Text $f.Name
-                $index++
-            }
-        }
-        finally {
-            $zipPortable.Dispose()
-        }
+        New-CoclicoArchive -ZipPath $portableZip -Files $portableFiles -BaseDir $portableDir
+
         Write-Host ""
 
         $portableSizeMb = [math]::Round((Get-Item $portableZip).Length / 1MB, 2)
