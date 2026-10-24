@@ -12,16 +12,6 @@
         ExtendClientAreaTitleBarHeightHint="-1"
         Background="{DynamicResource BgBaseBrush}"
         Opened="Window_Opened">
-
-  <!-- ============================================================
-       PORTAGE FIDÈLE de MainWindow.xaml (WPF-UI FluentWindow).
-       Remplacements Avalonia :
-       ui:FluentWindow -> Window + barre de titre custom (drag + min/close)
-       ui:TitleBar      -> TitleBarBorder custom
-       ui:SymbolIcon    -> PathIcon (vectoriels dans Ico.cs)
-       Storyboard       -> Style.Animations sur Canvas.Left/Canvas.Top
-       ============================================================ -->
-
   <Window.Styles>
     <Style Selector="Ellipse.ambientRed">
       <Style.Animations>
@@ -51,8 +41,6 @@
 
   <Border BorderBrush="#2A2228" BorderThickness="1" CornerRadius="8">
     <Grid Background="{DynamicResource BgBaseBrush}">
-
-      <!-- Ellipses ambient animées (identiques à l'original) -->
       <Canvas IsHitTestVisible="False" ClipToBounds="True" Opacity="0.30">
         <Ellipse Width="500" Height="320" Canvas.Left="-120" Canvas.Top="-120" Classes="ambientRed">
           <Ellipse.Fill>
@@ -84,8 +72,6 @@
       </Canvas>
 
       <Grid RowDefinitions="Auto,*">
-
-        <!-- ================= BARRE DE TITRE (portage de ui:TitleBar) ================= -->
         <Border x:Name="TitleBarBorder" Grid.Row="0" Height="40" Background="#0C0D12"
                 PointerPressed="TitleBar_PointerPressed">
           <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto,Auto">
@@ -107,11 +93,7 @@
                     VerticalAlignment="Center"/>
           </Grid>
         </Border>
-
-        <!-- ================= CORPS ================= -->
         <Grid Grid.Row="1" ColumnDefinitions="220,*">
-
-          <!-- ============ SIDEBAR gauche (identique originale) ============ -->
           <Border Grid.Column="0" Background="#0C0D12" BorderBrush="#1F1A22" BorderThickness="0,0,1,0" Padding="20,24">
             <Grid RowDefinitions="Auto,*,Auto">
               <StackPanel Grid.Row="0" Margin="0,0,0,24" Orientation="Horizontal">
@@ -171,11 +153,7 @@
               </StackPanel>
             </Grid>
           </Border>
-
-          <!-- ============ ZONE CONTENU DROITE ============ -->
           <Grid Grid.Column="1" Margin="28,16,28,20" RowDefinitions="*,Auto">
-
-            <!-- ===== ÉTAPE 1 : BIENVENUE ===== -->
             <Grid x:Name="ViewStepWelcome" Grid.Row="0" IsVisible="True">
               <StackPanel VerticalAlignment="Top">
                 <TextBlock x:Name="TxtWelcomeTitle" Text="Bienvenue dans l'installation de Coclico"
@@ -223,7 +201,6 @@
               </StackPanel>
             </Grid>
 
-            <!-- ===== ÉTAPE 2 : LICENCE ===== -->
             <Grid x:Name="ViewStepLicense" Grid.Row="0" IsVisible="False" RowDefinitions="Auto,*,Auto">
               <StackPanel Grid.Row="0" Margin="0,0,0,12">
                 <TextBlock x:Name="TxtLicenseTitle" Text="Contrat de Licence Logicielle" FontSize="20" FontWeight="Bold"/>
@@ -242,7 +219,6 @@
                         FontSize="12.5" Checked="ChkAcceptLicense_Changed" Unchecked="ChkAcceptLicense_Changed"/>
             </Grid>
 
-            <!-- ===== ÉTAPE 3 : DOSSIER ===== -->
             <Grid x:Name="ViewStepLocation" Grid.Row="0" IsVisible="False">
               <StackPanel VerticalAlignment="Top">
                 <TextBlock x:Name="TxtLocationTitle" Text="Dossier de Destination" FontSize="20" FontWeight="Bold" Margin="0,0,0,6"/>
@@ -277,7 +253,6 @@
               </StackPanel>
             </Grid>
 
-            <!-- ===== ÉTAPE 4 : COMPOSANTS & IA ===== -->
             <Grid x:Name="ViewStepComponents" Grid.Row="0" IsVisible="False">
               <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel VerticalAlignment="Top">
@@ -351,7 +326,6 @@
               </ScrollViewer>
             </Grid>
 
-            <!-- ===== ÉTAPE 5 : RÉSUMÉ ===== -->
             <Grid x:Name="ViewStepSummary" Grid.Row="0" IsVisible="False">
               <StackPanel VerticalAlignment="Top">
                 <TextBlock x:Name="TxtSummaryTitle" Text="Prêt à installer" FontSize="20" FontWeight="Bold" Margin="0,0,0,6"/>
@@ -377,7 +351,6 @@
               </StackPanel>
             </Grid>
 
-            <!-- ===== ÉTAPE 6 : INSTALLATION ===== -->
             <Grid x:Name="ViewStepInstalling" Grid.Row="0" IsVisible="False" VerticalAlignment="Center">
               <StackPanel HorizontalAlignment="Center" Width="520">
                 <Border Width="72" Height="72" CornerRadius="18" Background="#181922"
@@ -409,7 +382,6 @@
               </StackPanel>
             </Grid>
 
-            <!-- ===== ÉTAPE 7 : TERMINÉ ===== -->
             <Grid x:Name="ViewStepFinish" Grid.Row="0" IsVisible="False" VerticalAlignment="Center">
               <StackPanel HorizontalAlignment="Center" Width="560">
                 <Border Width="84" Height="84" CornerRadius="42" Background="#11291F"
@@ -450,7 +422,6 @@
               </StackPanel>
             </Grid>
 
-            <!-- ===== VUE DÉSINSTALLATION (portée pour fidélité, comme l'original) ===== -->
             <Grid x:Name="ViewStepUninstall" Grid.Row="0" IsVisible="False" VerticalAlignment="Center">
               <StackPanel HorizontalAlignment="Center" Width="480">
                 <Border Width="64" Height="64" CornerRadius="16" Background="#261A1D" BorderBrush="#4A252B"
@@ -476,7 +447,6 @@
               </StackPanel>
             </Grid>
 
-            <!-- ===== NAVBAR BAS (Annuler / Précédent / Suivant) ===== -->
             <Grid x:Name="NavBar" Grid.Row="1" Margin="0,16,0,0">
               <Button x:Name="BtnCancel" Classes="secondary" Content="Annuler" HorizontalAlignment="Left"
                       Width="100" Height="38" Click="BtnCancel_Click"/>

@@ -12,9 +12,6 @@
         ExtendClientAreaTitleBarHeightHint="-1"
         Background="{DynamicResource BgBaseBrush}"
         SystemDecorations="None">
-
-  <!-- Remplace System.Windows.MessageBox (inexistant en Avalonia) :
-       même rôle (erreur / avertissement), style sombre Coclico. -->
   <Border BorderBrush="#2A2228" BorderThickness="1" CornerRadius="8" Background="#0C0D12">
     <StackPanel Margin="22,18,22,18">
 

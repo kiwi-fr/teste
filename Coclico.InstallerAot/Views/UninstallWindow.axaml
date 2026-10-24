@@ -11,10 +11,6 @@
         ExtendClientAreaTitleBarHeightHint="-1"
         Background="{DynamicResource BgBaseBrush}">
 
-  <!-- PORTAGE FIDÈLE de Views/UninstallWindow.xaml (WPF-UI FluentWindow) :
-       désinstallation complète avec confirmation obligatoire, option de
-       conservation des données, progression et écran de remerciement final. -->
-
   <Window.Styles>
     <Style Selector="Ellipse.ambientUnRed">
       <Style.Animations>
@@ -42,7 +38,6 @@
       </Canvas>
 
       <Grid RowDefinitions="Auto,*">
-        <!-- Barre de titre custom -->
         <Border x:Name="TitleBarBorder" Grid.Row="0" Height="40" Background="#0C0D12"
                 PointerPressed="TitleBar_PointerPressed">
           <Grid ColumnDefinitions="Auto,Auto,*,Auto">
@@ -68,8 +63,6 @@
                          FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
             </StackPanel>
           </StackPanel>
-
-          <!-- ===== PANNEAU PRINCIPAL ===== -->
           <Grid x:Name="PanelMain" Grid.Row="1" RowDefinitions="Auto,*,Auto">
 
             <Border Grid.Row="0" Background="#261A1D" CornerRadius="10" BorderBrush="#FF453A" BorderThickness="1"
@@ -169,7 +162,6 @@
             </StackPanel>
           </Grid>
 
-          <!-- ===== PANNEAU AU REVOIR ===== -->
           <Grid x:Name="PanelGoodbye" Grid.Row="1" IsVisible="False" VerticalAlignment="Center">
             <StackPanel HorizontalAlignment="Center" Width="520">
               <Border Width="84" Height="84" CornerRadius="42" Background="#11291F"

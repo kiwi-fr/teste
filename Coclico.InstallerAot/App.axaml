@@ -2,13 +2,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Coclico.Installer.App"
              RequestedThemeVariant="Dark">
-
-  <!-- ============================================================
-       DESIGN SYSTEM - portage fidèle de l'App.xaml WPF original :
-       même palette (BgBase #07080B, cartes #13141A, accents rouge/orange
-       #FF453A -> #FF6B35, success #10B981), mêmes styles de boutons
-       (accent dégradé, secondaire, danger), checkbox custom, etc.
-       ============================================================ -->
   <Application.Resources>
     <ResourceDictionary>
       <SolidColorBrush x:Key="BgBaseBrush" Color="#07080B"/>
@@ -28,15 +21,9 @@
 
   <Application.Styles>
     <FluentTheme/>
-
-    <!-- Texte par défaut : couleur primaire -->
     <Style Selector="TextBlock">
       <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
     </Style>
-
-    <!-- ==================== BOUTONS ==================== -->
-
-    <!-- Bouton accent : dégradé rouge -> orange, arrondi 8 (comme AccentButtonStyle) -->
     <Style Selector="Button.accent">
       <Setter Property="Foreground" Value="White"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
@@ -73,8 +60,6 @@
     <Style Selector="Button.accent:disabled">
       <Setter Property="Opacity" Value="0.45"/>
     </Style>
-
-    <!-- Bouton secondaire : fond sombre, bordure grise (comme SecondaryButtonStyle) -->
     <Style Selector="Button.secondary">
       <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
@@ -108,8 +93,6 @@
     <Style Selector="Button.secondary:disabled">
       <Setter Property="Opacity" Value="0.45"/>
     </Style>
-
-    <!-- Bouton danger (désinstallation) -->
     <Style Selector="Button.danger">
       <Setter Property="Foreground" Value="White"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
@@ -141,8 +124,6 @@
     <Style Selector="Button.danger:disabled">
       <Setter Property="Opacity" Value="0.45"/>
     </Style>
-
-    <!-- Petits boutons langue FR/EN de la barre de titre -->
     <Style Selector="Button.lang">
       <Setter Property="FontSize" Value="11"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
@@ -171,8 +152,6 @@
     <Style Selector="Button.lang:pointerover">
       <Setter Property="Opacity" Value="0.85"/>
     </Style>
-
-    <!-- Boutons réduire / fermer de la barre de titre -->
     <Style Selector="Button.titlebarBtn">
       <Setter Property="Width" Value="44"/>
       <Setter Property="Height" Value="32"/>
@@ -201,8 +180,6 @@
       <Setter Property="Background" Value="#C42B1C"/>
       <Setter Property="Foreground" Value="White"/>
     </Style>
-
-    <!-- ==================== CHECKBOX (custom Coclico) ==================== -->
     <Style Selector="CheckBox">
       <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
       <Setter Property="Cursor" Value="Hand"/>
@@ -236,8 +213,6 @@
     <Style Selector="CheckBox:disabled">
       <Setter Property="Opacity" Value="0.45"/>
     </Style>
-
-    <!-- ==================== PROGRESSBAR ==================== -->
     <Style Selector="ProgressBar">
       <Setter Property="Background" Value="#191B24"/>
       <Setter Property="Foreground" Value="{DynamicResource AccentSecondaryBrush}"/>
@@ -255,8 +230,6 @@
         </ControlTemplate>
       </Setter>
     </Style>
-
-    <!-- ==================== TEXTBOX ==================== -->
     <Style Selector="TextBox">
       <Setter Property="Background" Value="#0D0E13"/>
       <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
@@ -270,8 +243,6 @@
     <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
       <Setter Property="BorderBrush" Value="#FF6B35"/>
     </Style>
-
-    <!-- ==================== COMBOBOX ==================== -->
     <Style Selector="ComboBox">
       <Setter Property="Background" Value="#0D0E13"/>
       <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
@@ -288,21 +259,15 @@
       <Setter Property="Background" Value="#2A1E22"/>
       <Setter Property="Foreground" Value="White"/>
     </Style>
-
-    <!-- Séparateur (remplace le <Separator/> WPF) : <Border Classes="sep"/> -->
     <Style Selector="Border.sep">
       <Setter Property="Height" Value="1"/>
       <Setter Property="Background" Value="#222"/>
     </Style>
-
-    <!-- Chemin d'icône par défaut -->
     <Style Selector="PathIcon">
       <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
       <Setter Property="Width" Value="16"/>
       <Setter Property="Height" Value="16"/>
     </Style>
-
-    <!-- ScrollViewer : barre fine et discrète -->
     <Style Selector="ScrollBar.vertical">
       <Setter Property="Width" Value="6"/>
     </Style>

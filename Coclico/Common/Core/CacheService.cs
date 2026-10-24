@@ -101,7 +101,7 @@ public sealed class CacheService : ICacheService
         }
     }
 
-    public void Set<T>(string subdir, string key, T value, TimeSpan? ttl = null)
+    public void SetInSubdir<T>(string subdir, string key, T value, TimeSpan? ttl = null)
     {
         string path = GetPath(subdir, key);
         SemaphoreSlim sem = GetLock(path);
@@ -121,7 +121,7 @@ public sealed class CacheService : ICacheService
         }
     }
 
-    public T? Get<T>(string subdir, string key)
+    public T? GetFromSubdir<T>(string subdir, string key)
     {
         string path = GetPath(subdir, key);
         SemaphoreSlim sem = GetLock(path);
@@ -141,7 +141,7 @@ public sealed class CacheService : ICacheService
         }
     }
 
-    public bool Has(string subdir, string key)
+    public bool HasInSubdir(string subdir, string key)
     {
         string path = GetPath(subdir, key);
         SemaphoreSlim sem = GetLock(path);
@@ -161,7 +161,7 @@ public sealed class CacheService : ICacheService
         }
     }
 
-    public void Invalidate(string subdir, string key)
+    public void InvalidateInSubdir(string subdir, string key)
     {
         string path = GetPath(subdir, key);
         SemaphoreSlim sem = GetLock(path);
@@ -236,7 +236,7 @@ public sealed class CacheService : ICacheService
         return value;
     }
 
-    public T GetOrSet<T>(string subdir, string key, Func<T> factory, TimeSpan? ttl = null)
+    public T GetOrSetInSubdir<T>(string subdir, string key, Func<T> factory, TimeSpan? ttl = null)
     {
         string path = GetPath(subdir, key);
         if (TryReadEntry(path, out T? cached))
@@ -245,7 +245,7 @@ public sealed class CacheService : ICacheService
         }
 
         T value = factory();
-        Set(subdir, key, value, ttl);
+        SetInSubdir(subdir, key, value, ttl);
         return value;
     }
 
@@ -344,7 +344,7 @@ public sealed class CacheService : ICacheService
         });
     }
 
-    public async Task SetAsync<T>(string subdir, string key, T value, TimeSpan? ttl = null)
+    public async Task SetInSubdirAsync<T>(string subdir, string key, T value, TimeSpan? ttl = null)
     {
         string path = GetPath(subdir, key);
         SemaphoreSlim sem = GetLock(path);
@@ -364,7 +364,7 @@ public sealed class CacheService : ICacheService
         }
     }
 
-    public async Task<T?> GetAsync<T>(string subdir, string key)
+    public async Task<T?> GetFromSubdirAsync<T>(string subdir, string key)
     {
         string path = GetPath(subdir, key);
         SemaphoreSlim sem = GetLock(path);
@@ -385,7 +385,7 @@ public sealed class CacheService : ICacheService
         }
     }
 
-    public async Task InvalidateAsync(string subdir, string key)
+    public async Task InvalidateInSubdirAsync(string subdir, string key)
     {
         string path = GetPath(subdir, key);
         SemaphoreSlim sem = GetLock(path);
@@ -433,7 +433,7 @@ public sealed class CacheService : ICacheService
         return value;
     }
 
-    public async Task<T> GetOrSetAsync<T>(string subdir, string key, Func<Task<T>> factory, TimeSpan? ttl = null)
+    public async Task<T> GetOrSetInSubdirAsync<T>(string subdir, string key, Func<Task<T>> factory, TimeSpan? ttl = null)
     {
         string path = GetPath(subdir, key);
         (bool found, T? cached) = await TryReadEntryAsync<T>(path).ConfigureAwait(false);
@@ -443,7 +443,7 @@ public sealed class CacheService : ICacheService
         }
 
         T value = await factory().ConfigureAwait(false);
-        await SetAsync(subdir, key, value, ttl).ConfigureAwait(false);
+        await SetInSubdirAsync(subdir, key, value, ttl).ConfigureAwait(false);
         return value;
     }
 
