@@ -77,6 +77,10 @@ public class DriverUpdateService
         return items;
     }
 
+    /// <summary>
+    /// Installe un pilote via l'API Windows Update (téléchargement + installation Microsoft, jamais de source tierce).
+    /// ResultCode : 2 = succès.
+    /// </summary>
     public virtual async Task<bool> InstallAsync(UpdateItem item, CancellationToken cancellationToken)
     {
         var sessionType = Type.GetTypeFromProgID("Microsoft.Update.Session");

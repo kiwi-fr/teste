@@ -8,30 +8,80 @@
     <Grid Margin="24,16,24,16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.Row="0" Margin="0,0,0,12">
-            <Button DockPanel.Dock="Right"
-                    Content="Vérifier tout"
-                    Command="{Binding CheckAllCommand}"
-                    MinWidth="140"
-                    Padding="16,8"/>
-            <DockPanel DockPanel.Dock="Right" Margin="0,0,10,0" VerticalAlignment="Center">
-                <TextBlock Text="&#x1F50D;" DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0,0,6,0"/>
+        <!-- Ligne d'en-tête : titre à gauche, "Mettre à jour la sélection" centré, recherche + Vérifier tout à droite -->
+        <Grid Grid.Row="0" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                <TextBlock Text="Update Center" FontSize="22" FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding LastScanSummary}" Opacity="0.7" Margin="0,2,0,0"/>
+            </StackPanel>
+
+            <Button Grid.Column="1"
+                    Content="Mettre à jour la sélection"
+                    Command="{Binding UpdateSelectedCommand}"
+                    Padding="16,8"
+                    Margin="16,0"
+                    VerticalAlignment="Center"/>
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <TextBlock Text="&#x1F50D;" VerticalAlignment="Center" Margin="0,0,6,0"/>
                 <TextBox Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Width="220"
                          Padding="8,6"
                          VerticalContentAlignment="Center"/>
-            </DockPanel>
-            <StackPanel VerticalAlignment="Center">
-                <TextBlock Text="Update Center" FontSize="22" FontWeight="SemiBold"/>
-                <TextBlock Text="{Binding LastScanSummary}" Opacity="0.7" Margin="0,2,0,0"/>
+                <Button Content="Vérifier tout"
+                        Command="{Binding CheckAllCommand}"
+                        MinWidth="140"
+                        Padding="16,8"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"/>
             </StackPanel>
-        </DockPanel>
+        </Grid>
 
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding Sections}">
+        <!-- Barre d'animation globale : visible pendant le scan ET pendant le téléchargement/installation -->
+        <StackPanel Grid.Row="1">
+            <ProgressBar Height="4" IsIndeterminate="True" Margin="0,0,0,6">
+                <ProgressBar.Style>
+                    <Style TargetType="ProgressBar">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding State}" Value="Scanning">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State}" Value="Updating">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ProgressBar.Style>
+            </ProgressBar>
+            <TextBlock FontSize="10.5" Opacity="0.7" Margin="0,0,0,10">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Text" Value=""/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding State}" Value="Scanning">
+                                <Setter Property="Text" Value="Recherche des mises à jour en cours…"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State}" Value="Updating">
+                                <Setter Property="Text" Value="Téléchargement et installation en cours…"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </StackPanel>
+
+        <ItemsControl Grid.Row="2" ItemsSource="{Binding Sections}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type vm:UpdateSectionViewModel}">
                     <Expander IsExpanded="{Binding IsExpanded}" Margin="0,0,0,8">
@@ -51,15 +101,30 @@
                         <ItemsControl ItemsSource="{Binding Items}" Margin="24,8,0,4">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type vm:UpdateItemViewModel}">
-                                    <DockPanel Margin="0,4">
-                                        <TextBlock DockPanel.Dock="Right" Text="{Binding StatusLabel}" Opacity="0.6" Margin="12,0,0,0"/>
-                                        <TextBlock DockPanel.Dock="Right" Text="{Binding SourceLabel}" Opacity="0.45" Margin="12,0,0,0"/>
-                                        <TextBlock DockPanel.Dock="Right" Opacity="0.7" Margin="12,0,0,0">
-                                            <Run Text="{Binding CurrentVersion, Mode=OneWay}"/><Run Text=" → "/><Run Text="{Binding AvailableVersion, Mode=OneWay}"/>
-                                        </TextBlock>
-                                        <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" IsEnabled="{Binding IsSelectable}" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                        <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis"/>
-                                    </DockPanel>
+                                    <StackPanel Margin="0,4">
+                                        <DockPanel>
+                                            <TextBlock DockPanel.Dock="Right" Text="{Binding StatusLabel}" Opacity="0.6" Margin="12,0,0,0"/>
+                                            <TextBlock DockPanel.Dock="Right" Text="{Binding SourceLabel}" Opacity="0.45" Margin="12,0,0,0"/>
+                                            <TextBlock DockPanel.Dock="Right" Opacity="0.7" Margin="12,0,0,0">
+                                                <Run Text="{Binding CurrentVersion, Mode=OneWay}"/><Run Text=" → "/><Run Text="{Binding AvailableVersion, Mode=OneWay}"/>
+                                            </TextBlock>
+                                            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" IsEnabled="{Binding IsSelectable}" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis"/>
+                                        </DockPanel>
+                                        <!-- Barre d'animation de l'élément pendant le téléchargement/installation -->
+                                        <ProgressBar Height="3" IsIndeterminate="True" Margin="0,3,0,0">
+                                            <ProgressBar.Style>
+                                                <Style TargetType="ProgressBar">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Updating">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ProgressBar.Style>
+                                        </ProgressBar>
+                                    </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -67,12 +132,5 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
-        <Button Grid.Row="2"
-                Content="Mettre à jour la sélection"
-                Command="{Binding UpdateSelectedCommand}"
-                HorizontalAlignment="Right"
-                Padding="16,8"
-                Margin="0,12,0,0"/>
     </Grid>
 </UserControl>
