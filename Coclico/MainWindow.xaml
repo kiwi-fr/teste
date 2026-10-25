@@ -751,16 +751,16 @@
                                         <TextBlock Text="{DynamicResource Menu_WingetInstaller}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
-                            </StackPanel>
-                            <Border Tag="UpdateCenter" MouseDown="DropdownItem_MouseDown" Cursor="Hand" Margin="0,0,0,4" Padding="12,10"
+                                <Border Tag="UpdateCenter" MouseDown="DropdownItem_MouseDown" Cursor="Hand" Margin="0,0,0,4" Padding="12,10"
                                         Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="ArrowSync24" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,9,0" VerticalAlignment="Center"/>
                                         <TextBlock Text="{DynamicResource Menu_UpdateCenter}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
+                            </StackPanel>
 
-<Border x:Name="MenuGroupMaintenance" Tag="Maintenance" MouseDown="MenuGroupToggle_MouseDown" Cursor="Hand"
+                            <Border x:Name="MenuGroupMaintenance" Tag="Maintenance" MouseDown="MenuGroupToggle_MouseDown" Cursor="Hand"
                                     Margin="6,8,6,0" Padding="12,9"
                                     Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1" CornerRadius="8">
                                 <Grid>

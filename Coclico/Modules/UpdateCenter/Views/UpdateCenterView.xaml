@@ -4,6 +4,12 @@
              xmlns:vm="clr-namespace:Coclico.Modules.UpdateCenter.ViewModels">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+        <!-- Dégradé orange → rouge → violet pour toutes les barres d'animation -->
+        <LinearGradientBrush x:Key="UpdateAnimBrush" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#FF9500" Offset="0"/>
+            <GradientStop Color="#FF3B30" Offset="0.5"/>
+            <GradientStop Color="#AF52DE" Offset="1"/>
+        </LinearGradientBrush>
     </UserControl.Resources>
     <Grid Margin="24,16,24,16">
         <Grid.RowDefinitions>
@@ -49,7 +55,8 @@
 
         <!-- Barre d'animation globale : visible pendant le scan ET pendant le téléchargement/installation -->
         <StackPanel Grid.Row="1">
-            <ProgressBar Height="4" IsIndeterminate="True" Margin="0,0,0,6">
+            <ProgressBar Height="4" IsIndeterminate="True" Margin="0,0,0,6"
+                         Foreground="{StaticResource UpdateAnimBrush}">
                 <ProgressBar.Style>
                     <Style TargetType="ProgressBar">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -94,6 +101,7 @@
                                 </TextBlock>
                                 <ProgressBar DockPanel.Dock="Right" Width="16" Height="16"
                                              IsIndeterminate="True"
+                                             Foreground="{StaticResource UpdateAnimBrush}"
                                              Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}"/>
                                 <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="15"/>
                             </DockPanel>
@@ -112,7 +120,8 @@
                                             <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis"/>
                                         </DockPanel>
                                         <!-- Barre d'animation de l'élément pendant le téléchargement/installation -->
-                                        <ProgressBar Height="3" IsIndeterminate="True" Margin="0,3,0,0">
+                                        <ProgressBar Height="3" IsIndeterminate="True" Margin="0,3,0,0"
+                                                     Foreground="{StaticResource UpdateAnimBrush}">
                                             <ProgressBar.Style>
                                                 <Style TargetType="ProgressBar">
                                                     <Setter Property="Visibility" Value="Collapsed"/>
