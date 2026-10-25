@@ -138,7 +138,7 @@ public partial class MainWindow : Window
 
             CmbAiModel.IsEnabled = ChkAiModel.IsChecked == true;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             Debug.WriteLine(ex.Message);
         }
@@ -170,7 +170,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            string licensePath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "LICENSE.txt");
+            string licensePath = Path.Join(AppContext.BaseDirectory, "..", "..", "..", "..", "LICENSE.txt");
             if (File.Exists(licensePath))
             {
                 TxtLicenseBox.Text = File.ReadAllText(licensePath);
@@ -191,7 +191,7 @@ public partial class MainWindow : Window
                 "IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n" +
                 "FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.";
         }
-        catch
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
         {
             TxtLicenseBox.Text = "MIT License - Copyright (c) 2026 Coclico";
         }
@@ -203,7 +203,7 @@ public partial class MainWindow : Window
         {
             if (req.HasDotNet10)
             {
-                TxtDotNetStatus.Text = string.Format(InstallerLocalization.Get("DotNetFound"), req.DotNet10Version);
+                TxtDotNetStatus.Text = TextFormatService.Format(InstallerLocalization.Get("DotNetFound"), req.DotNet10Version);
                 TxtDotNetBadge.Text = "OK";
                 DotNetIcon.Data = Ico.CheckCircle;
                 DotNetIcon.Foreground = AppBrushes.AccentSuccess;
@@ -219,7 +219,7 @@ public partial class MainWindow : Window
 
             if (req.HasNvidiaGpu)
             {
-                TxtGpuStatus.Text = string.Format(InstallerLocalization.Get("GpuNvidiaFound"), req.GpuName);
+                TxtGpuStatus.Text = TextFormatService.Format(InstallerLocalization.Get("GpuNvidiaFound"), req.GpuName);
                 TxtGpuBadge.Text = "CUDA PRÊT";
                 GpuIcon.Data = Ico.CheckCircle;
                 GpuIcon.Foreground = AppBrushes.AccentSuccess;
@@ -227,7 +227,7 @@ public partial class MainWindow : Window
             }
             else
             {
-                TxtGpuStatus.Text = string.Format(InstallerLocalization.Get("GpuStandard"), req.GpuName);
+                TxtGpuStatus.Text = TextFormatService.Format(InstallerLocalization.Get("GpuStandard"), req.GpuName);
                 TxtGpuBadge.Text = "CPU";
                 GpuIcon.Data = Ico.Desktop;
                 GpuIcon.Foreground = AppBrushes.TextSecondary;
@@ -235,10 +235,10 @@ public partial class MainWindow : Window
             }
 
             double freeGb = Math.Round((double)req.AvailableDiskSpaceBytes / (1024 * 1024 * 1024), 1);
-            TxtSpaceAvailable.Text = string.Format(InstallerLocalization.Get("SpaceAvailable"), req.TargetDriveLetter, freeGb);
+            TxtSpaceAvailable.Text = TextFormatService.Format(InstallerLocalization.Get("SpaceAvailable"), req.TargetDriveLetter, freeGb);
             UpdateSpaceCalculations();
         }
-        catch { }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { _ = ex; }
     }
 
     private void UpdateSpaceCalculations()
@@ -246,7 +246,7 @@ public partial class MainWindow : Window
         _config.InstallCuda = ChkCuda.IsChecked == true;
         _config.InstallAiModel = ChkAiModel.IsChecked == true;
         int reqMb = _config.CalculateRequiredSpaceMb();
-        TxtSpaceRequired.Text = string.Format(InstallerLocalization.Get("SpaceRequired"), reqMb);
+        TxtSpaceRequired.Text = TextFormatService.Format(InstallerLocalization.Get("SpaceRequired"), reqMb);
     }
 
     private void ApplyLanguage(InstallerLanguage lang)
@@ -455,7 +455,7 @@ public partial class MainWindow : Window
             compList.AppendLine("• Entrée dans le Menu Démarrer");
 
         TxtSummaryComponentsList.Text = compList.ToString().TrimEnd();
-        TxtSummaryTotalSpace.Text = string.Format(InstallerLocalization.Get("SpaceRequired"), _config.CalculateRequiredSpaceMb());
+        TxtSummaryTotalSpace.Text = TextFormatService.Format(InstallerLocalization.Get("SpaceRequired"), _config.CalculateRequiredSpaceMb());
     }
 
     private void BtnNext_Click(object? sender, RoutedEventArgs e)
@@ -511,13 +511,13 @@ public partial class MainWindow : Window
                 string folderName = folders[0].Path.LocalPath;
                 if (!string.IsNullOrWhiteSpace(folderName))
                 {
-                    _config.InstallPath = Path.Combine(folderName, "Coclico");
+                    _config.InstallPath = Path.Join(folderName, "Coclico");
                     TxtInstallPath.Text = _config.InstallPath;
                     UpdateRequirementsUI(SystemRequirementService.CheckRequirements(_config.InstallPath));
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
         {
             Debug.WriteLine($"[MainWindow.Browse] {ex.Message}");
         }
@@ -561,7 +561,7 @@ public partial class MainWindow : Window
 
             GoToStep(7);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             _tipsTimer.Stop();
             NavBar.IsVisible = true;
@@ -577,7 +577,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            string exe = Path.Combine(_config.InstallPath, "Coclico.exe");
+            string exe = Path.Join(_config.InstallPath, "Coclico.exe");
             if (File.Exists(exe))
             {
                 Process.Start(new ProcessStartInfo
@@ -588,7 +588,7 @@ public partial class MainWindow : Window
                 });
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.ComponentModel.Win32Exception or System.InvalidOperationException)
         {
             Debug.WriteLine($"[MainWindow.Installer] Lancement de Coclico après installation échoué : {ex.Message}");
         }
@@ -638,7 +638,7 @@ public partial class MainWindow : Window
             TxtUninstallDesc.Text = "Tous les fichiers et raccourcis ont été supprimés.";
             BtnFinishUninstalled.IsVisible = true;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             UninstallProgress.IsVisible = false;
             UninstallButtonPanel.IsVisible = true;
@@ -656,10 +656,8 @@ public partial class MainWindow : Window
         {
             await handler();
         }
-        catch (OperationCanceledException)
-        {
-        }
-        catch (Exception ex)
+        catch (OperationCanceledException ex) { _ = ex; }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             Debug.WriteLine($"[MainWindow.Installer] {operationName} : {ex.Message}");
         }

@@ -39,9 +39,7 @@ public sealed partial class DiagnosticPrivacySanitizer
                 result = result.Replace(userName, MaskedValue, StringComparison.OrdinalIgnoreCase);
             }
         }
-        catch
-        {
-        }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { _ = ex; }
 
         return result;
     }

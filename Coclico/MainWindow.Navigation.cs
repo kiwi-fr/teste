@@ -89,7 +89,7 @@ public partial class MainWindow
             CentralUnitStigmergy stigmergy = CentralUnitStigmergy.Current;
             stigmergy.RecordTransition(stigmergy.LastModule, tag);
         }
-        catch (Exception ex) { LoggingService.LogException(ex, "MainWindow.RecordStigmergyTransition"); }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.RecordStigmergyTransition"); }
     }
 
     private void PreloadPredictedViews(string currentTag)
@@ -121,7 +121,7 @@ public partial class MainWindow
                 }
             }, System.Windows.Threading.DispatcherPriority.Background);
         }
-        catch (Exception ex) { LoggingService.LogException(ex, "MainWindow.PreloadPredictedViews"); }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.PreloadPredictedViews"); }
     }
 
     public async Task NavigateToTagAsync(string tag)
@@ -153,7 +153,7 @@ public partial class MainWindow
             UpdateTopNavActiveIndicator(tag);
             PreloadPredictedViews(tag);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "MainWindow.NavigateToTagAsync");
             MainContentFrame.Content = CreateErrorFallback(L("MainWindow_PageLoadError"));
@@ -283,7 +283,7 @@ public partial class MainWindow
             TopUnderlineDisk.Visibility = activeTag == "DiskAnalyzer" ? Visibility.Visible : Visibility.Collapsed;
             TopUnderlineInstaller.Visibility = activeTag == "Installer" ? Visibility.Visible : Visibility.Collapsed;
         }
-        catch (Exception ex) { LoggingService.LogException(ex, "MainWindow.UpdateTopNavActiveIndicator"); }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.UpdateTopNavActiveIndicator"); }
     }
 
     private void MenuGroupToggle_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -340,7 +340,7 @@ public partial class MainWindow
                 SaveMenuGroupExpansion();
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, $"MainWindow.SetMenuGroupExpanded({groupId})");
         }
@@ -360,7 +360,7 @@ public partial class MainWindow
                 SetMenuGroupExpanded(id, expanded.Contains(id), persist: false);
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "MainWindow.LoadMenuGroupExpansion");
         }
@@ -374,7 +374,7 @@ public partial class MainWindow
             ss.Settings.MenuExpandedGroups = string.Join(",", MenuGroupIds.Where(IsMenuGroupExpanded));
             _ = ss.SaveAsync();
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "MainWindow.SaveMenuGroupExpansion");
         }

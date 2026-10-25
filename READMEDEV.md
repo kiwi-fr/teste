@@ -462,7 +462,11 @@ At install time, the standalone `Coclico.Installer` project takes over (`Service
 - **On-demand elevation**: the app starts as a standard user; affected modules show their state.
 - **Logs**: never contain personal data; `LoggingService.LogException` in every `catch`; async errors routed by `AsyncEventSafe` and triaged by the CentralUnit.
 
-## 17. Publishing a release
+## 17. Code scanning and P/Invoke rules
+
+Coclico intentionally relies on Windows P/Invoke calls (memory trimming, GPU detection, recycle bin, working sets). The CodeQL rules `cs/call-to-unmanaged-code` and `cs/unmanaged-code` flag every such call by design, so they are excluded via `query-filters` in `.github/codeql/codeql-config.yml`. All other CodeQL rules are analyzed and must stay at zero alerts.
+
+## 18. Publishing a release
 
 1. Update `version.txt` at the repository root the single source of the version, picked up by the build and the installer script.
 2. Adjust the version shown in the status bar of `MainWindow.xaml` if needed.

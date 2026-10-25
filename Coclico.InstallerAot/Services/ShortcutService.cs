@@ -9,17 +9,17 @@ public static class ShortcutService
 {
     public static Task CreateShortcutsAsync(string installDir, string exeName)
     {
-        var exePath = Path.Combine(installDir, exeName);
+        var exePath = Path.Join(installDir, exeName);
         var desktopDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-        var startMenuDir = Path.Combine(
+        var startMenuDir = Path.Join(
             Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
             "Programs", "Coclico");
         Directory.CreateDirectory(startMenuDir);
 
         var script =
             "$s = New-Object -ComObject WScript.Shell; " +
-            $"$s.CreateShortcut('{Path.Combine(desktopDir, "Coclico.lnk")}').TargetPath = '{exePath}'; " +
-            $"$s.CreateShortcut('{Path.Combine(startMenuDir, "Coclico.lnk")}').TargetPath = '{exePath}';";
+            $"$s.CreateShortcut('{Path.Join(desktopDir, "Coclico.lnk")}').TargetPath = '{exePath}'; " +
+            $"$s.CreateShortcut('{Path.Join(startMenuDir, "Coclico.lnk")}').TargetPath = '{exePath}';";
 
         var psi = new ProcessStartInfo
         {

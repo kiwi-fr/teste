@@ -13,7 +13,7 @@ public static class DotnetRuntimeService
 
     public static bool IsDesktopRuntimeInstalled()
     {
-        string programFilesDotnet = Path.Combine(
+        string programFilesDotnet = Path.Join(
             Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet");
 
         string? dotnetRoot = Environment.GetEnvironmentVariable("DOTNET_ROOT");
@@ -26,15 +26,14 @@ public static class DotnetRuntimeService
 
         foreach (string root in roots)
         {
-            string sharedDir = Path.Combine(root, "shared", "Microsoft.WindowsDesktop.App");
+            string sharedDir = Path.Join(root, "shared", "Microsoft.WindowsDesktop.App");
             if (!Directory.Exists(sharedDir))
             {
                 continue;
             }
 
-            foreach (string versionDir in Directory.GetDirectories(sharedDir))
+            foreach (string versionName in Directory.GetDirectories(sharedDir).Select(versionDir => Path.GetFileName(versionDir) ?? string.Empty))
             {
-                string versionName = Path.GetFileName(versionDir);
                 if (Version.TryParse(versionName, out Version? version) && version.Major >= 10)
                 {
                     return true;
@@ -55,7 +54,7 @@ public static class DotnetRuntimeService
 
         progress.Report(new InstallProgressReport(5, "Runtime .NET 10 absent, téléchargement...", ""));
 
-        string tempDir = Path.Combine(Path.GetTempPath(), "Coclico");
+        string tempDir = Path.Join(Path.GetTempPath(), "Coclico");
         Directory.CreateDirectory(tempDir);
 
         foreach (string oldFile in Directory.GetFiles(tempDir, "windowsdesktop-runtime-*.exe"))
@@ -64,13 +63,11 @@ public static class DotnetRuntimeService
             {
                 File.Delete(oldFile);
             }
-            catch
-            {
-            }
+            catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
         }
 
-        string installerPath = Path.Combine(tempDir, $"windowsdesktop-runtime-{Guid.NewGuid():N}.exe");
-        string logPath = Path.Combine(tempDir, $"dotnet-runtime-install-{Guid.NewGuid():N}.log");
+        string installerPath = Path.Join(tempDir, $"windowsdesktop-runtime-{Guid.NewGuid():N}.exe");
+        string logPath = Path.Join(tempDir, $"dotnet-runtime-install-{Guid.NewGuid():N}.log");
 
         try
         {
@@ -90,9 +87,7 @@ public static class DotnetRuntimeService
                     File.Delete(installerPath);
                 }
             }
-            catch
-            {
-            }
+            catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
         }
     }
 
@@ -189,7 +184,7 @@ public static class DotnetRuntimeService
         {
             process = Process.Start(psi);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)
         {
             throw new InvalidOperationException($"Impossible de lancer l'installeur du runtime .NET 10 : {ex.Message}");
         }

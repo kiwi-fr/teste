@@ -80,7 +80,7 @@ public sealed class SystemHealthService
 
                 return new DefenderStatusInfo(active, realtime, version, updated);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException or System.Text.Json.JsonException or System.FormatException)
             {
                 LoggingService.LogException(ex, "SystemHealthService.GetDefenderStatusAsync");
                 return new DefenderStatusInfo(false, false, "Statut inconnu (erreur de lecture)", null);
@@ -127,7 +127,7 @@ public sealed class SystemHealthService
         {
             try
             {
-                string mrtPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "MRT.exe");
+                string mrtPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "MRT.exe");
                 if (!File.Exists(mrtPath))
                 {
                     mrtPath = "mrt.exe";
@@ -144,7 +144,7 @@ public sealed class SystemHealthService
                 using var proc = Process.Start(psi);
                 return proc != null;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.ComponentModel.Win32Exception or System.InvalidOperationException)
             {
                 LoggingService.LogException(ex, "SystemHealthService.LaunchMrtAsync");
                 return false;
@@ -258,20 +258,20 @@ public sealed class SystemHealthService
         try
         {
             string winDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
-            string softDist = Path.Combine(winDir, "SoftwareDistribution", "Download");
+            string softDist = Path.Join(winDir, "SoftwareDistribution", "Download");
             if (Directory.Exists(softDist))
             {
                 int deleted = 0, locked = 0;
                 foreach (string f in Directory.EnumerateFiles(softDist))
                 {
                     try { File.Delete(f); deleted++; }
-                    catch { locked++; }
+                    catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { locked++; }
                 }
                 onOutput?.Invoke($"🗑️ Cache de téléchargement Windows Update purgé ({deleted} fichiers supprimés, {locked} verrouillés).");
                 _ = sb.AppendLine($"Purge SoftwareDistribution\\Download : {deleted} supprimés, {locked} verrouillés.");
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
         {
             LoggingService.LogException(ex, "ResetWindowsUpdate.Purge");
             _ = sb.AppendLine($"Purge échouée : {ex.Message}");
@@ -386,7 +386,7 @@ public sealed class SystemHealthService
                 }
                 catch (OperationCanceledException)
                 {
-                    try { proc.Kill(entireProcessTree: true); } catch (Exception ex) { LoggingService.LogException(ex, "SystemHealthService.ExecutePowerShellCommandAsync"); }
+                    try { proc.Kill(entireProcessTree: true); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "SystemHealthService.ExecutePowerShellCommandAsync"); }
                     throw;
                 }
 
@@ -395,7 +395,7 @@ public sealed class SystemHealthService
                 return new DiagnosticResult(success, summary, sb.ToString());
             }
             catch (OperationCanceledException) { throw; }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)
             {
                 LoggingService.LogException(ex, $"ExecutePowerShell({script})");
                 return new DiagnosticResult(false, ex.Message, ex.ToString());
@@ -449,7 +449,7 @@ public sealed class SystemHealthService
                 }
                 catch (OperationCanceledException)
                 {
-                    try { proc.Kill(entireProcessTree: true); } catch (Exception ex) { LoggingService.LogException(ex, "SystemHealthService.RunProcessAsync"); }
+                    try { proc.Kill(entireProcessTree: true); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "SystemHealthService.RunProcessAsync"); }
                     throw;
                 }
 
@@ -458,7 +458,7 @@ public sealed class SystemHealthService
                 return new DiagnosticResult(success, summary, sb.ToString());
             }
             catch (OperationCanceledException) { throw; }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)
             {
                 LoggingService.LogException(ex, $"RunProcess({exe} {args})");
                 return new DiagnosticResult(false, ex.Message, ex.ToString());

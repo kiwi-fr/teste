@@ -227,7 +227,6 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
             return "≈ 0 %";
         }
 
-        bool improvement = higherIsBetter ? pct > 0 : pct < 0;
         string sign = pct > 0 ? "+" : string.Empty;
         return $"{sign}{pct:F1} %";
     }
@@ -245,8 +244,7 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
             return "#94A3B8";
         }
 
-        bool improvement = higherIsBetter ? pct > 0 : pct < 0;
-        return improvement ? "#10B981" : "#EF4444";
+        return (higherIsBetter ? pct > 0 : pct < 0) ? "#10B981" : "#EF4444";
     }
 
     private void RefreshComparison()
@@ -321,7 +319,7 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
 
             await LoadTuningStatusAsync().ConfigureAwait(false);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "NetworkOptimizerViewModel.RefreshAsync");
         }
@@ -354,7 +352,7 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
                 OnPropertyChanged(nameof(TuningParameters));
             });
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "NetworkOptimizerViewModel.LoadTuningStatusAsync");
         }
@@ -373,21 +371,21 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
             NetworkTestReport report = await _netService.RunCompleteTestAsync(
                 4,
                 (stage, run) => AddLog(stage == "down"
-                    ? string.Format(L("Network_TestRun"), run, L("Network_MetricDownload"))
-                    : string.Format(L("Network_TestRun"), run, L("Network_MetricUpload"))),
+                    ? TextFormatService.Format(L("Network_TestRun"), run, L("Network_MetricDownload"))
+                    : TextFormatService.Format(L("Network_TestRun"), run, L("Network_MetricUpload"))),
                 p => ProgressValue = p,
                 _cts.Token).ConfigureAwait(false);
 
             BeforeTest = report;
             AfterTest = null;
-            StatusText = string.Format(L("Network_TestDone"), report.DownloadDisplay, report.UploadDisplay, report.LatencyDisplay);
+            StatusText = TextFormatService.Format(L("Network_TestDone"), report.DownloadDisplay, report.UploadDisplay, report.LatencyDisplay);
             AddLog($"↓ {report.DownloadDisplay} · ↑ {report.UploadDisplay} · {report.LatencyDisplay} · {report.JitterDisplay}");
         }
         catch (OperationCanceledException)
         {
             StatusText = L("Network_Cancelled");
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "NetworkOptimizerViewModel.RunTestAsync");
             StatusText = L("Network_TestError");
@@ -429,7 +427,7 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
             StatusText = L("Network_Cancelled");
             AddLog(L("Network_Cancelled"));
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "NetworkOptimizerViewModel.RunTuningAsync");
             StatusText = L("Network_TuningError");
@@ -454,7 +452,7 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
             AddLog(StatusText);
             await LoadTuningStatusAsync().ConfigureAwait(false);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "NetworkOptimizerViewModel.RestoreAsync");
             StatusText = L("Network_TuningError");

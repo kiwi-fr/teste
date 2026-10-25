@@ -303,13 +303,13 @@ public partial class AppsViewModel : INotifyPropertyChanged
 
     public int SelectedCount => AllApps.Count(static a => a.IsSelected);
 
-    public string SelectedCountText => string.Format(_loc?.Get("Installer_SelectedCount") ?? "{0} sélectionné(s)", SelectedCount);
+    public string SelectedCountText => TextFormatService.Format(_loc?.Get("Installer_SelectedCount") ?? "{0} sélectionné(s)", SelectedCount);
 
     public bool HasSelected => SelectedCount > 0;
 
     public int UpgradesCount => AvailableUpgrades.Count;
     public bool HasUpgrades => AvailableUpgrades.Count > 0;
-    public string UpgradesCountText => string.Format(_loc?.Get("Installer_AvailableCount") ?? "{0} disponible(s)", UpgradesCount);
+    public string UpgradesCountText => TextFormatService.Format(_loc?.Get("Installer_AvailableCount") ?? "{0} disponible(s)", UpgradesCount);
     public bool HasSearchResults => SearchResults.Count > 0;
 
     public AppsViewModel(AppCatalogService catalog, WingetEngineService winget, GitHubToolService github, AppShortcutsService shortcuts)
@@ -336,7 +336,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         _ = Task.Run(async () =>
         {
             try { await DetectInstalledAsync(); }
-            catch (Exception ex) { LoggingService.LogException(ex, "AppsViewModel.DetectInstalledAsync"); }
+            catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "AppsViewModel.DetectInstalledAsync"); }
         });
         _ = Task.Run(async () =>
         {
@@ -348,7 +348,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
                     await CheckUpgradesCoreAsync(autoScan: true).ConfigureAwait(false);
                 }
             }
-            catch (Exception ex) { LoggingService.LogException(ex, "AppsViewModel.AutoScanUpgrades"); }
+            catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "AppsViewModel.AutoScanUpgrades"); }
         });
     }
 
@@ -360,9 +360,8 @@ public partial class AppsViewModel : INotifyPropertyChanged
     private void LoadCatalog()
     {
         AllApps.Clear();
-        foreach (AppCatalogService.AppCatalogEntry entry in _catalog.GetApps())
+        foreach (var item in _catalog.GetApps().Select(entry => new AppInstallItem { Entry = entry }))
         {
-            var item = new AppInstallItem { Entry = entry };
             item.PropertyChanged += (_, e) =>
             {
                 if (e.PropertyName == nameof(AppInstallItem.IsSelected))
@@ -574,7 +573,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
             Notify?.Invoke(OperationStatus, "WinGet");
             AppendLog(OperationStatus);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "AppsViewModel.RepairWingetAsync");
             OperationStatus = $"Erreur WinGet : {ex.Message}";
@@ -601,7 +600,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         }
 
         bool confirmed = Confirm?.Invoke(
-            string.Format(L("Installer_Dialog_BatchInstallMsg", "Installer les {0} applications sélectionnées en séquence ?"), selected.Count),
+            TextFormatService.Format(L("Installer_Dialog_BatchInstallMsg", "Installer les {0} applications sélectionnées en séquence ?"), selected.Count),
             L("Installer_Dialog_BatchInstallTitle", "Installation par lot")) ?? false;
         if (!confirmed)
         {
@@ -644,7 +643,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         }
 
         bool confirmed = Confirm?.Invoke(
-            string.Format(L("Installer_Dialog_BatchInstallMsg", "Installer les {0} applications sélectionnées en séquence ?"), toInstall.Count),
+            TextFormatService.Format(L("Installer_Dialog_BatchInstallMsg", "Installer les {0} applications sélectionnées en séquence ?"), toInstall.Count),
             pack.Name) ?? false;
         if (!confirmed)
         {
@@ -673,7 +672,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         }
 
         bool confirmed = Confirm?.Invoke(
-            string.Format("Désinstaller {0} ?", item.Name),
+            TextFormatService.Format("Désinstaller {0} ?", item.Name),
             "Désinstallation") ?? false;
         if (!confirmed)
         {
@@ -681,7 +680,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         }
 
         IsOperating = true;
-        OperationStatus = string.Format(L("Installer_Status_UninstallingPkg", "Désinstallation de {0}..."), item.Name);
+        OperationStatus = TextFormatService.Format(L("Installer_Status_UninstallingPkg", "Désinstallation de {0}..."), item.Name);
         _cts = new CancellationTokenSource();
         item.IsBusy = true;
         item.Status = "Désinstallation...";
@@ -713,7 +712,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
             item.Status = "Annulé";
             OperationStatus = L("Installer_Status_BatchCancelled", "Opération annulée.");
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "AppsViewModel.UninstallOneAsync");
             item.IsFailed = true;
@@ -781,9 +780,9 @@ public partial class AppsViewModel : INotifyPropertyChanged
         {
             OperationStatus = L("Installer_Status_CheckCancelled", "Vérification annulée.");
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.InvalidOperationException or System.OperationCanceledException)
         {
-            OperationStatus = string.Format(L("Installer_Status_CheckError", "Erreur vérification : {0}"), ex.Message);
+            OperationStatus = TextFormatService.Format(L("Installer_Status_CheckError", "Erreur vérification : {0}"), ex.Message);
             LoggingService.LogException(ex, "AppsViewModel.CheckUpgradesAsync");
         }
         finally
@@ -804,7 +803,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         _cts = new CancellationTokenSource();
         item.IsBusy = true;
         item.Status = L("Installer_Status_Updating", "Mise à jour...");
-        OperationStatus = string.Format(L("Installer_Status_UpdatingPkg", "Mise à jour de {0}..."), item.Name);
+        OperationStatus = TextFormatService.Format(L("Installer_Status_UpdatingPkg", "Mise à jour de {0}..."), item.Name);
         AppendLog(OperationStatus);
 
         try
@@ -841,7 +840,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
             item.Status = "Annulé";
             OperationStatus = L("Installer_Status_BatchCancelled", "Opération annulée.");
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.InvalidOperationException or System.OperationCanceledException)
         {
             LoggingService.LogException(ex, "AppsViewModel.UpgradeOneAsync");
             item.Status = $"Erreur : {ex.Message}";
@@ -871,7 +870,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         }
 
         bool confirmed = Confirm?.Invoke(
-            string.Format(L("Installer_Dialog_UpdateAllMsg", "Mettre à jour les {0} applications détectées ?"), AvailableUpgrades.Count),
+            TextFormatService.Format(L("Installer_Dialog_UpdateAllMsg", "Mettre à jour les {0} applications détectées ?"), AvailableUpgrades.Count),
             L("Installer_Dialog_UpdateAllTitle", "Mise à jour globale")) ?? false;
         if (!confirmed)
         {
@@ -894,7 +893,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
                 _cts.Token.ThrowIfCancellationRequested();
                 item.IsBusy = true;
                 item.Status = L("Installer_Status_Updating", "Mise à jour...");
-                AppendLog(string.Format(L("Installer_Status_UpdatingPkg", "Mise à jour de {0}..."), item.Name));
+                AppendLog(TextFormatService.Format(L("Installer_Status_UpdatingPkg", "Mise à jour de {0}..."), item.Name));
 
                 WingetEngineService.InstallResult result = await _winget.UpgradeAsync(item.Id, progress, _cts.Token).ConfigureAwait(true);
                 if (result.Status is WingetEngineService.InstallStatus.Succeeded
@@ -933,7 +932,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
             OperationStatus = L("Installer_Status_BatchCancelled", "Opération annulée.");
             AppendLog(OperationStatus);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.InvalidOperationException or System.OperationCanceledException)
         {
             LoggingService.LogException(ex, "AppsViewModel.UpgradeAllAsync");
             OperationStatus = $"Erreur : {ex.Message}";
@@ -985,9 +984,9 @@ public partial class AppsViewModel : INotifyPropertyChanged
         {
             OperationStatus = L("Installer_Status_SearchCancelled", "Recherche annulée.");
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.InvalidOperationException or System.OperationCanceledException)
         {
-            OperationStatus = string.Format(L("Installer_Status_SearchError", "Erreur : {0}"), ex.Message);
+            OperationStatus = TextFormatService.Format(L("Installer_Status_SearchError", "Erreur : {0}"), ex.Message);
             LoggingService.LogException(ex, "AppsViewModel.OnlineSearchAsync");
         }
         finally
@@ -1007,7 +1006,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         IsOperating = true;
         _cts = new CancellationTokenSource();
         var progress = new Progress<string>(AppendLog);
-        OperationStatus = string.Format(L("Installer_Status_InstallingPkg", "Installation de {0}..."), row.Name);
+        OperationStatus = TextFormatService.Format(L("Installer_Status_InstallingPkg", "Installation de {0}..."), row.Name);
         AppendLog(OperationStatus);
 
         try
@@ -1048,7 +1047,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         {
             OperationStatus = L("Installer_Status_BatchCancelled", "Opération annulée.");
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "AppsViewModel.InstallSearchResultAsync");
             OperationStatus = $"Erreur : {ex.Message}";
@@ -1097,7 +1096,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
                     item.IsBusy = true;
                     item.IsFailed = false;
                     item.Status = "Installation...";
-                    OperationStatus = string.Format(L("Installer_Status_InstallingPkg", "Installation de {0}..."), item.Name);
+                    OperationStatus = TextFormatService.Format(L("Installer_Status_InstallingPkg", "Installation de {0}..."), item.Name);
                     AppendLog(OperationStatus);
 
                     WingetEngineService.InstallResult result = await _winget.InstallAsync(item.Entry.WingetId, progress, _cts.Token).ConfigureAwait(true);
@@ -1161,7 +1160,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
             _ = Task.Run(async () =>
             {
                 try { await DetectInstalledAsync(); }
-                catch (Exception ex) { LoggingService.LogException(ex, "AppsViewModel.DetectInstalledAsync"); }
+                catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "AppsViewModel.DetectInstalledAsync"); }
             });
         }
         catch (OperationCanceledException)
@@ -1169,7 +1168,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
             OperationStatus = L("Installer_Status_BatchCancelled", "Installation par lot annulée.");
             AppendLog(OperationStatus);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "AppsViewModel.RunInstallBatchAsync");
             OperationStatus = $"Erreur : {ex.Message}";
@@ -1203,7 +1202,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
             item.IsBusy = true;
             item.IsFailed = false;
             item.Status = "Téléchargement...";
-            OperationStatus = string.Format(L("Installer_Status_InstallingPkg", "Téléchargement de {0}..."), item.Name);
+            OperationStatus = TextFormatService.Format(L("Installer_Status_InstallingPkg", "Téléchargement de {0}..."), item.Name);
             AppendLog(OperationStatus);
 
             GitHubToolService.GithubToolResult result = await _github.InstallToolAsync(item.Name, item.Entry.Repo, item.Entry.AssetPattern, progress, ct).ConfigureAwait(true);

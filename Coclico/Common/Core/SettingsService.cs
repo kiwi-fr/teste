@@ -148,10 +148,10 @@ public class SettingsService
         public const double CardMax = 0.40;
     }
 
-    public static readonly string SettingsDir = Path.Combine(
+    public static readonly string SettingsDir = Path.Join(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Coclico");
 
-    private static readonly string SettingsPath = Path.Combine(SettingsDir, "settings.json");
+    private static readonly string SettingsPath = Path.Join(SettingsDir, "settings.json");
     private static readonly JsonSerializerOptions _writeOptions = new() { WriteIndented = true };
     private static readonly SemaphoreSlim _ioLock = new(1, 1);
     private static readonly string[] ValidLanguages = ["en", "fr"];
@@ -171,12 +171,12 @@ public class SettingsService
         try
         {
             _ = Directory.CreateDirectory(SettingsDir);
-            _ = Directory.CreateDirectory(Path.Combine(SettingsDir, "profiles"));
-            _ = Directory.CreateDirectory(Path.Combine(SettingsDir, "avatars"));
-            _ = Directory.CreateDirectory(Path.Combine(SettingsDir, "logs"));
-            _ = Directory.CreateDirectory(Path.Combine(SettingsDir, "cache"));
+            _ = Directory.CreateDirectory(Path.Join(SettingsDir, "profiles"));
+            _ = Directory.CreateDirectory(Path.Join(SettingsDir, "avatars"));
+            _ = Directory.CreateDirectory(Path.Join(SettingsDir, "logs"));
+            _ = Directory.CreateDirectory(Path.Join(SettingsDir, "cache"));
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
         {
             LoggingService.LogException(ex, "SettingsService.GetUserDataDirectory");
         }
@@ -190,7 +190,7 @@ public class SettingsService
             string dir = GetUserDataDirectory();
             _ = Process.Start(new ProcessStartInfo("explorer.exe", dir) { UseShellExecute = true });
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)
         {
             LoggingService.LogException(ex, "SettingsService.OpenUserDataDirectory");
         }
@@ -218,7 +218,7 @@ public class SettingsService
                 Settings = new AppSettings();
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Text.Json.JsonException or System.FormatException)
         {
             Settings = new AppSettings();
             LoggingService.LogException(ex, "SettingsService.Load");
@@ -264,11 +264,11 @@ public class SettingsService
             }
 
             string exePath = Process.GetCurrentProcess().MainModule?.FileName
-                ?? Path.Combine(AppContext.BaseDirectory, "Coclico.exe");
+                ?? Path.Join(AppContext.BaseDirectory, "Coclico.exe");
 
             key.SetValue("Coclico", '"' + exePath + '"');
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Security.SecurityException or System.ComponentModel.Win32Exception or System.InvalidOperationException)
         {
             LoggingService.LogException(ex, "SettingsService.EnableAutostart");
         }
@@ -282,7 +282,7 @@ public class SettingsService
                 .OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", writable: true);
             key?.DeleteValue("Coclico", throwOnMissingValue: false);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.Security.SecurityException or System.IO.IOException or System.UnauthorizedAccessException)
         {
             LoggingService.LogException(ex, "SettingsService.DisableAutostart");
         }
@@ -305,7 +305,7 @@ public class SettingsService
                 Settings = new AppSettings();
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Text.Json.JsonException or System.FormatException)
         {
             Settings = new AppSettings();
             LoggingService.LogException(ex, "SettingsService.Load");
@@ -332,7 +332,7 @@ public class SettingsService
             await File.WriteAllTextAsync(tempPath, json).ConfigureAwait(false);
             File.Move(tempPath, SettingsPath, overwrite: true);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Text.Json.JsonException or System.FormatException)
         {
             LoggingService.LogException(ex, "SettingsService.Save");
         }

@@ -112,7 +112,7 @@ public class NetworkMonitorService : IDisposable
                 return reply.RoundtripTime;
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "NetworkMonitorService.ProbeLatencyAsync");
         }
@@ -178,7 +178,7 @@ public class NetworkMonitorService : IDisposable
             CentralCircuitBreaker.Current.RecordSuccess(Subsystem);
             CentralUnitWatchdog.Current.Beat(Subsystem);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "NetworkMonitorService.RefreshAsync");
             CentralCircuitBreaker.Current.RecordFailure(Subsystem, ex);
@@ -196,7 +196,7 @@ public class NetworkMonitorService : IDisposable
         {
             _ = _loop.Wait(2000);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "NetworkMonitorService.Dispose:Loop");
         }
@@ -206,7 +206,7 @@ public class NetworkMonitorService : IDisposable
             _subject.OnCompleted();
             _subject.Dispose();
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "NetworkMonitorService.Dispose:Subject");
         }

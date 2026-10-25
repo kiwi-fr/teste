@@ -78,25 +78,25 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
     public string PhysAvailText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
     public string PhysTotalText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
     public string PhysPercent { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public double PhysUsedPercent { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } }
+    public double PhysUsedPercent { get; private set { if (field.Equals(value)) return; field = value; OnPropertyChanged(); } }
     public string VirtUsedText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
     public string VirtAvailText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
     public string VirtTotalText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
     public string VirtPercent { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public double VirtUsedPercent { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } }
+    public double VirtUsedPercent { get; private set { if (field.Equals(value)) return; field = value; OnPropertyChanged(); } }
     public string PageUsedText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
     public string PageAvailText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
     public string PageTotalText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public double SysCpuPercent { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } }
+    public double SysCpuPercent { get; private set { if (field.Equals(value)) return; field = value; OnPropertyChanged(); } }
     public string SysCpuText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
     public Brush SysCpuColor { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = _brushGreen;
     public string GpuNameShort { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
     public string GpuVramText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
     public string GpuTypeText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
     public string AppRamText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public double AppRamPercent { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } }
+    public double AppRamPercent { get; private set { if (field.Equals(value)) return; field = value; OnPropertyChanged(); } }
     public string AppCpuText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public double AppCpuPercent { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } }
+    public double AppCpuPercent { get; private set { if (field.Equals(value)) return; field = value; OnPropertyChanged(); } }
     public string PressureText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
     public Brush PressureColor { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = _brushGreen;
     public Brush PressureBorderColor { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = _brushBorderNormal;
@@ -317,7 +317,7 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
         if (_disposed) return;
         _disposed = true;
         Detach();
-        try { Interlocked.Exchange(ref _cleanCts, null)?.Cancel(); } catch (Exception ex) { LoggingService.LogException(ex, $"{Subsystem}.Dispose.CancelCts"); }
+        try { Interlocked.Exchange(ref _cleanCts, null)?.Cancel(); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, $"{Subsystem}.Dispose.CancelCts"); }
     }
 
     [RelayCommand]
@@ -342,13 +342,13 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
         {
             long freed = await Task.Run(MemoryCleanerService.ClearDirectXShaderCaches);
             string freedText = MemoryCleanerService.FormatBytes(freed);
-            GuardStatusText = string.Format(L("RamCleaner_ShaderCleared"), freedText) + " - " + DateTime.Now.ToString("HH:mm:ss");
+            GuardStatusText = TextFormatService.Format(L("RamCleaner_ShaderCleared"), freedText) + " - " + DateTime.Now.ToString("HH:mm:ss");
             if (NotifEnabled)
             {
-                ToastService.Show(string.Format(L("RamCleaner_ShaderCleared"), freedText));
+                ToastService.Show(TextFormatService.Format(L("RamCleaner_ShaderCleared"), freedText));
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, $"{Subsystem}.ClearShaders");
         }
@@ -371,7 +371,7 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
                 ToastService.Show(L("RamCleaner_GpuPipelineToast"));
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, $"{Subsystem}.RestartGpuPipeline");
         }
@@ -417,15 +417,15 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
                           : _brushGreen;
 
             ResourceGuardService guard = ServiceContainer.GetRequired<ResourceGuardService>();
-            AppRamText = string.Format(L("RamCleaner_AppRam"), guard.AppWorkingSetMb);
-            AppCpuText = string.Format(L("RamCleaner_AppCpu"), $"{guard.AppCpuPercent:F1}");
+            AppRamText = TextFormatService.Format(L("RamCleaner_AppRam"), guard.AppWorkingSetMb);
+            AppCpuText = TextFormatService.Format(L("RamCleaner_AppCpu"), $"{guard.AppCpuPercent:F1}");
             double totalRamMb = info.TotalPhysBytes / (1024.0 * 1024.0);
             AppRamPercent = totalRamMb > 0 ? Math.Min(100.0, guard.AppWorkingSetMb / totalRamMb * 100.0) : 0;
             AppCpuPercent = Math.Min(100.0, Math.Max(0.0, guard.AppCpuPercent));
 
             PushHistory(info.PhysUsedPercent);
         }
-        catch (Exception ex) { LoggingService.LogException(ex, $"{Subsystem}.RefreshStats"); }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, $"{Subsystem}.RefreshStats"); }
     }
 
     public async Task RefreshGpuAsync()
@@ -435,8 +435,8 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
             MemoryCleanerService.GpuInfo gpu = await Task.Run(MemoryCleanerService.GetGpuInfo);
             string name = gpu.Name.Length > 22 ? gpu.Name[..22] + "…" : gpu.Name;
             string vram = gpu.AdapterRamMb > 0
-                ? string.Format(L("RamCleaner_GpuVram"), gpu.AdapterRamMb)
-                : gpu.SharedUsedMb > 0 ? string.Format(L("RamCleaner_GpuShared"), gpu.SharedUsedMb) : L("RamCleaner_GpuVramNA");
+                ? TextFormatService.Format(L("RamCleaner_GpuVram"), gpu.AdapterRamMb)
+                : gpu.SharedUsedMb > 0 ? TextFormatService.Format(L("RamCleaner_GpuShared"), gpu.SharedUsedMb) : L("RamCleaner_GpuVramNA");
             string type = gpu.IsIntegrated ? L("RamCleaner_GpuIntegrated") : L("RamCleaner_GpuDedicated");
 
             RunOnUi(() =>
@@ -446,7 +446,7 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
                 GpuTypeText = type;
             });
         }
-        catch (Exception ex) { LoggingService.LogException(ex, $"{Subsystem}.RefreshGpu"); }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, $"{Subsystem}.RefreshGpu"); }
     }
 
     public void RefreshProcesses()
@@ -471,7 +471,7 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
                 }
             });
         }
-        catch (Exception ex) { LoggingService.LogException(ex, $"{Subsystem}.RefreshProcesses"); }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, $"{Subsystem}.RefreshProcesses"); }
     }
 
     public double[] GetRamHistorySnapshot()
@@ -509,8 +509,9 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
         try
         {
             CancellationTokenSource? oldCts = Interlocked.Exchange(ref _cleanCts, new CancellationTokenSource());
-            try { oldCts?.Cancel(); } catch (Exception ex) { LoggingService.LogException(ex, $"{Subsystem}.SafeCleanAsync.CancelPreviousCts"); }
-            try { oldCts?.Dispose(); } catch (Exception ex) { LoggingService.LogException(ex, $"{Subsystem}.SafeCleanAsync.DisposePreviousCts"); }
+            try { oldCts?.Cancel(); }
+            catch (Exception ex) when (ex is ObjectDisposedException or AggregateException) { LoggingService.LogException(ex, $"{Subsystem}.SafeCleanAsync.CancelPreviousCts"); }
+            finally { oldCts?.Dispose(); }
 
             CancellationToken ct = _cleanCts!.Token;
 
@@ -535,7 +536,6 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
                 lp = smartRes.LowPriorityStandbyFreed;
                 sfc = smartRes.SystemFileCacheFreed;
                 dns = smartRes.DnsCacheFreed;
-                gc = smartRes.GcCollectFreed;
                 total = smartRes.TotalFreed;
             }
             else
@@ -624,7 +624,7 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
 
                     ct.ThrowIfCancellationRequested();
                     CleaningStatus = L("RamCleaner_Status_SysMain");
-                    try { sf = await MemoryCleanerService.FlushSuperFetchAsync(ct); } catch (Exception ex) { LoggingService.LogException(ex, $"{Subsystem}.SafeCleanAsync.FlushSuperFetch"); }
+                    try { sf = await MemoryCleanerService.FlushSuperFetchAsync(ct); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, $"{Subsystem}.SafeCleanAsync.FlushSuperFetch"); }
                 }
 
                 long sumParts = ws + mfc + sfc + rc + sb + lp + cp + mp
@@ -662,8 +662,8 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
             RefreshStats();
             RefreshProcesses();
         }
-        catch (OperationCanceledException) { }
-        catch (Exception ex)
+        catch (OperationCanceledException ex) { _ = ex; }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             CleaningStatus = "Erreur : " + ex.Message;
             ResultTotal = "Erreur";
@@ -750,7 +750,7 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
         {
             return Application.Current?.TryFindResource(key) as string ?? key;
         }
-        catch { return key; }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { return key; }
     }
 
     private static void RunOnUi(Action action)

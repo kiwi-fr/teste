@@ -149,7 +149,8 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
 
         IsBusy = true;
         BusyActionTitle = actionTitle;
-        _cts = new CancellationTokenSource();
+        using CancellationTokenSource cts = new();
+        _cts = cts;
 
         try
         {
@@ -161,7 +162,7 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
         {
             AppendLog($"⚠️ Opération annulée par l'utilisateur.");
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             AppendLog($"❌ Erreur : {ex.Message}");
             LoggingService.LogException(ex, $"HealthDefenseVM.{actionTitle}");
@@ -170,7 +171,6 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
         {
             IsBusy = false;
             BusyActionTitle = string.Empty;
-            _cts?.Dispose();
             _cts = null;
             await RefreshStatusAsync();
         }

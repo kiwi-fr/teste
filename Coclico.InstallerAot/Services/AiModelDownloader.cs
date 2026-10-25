@@ -13,9 +13,9 @@ public static class AiModelDownloader
 {
     public static async Task DownloadModelAsync(string installDir, InstallerAiModel model, IProgress<InstallProgressReport> progress, CancellationToken ct = default)
     {
-        string modelDir = Path.Combine(installDir, "resource", "model");
+        string modelDir = Path.Join(installDir, "resource", "model");
         Directory.CreateDirectory(modelDir);
-        string targetFile = Path.Combine(modelDir, model.Id);
+        string targetFile = Path.Join(modelDir, model.Id);
 
         if (!targetFile.EndsWith(".gguf", StringComparison.OrdinalIgnoreCase))
         {
@@ -60,7 +60,7 @@ public static class AiModelDownloader
         else
         {
             resumeFrom = 0;
-            try { File.Delete(tempFile); } catch { }
+            try { File.Delete(tempFile); } catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
         }
 
         response.EnsureSuccessStatusCode();
@@ -71,7 +71,7 @@ public static class AiModelDownloader
         long totalRead = resumeFrom;
         if (totalBytes.HasValue && totalRead > totalBytes.Value)
         {
-            try { File.Delete(tempFile); } catch { }
+            try { File.Delete(tempFile); } catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
             resumeFrom = 0;
             totalRead = 0;
         }
@@ -110,9 +110,9 @@ public static class AiModelDownloader
         if (string.IsNullOrWhiteSpace(model.ExpectedSha256))
         {
             long downloadedBytes = new FileInfo(tempFile).Length;
-            if (downloadedBytes < (model.SizeMb * 1024 * 1024 * 0.8) || downloadedBytes == 0)
+            if (downloadedBytes < ((long)(model.SizeMb * 1024.0 * 1024.0 * 0.8)) || downloadedBytes == 0)
             {
-                try { File.Delete(tempFile); } catch { }
+                try { File.Delete(tempFile); } catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
                 throw new InvalidDataException(
                     $"Modèle {model.DisplayName} incomplet : {downloadedBytes} octets téléchargés (taille attendue ~{model.SizeMb} Mo).");
             }
@@ -122,7 +122,7 @@ public static class AiModelDownloader
             string actualHash = await ComputeSha256Async(tempFile, ct).ConfigureAwait(false);
             if (!string.Equals(actualHash, model.ExpectedSha256, StringComparison.OrdinalIgnoreCase))
             {
-                try { File.Delete(tempFile); } catch { }
+                try { File.Delete(tempFile); } catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
                 throw new InvalidDataException(
                     $"Modèle {model.DisplayName} invalide : empreinte SHA-256 incorrecte.");
             }
@@ -130,7 +130,7 @@ public static class AiModelDownloader
 
         if (File.Exists(targetFile))
         {
-            try { File.Delete(targetFile); } catch { }
+            try { File.Delete(targetFile); } catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
         }
         File.Move(tempFile, targetFile);
     }
@@ -157,9 +157,7 @@ public static class AiModelDownloader
         {
             throw;
         }
-        catch
-        {
-        }
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
     }
 
     private static async Task<bool> IsModelFileValidAsync(string targetFile, InstallerAiModel model, CancellationToken ct)
@@ -172,9 +170,9 @@ public static class AiModelDownloader
                 return string.Equals(hash, model.ExpectedSha256, StringComparison.OrdinalIgnoreCase);
             }
 
-            return new FileInfo(targetFile).Length > (model.SizeMb * 1024 * 1024 * 0.8);
+            return new FileInfo(targetFile).Length > ((long)(model.SizeMb * 1024.0 * 1024.0 * 0.8));
         }
-        catch
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             return false;
         }

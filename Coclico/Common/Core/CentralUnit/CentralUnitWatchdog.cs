@@ -100,7 +100,7 @@ public sealed class CentralUnitWatchdog : IDisposable
             {
                 revive?.Invoke();
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not System.OutOfMemoryException)
             {
                 LoggingService.LogException(ex, $"CentralUnitWatchdog.Revive.{subsystem}");
             }

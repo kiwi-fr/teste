@@ -123,7 +123,7 @@ public sealed class CacheServiceTests : IDisposable
     public void TryGet_CorruptedEntryIsTreatedAsMissing()
     {
         string key = Key("corrupt");
-        string path = Path.Combine(
+        string path = Path.Join(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "Coclico", "cache", key + ".cache.json");
         _keys.Add(key);
@@ -202,7 +202,7 @@ public sealed class CacheServiceTests : IDisposable
         string key = Key("indent");
         _cache.Set(key, "compact");
 
-        string path = Path.Combine(
+        string path = Path.Join(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "Coclico", "cache", key + ".cache.json");
 

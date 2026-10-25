@@ -55,7 +55,7 @@ public static class CudaRuntimeDownloader
     {
         EnsureSufficientDiskSpace(installPath);
 
-        string cudaDir = Path.Combine(installPath, "runtimes", "win-x64", "native", "cuda12");
+        string cudaDir = Path.Join(installPath, "runtimes", "win-x64", "native", "cuda12");
         _ = Directory.CreateDirectory(cudaDir);
 
         await DownloadAndExtractFolderAsync(
@@ -99,9 +99,7 @@ public static class CudaRuntimeDownloader
         {
             throw;
         }
-        catch
-        {
-        }
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
     }
 
     private static async Task DownloadAndExtractFolderAsync(
@@ -110,7 +108,7 @@ public static class CudaRuntimeDownloader
         IProgress<InstallProgressReport> progress, CancellationToken ct)
     {
         string url = $"{NugetFlatContainer}{packageId}/{version}/{packageId}.{version}.nupkg";
-        string tempNupkg = Path.Combine(Path.GetTempPath(), $"coclico-{packageId}.nupkg");
+        string tempNupkg = Path.Join(Path.GetTempPath(), $"coclico-{packageId}.nupkg");
         string extractDir = Path.Join(Path.GetTempPath(), $"coclico-extract-{packageId}");
 
         try
@@ -148,16 +146,16 @@ public static class CudaRuntimeDownloader
                     Directory.Delete(extractDir, recursive: true);
                 }
             }
-            catch { }
+            catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
         }
     }
 
     private static async Task DownloadAndJoinCublasLtAsync(
         string installPath, IProgress<InstallProgressReport> progress, CancellationToken ct)
     {
-        string tempFragment0 = Path.Combine(Path.GetTempPath(), "coclico-cublaslt.f00");
-        string tempFragment1 = Path.Combine(Path.GetTempPath(), "coclico-cublaslt.f01");
-        string targetFile = Path.Combine(installPath, "cublasLt64_12.dll");
+        string tempFragment0 = Path.Join(Path.GetTempPath(), "coclico-cublaslt.f00");
+        string tempFragment1 = Path.Join(Path.GetTempPath(), "coclico-cublaslt.f01");
+        string targetFile = Path.Join(installPath, "cublasLt64_12.dll");
 
         try
         {
@@ -195,8 +193,8 @@ public static class CudaRuntimeDownloader
         }
         finally
         {
-            try { File.Delete(tempFragment0); } catch { }
-            try { File.Delete(tempFragment1); } catch { }
+            try { File.Delete(tempFragment0); } catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
+            try { File.Delete(tempFragment1); } catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
         }
     }
 
@@ -206,7 +204,7 @@ public static class CudaRuntimeDownloader
         IProgress<InstallProgressReport> progress, CancellationToken ct)
     {
         string url = $"{NugetFlatContainer}{packageId}/{version}/{packageId}.{version}.nupkg";
-        string tempNupkg = Path.Combine(Path.GetTempPath(), $"coclico-{packageId}.nupkg");
+        string tempNupkg = Path.Join(Path.GetTempPath(), $"coclico-{packageId}.nupkg");
 
         try
         {
@@ -227,7 +225,7 @@ public static class CudaRuntimeDownloader
         }
         finally
         {
-            try { File.Delete(tempNupkg); } catch { }
+            try { File.Delete(tempNupkg); } catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
         }
     }
 

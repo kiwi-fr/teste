@@ -5,7 +5,7 @@ namespace Coclico.Installer.Models;
 
 public class InstallConfig
 {
-    public static string DefaultInstallPath => Path.Combine(
+    public static string DefaultInstallPath => Path.Join(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         "Programs", "Coclico");
 

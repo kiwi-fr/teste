@@ -28,12 +28,12 @@ public sealed class GitHubToolService
 
     public static string GetAppsRootDir()
     {
-        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Coclico Apps");
+        return Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Coclico Apps");
     }
 
     public static string GetToolDir(string toolName)
     {
-        return Path.Combine(GetAppsRootDir(), AppCatalogService.GetSafeFolderName(toolName));
+        return Path.Join(GetAppsRootDir(), AppCatalogService.GetSafeFolderName(toolName));
     }
 
     public async Task<GithubAsset> GetLatestAssetAsync(string repo, string pattern, CancellationToken ct = default)
@@ -80,7 +80,7 @@ public sealed class GitHubToolService
             log?.Report($"GitHub : recherche de la dernière release de {toolName} ({repo})...");
             GithubAsset asset = await GetLatestAssetAsync(repo, pattern, ct).ConfigureAwait(false);
 
-            string destination = Path.Combine(root, asset.Name);
+            string destination = Path.Join(root, asset.Name);
             string partial = destination + ".part";
             try
             {
@@ -89,9 +89,7 @@ public sealed class GitHubToolService
                     File.Delete(partial);
                 }
             }
-            catch (Exception)
-            {
-            }
+            catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
 
             log?.Report($"Téléchargement : {asset.Name}...");
             using (HttpResponseMessage response = await Http.GetAsync(asset.DownloadUrl, HttpCompletionOption.ResponseHeadersRead, ct).ConfigureAwait(false))
@@ -131,7 +129,7 @@ public sealed class GitHubToolService
 
             return new GithubToolResult(true, toolDir, exePath, null);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Net.Http.HttpRequestException or System.Net.Sockets.SocketException)
         {
             LoggingService.LogException(ex, $"GitHubToolService.InstallToolAsync({toolName})");
             return new GithubToolResult(false, string.Empty, null, ex.Message);
@@ -168,7 +166,7 @@ public sealed class GitHubToolService
     {
         string shortcutDir = AppShortcutsService.GetShortcutDir();
         Directory.CreateDirectory(shortcutDir);
-        string linkPath = Path.Combine(shortcutDir, AppCatalogService.GetSafeFolderName(shortcutName) + ".lnk");
+        string linkPath = Path.Join(shortcutDir, AppCatalogService.GetSafeFolderName(shortcutName) + ".lnk");
 
         string script =
             "$s = (New-Object -ComObject WScript.Shell).CreateShortcut('" + linkPath.Replace("'", "''") + "'); " +

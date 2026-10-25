@@ -23,7 +23,7 @@ public sealed class SecurityPolicyModel
 
 public sealed class SecurityPolicyService : ISecurityPolicy
 {
-    private static readonly string PolicyPath = Path.Combine(
+    private static readonly string PolicyPath = Path.Join(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "Coclico", "security-policy.json");
 
@@ -75,7 +75,7 @@ public sealed class SecurityPolicyService : ISecurityPolicy
         Environment.GetFolderPath(Environment.SpecialFolder.Windows),
         Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
         Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs"),
+        Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs"),
         Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
     ];
 
@@ -216,7 +216,7 @@ public sealed class SecurityPolicyService : ISecurityPolicy
 
         if (_standardSystemApps.TryGetValue(trimmed, out string? exeName))
         {
-            resolvedPath = Path.Combine(Environment.SystemDirectory, exeName);
+            resolvedPath = Path.Join(Environment.SystemDirectory, exeName);
             if (File.Exists(resolvedPath))
             {
                 return true;
@@ -325,7 +325,7 @@ public sealed class SecurityPolicyService : ISecurityPolicy
                 $"+{model.BlockedPowerShellPatterns.Count} ps, " +
                 $"+{model.ProtectedPathSegments.Count} paths)");
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Text.Json.JsonException or System.FormatException)
         {
             LoggingService.LogException(ex, "SecurityPolicyService.MergeFromFileAsync");
         }
@@ -342,7 +342,7 @@ public sealed class SecurityPolicyService : ISecurityPolicy
                     RegexOptions.Compiled | RegexOptions.IgnoreCase,
                     TimeSpan.FromMilliseconds(100)));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not System.OutOfMemoryException)
             {
                 LoggingService.LogException(ex, $"SecurityPolicy.CompileWildcard({p})");
             }

@@ -100,7 +100,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
             _logger.LogWarning("Update check cancelled");
             return null;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.Net.Http.HttpRequestException or System.Net.Sockets.SocketException or System.Text.Json.JsonException or System.FormatException)
         {
             _logger.LogError($"Unexpected error checking updates: {ex.Message}");
             return null;
@@ -212,7 +212,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
                         File.Delete(tempPath);
                     }
                 }
-                catch (Exception exCleanup)
+                catch (Exception exCleanup) when (exCleanup is System.IO.IOException or System.UnauthorizedAccessException)
                 {
                     LoggingService.LogException(exCleanup, "UpdateManager.TempCleanup");
                 }
@@ -221,7 +221,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
             _logger.LogInformation($"Download complete: {savePath}");
             return true;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Net.Http.HttpRequestException or System.Net.Sockets.SocketException or System.Security.Cryptography.CryptographicException or System.OperationCanceledException)
         {
             _logger.LogError($"Error downloading release: {ex.Message}");
             return false;
@@ -278,7 +278,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
             _logger.LogInformation("Installer launch cancelled by the user at the UAC prompt.");
             return false;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.ComponentModel.Win32Exception or System.InvalidOperationException or System.Security.Cryptography.CryptographicException)
         {
             _logger.LogError($"Failed to launch installer: {ex.Message}");
             return false;
@@ -315,7 +315,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
             bool currentIsPrerelease = !string.IsNullOrEmpty(currentSuffix);
             return !latestIsPrerelease && currentIsPrerelease;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "UpdateManager.IsNewerVersion");
             return string.Compare(latestTag, currentVersion) > 0;
@@ -347,7 +347,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
             string? version = string.IsNullOrWhiteSpace(info.ProductVersion) ? info.FileVersion : info.ProductVersion;
             return string.IsNullOrWhiteSpace(version) ? null : version.Trim();
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, $"UpdateManager.ReadInstallerVersion({filePath})");
             return null;
@@ -405,13 +405,8 @@ public class UpdateManager(ILogger<UpdateManager> logger)
         int unnamedHashCount = 0;
         string? lastUnnamedHash = null;
 
-        foreach (string rawLine in shaContent.Split('\n'))
+        foreach (string line in shaContent.Split('\n').Select(rawLine => rawLine.Trim()).Where(line => line.Length > 0))
         {
-            string line = rawLine.Trim();
-            if (line.Length == 0)
-            {
-                continue;
-            }
 
             Match m = NamedHashLineRegex.Match(line);
             if (m.Success)
@@ -476,7 +471,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
                     File.Delete(fullPath);
                 }
             }
-            catch (Exception exDelete)
+            catch (Exception exDelete) when (exDelete is System.IO.IOException or System.UnauthorizedAccessException)
             {
                 LoggingService.LogException(exDelete, "UpdateManager.TryReplaceInstaller.Delete");
             }
@@ -519,7 +514,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
 
             return ParseHashForAsset(shaContent, assetName);
         }
-        catch (Exception exShaAsset)
+        catch (Exception exShaAsset) when (exShaAsset is not System.OutOfMemoryException)
         {
             LoggingService.LogException(exShaAsset, "UpdateManager.ShaAssetDownload");
             return null;
@@ -545,16 +540,10 @@ public class UpdateManager(ILogger<UpdateManager> logger)
 
     private static List<int> ParseVersionParts(string versionString)
     {
-        var parts = new List<int>();
-        foreach (string part in versionString.Split('.', StringSplitOptions.RemoveEmptyEntries))
-        {
-            if (int.TryParse(part, out int num))
-            {
-                parts.Add(num);
-            }
-        }
-
-        return parts;
+        return versionString.Split('.', StringSplitOptions.RemoveEmptyEntries)
+            .Where(part => int.TryParse(part, out _))
+            .Select(int.Parse)
+            .ToList();
     }
 
     private static bool IsSha256Hex(string value)

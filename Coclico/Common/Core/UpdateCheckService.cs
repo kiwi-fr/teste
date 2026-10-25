@@ -77,7 +77,7 @@ public class UpdateCheckService(
 
             return release;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             _logger.LogError($"Failed to check for updates: {ex.Message}");
             CheckFailed?.Invoke(this, ex);

@@ -24,7 +24,7 @@ public sealed class DiagnosticHistoryService : IDiagnosticHistoryService
 
     public DiagnosticHistoryService(int retentionCount = 30, int retentionDays = 30)
         : this(
-            Path.Combine(
+            Path.Join(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "Coclico", "diagnostics"),
             retentionCount,
@@ -45,7 +45,7 @@ public sealed class DiagnosticHistoryService : IDiagnosticHistoryService
         ArgumentNullException.ThrowIfNull(run);
         Directory.CreateDirectory(_baseDirectory);
 
-        string filePath = Path.Combine(_baseDirectory, FileNameFor(run.Id));
+        string filePath = Path.Join(_baseDirectory, FileNameFor(run.Id));
 
         string tempPath = filePath + ".tmp";
         await using (FileStream stream = File.Create(tempPath))
@@ -85,7 +85,7 @@ public sealed class DiagnosticHistoryService : IDiagnosticHistoryService
 
     public Task<DiagnosticRun?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        string filePath = Path.Combine(_baseDirectory, FileNameFor(id));
+        string filePath = Path.Join(_baseDirectory, FileNameFor(id));
         if (!File.Exists(filePath))
         {
             return Task.FromResult<DiagnosticRun?>(null);
@@ -106,7 +106,7 @@ public sealed class DiagnosticHistoryService : IDiagnosticHistoryService
 
     public Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        string filePath = Path.Combine(_baseDirectory, FileNameFor(id));
+        string filePath = Path.Join(_baseDirectory, FileNameFor(id));
         if (File.Exists(filePath))
         {
             File.Delete(filePath);
@@ -208,7 +208,7 @@ public sealed class DiagnosticHistoryService : IDiagnosticHistoryService
         {
             return File.GetLastWriteTimeUtc(filePath);
         }
-        catch
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
         {
             return DateTime.MinValue;
         }

@@ -15,7 +15,7 @@ public static class RegistryService
         string installDir,
         string exePath)
     {
-        using var key = Registry.LocalMachine.CreateSubKey(Path.Combine(UninstallKeyRoot, CoclicoKey));
+        using var key = Registry.LocalMachine.CreateSubKey(Path.Join(UninstallKeyRoot, CoclicoKey));
         if (key is null)
         {
             throw new InvalidOperationException("Impossible de creer la cle de registre de desinstallation.");
@@ -25,7 +25,7 @@ public static class RegistryService
         key.SetValue("DisplayVersion", version);
         key.SetValue("DisplayIcon", exePath);
         key.SetValue("InstallLocation", installDir);
-        var uninstaller = Path.Combine(installDir, "unins000.exe");
+        var uninstaller = Path.Join(installDir, "unins000.exe");
         key.SetValue("UninstallString", $"\"{uninstaller}\"");
         key.SetValue("Publisher", "Coclico");
         key.SetValue("NoModify", 1, RegistryValueKind.DWord);

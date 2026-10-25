@@ -35,7 +35,7 @@ public static class ShortcutHelper
             using var process = System.Diagnostics.Process.Start(psi);
             process?.WaitForExit(15000);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.ComponentModel.Win32Exception or System.InvalidOperationException or System.Runtime.InteropServices.COMException)
         {
             System.Diagnostics.Debug.WriteLine($"Erreur création raccourci {shortcutPath}: {ex.Message}");
         }
@@ -50,7 +50,7 @@ public static class ShortcutHelper
                 File.Delete(shortcutPath);
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
         {
             System.Diagnostics.Debug.WriteLine($"Erreur suppression raccourci {shortcutPath}: {ex.Message}");
         }

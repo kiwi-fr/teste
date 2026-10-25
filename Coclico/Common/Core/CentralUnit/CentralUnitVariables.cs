@@ -37,7 +37,7 @@ public sealed class CentralUnitVariables
         foreach (Action<string, object?> handler in GetHandlers(key))
         {
             try { handler(key, boxed); }
-            catch { }
+            catch (Exception ex) when (ex is not System.OutOfMemoryException) { _ = ex; }
         }
 
         ValueChanged?.Invoke(key, boxed);
@@ -81,7 +81,7 @@ public sealed class CentralUnitVariables
         if (_values.TryGetValue(key, out object? current))
         {
             try { handler(key, current); }
-            catch { }
+            catch (Exception ex) when (ex is not System.OutOfMemoryException) { _ = ex; }
         }
 
         return () =>

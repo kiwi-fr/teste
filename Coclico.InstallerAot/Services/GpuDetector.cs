@@ -75,7 +75,7 @@ public static class GpuDetector
                 _ => new GpuInfo(false, "Carte graphique standard", InstallerGpuVendor.None)
             };
         }
-        catch
+        catch (Exception ex) when (ex is System.Security.SecurityException or System.IO.IOException or System.UnauthorizedAccessException)
         {
             return new GpuInfo(false, "Carte graphique standard", InstallerGpuVendor.None);
         }

@@ -67,7 +67,7 @@ public class FileIconConverter : IValueConverter
                         _cache.Add(path, bitmap);
                     }
                 }
-                catch (Exception exSwallow)
+                catch (Exception exSwallow) when (exSwallow is not System.OutOfMemoryException)
                 {
                     Services.LoggingService.LogException(exSwallow, "FileIconConverter.PreloadIcon");
                 }
@@ -95,7 +95,7 @@ public class FileIconConverter : IValueConverter
                 _cache.Add(path, bitmap);
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
         {
             Services.LoggingService.LogException(ex, "FileIconConverter.LoadIconAsync");
         }

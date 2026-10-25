@@ -7,7 +7,7 @@ namespace Coclico.Views;
 
 public partial class DiagnosticView : UserControl
 {
-    private DiagnosticViewModel? _viewModel;
+    private readonly DiagnosticViewModel? _viewModel;
 
     public DiagnosticView()
     {
@@ -31,7 +31,7 @@ public partial class DiagnosticView : UserControl
                 main.NavigateTo(navigationTag);
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "DiagnosticView.OnActionRequested");
         }

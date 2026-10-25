@@ -22,7 +22,7 @@ public partial class App : Application
             {
                 main = Program.IsUninstallMode ? new Views.UninstallWindow() : new MainWindow();
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not System.OutOfMemoryException)
             {
                 Program.LogCrash(ex);
                 Environment.Exit(1);

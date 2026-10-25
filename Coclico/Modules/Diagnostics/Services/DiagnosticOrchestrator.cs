@@ -110,9 +110,7 @@ public sealed class DiagnosticOrchestrator : IDiagnosticOrchestrator
             {
                 await _history.SaveAsync(run, cancellationToken).ConfigureAwait(false);
             }
-            catch (OperationCanceledException)
-            {
-            }
+            catch (OperationCanceledException ex) { _ = ex; }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
                 LoggingService.LogException(ex, $"{Subsystem}.Save");
@@ -156,7 +154,7 @@ public sealed class DiagnosticOrchestrator : IDiagnosticOrchestrator
                     DiagnosticCheckStatus.TimedOut, [], TimeSpan.Zero,
                     reason: "check_timeout");
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not System.OutOfMemoryException)
             {
                 LoggingService.LogException(ex, $"{Subsystem}.{check.Id}");
                 result = DiagnosticCheckResult.Finished(
@@ -229,7 +227,7 @@ public sealed class DiagnosticOrchestrator : IDiagnosticOrchestrator
         {
             hasBattery = NativeDiag.HasBattery();
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, $"{Subsystem}.BuildEnvironment");
         }
@@ -253,7 +251,7 @@ public sealed class DiagnosticOrchestrator : IDiagnosticOrchestrator
                 ram.TotalPhysBytes,
                 environment.IsElevated);
         }
-        catch (Exception)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             return null;
         }
@@ -265,7 +263,7 @@ public sealed class DiagnosticOrchestrator : IDiagnosticOrchestrator
         {
             return System.Reflection.Assembly.GetEntryAssembly()?.GetName().Version?.ToString();
         }
-        catch
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             return null;
         }

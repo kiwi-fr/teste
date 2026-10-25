@@ -163,7 +163,7 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
         {
             _runCts?.Cancel();
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, $"{Subsystem}.Cancel");
         }
@@ -237,7 +237,7 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
         {
             StatusText = L("Diag_State_Interrupted");
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, $"{Subsystem}.Run");
             StatusText = L("Diag_State_GlobalError");
@@ -266,21 +266,16 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
 
         RebuildCategoryCards(run);
 
-        if (run.Summary is DiagnosticSummary summary)
-        {
-            SummaryText = L("Diag_SummaryFormat")
+        SummaryText = run.Summary is DiagnosticSummary summary
+            ? L("Diag_SummaryFormat")
                 .Replace("{completed}", summary.ChecksCompleted.ToString(System.Globalization.CultureInfo.CurrentCulture), StringComparison.Ordinal)
                 .Replace("{total}", summary.ChecksTotal.ToString(System.Globalization.CultureInfo.CurrentCulture), StringComparison.Ordinal)
                 .Replace("{failed}", summary.ChecksFailed.ToString(System.Globalization.CultureInfo.CurrentCulture), StringComparison.Ordinal)
                 .Replace("{warning}", summary.FindingsWarning.ToString(System.Globalization.CultureInfo.CurrentCulture), StringComparison.Ordinal)
                 .Replace("{error}", summary.FindingsError.ToString(System.Globalization.CultureInfo.CurrentCulture), StringComparison.Ordinal)
                 .Replace("{critical}", summary.FindingsCritical.ToString(System.Globalization.CultureInfo.CurrentCulture), StringComparison.Ordinal)
-                + (run.Findings.Count == 0 ? " " + L("Diag_SummaryNoFinding") : string.Empty);
-        }
-        else
-        {
-            SummaryText = string.Empty;
-        }
+                + (run.Findings.Count == 0 ? " " + L("Diag_SummaryNoFinding") : string.Empty)
+            : string.Empty;
 
         LastRunText = run.StartedAtUtc.ToLocalTime().ToString("g", System.Globalization.CultureInfo.CurrentCulture);
         HasResult = true;
@@ -386,7 +381,7 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
                 };
                 findingsText = findings.Count == 0
                     ? L("Diag_Card_NoFinding")
-                    : string.Format(System.Globalization.CultureInfo.CurrentCulture, L("Diag_Card_FindingsFormat"), findings.Count);
+                    : TextFormatService.Format(System.Globalization.CultureInfo.CurrentCulture, L("Diag_Card_FindingsFormat"), findings.Count);
             }
 
             CategoryCards.Add(new DiagnosticCategoryCard
@@ -417,7 +412,7 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
                     DateText = summary.StartedAtUtc.ToLocalTime().ToString("g", System.Globalization.CultureInfo.CurrentCulture),
                     ModeText = L($"Diag_Mode_{summary.Mode}"),
                     StatusText = L($"Diag_RunStatus_{summary.Status}"),
-                    FindingsText = string.Format(
+                    FindingsText = TextFormatService.Format(
                         System.Globalization.CultureInfo.CurrentCulture,
                         L("Diag_Card_FindingsFormat"),
                         summary.FindingsWarning + summary.FindingsError + summary.FindingsCritical)
@@ -426,7 +421,7 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
 
             OnPropertyChanged(nameof(HasHistory));
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, $"{Subsystem}.LoadHistory");
         }
@@ -445,7 +440,6 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
             string filter = asText
                 ? "Text report (*.txt)|*.txt"
                 : "JSON report (*.json)|*.json";
-            string fileName = $"coclico-diagnostic-{run.StartedAtUtc:yyyyMMdd-HHmmss}" + (asText ? ".txt" : ".json");
 
             string? target = _dialog.ShowSaveFileDialog(
                 L(asText ? "Diag_ExportTextTitle" : "Diag_ExportJsonTitle"),
@@ -504,7 +498,7 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
         {
             return Application.Current?.TryFindResource(key) as string ?? key;
         }
-        catch
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             return key;
         }
@@ -538,7 +532,7 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
         {
             _runCts?.Cancel();
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, $"{Subsystem}.Dispose");
         }

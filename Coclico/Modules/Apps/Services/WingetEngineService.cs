@@ -61,13 +61,11 @@ public sealed class WingetEngineService
         string? direct = null;
         try
         {
-            direct = Path.Combine(
+            direct = Path.Join(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 @"Microsoft\WindowsApps\winget.exe");
         }
-        catch (Exception)
-        {
-        }
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
 
         if (!string.IsNullOrEmpty(direct) && File.Exists(direct))
         {
@@ -96,9 +94,7 @@ public sealed class WingetEngineService
                     return candidate;
                 }
             }
-            catch (Exception)
-            {
-            }
+            catch (Exception ex) when (ex is not System.OutOfMemoryException) { _ = ex; }
         }
 
         return null;
@@ -117,7 +113,7 @@ public sealed class WingetEngineService
         }
 
         log?.Report("WinGet absent : installation du bundle officiel App Installer...");
-        string dir = Path.Combine(Path.GetTempPath(), "Coclico-WingetSetup");
+        string dir = Path.Join(Path.GetTempPath(), "Coclico-WingetSetup");
         try
         {
             if (Directory.Exists(dir))
@@ -125,13 +121,11 @@ public sealed class WingetEngineService
                 Directory.Delete(dir, recursive: true);
             }
         }
-        catch (Exception)
-        {
-        }
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
 
         Directory.CreateDirectory(dir);
 
-        string bundlePath = Path.Combine(dir, "Microsoft.DesktopAppInstaller.msixbundle");
+        string bundlePath = Path.Join(dir, "Microsoft.DesktopAppInstaller.msixbundle");
         await DownloadAsync(BundleUrl, bundlePath, ct).ConfigureAwait(false);
         if (!await VerifyBundleSha256Async(bundlePath, log, ct).ConfigureAwait(false))
         {
@@ -148,7 +142,7 @@ public sealed class WingetEngineService
         }
 
         log?.Report("Installation des dépendances officielles (VCLibs, UI.Xaml)...");
-        string depsZipPath = Path.Combine(dir, "DesktopAppInstaller_Dependencies.zip");
+        string depsZipPath = Path.Join(dir, "DesktopAppInstaller_Dependencies.zip");
         await DownloadAsync(DepsZipUrl, depsZipPath, ct).ConfigureAwait(false);
         List<string> dependencyPaths = ExtractX64Dependencies(depsZipPath, dir);
         foreach (string dependency in dependencyPaths)
@@ -274,7 +268,7 @@ public sealed class WingetEngineService
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "WingetEngineService.DetectInstalledIdsAsync");
         }
@@ -321,7 +315,7 @@ public sealed class WingetEngineService
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "WingetEngineService.GetAvailableUpgradesAsync");
         }
@@ -377,7 +371,7 @@ public sealed class WingetEngineService
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, $"WingetEngineService.SearchAsync({query})");
         }
@@ -473,7 +467,7 @@ public sealed class WingetEngineService
                     Directory.Delete(extractDir, recursive: true);
                 }
             }
-            catch { }
+            catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
         }
 
         return paths.Count > 0
@@ -494,7 +488,7 @@ public sealed class WingetEngineService
                 "if (-not (Test-Path -LiteralPath $m)) { exit 3 }; " +
                 "Add-AppxPackage -Register $m -DisableDevelopmentMode; " +
                 "if ($?) { exit 0 } else { exit 1 } " +
-                "} catch { exit 4 }";
+                "} catch (Exception ex) when (ex is not System.OutOfMemoryException){ exit 4 }";
 
             ProcessExecutionResult result = await _processExecution.ExecuteAsync(
                 "powershell.exe",
@@ -517,7 +511,7 @@ public sealed class WingetEngineService
 
             return false;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             log?.Report($"Réparation impossible ({ex.Message}).");
             return false;
@@ -541,7 +535,7 @@ public sealed class WingetEngineService
             byte[] expected = Convert.FromHexString(BundleSha256);
             return CryptographicOperations.FixedTimeEquals(actual, expected);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Security.Cryptography.CryptographicException)
         {
             LoggingService.LogException(ex, "WingetEngineService.VerifyBundleSha256Async");
             log?.Report($"Impossible de vérifier l'empreinte du bundle : {ex.Message}");
@@ -573,7 +567,7 @@ public sealed class WingetEngineService
 
             return false;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             log?.Report($"Installation impossible ({ex.Message}).");
             return false;

@@ -194,7 +194,7 @@ public sealed class CentralUnitFlagStore : IDisposable
         while (!loopToken.IsCancellationRequested)
         {
             TimeSpan delay;
-            CancellationTokenSource linked;
+            CancellationTokenSource? linked = null;
             try
             {
                 lock (_scheduleLock)
@@ -218,44 +218,37 @@ public sealed class CentralUnitFlagStore : IDisposable
                 break;
             }
 
-            if (delay == TimeSpan.Zero)
+            using (linked)
             {
-                linked.Dispose();
-                FireDueSchedules();
-                continue;
-            }
+                if (delay == TimeSpan.Zero)
+                {
+                    FireDueSchedules();
+                    continue;
+                }
 
-            try
-            {
-                await Task.Delay(delay, linked.Token).ConfigureAwait(false);
-            }
-            catch (OperationCanceledException)
-            {
-            }
-            catch (ObjectDisposedException)
-            {
-                break;
-            }
-            finally
-            {
-                linked.Dispose();
+                try
+                {
+                    await Task.Delay(delay, linked.Token).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException ex) { _ = ex; }
+                catch (ObjectDisposedException)
+                {
+                    break;
+                }
             }
         }
     }
 
     private void FireDueSchedules()
     {
-        List<string> due = new();
+        List<string> due;
         lock (_scheduleLock)
         {
             DateTime now = DateTime.UtcNow;
-            foreach (KeyValuePair<string, DateTime> schedule in _schedules)
-            {
-                if (schedule.Value <= now)
-                {
-                    due.Add(schedule.Key);
-                }
-            }
+            due = _schedules
+                .Where(schedule => schedule.Value <= now)
+                .Select(schedule => schedule.Key)
+                .ToList();
 
             foreach (string flag in due)
             {

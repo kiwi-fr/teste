@@ -75,8 +75,7 @@ public static class DiagnosticRuleEngine
 
         foreach (DiskReliabilityFacts disk in facts.Disks)
         {
-            long uncorrected = (disk.ReadErrorsUncorrected ?? 0) + (disk.WriteErrorsUncorrected ?? 0);
-            if (disk.ReadErrorsUncorrected is > 0 || disk.WriteErrorsUncorrected is > 0)
+            if ((disk.ReadErrorsUncorrected ?? 0) > 0 || (disk.WriteErrorsUncorrected ?? 0) > 0)
             {
                 findings.Add(new DiagnosticFinding
                 {
@@ -384,28 +383,25 @@ public static class DiagnosticRuleEngine
             });
         }
 
-        foreach (EventGroupFacts group in facts.CriticalGroups7d)
+        foreach (EventGroupFacts group in facts.CriticalGroups7d.Where(group => group.Count >= CriticalEventGroupWarning7d))
         {
-            if (group.Count >= CriticalEventGroupWarning7d)
+            findings.Add(new DiagnosticFinding
             {
-                findings.Add(new DiagnosticFinding
-                {
-                    Id = "WINDOWS_CRITICAL_EVENTS_001",
-                    Entity = $"{group.Provider}/{group.EventId}",
-                    Category = DiagnosticCategory.Windows,
-                    Severity = DiagnosticSeverity.Warning,
-                    Confidence = DiagnosticConfidence.Medium,
-                    TitleKey = "Diag_Finding_RecurringEvents_Title",
-                    SummaryKey = "Diag_Finding_RecurringEvents_Summary",
-                    ObservedAtUtc = DateTime.UtcNow,
-                    Evidence =
+                Id = "WINDOWS_CRITICAL_EVENTS_001",
+                Entity = $"{group.Provider}/{group.EventId}",
+                Category = DiagnosticCategory.Windows,
+                Severity = DiagnosticSeverity.Warning,
+                Confidence = DiagnosticConfidence.Medium,
+                TitleKey = "Diag_Finding_RecurringEvents_Title",
+                SummaryKey = "Diag_Finding_RecurringEvents_Summary",
+                ObservedAtUtc = DateTime.UtcNow,
+                Evidence =
                     [
                         DiagnosticEvidence.Measured("windows.events.count7d", "Diag_Evidence_EventCount", group.Count, "", "EventLog:System"),
                         DiagnosticEvidence.Measured("windows.events.provider", "Diag_Evidence_EventProvider", group.Provider, "", "EventLog:System")
                     ],
-                    RecommendedNextStepKeys = ["Diag_Next_CheckEventDetails"]
-                });
-            }
+                RecommendedNextStepKeys = ["Diag_Next_CheckEventDetails"]
+            });
         }
 
         return findings;

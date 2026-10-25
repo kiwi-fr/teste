@@ -106,8 +106,8 @@ public sealed class DiagnosticResourceKeyTests
     public void DynamicKey_ExistsInBothLanguageFiles(string key)
     {
         string repoRoot = XamlResourceValidationTests.FindRepoRoot();
-        HashSet<string> fr = ExtractKeys(Path.Combine(repoRoot, "Coclico", "Resources", "Lang", "fr.xaml"));
-        HashSet<string> en = ExtractKeys(Path.Combine(repoRoot, "Coclico", "Resources", "Lang", "en.xaml"));
+        HashSet<string> fr = ExtractKeys(Path.Join(repoRoot, "Coclico", "Resources", "Lang", "fr.xaml"));
+        HashSet<string> en = ExtractKeys(Path.Join(repoRoot, "Coclico", "Resources", "Lang", "en.xaml"));
 
         Assert.True(fr.Contains(key), $"Clé absente de fr.xaml : {key}");
         Assert.True(en.Contains(key), $"Clé absente de en.xaml : {key}");
@@ -118,7 +118,7 @@ public sealed class DiagnosticResourceKeyTests
     {
         string[] categories = Enum.GetNames(typeof(Coclico.Modules.Diagnostics.Models.DiagnosticCategory));
         string repoRoot = XamlResourceValidationTests.FindRepoRoot();
-        HashSet<string> fr = ExtractKeys(Path.Combine(repoRoot, "Coclico", "Resources", "Lang", "fr.xaml"));
+        HashSet<string> fr = ExtractKeys(Path.Join(repoRoot, "Coclico", "Resources", "Lang", "fr.xaml"));
 
         Assert.All(categories, category =>
             Assert.Contains($"Diag_Category_{category}", fr));
@@ -144,7 +144,7 @@ public sealed class DiagnosticResourceKeyTests
         ];
 
         string repoRoot = XamlResourceValidationTests.FindRepoRoot();
-        HashSet<string> en = ExtractKeys(Path.Combine(repoRoot, "Coclico", "Resources", "Lang", "en.xaml"));
+        HashSet<string> en = ExtractKeys(Path.Join(repoRoot, "Coclico", "Resources", "Lang", "en.xaml"));
 
         Assert.All(checkIds, id =>
             Assert.Contains($"Diag_Check_{id.Replace('.', '_')}", en));

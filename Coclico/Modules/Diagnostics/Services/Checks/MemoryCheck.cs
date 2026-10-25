@@ -53,7 +53,7 @@ public sealed class MemoryCheck : IDiagnosticCheck
         {
             return Process.GetProcesses().Length;
         }
-        catch
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)
         {
             return 0;
         }
@@ -74,7 +74,7 @@ public sealed class MemoryCheck : IDiagnosticCheck
         {
             throw;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException or System.OperationCanceledException)
         {
             LoggingService.LogException(ex, "MemoryCheck.GetTopMemoryProcess");
             return (null, null);
@@ -87,7 +87,7 @@ public sealed class MemoryCheck : IDiagnosticCheck
         {
             return process.WorkingSet64;
         }
-        catch
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             return 0;
         }

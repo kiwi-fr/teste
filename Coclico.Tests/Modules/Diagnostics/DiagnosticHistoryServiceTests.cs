@@ -10,7 +10,7 @@ public sealed class DiagnosticHistoryServiceTests : IDisposable
 
     public DiagnosticHistoryServiceTests()
     {
-        _baseDirectory = Path.Combine(Path.GetTempPath(), "coclico-diag-tests-" + Guid.NewGuid().ToString("N"));
+        _baseDirectory = Path.Join(Path.GetTempPath(), "coclico-diag-tests-" + Guid.NewGuid().ToString("N"));
     }
 
     public void Dispose()
@@ -19,9 +19,7 @@ public sealed class DiagnosticHistoryServiceTests : IDisposable
         {
             Directory.Delete(_baseDirectory, recursive: true);
         }
-        catch (DirectoryNotFoundException)
-        {
-        }
+        catch (DirectoryNotFoundException ex) { _ = ex; }
     }
 
     private DiagnosticHistoryService CreateService(int retentionCount = 30, int retentionDays = 30)
@@ -128,7 +126,7 @@ public sealed class DiagnosticHistoryServiceTests : IDisposable
     public async Task CorruptJsonFile_DoesNotCrashAndIsIgnored()
     {
         Directory.CreateDirectory(_baseDirectory);
-        string corruptFile = Path.Combine(_baseDirectory, Guid.NewGuid().ToString("N") + ".json");
+        string corruptFile = Path.Join(_baseDirectory, Guid.NewGuid().ToString("N") + ".json");
         File.WriteAllText(corruptFile, "{ this is not valid json");
 
         DiagnosticHistoryService service = CreateService();

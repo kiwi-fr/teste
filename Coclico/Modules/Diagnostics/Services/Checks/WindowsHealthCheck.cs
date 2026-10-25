@@ -93,19 +93,14 @@ public sealed class WindowsHealthCheck : IDiagnosticCheck
             string provider = record.ProviderName ?? "Unknown";
             string key = $"{provider}/{record.Id}";
 
-            if (grouped.TryGetValue(key, out EventGroupFacts? existing))
-            {
-                grouped[key] = existing with { Count = existing.Count + 1 };
-            }
-            else
-            {
-                grouped[key] = new EventGroupFacts(
+            grouped[key] = grouped.TryGetValue(key, out EventGroupFacts? existing)
+                ? existing with { Count = existing.Count + 1 }
+                : new EventGroupFacts(
                     provider,
                     record.Id,
                     1,
                     record.TimeCreated?.ToUniversalTime(),
                     "Error");
-            }
         }
 
         foreach (EventGroupFacts group in grouped.Values.OrderByDescending(g => g.Count).Take(maxGroups))

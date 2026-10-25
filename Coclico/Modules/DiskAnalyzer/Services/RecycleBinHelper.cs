@@ -23,7 +23,7 @@ public static class RecycleBinHelper
         {
             return SendToRecycleBinIFileOperation(paths);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "RecycleBinHelper.IFileOperation");
             return SendToRecycleBinLegacy(paths);

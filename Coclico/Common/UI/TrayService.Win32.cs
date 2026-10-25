@@ -125,7 +125,7 @@ public partial class TrayService : IDisposable
                 _hMenu = IntPtr.Zero;
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.Runtime.InteropServices.COMException or System.InvalidOperationException)
         {
             LoggingService.LogException(ex, "TrayService.Dispose");
         }

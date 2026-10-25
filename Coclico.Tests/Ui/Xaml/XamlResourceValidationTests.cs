@@ -22,14 +22,14 @@ public sealed class XamlResourceValidationTests
 
         foreach (string projectName in ProjectNames)
         {
-            string projectDir = Path.Combine(repoRoot, projectName);
+            string projectDir = Path.Join(repoRoot, projectName);
             if (!Directory.Exists(projectDir))
             {
                 violations.Add($"Projet introuvable : {projectDir}");
                 continue;
             }
 
-            var globalKeys = new HashSet<string>(ExtractKeys(File.ReadAllText(Path.Combine(projectDir, "App.xaml"))));
+            var globalKeys = new HashSet<string>(ExtractKeys(File.ReadAllText(Path.Join(projectDir, "App.xaml"))));
 
             var xamlFiles = Directory.EnumerateFiles(projectDir, "*.xaml", SearchOption.AllDirectories)
                 .Where(IsSourceFile)
@@ -42,27 +42,24 @@ public sealed class XamlResourceValidationTests
                 available.UnionWith(ExtractKeys(raw));
                 CollectMergedDictionaryKeys(projectDir, raw, available, [file]);
 
-                foreach (Match match in StaticResourceRegex.Matches(raw))
+                foreach (string key in StaticResourceRegex.Matches(raw).OfType<Match>().Select(match => match.Groups[1].Value))
                 {
-                    string key = match.Groups[1].Value;
                     if (!available.Contains(key))
                     {
                         violations.Add($"{Rel(repoRoot, file)} : clé StaticResource '{key}' introuvable (ni locale, ni App.xaml, ni dictionnaires fusionnés)");
                     }
                 }
 
-                foreach (Match match in MergedDictionaryRegex.Matches(raw))
+                foreach (string source in MergedDictionaryRegex.Matches(raw).OfType<Match>().Select(match => match.Groups[1].Value))
                 {
-                    string source = match.Groups[1].Value;
                     if (!TryResolvePackUri(projectDir, source, out string? resolved))
                     {
                         violations.Add($"{Rel(repoRoot, file)} : dictionnaire fusionné introuvable '{source}'");
                     }
                 }
 
-                foreach (Match match in IconSourceRegex.Matches(raw))
+                foreach (string rawValue in IconSourceRegex.Matches(raw).OfType<Match>().Select(match => match.Groups[1].Value.Trim()))
                 {
-                    string rawValue = match.Groups[1].Value.Trim();
                     string value = rawValue.Replace('/', '\\');
                     if (!IsImagePath(rawValue))
                     {
@@ -77,7 +74,7 @@ public sealed class XamlResourceValidationTests
                             continue;
                         }
 
-                        string target = Path.Combine(projectDir, packMatch.Groups[2].Value.Replace('/', '\\'));
+                        string target = Path.Join(projectDir, packMatch.Groups[2].Value.Replace('/', '\\'));
                         if (!File.Exists(target))
                         {
                             violations.Add($"{Rel(repoRoot, file)} : ressource pack introuvable '{rawValue}'");
@@ -85,7 +82,7 @@ public sealed class XamlResourceValidationTests
                     }
                     else
                     {
-                        string target = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(file)!, value));
+                        string target = Path.GetFullPath(Path.Join(Path.GetDirectoryName(file)!, value));
                         if (!File.Exists(target))
                         {
                             violations.Add($"{Rel(repoRoot, file)} : image/icône introuvable '{rawValue}' (résolue : {target})");
@@ -131,9 +128,8 @@ public sealed class XamlResourceValidationTests
 
     private static void CollectMergedDictionaryKeys(string projectDir, string xaml, ISet<string> keys, IReadOnlyList<string> visitedFiles)
     {
-        foreach (Match match in MergedDictionaryRegex.Matches(xaml))
+        foreach (string source in MergedDictionaryRegex.Matches(xaml).OfType<Match>().Select(match => match.Groups[1].Value))
         {
-            string source = match.Groups[1].Value;
             if (!TryResolvePackUri(projectDir, source, out string? resolved) || resolved is null)
             {
                 continue;
@@ -170,7 +166,7 @@ public sealed class XamlResourceValidationTests
             return true;
         }
 
-        string candidate = Path.Combine(projectDir, match.Groups[2].Value.Replace('/', '\\'));
+        string candidate = Path.Join(projectDir, match.Groups[2].Value.Replace('/', '\\'));
         if (!File.Exists(candidate))
         {
             return false;
@@ -185,7 +181,7 @@ public sealed class XamlResourceValidationTests
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
         while (dir is not null)
         {
-            if (File.Exists(Path.Combine(dir.FullName, "Coclico.slnx")) || File.Exists(Path.Combine(dir.FullName, "Coclico.sln")))
+            if (File.Exists(Path.Join(dir.FullName, "Coclico.slnx")) || File.Exists(Path.Join(dir.FullName, "Coclico.sln")))
             {
                 return dir.FullName;
             }
@@ -205,8 +201,8 @@ public sealed class LanguageParityTests
     public void FrAndEnDictionariesHaveIdenticalKeySets()
     {
         string repoRoot = XamlResourceValidationTests.FindRepoRoot();
-        HashSet<string> fr = ExtractLangKeys(Path.Combine(repoRoot, "Coclico", "Resources", "Lang", "fr.xaml"));
-        HashSet<string> en = ExtractLangKeys(Path.Combine(repoRoot, "Coclico", "Resources", "Lang", "en.xaml"));
+        HashSet<string> fr = ExtractLangKeys(Path.Join(repoRoot, "Coclico", "Resources", "Lang", "fr.xaml"));
+        HashSet<string> en = ExtractLangKeys(Path.Join(repoRoot, "Coclico", "Resources", "Lang", "en.xaml"));
 
         var missingInEn = fr.Except(en).ToList();
         var missingInFr = en.Except(fr).ToList();
@@ -219,7 +215,7 @@ public sealed class LanguageParityTests
     public void NoDeadLanguageKeys()
     {
         string repoRoot = XamlResourceValidationTests.FindRepoRoot();
-        HashSet<string> keys = ExtractLangKeys(Path.Combine(repoRoot, "Coclico", "Resources", "Lang", "fr.xaml"));
+        HashSet<string> keys = ExtractLangKeys(Path.Join(repoRoot, "Coclico", "Resources", "Lang", "fr.xaml"));
 
         var searched = new List<string> { "Coclico", "Coclico.Tests" };
         var dead = new List<string>();
@@ -231,9 +227,8 @@ public sealed class LanguageParityTests
             }
 
             bool found = false;
-            foreach (string dir in searched)
+            foreach (string baseDir in searched.Select(dir => Path.Join(repoRoot, dir)))
             {
-                string baseDir = Path.Combine(repoRoot, dir);
                 foreach (string ext in new[] { "*.cs", "*.xaml" })
                 {
                     foreach (string file in Directory.EnumerateFiles(baseDir, ext, SearchOption.AllDirectories))

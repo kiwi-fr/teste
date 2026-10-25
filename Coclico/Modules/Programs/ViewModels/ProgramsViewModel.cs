@@ -337,7 +337,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
         {
             return Application.Current?.TryFindResource(key) as string ?? ServiceContainer.GetOptional<LocalizationService>()?.Get(key) ?? key;
         }
-        catch { return key; }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { return key; }
     }
 
     public ProgramsViewModel()
@@ -495,7 +495,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
                 UpdateUI();
             }, DispatcherPriority.Background);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "ProgramsViewModel.LoadProgramsAsync");
         }
@@ -509,13 +509,22 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
     {
         string searchText = SearchText?.Trim() ?? string.Empty;
 
+        static bool Contient(string? valeur, string recherche)
+        {
+            return !string.IsNullOrEmpty(valeur) && valeur.Contains(recherche, StringComparison.OrdinalIgnoreCase);
+        }
+
         bool MatchesSearch(ProgramDisplayInfo program)
         {
-            return string.IsNullOrEmpty(searchText) ||
-            (!string.IsNullOrEmpty(program.Name) && program.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)) ||
-            (!string.IsNullOrEmpty(program.Publisher) && program.Publisher.Contains(searchText, StringComparison.OrdinalIgnoreCase)) ||
-            (!string.IsNullOrEmpty(program.Source) && program.Source.Contains(searchText, StringComparison.OrdinalIgnoreCase)) ||
-            (!string.IsNullOrEmpty(program.Category) && program.Category.Contains(searchText, StringComparison.OrdinalIgnoreCase));
+            if (string.IsNullOrEmpty(searchText))
+            {
+                return true;
+            }
+
+            return Contient(program.Name, searchText) ||
+            Contient(program.Publisher, searchText) ||
+            Contient(program.Source, searchText) ||
+            Contient(program.Category, searchText);
         }
 
         IEnumerable<ProgramDisplayInfo> query = CurrentTab switch
@@ -601,7 +610,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
     private async Task LaunchAppAndForgetAsync(ProgramDisplayInfo app)
     {
         try { await LaunchApp(app); }
-        catch (Exception ex) { LoggingService.LogException(ex, "ProgramsViewModel.LaunchAppAndForget"); }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "ProgramsViewModel.LaunchAppAndForget"); }
     }
 
     private async Task LaunchApp(ProgramDisplayInfo app)
@@ -644,10 +653,10 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
             }
 
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.ComponentModel.Win32Exception or System.InvalidOperationException)
         {
             LoggingService.LogException(ex, "ProgramsViewModel.LaunchApp");
-            Notify?.Invoke(string.Format(L("Programs_LaunchError"), ex.Message), null);
+            Notify?.Invoke(TextFormatService.Format(L("Programs_LaunchError"), ex.Message), null);
         }
         finally
         {
@@ -705,7 +714,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
         if (app != null && !string.IsNullOrEmpty(app.InstallPath))
         {
             try { _ = Process.Start("explorer.exe", app.InstallPath); }
-            catch (Exception ex) { LoggingService.LogException(ex, "ProgramsViewModel.OpenFolder"); }
+            catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException) { LoggingService.LogException(ex, "ProgramsViewModel.OpenFolder"); }
         }
     }
 
@@ -723,9 +732,9 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
             try
             {
                 Clipboard.SetText(path);
-                Notify?.Invoke(string.Format(L("Programs_PathCopied"), path), null);
+                Notify?.Invoke(TextFormatService.Format(L("Programs_PathCopied"), path), null);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not System.OutOfMemoryException)
             {
                 LoggingService.LogException(ex, "ProgramsViewModel.CopyPath");
             }
@@ -798,7 +807,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
         }
 
         bool confirm = Confirm?.Invoke(
-            string.Format(L("Programs_ConfirmUninstall"), app.Name),
+            TextFormatService.Format(L("Programs_ConfirmUninstall"), app.Name),
             L("Programs_ConfirmUninstallTitle")) ?? false;
 
         if (!confirm)
@@ -867,10 +876,10 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
                 $"Le programme de désinstallation est introuvable : {parsed.ExecutableOrUri}",
                 null);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.ComponentModel.Win32Exception or System.InvalidOperationException)
         {
             LoggingService.LogException(ex, "ProgramsViewModel.Uninstall");
-            Notify?.Invoke(string.Format(L("Programs_UninstallError"), ex.Message), L("Common_Error"));
+            Notify?.Invoke(TextFormatService.Format(L("Programs_UninstallError"), ex.Message), L("Common_Error"));
         }
     }
 

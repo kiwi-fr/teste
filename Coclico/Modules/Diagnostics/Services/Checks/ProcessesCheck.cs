@@ -35,20 +35,17 @@ public sealed class ProcessesCheck : IDiagnosticCheck
             long topWorkingSet = 0;
             foreach (Process process in processes)
             {
-                try
+                using (process)
                 {
-                    if (process.WorkingSet64 > topWorkingSet)
+                    try
                     {
-                        topWorkingSet = process.WorkingSet64;
-                        topRamName = process.ProcessName;
+                        if (process.WorkingSet64 > topWorkingSet)
+                        {
+                            topWorkingSet = process.WorkingSet64;
+                            topRamName = process.ProcessName;
+                        }
                     }
-                }
-                catch
-                {
-                }
-                finally
-                {
-                    process.Dispose();
+                    catch (Exception ex) when (ex is not System.OutOfMemoryException) { _ = ex; }
                 }
             }
 
@@ -57,7 +54,7 @@ public sealed class ProcessesCheck : IDiagnosticCheck
                 topRamPercent = Math.Round(topWorkingSet * 100.0 / totalRam, 1);
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)
         {
             LoggingService.LogException(ex, $"{Id}.Processes");
         }
@@ -114,9 +111,7 @@ public sealed class ProcessesCheck : IDiagnosticCheck
                 anyRead = true;
                 count += Math.Min(key.ValueCount, MaxStartupEntriesReported);
             }
-            catch (Exception ex) when (ex is UnauthorizedAccessException or System.IO.IOException)
-            {
-            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException or System.IO.IOException) { _ = ex; }
         }
 
         return anyRead ? count : -1;

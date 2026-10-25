@@ -84,7 +84,7 @@ public static class InstallerAiCatalog
 
             return models.Count > 0 ? models : null;
         }
-        catch
+        catch (Exception ex) when (ex is System.Text.Json.JsonException or System.FormatException)
         {
             return null;
         }

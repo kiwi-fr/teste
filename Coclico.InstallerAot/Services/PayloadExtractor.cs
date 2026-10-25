@@ -62,7 +62,7 @@ public static class PayloadExtractor
                     Directory.Delete(extractDir, recursive: true);
                 }
             }
-            catch { }
+            catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
         }
     }
 }

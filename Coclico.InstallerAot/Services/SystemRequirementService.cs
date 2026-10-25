@@ -21,15 +21,14 @@ public static class SystemRequirementService
 
         try
         {
-            string defaultDotNetDir = Path.Combine(
+            string defaultDotNetDir = Path.Join(
                 Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
                 "dotnet", "shared", "Microsoft.WindowsDesktop.App");
 
             if (Directory.Exists(defaultDotNetDir))
             {
-                foreach (string dir in Directory.EnumerateDirectories(defaultDotNetDir))
+                foreach (string dirName in Directory.EnumerateDirectories(defaultDotNetDir).Select(dir => Path.GetFileName(dir) ?? string.Empty))
                 {
-                    string dirName = Path.GetFileName(dir);
                     if (dirName.StartsWith("10.", StringComparison.OrdinalIgnoreCase))
                     {
                         hasDotNet10 = true;
@@ -56,9 +55,7 @@ public static class SystemRequirementService
                 }
             }
         }
-        catch
-        {
-        }
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Security.SecurityException) { _ = ex; }
 
         var gpu = GpuDetector.DetectGpu();
 
@@ -74,7 +71,7 @@ public static class SystemRequirementService
                 freeBytes = driveInfo.AvailableFreeSpace;
             }
         }
-        catch { }
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
 
         return new SystemRequirementStatus(
             hasDotNet10,

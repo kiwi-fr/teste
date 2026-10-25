@@ -45,7 +45,7 @@ public sealed class CpuCheck : IDiagnosticCheck
             loadMax = Math.Max(loadMax, load);
         }
 
-        if (loadMin == double.MaxValue)
+        if (loadMin >= double.MaxValue)
         {
             loadMin = 0;
         }
@@ -101,13 +101,11 @@ public sealed class CpuCheck : IDiagnosticCheck
             {
                 if (item["Name"] is string name
                     && item["PercentProcessorTime"] is string raw
-                    && double.TryParse(raw, out double percent))
+                    && double.TryParse(raw, out double percent)
+                    && percent > topPercent)
                 {
-                    if (percent > topPercent)
-                    {
-                        topPercent = percent;
-                        topName = name;
-                    }
+                    topPercent = percent;
+                    topName = name;
                 }
             }
 

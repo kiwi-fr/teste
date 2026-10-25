@@ -98,14 +98,14 @@ public partial class UninstallWindow : Window
                 return currentExeDir;
             }
 
-            string programFilesPath = Path.Combine(
+            string programFilesPath = Path.Join(
                 Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Coclico");
             if (Directory.Exists(programFilesPath))
             {
                 return programFilesPath;
             }
 
-            string localAppDataPath = Path.Combine(
+            string localAppDataPath = Path.Join(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "Coclico");
             if (Directory.Exists(localAppDataPath))
             {
@@ -114,7 +114,7 @@ public partial class UninstallWindow : Window
 
             return string.Empty;
         }
-        catch
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Security.SecurityException)
         {
             return string.Empty;
         }
@@ -145,7 +145,8 @@ public partial class UninstallWindow : Window
         ChkKeepUserData.IsEnabled = false;
 
         TxtProgressStatus.Text = InstallerLocalization.Get("UnStarting");
-        _cts = new CancellationTokenSource();
+        using CancellationTokenSource cts = new();
+        _cts = cts;
 
         try
         {
@@ -170,7 +171,7 @@ public partial class UninstallWindow : Window
             ChkConfirmCompleteRemoval.IsEnabled = true;
             ChkKeepUserData.IsEnabled = true;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             TxtProgressStatus.Text = "Erreur : " + ex.Message;
             BtnStartUninstall.IsEnabled = true;
@@ -180,7 +181,6 @@ public partial class UninstallWindow : Window
         }
         finally
         {
-            _cts?.Dispose();
             _cts = null;
         }
     }
@@ -196,10 +196,8 @@ public partial class UninstallWindow : Window
         {
             await handler();
         }
-        catch (OperationCanceledException)
-        {
-        }
-        catch (Exception ex)
+        catch (OperationCanceledException ex) { _ = ex; }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             System.Diagnostics.Debug.WriteLine($"[UninstallWindow] {operationName} : {ex.Message}");
         }

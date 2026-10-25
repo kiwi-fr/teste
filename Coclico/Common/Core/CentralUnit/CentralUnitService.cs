@@ -222,7 +222,7 @@ public sealed class CentralUnitService : IDisposable
             Activity.LevelChanged -= OnActivityLevelChanged;
             ApplyProcessPowerPolicy(false);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "CentralUnitService.Shutdown");
         }
@@ -263,7 +263,7 @@ public sealed class CentralUnitService : IDisposable
             };
             _ = SetThreadInformation(GetCurrentThread(), ThreadInformationMemoryPriority, ref priority, Marshal.SizeOf<MemoryPriorityInformation>());
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.Runtime.InteropServices.COMException or System.InvalidOperationException)
         {
             LoggingService.LogException(ex, "CentralUnitService.ApplyCurrentThreadBackgroundQos");
         }
@@ -312,7 +312,7 @@ public sealed class CentralUnitService : IDisposable
             {
                 SamplePressure();
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not System.OutOfMemoryException)
             {
                 LoggingService.LogException(ex, "CentralUnitService.SamplePressure");
             }
@@ -442,7 +442,7 @@ public sealed class CentralUnitService : IDisposable
             };
             return GlobalMemoryStatusEx(ref status) && status.MemoryLoad >= ExternalPressureRamPercent;
         }
-        catch
+        catch (Exception ex) when (ex is System.Runtime.InteropServices.COMException or System.InvalidOperationException)
         {
             return false;
         }
@@ -468,7 +468,7 @@ public sealed class CentralUnitService : IDisposable
             };
             _ = SetProcessInformation(process.Handle, ProcessInformationMemoryPriority, ref priority, Marshal.SizeOf<MemoryPriorityInformation>());
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException or System.Runtime.InteropServices.COMException)
         {
             LoggingService.LogException(ex, "CentralUnitService.ApplyProcessPowerPolicy");
         }

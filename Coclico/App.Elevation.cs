@@ -14,7 +14,7 @@ public partial class App
             var principal = new WindowsPrincipal(identity);
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
-        catch
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             return false;
         }
@@ -43,7 +43,7 @@ public partial class App
             if (string.IsNullOrWhiteSpace(exePath) ||
                 Path.GetFileNameWithoutExtension(exePath).Equals("dotnet", StringComparison.OrdinalIgnoreCase))
             {
-                string candidate = Path.Combine(AppContext.BaseDirectory, "Coclico.exe");
+                string candidate = Path.Join(AppContext.BaseDirectory, "Coclico.exe");
                 if (File.Exists(candidate))
                 {
                     exePath = candidate;
@@ -56,7 +56,7 @@ public partial class App
                         string? dir = Path.GetDirectoryName(entryLoc);
                         if (!string.IsNullOrWhiteSpace(dir))
                         {
-                            string candidate2 = Path.Combine(dir, "Coclico.exe");
+                            string candidate2 = Path.Join(dir, "Coclico.exe");
                             if (File.Exists(candidate2))
                             {
                                 exePath = candidate2;
@@ -67,7 +67,7 @@ public partial class App
 
                 if (!File.Exists(exePath))
                 {
-                    string candidateDll = Path.Combine(AppContext.BaseDirectory, "Coclico.dll");
+                    string candidateDll = Path.Join(AppContext.BaseDirectory, "Coclico.dll");
                     if (File.Exists(candidateDll))
                     {
                         dllPath = candidateDll;
@@ -128,7 +128,7 @@ public partial class App
             {
                 var process = Process.Start(psi);
                 string pidStr;
-                try { pidStr = process?.Id.ToString() ?? "détaché"; } catch { pidStr = "détaché"; }
+                try { pidStr = process?.Id.ToString() ?? "détaché"; } catch (Exception ex) when (ex is not System.OutOfMemoryException) { pidStr = "détaché"; }
                 LoggingService.LogInfo($"[App.TryRestartAsAdmin] Processus lancé avec succès (PID: {pidStr}).");
                 return true;
             }
@@ -137,13 +137,13 @@ public partial class App
                 LoggingService.LogInfo("Élévation UAC annulée ou refusée par l'utilisateur (code 1223).");
                 return false;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)
             {
                 LoggingService.LogException(ex, "App.TryRestartAsAdmin.ProcessStart");
                 return false;
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.ComponentModel.Win32Exception or System.InvalidOperationException)
         {
             LoggingService.LogException(ex, "App.TryRestartAsAdmin");
             return false;
@@ -176,20 +176,20 @@ public partial class App
         string? dotnetRoot = Environment.GetEnvironmentVariable("DOTNET_ROOT");
         if (!string.IsNullOrWhiteSpace(dotnetRoot))
         {
-            string candidateInRoot = Path.Combine(dotnetRoot, "dotnet.exe");
+            string candidateInRoot = Path.Join(dotnetRoot, "dotnet.exe");
             if (File.Exists(candidateInRoot))
             {
                 return candidateInRoot;
             }
         }
 
-        string pfDotNet = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet", "dotnet.exe");
+        string pfDotNet = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet", "dotnet.exe");
         if (File.Exists(pfDotNet))
         {
             return pfDotNet;
         }
 
-        string pfX86DotNet = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "dotnet", "dotnet.exe");
+        string pfX86DotNet = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "dotnet", "dotnet.exe");
         if (File.Exists(pfX86DotNet))
         {
             return pfX86DotNet;
@@ -202,13 +202,13 @@ public partial class App
             {
                 try
                 {
-                    string candidate = Path.Combine(pathPart, "dotnet.exe");
+                    string candidate = Path.Join(pathPart, "dotnet.exe");
                     if (File.Exists(candidate))
                     {
                         return candidate;
                     }
                 }
-                catch (Exception ex) { LoggingService.LogException(ex, "App.ResolveDotNetHost.PathCandidate"); }
+                catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { LoggingService.LogException(ex, "App.ResolveDotNetHost.PathCandidate"); }
             }
         }
 

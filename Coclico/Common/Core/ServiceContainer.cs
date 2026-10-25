@@ -66,7 +66,7 @@ public static class ServiceContainer
                 disposable.Dispose();
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "ServiceContainer.Shutdown");
         }

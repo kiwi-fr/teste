@@ -56,7 +56,7 @@ internal static class WmiHelper
         {
             return Convert.ToInt64(value, System.Globalization.CultureInfo.InvariantCulture);
         }
-        catch
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             return null;
         }
@@ -68,7 +68,7 @@ internal static class WmiHelper
         {
             return Convert.ToDouble(value, System.Globalization.CultureInfo.InvariantCulture);
         }
-        catch
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             return null;
         }

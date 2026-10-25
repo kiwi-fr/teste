@@ -48,7 +48,7 @@ internal static class Program
                 Task.Run(() => InstallService.InstallAsync(config, new Progress<InstallProgressReport>())).GetAwaiter().GetResult();
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LogCrash(ex);
         }
@@ -63,9 +63,9 @@ internal static class Program
         if (ex == null) return;
         try
         {
-            string logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "coclico-setup-crash.txt");
+            string logPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "coclico-setup-crash.txt");
             File.AppendAllText(logPath, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " " + ex + Environment.NewLine);
         }
-        catch { }
+        catch (Exception erreurFichier) when (erreurFichier is System.IO.IOException or System.UnauthorizedAccessException) { _ = erreurFichier; }
     }
 }
