@@ -32,8 +32,6 @@ public partial class MainWindow : FluentWindow
         public static readonly TimeSpan WindowFadeIn = TimeSpan.FromMilliseconds(400);
     }
 
-
-
     private static string L(string key) => Application.Current?.TryFindResource(key) as string ?? ServiceContainer.GetOptional<LocalizationService>()?.Get(key) ?? key;
 
     private TrayService? _trayService;
@@ -311,21 +309,6 @@ public partial class MainWindow : FluentWindow
         try { _trayService?.ShowBalloon(title, text); } catch (Exception ex) { LoggingService.LogException(ex, "MainWindow.ShowTrayBalloon"); }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private void ProfileBorder_MouseDown(object sender, RoutedEventArgs e)
     {
         var profileWindow = new ProfileWindow(_userService)
@@ -334,10 +317,6 @@ public partial class MainWindow : FluentWindow
         };
         _ = profileWindow.ShowDialog();
     }
-
-
-
-
 
     private void BtnElevateAdmin_Click(object sender, RoutedEventArgs e)
     {
@@ -355,21 +334,6 @@ public partial class MainWindow : FluentWindow
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     private void BtnToggleWindowMode_Click(object sender, RoutedEventArgs e)
     {
@@ -491,8 +455,5 @@ public partial class MainWindow : FluentWindow
         }
         return null;
     }
-
-
-
 
 }

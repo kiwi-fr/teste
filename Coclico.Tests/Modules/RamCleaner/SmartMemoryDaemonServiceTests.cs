@@ -12,10 +12,6 @@ public sealed class SmartMemoryDaemonServiceTests : IDisposable
         _daemon.Dispose();
     }
 
-    // NB : Configure() démarre une vraie boucle de nettoyage et écrit le fichier
-    // de paramètres réel — volontairement non testé ici (trop invasif en UT).
-    // Ces tests couvrent le constructeur (lecture des réglages) et les méthodes statiques.
-
     [Theory]
     [InlineData(null, AutoCleanMode.Interval)]
     [InlineData("", AutoCleanMode.Interval)]
@@ -46,7 +42,7 @@ public sealed class SmartMemoryDaemonServiceTests : IDisposable
     {
         Assert.False(_daemon.IsEnabled);
         Assert.Equal(AutoCleanMode.Interval, _daemon.Mode);
-        Assert.Equal(15, _daemon.Value); // AutoCleanIntervalMinutes par défaut
+        Assert.Equal(15, _daemon.Value);
         Assert.True(_daemon.ProtectForeground);
         Assert.Equal(MemoryCleanerService.CleanProfile.Smart, _daemon.Profile);
     }

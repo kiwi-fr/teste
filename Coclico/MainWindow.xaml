@@ -437,6 +437,25 @@
                                     </RadioButton.Content>
                                 </RadioButton>
 
+                                <RadioButton x:Name="NavDiagnostics" Tag="Diagnostics" GroupName="NavGroup"
+                                             Style="{StaticResource NavItemStyle}"
+                                             Click="NavItem_Click"
+                                             ToolTip="{DynamicResource Menu_Diagnostics}"
+                                             AutomationProperties.Name="Navigation - Diagnostic du PC">
+                                    <RadioButton.Content>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="24"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <ui:SymbolIcon Symbol="DesktopPulse24" FontSize="17" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="NavDiagnostics_Lbl" Grid.Column="1"
+                                                       Text="{DynamicResource Menu_Diagnostics}"
+                                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </RadioButton.Content>
+                                </RadioButton>
+
                                 <RadioButton x:Name="NavDisk" Tag="DiskAnalyzer" GroupName="NavGroup"
                                              Style="{StaticResource NavItemStyle}"
                                              Click="NavItem_Click"

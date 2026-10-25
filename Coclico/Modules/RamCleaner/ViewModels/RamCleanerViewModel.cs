@@ -53,7 +53,6 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
 
     public ObservableCollection<ProcessItemVm> TopProcesses { get; } = [];
 
-
     public bool IsCleaning { get; private set { if (field == value) return; field = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsNotCleaning)); } }
     public bool IsNotCleaning => !IsCleaning;
     public bool HasResult { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } }

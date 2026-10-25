@@ -71,7 +71,6 @@ public sealed class CacheServiceTests : IDisposable
         string key = Key("ttl");
         _cache.Set(key, "périmé", TimeSpan.FromMilliseconds(1));
 
-        // Laisse l'entrée expirer.
         Thread.Sleep(100);
 
         Assert.False(_cache.TryGet(key, out string? value));

@@ -31,11 +31,9 @@ public sealed class AsyncEventSafeTests
             throw new InvalidOperationException("erreur volontaire (test)");
         }, "ut-throwing-handler");
 
-        // Le handler a bien été invoqué…
         bool ran = await reached.WaitAsync(TimeSpan.FromSeconds(5));
         Assert.True(ran);
 
-        // …et l'exception a été avalée : on laisse la continuation se terminer.
         await Task.Delay(100);
     }
 
@@ -58,7 +56,6 @@ public sealed class AsyncEventSafeTests
     [Fact]
     public void Run_NullHandler_DoesNothing()
     {
-        // .ctor du Func est passé tel quel : null est toléré silencieusement.
         AsyncEventSafe.Run(handler: null!, operationName: "ut-null-handler");
     }
 

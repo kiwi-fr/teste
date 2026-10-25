@@ -22,9 +22,9 @@ internal static class NativeLibBundle
                 using var fs = new FileStream(target, FileMode.Create, FileAccess.Write, FileShare.Read);
                 stream.CopyTo(fs);
             }
-            catch (IOException) { /* verrouillé par une autre instance déjà lancée */ }
+            catch (IOException) { }
 
-            try { NativeLibrary.Load(target); } catch { /* déjà chargée */ }
+            try { NativeLibrary.Load(target); } catch { }
         }
     }
 }

@@ -160,7 +160,7 @@ Repository root:
 
 ## 5. The modules, one by one
 
-`Modules/` contains eleven folders, one per feature. They all follow the shape of §4: logic in services, UI in views.
+`Modules/` contains twelve folders, one per feature. They all follow the shape of §4: logic in services, UI in views.
 
 ### Dashboard (`Modules/Dashboard`)
 
@@ -179,6 +179,22 @@ The built-in, fully local assistant the chat panel opened with `Ctrl+Space`. Det
 - `ISecurityPolicy` / `SecurityPolicyService`: the central command policy. `IProcessExecutionService` consults it before running anything (§10). Forbidden commands are blocked in one single place, covered by `SecurityPolicyTests`.
 - `SystemHealthService`: system status checks.
 - `StartupHealthService`: reviews what runs at Windows startup.
+
+### PC Diagnostics (`Modules/Diagnostics`)
+
+The global PC diagnostics hub: it gathers and correlates hardware, system, network, storage and software information. **Every scan is read-only**, no system setting is ever changed, and each run is cancellable.
+
+- `DiagnosticOrchestrator` (`IDiagnosticOrchestrator`): runs checks with limited concurrency (3 by default), a per-check timeout, per-check error isolation (one failure never fails the run), then merge, dedupe, severity/confidence sort and sanitization before persistence.
+- Eleven `IDiagnosticCheck` implementations (one per domain): `WindowsHealthCheck`, `CpuCheck`, `GpuCheck`, `MemoryCheck`, `StorageCheck`, `NetworkCheck`, `PowerBatteryCheck`, `DeviceCheck`, `ProcessesCheck`, `SecurityCheck`, `MotherboardCheck`. **Quick** mode runs only cheap checks; **Full** adds the motherboard/BIOS check; **Targeted** runs only the selected categories. Checks reuse the existing services (`SystemHealthService`, `MemoryCleanerService`, `StartupHealthService`, `DriveInfo`, event logs, documented WMI/CIM) without duplicating their scans.
+- `DiagnosticRuleEngine`: **deterministic, pure, versioned** rule engine (`RulesVersion`). Thresholds are explicit, documented constants; a missing value never produces a finding (neither "healthy" nor "failing"); severity and confidence are two separate axes; no opaque 0-100 global score.
+- `DiagnosticActionCatalog`: **closed** catalog of typed actions (navigation to existing modules only). A finding never carries a free shell command; the local AI may explain results but cannot invent metrics, change severities or execute anything.
+- `DiagnosticHistoryService` (`IDiagnosticHistoryService`): local JSON history under `%APPDATA%\Coclico\diagnostics\`, atomic writes, 30 runs / 30 days retention, resilient to corrupt files.
+- `DiagnosticReportExporter`: versioned `.json` and human-readable `.txt` export, always through a user save dialog.
+- `DiagnosticPrivacySanitizer`: masks profile paths, machine/user names and serial numbers before any persistence or export; sensitive metrics (MAC, serial) are masked entirely.
+- `WmiHardwareTelemetryService` (`IHardwareTelemetryService`): MVP sensor provider (ACPI thermal zone through WMI). **LibreHardwareMonitorLib is not adopted** for now: the stable NuGet release is 0.9.6 (MPL-2.0) while visible 0.9.7 builds are frequent prereleases; a prerelease is not acceptable in a production package. The provider sits behind an interface for a documented later addition.
+- `AppSettings`: `diagnosticEnableHardwareSensors`, `diagnosticEnableLiveMonitoring` (default false), `diagnosticHistoryRetentionCount/Days` (30/30), `diagnosticNetworkProbeTimeoutMs` (2000, bounded), `diagnosticMaxParallelChecks` (3), `diagnosticEnableExternalBandwidthTest` (default false).
+- Navigation: tag `Diagnostics`, "PC Diagnostics" entry in the Maintenance group, AI action `open_diagnostics`.
+- Tests in `Coclico.Tests/Modules/Diagnostics/`: rule engine (thresholds, missing data, sorting, dedupe, no free commands), orchestrator (fake checks: quick/full/targeted, error isolation, timeout, cancellation, progress), history (round-trip, retention, corrupt file), sanitizer, summary builder, and dynamic language-key validation (`DiagnosticResourceKeyTests`).
 
 ### Disk Analysis (`Modules/DiskAnalyzer`)
 
@@ -371,6 +387,12 @@ Concrete example: the PC Power Management module (`Modules/Power`). Steps:
 | `Modules/DiskAnalyzer/DiskAnalyzerTests.cs` | Tree scan, `FormatSize`, STA instantiation |
 | `Modules/DiskAnalyzer/DuplicateFinderTests.cs` | 3-phase duplicates, thresholds, top-N |
 | `Modules/HealthDefense/SecurityPolicyTests.cs` | Blocked commands |
+| `Modules/Diagnostics/DiagnosticRuleEngineTests.cs` | Rules: thresholds, missing data, sorting, dedupe, no free commands |
+| `Modules/Diagnostics/DiagnosticOrchestratorTests.cs` | Quick/full/targeted modes, error isolation, timeout, cancellation, progress |
+| `Modules/Diagnostics/DiagnosticHistoryServiceTests.cs` | History: round-trip, retention, corrupt file, atomic write |
+| `Modules/Diagnostics/DiagnosticPrivacySanitizerTests.cs` | Path, serial, machine name masking, sensitive metrics |
+| `Modules/Diagnostics/DiagnosticSummaryBuilderTests.cs` | Honest counters, no global score |
+| `Modules/Diagnostics/DiagnosticResourceKeyTests.cs` | Dynamic language keys present in fr.xaml and en.xaml |
 | `Modules/Network/NetworkSettingsGuardTests.cs` | Network value validation |
 | `Modules/Network/NetworkTuningCatalogTests.cs` | Catalog of the 9 settings |
 | `Modules/Power/AdaptivePowerRulesTests.cs` | Adaptive rule: thresholds, hysteresis, cooldown |
@@ -392,6 +414,12 @@ dotnet test Coclico.slnx --configuration Release --no-build --no-restore
 ```
 
 > Format rule: all new code must pass `dotnet format --verify-no-changes`. If a local check fails, run `dotnet format Coclico.slnx` (without `--verify`) and commit the result.
+
+### Zero-warning policy
+
+All three projects (`Coclico`, `Coclico.Tests`, `Coclico.InstallerAot`) define `<TreatWarningsAsErrors>true</TreatWarningsAsErrors>`, and `installer/build-installer.ps1` passes `-warnaserror` to every `dotnet publish`. Any warning therefore fails the build and the installer. For a full sweep (incremental builds do not re-emit existing warnings): `dotnet build Coclico.sln -t:Rebuild -warnaserror`, in both Debug and Release.
+
+**Documented exception — IL3053 in `Coclico.InstallerAot`**: this NativeAOT warning originates from `MicroCom.Runtime` (a third-party Avalonia dependency, COM interop that is not statically AOT-provable). Audit: the affected COM paths are not used at runtime by the installer; the warning is suppressed in a targeted way via `<NoWarn>IL3053</NoWarn>` in `Coclico.InstallerAot.csproj`. Everything else stays an error. The source code is intentionally comment-free; this rationale lives here, in the documentation.
 
 Workflows in `.github/workflows/`:
 

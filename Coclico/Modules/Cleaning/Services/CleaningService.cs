@@ -256,7 +256,6 @@ public class CleaningService
             string windows = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
 
-
             DateTime cleanupCutoff = DateTime.UtcNow.AddHours(-1);
             DateTime logsCutoff = DateTime.UtcNow.AddDays(-7);
 

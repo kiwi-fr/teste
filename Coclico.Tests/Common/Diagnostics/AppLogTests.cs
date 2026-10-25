@@ -25,7 +25,6 @@ public sealed class AppLogTests
     [Fact]
     public void Action_NeverThrowsWhetherContainerIsBuiltOrNot()
     {
-        // Sans ServiceContainer construit, le chemin audit est simplement ignoré.
         AppLog.Action("Nettoyage", "C:\\Temp");
         AppLog.Action("Analyse", "Disque C:", success: false, details: "simulation", actor: "ut-actor");
     }

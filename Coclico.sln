@@ -6,8 +6,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coclico", "Coclico\Coclico.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coclico.Tests", "Coclico.Tests\Coclico.Tests.csproj", "{BB7C3FB8-64A0-4BFD-A3C1-BA114F181B9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coclico.Installer", "Coclico.Installer\Coclico.Installer.csproj", "{2DE3868A-E7A7-4987-BDE6-E157EA06C866}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,14 +30,6 @@ Global
 		{BB7C3FB8-64A0-4BFD-A3C1-BA114F181B9F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BB7C3FB8-64A0-4BFD-A3C1-BA114F181B9F}.Release|x64.ActiveCfg = Release|Any CPU
 		{BB7C3FB8-64A0-4BFD-A3C1-BA114F181B9F}.Release|x64.Build.0 = Release|Any CPU
-		{2DE3868A-E7A7-4987-BDE6-E157EA06C866}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2DE3868A-E7A7-4987-BDE6-E157EA06C866}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2DE3868A-E7A7-4987-BDE6-E157EA06C866}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{2DE3868A-E7A7-4987-BDE6-E157EA06C866}.Debug|x64.Build.0 = Debug|Any CPU
-		{2DE3868A-E7A7-4987-BDE6-E157EA06C866}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2DE3868A-E7A7-4987-BDE6-E157EA06C866}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2DE3868A-E7A7-4987-BDE6-E157EA06C866}.Release|x64.ActiveCfg = Release|Any CPU
-		{2DE3868A-E7A7-4987-BDE6-E157EA06C866}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

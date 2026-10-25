@@ -27,7 +27,6 @@ public sealed class SimpleStemmerTests
     [Fact]
     public void Stem_KeepsWordWhenRootWouldBeTooShort()
     {
-        // "age" ne doit pas être retiré s'il reste moins de 3 caractères
         Assert.Equal("page", SimpleStemmer.Stem("page"));
     }
 

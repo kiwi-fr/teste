@@ -160,7 +160,7 @@ Racine du dépôt :
 
 ## 5. Les modules, un par un
 
-`Modules/` contient onze dossiers, un par fonctionnalité. Tous suivent la forme du §4 : la logique dans les services, l'UI dans les vues.
+`Modules/` contient douze dossiers, un par fonctionnalité. Tous suivent la forme du §4 : la logique dans les services, l'UI dans les vues.
 
 ### Accueil (`Modules/Dashboard`)
 
@@ -179,6 +179,22 @@ L'assistant intégré, entièrement local le panneau ouvert par `Ctrl + Espace`.
 - `ISecurityPolicy` / `SecurityPolicyService` : la politique centrale de commandes. `IProcessExecutionService` la consulte avant tout lancement (§10). Les commandes interdites sont bloquées en un seul point, couvert par `SecurityPolicyTests`.
 - `SystemHealthService` : vérifications de l'état système.
 - `StartupHealthService` : examine ce qui tourne au démarrage de Windows.
+
+### Diagnostic PC (`Modules/Diagnostics`)
+
+Le centre de diagnostic global de l'ordinateur : il réunit et corrèle les informations matérielles, système, réseau, stockage et logiciels. **Toutes les analyses sont en lecture seule**, aucun réglage système n'est modifié, et chaque exécution est annulable.
+
+- `DiagnosticOrchestrator` (`IDiagnosticOrchestrator`) : exécute les contrôles en concurrence limitée (3 par défaut), avec un délai maximal par contrôle, une isolation des erreurs par contrôle (un échec ne fait jamais échouer le run), puis fusion, déduplication, tri par gravité/confiance et assainissement avant persistance.
+- Onze contrôles `IDiagnosticCheck` (un par domaine) : `WindowsHealthCheck`, `CpuCheck`, `GpuCheck`, `MemoryCheck`, `StorageCheck`, `NetworkCheck`, `PowerBatteryCheck`, `DeviceCheck`, `ProcessesCheck`, `SecurityCheck`, `MotherboardCheck`. Le mode **Rapide** n'exécute que les contrôles peu coûteux ; le mode **Complet** ajoute le contrôle carte mère/BIOS ; le mode **Ciblé** n'exécute que les catégories choisies. Les contrôles réutilisent les services existants (`SystemHealthService`, `MemoryCleanerService`, `StartupHealthService`, `DriveInfo`, journaux d'événements, WMI/CIM documenté) sans dupliquer leurs scans.
+- `DiagnosticRuleEngine` : moteur de règles **déterministe, pur et versionné** (`RulesVersion`). Les seuils sont des constantes explicites et documentées ; une valeur manquante ne produit **jamais** un constat (ni « sain », ni « défaillant ») ; gravité et confiance sont deux axes distincts ; aucun score global 0-100.
+- `DiagnosticActionCatalog` : catalogue **fermé** d'actions typées (navigation vers les modules existants uniquement). Un constat ne porte jamais une commande shell libre ; l'IA locale peut expliquer les résultats mais ne peut ni inventer des métriques, ni changer une gravité, ni exécuter quoi que ce soit.
+- `DiagnosticHistoryService` (`IDiagnosticHistoryService`) : historique local JSON sous `%APPDATA%\Coclico\diagnostics\`, écriture atomique, rétention 30 runs / 30 jours, tolérant aux fichiers corrompus.
+- `DiagnosticReportExporter` : export `.json` versionné et `.txt` lisible, toujours via une boîte de dialogue utilisateur.
+- `DiagnosticPrivacySanitizer` : masque chemins de profil, nom de machine/utilisateur et numéros de série avant toute persistance ou export ; les métriques sensibles (MAC, série) sont masquées entièrement.
+- `WmiHardwareTelemetryService` (`IHardwareTelemetryService`) : fournisseur capteurs MVP (zone thermique ACPI via WMI). **LibreHardwareMonitorLib n'est pas adopté** pour l'instant : la version stable NuGet est 0.9.6 (MPL-2.0) et les 0.9.7 visibles sont des préversions fréquentes ; une préversion n'est pas acceptée dans un paquet de production. Le fournisseur est isolé derrière une interface pour un ajout ultérieur documenté.
+- Réglages `AppSettings` : `diagnosticEnableHardwareSensors`, `diagnosticEnableLiveMonitoring` (faux par défaut), `diagnosticHistoryRetentionCount/Days` (30/30), `diagnosticNetworkProbeTimeoutMs` (2000, borné), `diagnosticMaxParallelChecks` (3), `diagnosticEnableExternalBandwidthTest` (faux).
+- Navigation : tag `Diagnostics`, entrée « Diagnostic du PC » dans le groupe Maintenance, action IA `open_diagnostics`.
+- Tests dans `Coclico.Tests/Modules/Diagnostics/` : moteur de règles (seuils, données manquantes, tri, déduplication), orchestrateur (faux contrôles : modes rapide/complet/ciblé, isolation des erreurs, timeout, annulation, progression, assainissement), historique (aller-retour, rétention, fichier corrompu), assainisseur, synthèse, et validation des clés de langue dynamiques (`DiagnosticResourceKeyTests`).
 
 ### Analyse Disque (`Modules/DiskAnalyzer`)
 
@@ -371,6 +387,12 @@ Exemple concret : le module Management Alimentation PC (`Modules/Power`). Les é
 | `Modules/DiskAnalyzer/DiskAnalyzerTests.cs` | Scan d'arborescence, `FormatSize`, instanciation STA |
 | `Modules/DiskAnalyzer/DuplicateFinderTests.cs` | Doublons en 3 phases, seuils, top-N |
 | `Modules/HealthDefense/SecurityPolicyTests.cs` | Commandes interdites |
+| `Modules/Diagnostics/DiagnosticRuleEngineTests.cs` | Règles : seuils, données manquantes, tri, déduplication, aucune commande libre |
+| `Modules/Diagnostics/DiagnosticOrchestratorTests.cs` | Modes rapide/complet/ciblé, isolation des erreurs, timeout, annulation, progression |
+| `Modules/Diagnostics/DiagnosticHistoryServiceTests.cs` | Historique : aller-retour, rétention, fichier corrompu, écriture atomique |
+| `Modules/Diagnostics/DiagnosticPrivacySanitizerTests.cs` | Masquage chemins, séries, nom de machine, métriques sensibles |
+| `Modules/Diagnostics/DiagnosticSummaryBuilderTests.cs` | Compteurs honnêtes, aucun score global |
+| `Modules/Diagnostics/DiagnosticResourceKeyTests.cs` | Clés de langue dynamiques présentes dans fr.xaml et en.xaml |
 | `Modules/Network/NetworkSettingsGuardTests.cs` | Validation des valeurs réseau |
 | `Modules/Network/NetworkTuningCatalogTests.cs` | Catalogue des 9 paramètres |
 | `Modules/Power/AdaptivePowerRulesTests.cs` | Règle adaptative : seuils, hystérésis, cooldown |
@@ -392,6 +414,12 @@ dotnet test Coclico.slnx --configuration Release --no-build --no-restore
 ```
 
 > Règle de format : tout nouveau code doit passer `dotnet format --verify-no-changes`. Si une vérification locale échoue, lance `dotnet format Coclico.slnx` (sans `--verify`) et commite le résultat.
+
+### Politique zéro warning
+
+Les trois projets (`Coclico`, `Coclico.Tests`, `Coclico.InstallerAot`) définissent `<TreatWarningsAsErrors>true</TreatWarningsAsErrors>`, et `installer/build-installer.ps1` passe `-warnaserror` à chaque `dotnet publish`. Tout warning fait donc échouer le build et l'installeur. Pour un balayage complet (les builds incrémentaux ne réaffichent pas les warnings existants) : `dotnet build Coclico.sln -t:Rebuild -warnaserror`, en Debug et en Release.
+
+**Exception documentée — IL3053 dans `Coclico.InstallerAot`** : cet avertissement NativeAOT provient de `MicroCom.Runtime` (dépendance tierce d'Avalonia, COM interop non provable statiquement). Audit : les chemins COM concernés ne sont pas utilisés au runtime par l'installeur ; l'avertissement est supprimé de façon ciblée via `<NoWarn>IL3053</NoWarn>` dans `Coclico.InstallerAot.csproj`. Tout autre code reste une erreur. Le code source est volontairement sans aucun commentaire ; cette justification vit ici, dans la documentation.
 
 Workflows dans `.github/workflows/` :
 

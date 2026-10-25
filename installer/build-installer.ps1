@@ -126,9 +126,6 @@ function New-CoclicoArchive {
 }
 
 $rootDir = (Resolve-Path "$PSScriptRoot\..").Path
-# v2 : l'installeur est desormais Coclico.InstallerAot (Avalonia 11 + NativeAOT),
-# qui remplace le projet WPF Coclico.Installer. Le payload.zip est depose dans
-# son dossier de projet et embarque dans l'exe natif a la compilation.
 $installerProjDir = "$rootDir\Coclico.InstallerAot"
 
 try {
@@ -213,7 +210,8 @@ try {
             "-p:PublishSingleFile=false",
             "-p:DebugSymbols=false",
             "-p:DebugType=None",
-            "-p:Version=$Version"
+            "-p:Version=$Version",
+            "-warnaserror"
         )
         if ($IncludeCuda) {
             $coclicoArgs += "-p:IncludeCuda=true"
@@ -227,8 +225,6 @@ try {
 
     Write-Section (T "CREATION DU PAYLOAD" "CREATING PAYLOAD")
 
-    # v2 : payload.zip est depose directement dans Coclico.InstallerAot\
-    # ou il est embarque dans l'exe natif par le csproj (EmbeddedResource).
     $payloadZip = "$installerProjDir\payload.zip"
 
     Add-Type -AssemblyName System.IO.Compression -ErrorAction SilentlyContinue
@@ -276,10 +272,6 @@ try {
 
     Write-Step (T "Compilation en binaire natif unique (Avalonia + NativeAOT)..." "Building single native binary (Avalonia + NativeAOT)...")
 
-    # Le publish AOT produit un exe natif unique : le payload.zip ci-dessus et
-    # les DLL natives (libSkiaSharp, libHarfBuzzSharp, av_libglesv2) sont
-    # embarques dans l'exe via le csproj, et extraits au demarrage.
-    # Aucun fichier a copier manuellement a cote de l'exe final.
     $tempBuildDir = "$rootDir\artifacts\installer_build"
     if (Test-Path $tempBuildDir) { Remove-Item $tempBuildDir -Recurse -Force }
     New-Item -ItemType Directory -Path $tempBuildDir -Force | Out-Null
@@ -289,7 +281,8 @@ try {
         "--configuration", $Configuration,
         "--runtime", "win-x64",
         "--output", $tempBuildDir,
-        "-p:Version=$Version"
+        "-p:Version=$Version",
+        "-warnaserror"
     )
     & dotnet @aotArgs
     if ($LASTEXITCODE -ne 0) {
@@ -339,7 +332,6 @@ try {
         Write-Host ""
     }
 
-
     if (-not $SkipPortable) {
         Write-Section (T "VERSION PORTABLE" "PORTABLE VERSION")
 
@@ -357,7 +349,8 @@ try {
             "-p:PublishSingleFile=false",
             "-p:DebugSymbols=false",
             "-p:DebugType=None",
-            "-p:Version=$Version"
+            "-p:Version=$Version",
+            "-warnaserror"
         )
         if ($IncludeCuda) {
             $portableArgs += "-p:IncludeCuda=true"

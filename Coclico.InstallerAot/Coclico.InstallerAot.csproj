@@ -10,6 +10,8 @@
     <PublishTrimmed>true</PublishTrimmed>
     <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
     <TrimMode>partial</TrimMode>
+    <NoWarn>$(NoWarn);IL3053</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>Coclico.Installer</RootNamespace>
     <AssemblyName>Coclico.Installer</AssemblyName>
 

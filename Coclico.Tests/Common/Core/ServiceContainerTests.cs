@@ -4,8 +4,6 @@ using Xunit;
 
 namespace Coclico.Tests;
 
-// Ce conteneur est un état global statique partagé avec AppLogTests :
-// la collection force l'exécution séquentielle de ces deux classes.
 [Collection("ServiceContainerSerial")]
 public sealed class ServiceContainerTests
 {

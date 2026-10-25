@@ -107,6 +107,22 @@ public partial class App : Application
                     _ = services.AddSingleton<Coclico.Modules.Power.Services.CpuPowerService>();
                     _ = services.AddSingleton<Coclico.Modules.Power.Services.AdaptivePowerService>();
 
+                    _ = services.AddSingleton<Coclico.Modules.Diagnostics.Services.DiagnosticPrivacySanitizer>();
+                    _ = services.AddSingleton<Coclico.Modules.Diagnostics.Services.IDiagnosticHistoryService, Coclico.Modules.Diagnostics.Services.DiagnosticHistoryService>();
+                    _ = services.AddSingleton<Coclico.Modules.Diagnostics.Services.Hardware.IHardwareTelemetryService, Coclico.Modules.Diagnostics.Services.Hardware.WmiHardwareTelemetryService>();
+                    _ = services.AddTransient<Coclico.Modules.Diagnostics.Services.IDiagnosticCheck, Coclico.Modules.Diagnostics.Services.Checks.WindowsHealthCheck>();
+                    _ = services.AddTransient<Coclico.Modules.Diagnostics.Services.IDiagnosticCheck, Coclico.Modules.Diagnostics.Services.Checks.CpuCheck>();
+                    _ = services.AddTransient<Coclico.Modules.Diagnostics.Services.IDiagnosticCheck, Coclico.Modules.Diagnostics.Services.Checks.GpuCheck>();
+                    _ = services.AddTransient<Coclico.Modules.Diagnostics.Services.IDiagnosticCheck, Coclico.Modules.Diagnostics.Services.Checks.MemoryCheck>();
+                    _ = services.AddTransient<Coclico.Modules.Diagnostics.Services.IDiagnosticCheck, Coclico.Modules.Diagnostics.Services.Checks.StorageCheck>();
+                    _ = services.AddTransient<Coclico.Modules.Diagnostics.Services.IDiagnosticCheck, Coclico.Modules.Diagnostics.Services.Checks.NetworkCheck>();
+                    _ = services.AddTransient<Coclico.Modules.Diagnostics.Services.IDiagnosticCheck, Coclico.Modules.Diagnostics.Services.Checks.PowerBatteryCheck>();
+                    _ = services.AddTransient<Coclico.Modules.Diagnostics.Services.IDiagnosticCheck, Coclico.Modules.Diagnostics.Services.Checks.DeviceCheck>();
+                    _ = services.AddTransient<Coclico.Modules.Diagnostics.Services.IDiagnosticCheck, Coclico.Modules.Diagnostics.Services.Checks.ProcessesCheck>();
+                    _ = services.AddTransient<Coclico.Modules.Diagnostics.Services.IDiagnosticCheck, Coclico.Modules.Diagnostics.Services.Checks.SecurityCheck>();
+                    _ = services.AddTransient<Coclico.Modules.Diagnostics.Services.IDiagnosticCheck, Coclico.Modules.Diagnostics.Services.Checks.MotherboardCheck>();
+                    _ = services.AddSingleton<Coclico.Modules.Diagnostics.Services.IDiagnosticOrchestrator, Coclico.Modules.Diagnostics.Services.DiagnosticOrchestrator>();
+
                     _ = services.AddTransient<Coclico.ViewModels.DashboardViewModel>();
                     _ = services.AddTransient<Coclico.ViewModels.CleaningViewModel>();
                     _ = services.AddTransient<Coclico.ViewModels.SettingsViewModel>();
@@ -116,6 +132,7 @@ public partial class App : Application
                     _ = services.AddTransient<Coclico.ViewModels.RamCleanerViewModel>();
                     _ = services.AddTransient<Coclico.ViewModels.ProgramsViewModel>();
                     _ = services.AddTransient<Coclico.ViewModels.DiskAnalyzerViewModel>();
+                    _ = services.AddTransient<Coclico.ViewModels.DiagnosticViewModel>();
                 });
 
                 string appVersion = System.Reflection.Assembly.GetExecutingAssembly()
@@ -251,13 +268,6 @@ public partial class App : Application
             LoggingService.LogWarning($"Could not remove the legacy AI API-key vault: {ex.Message}");
         }
     }
-
-
-
-
-
-
-
 
     protected override void OnExit(ExitEventArgs e)
     {

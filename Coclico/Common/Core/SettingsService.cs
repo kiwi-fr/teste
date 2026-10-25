@@ -60,6 +60,27 @@ public class AppSettings
     [JsonPropertyName("auditRetentionDays")]
     public int AuditRetentionDays { get; set; } = 90;
 
+    [JsonPropertyName("diagnosticEnableHardwareSensors")]
+    public bool DiagnosticEnableHardwareSensors { get; set; } = true;
+
+    [JsonPropertyName("diagnosticEnableLiveMonitoring")]
+    public bool DiagnosticEnableLiveMonitoring { get; set; } = false;
+
+    [JsonPropertyName("diagnosticHistoryRetentionCount")]
+    public int DiagnosticHistoryRetentionCount { get; set; } = 30;
+
+    [JsonPropertyName("diagnosticHistoryRetentionDays")]
+    public int DiagnosticHistoryRetentionDays { get; set; } = 30;
+
+    [JsonPropertyName("diagnosticNetworkProbeTimeoutMs")]
+    public int DiagnosticNetworkProbeTimeoutMs { get; set; } = 2000;
+
+    [JsonPropertyName("diagnosticMaxParallelChecks")]
+    public int DiagnosticMaxParallelChecks { get; set; } = 3;
+
+    [JsonPropertyName("diagnosticEnableExternalBandwidthTest")]
+    public bool DiagnosticEnableExternalBandwidthTest { get; set; } = false;
+
     [JsonPropertyName("aiIdleTimeoutMinutes")]
     public int AiIdleTimeoutMinutes { get; set; } = 5;
 

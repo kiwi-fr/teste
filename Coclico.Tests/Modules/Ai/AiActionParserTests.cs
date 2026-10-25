@@ -5,7 +5,6 @@ namespace Coclico.Tests;
 
 public sealed class AiActionParserTests
 {
-    // Construits par concaténation pour rester lisibles ici.
     private const string Open = "<" + "think" + ">";
     private const string Close = "</" + "think" + ">";
 
@@ -60,7 +59,6 @@ public sealed class AiActionParserTests
     [Fact]
     public void Clean_NullInput_ThrowsArgumentNullException()
     {
-        // Documente le comportement actuel : le composant appelant doit passer une chaîne.
         Assert.Throws<ArgumentNullException>(() => AiActionParser.Clean(null!));
     }
 }

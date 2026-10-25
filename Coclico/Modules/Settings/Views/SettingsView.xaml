@@ -10,8 +10,6 @@
              d:DataContext="{d:DesignInstance vm:SettingsViewModel}"
              RenderOptions.BitmapScalingMode="HighQuality">
 
-
-
     <UserControl.Resources>
 
         <Style x:Key="GroupLabel" TargetType="TextBlock">
@@ -351,7 +349,6 @@
 
             
 
-
             
             <Border x:Name="PanelProfiles" Visibility="Collapsed">
                 <Grid>
@@ -492,7 +489,6 @@
                 </StackPanel>
             </Border>
 
-
             <Border x:Name="PanelAutonomous" Visibility="Collapsed">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,12,0">
                     <StackPanel>
@@ -573,7 +569,6 @@
                     </StackPanel>
                 </ScrollViewer>
             </Border>
-
 
             <Border x:Name="PanelAbout" Visibility="Collapsed">
                 <StackPanel>
