@@ -3,6 +3,7 @@ using Xunit;
 
 namespace Coclico.Tests;
 
+[Collection("ServiceContainerSerial")]
 public sealed class DiskAnalyzerTests
 {
     [Fact]

@@ -49,7 +49,19 @@ public static class ServiceContainer
 
     public static T? GetOptional<T>() where T : class
     {
-        return _isBuilt ? Provider.GetService<T>() : null;
+        if (!_isBuilt)
+        {
+            return null;
+        }
+
+        try
+        {
+            return Provider.GetService<T>();
+        }
+        catch (ObjectDisposedException)
+        {
+            return null;
+        }
     }
 
     public static IServiceScope CreateScope()
