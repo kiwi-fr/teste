@@ -1083,4 +1083,5 @@ Estimated: {0} across {1} categories.</system:String>
     <system:String x:Key="Diag_ValueState_SourceError">Source error</system:String>
     <system:String x:Key="Diag_ValueState_Stale">Stale measure</system:String>
     <system:String x:Key="Menu_Diagnostics">PC Diagnostics</system:String>
+    <system:String x:Key="Menu_UpdateCenter">Updates</system:String>
 </ResourceDictionary>

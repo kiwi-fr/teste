@@ -1083,4 +1083,5 @@ Estimation : {0} répartis sur {1} catégories.</system:String>
     <system:String x:Key="Diag_ValueState_SourceError">Source en erreur</system:String>
     <system:String x:Key="Diag_ValueState_Stale">Mesure périmée</system:String>
     <system:String x:Key="Menu_Diagnostics">Diagnostic du PC</system:String>
+    <system:String x:Key="Menu_UpdateCenter">Mises à jour</system:String>
 </ResourceDictionary>

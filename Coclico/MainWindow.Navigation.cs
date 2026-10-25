@@ -5,6 +5,8 @@ using System.Windows.Media.Animation;
 using Coclico.Modules.Apps.Views;
 using Coclico.Modules.DiskAnalyzer.Views;
 using Coclico.Modules.Power.Views;
+using Coclico.Modules.UpdateCenter.ViewModels;
+using Coclico.Modules.UpdateCenter.Views;
 using Coclico.Services;
 using Coclico.Views;
 namespace Coclico;
@@ -20,6 +22,7 @@ public partial class MainWindow
         ("Diagnostics", static () => new DiagnosticView()),
         ("Network", static () => ServiceContainer.GetOptional<NetworkOptimizerView>() ?? new NetworkOptimizerView()),
         ("Installer", static () => ServiceContainer.GetOptional<AppsView>() ?? new AppsView()),
+        ("UpdateCenter", static () => ServiceContainer.GetOptional<UpdateCenterView>() ?? new UpdateCenterView(ServiceContainer.GetRequired<UpdateCenterViewModel>())),
         ("Cleaning", static () => new CleaningView()),
         ("RamCleaner", static () => new RamCleanerView()),
         ("PowerOptimizer", static () => ServiceContainer.GetOptional<PowerOptimizerView>() ?? new PowerOptimizerView()),
@@ -74,6 +77,7 @@ public partial class MainWindow
             "open_network" => "Network",
             "open_power" => "PowerOptimizer",
             "open_installer" => "Installer",
+            "open_updates" => "UpdateCenter",
             "open_cleaning" => "Cleaning",
             "open_ramcleaner" => "RamCleaner",
             "open_settings" => "Settings",
@@ -141,6 +145,7 @@ public partial class MainWindow
                 "HealthDefense" => "L'utilisateur est sur le module Santé, Défense & Réparation Windows.",
                 "Network" => "L'utilisateur est sur le module Réseau & Latence (optimisation TCP, cartes Ethernet/Wi-Fi, DNS, MTU).",
                 "Installer" => "L'utilisateur est dans l'Installeur Winget.",
+                "UpdateCenter" => "L'utilisateur est dans le Centre de Mises à jour (applications via Winget, pilotes via Windows Update, statut Windows et Coclico).",
                 "Cleaning" => "L'utilisateur est dans le Nettoyage système.",
                 "RamCleaner" => "L'utilisateur est dans le RAM Cleaner (nettoyage et surveillance mémoire).",
                 "PowerOptimizer" => "L'utilisateur est dans le module CPU & Alimentation (plans Coclico économie/optimal/performance, mode adaptatif, test CPU).",
