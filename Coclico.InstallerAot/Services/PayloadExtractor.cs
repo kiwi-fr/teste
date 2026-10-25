@@ -4,6 +4,7 @@ using System.IO.Compression;
 using System.Reflection;
 
 namespace Coclico.InstallerAot.Services;
+
 public static class PayloadExtractor
 {
     private const string PayloadResourceName = "Coclico.payload.zip";
@@ -47,7 +48,7 @@ public static class PayloadExtractor
 
             if (entry.Length == 0 && string.IsNullOrEmpty(entry.Name))
             {
-                continue; 
+                continue;
             }
 
             using (var input = entry.Open())

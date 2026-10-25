@@ -31,9 +31,9 @@ public static class CudaRuntimeDownloader
     private static readonly byte[] DownloadBuffer = new byte[1_048_576];
     private static readonly byte[] CopyBuffer = new byte[81_920];
 
-    private const int MaxSegments = 8;                       
-    private const long SegmentThreshold = 8L * 1024 * 1024;  
-    private const int SegmentMaxRetries = 3;                  
+    private const int MaxSegments = 8;
+    private const long SegmentThreshold = 8L * 1024 * 1024;
+    private const int SegmentMaxRetries = 3;
 
     private static readonly HttpClient Http = CreateHttpClient();
 

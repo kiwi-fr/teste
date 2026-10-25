@@ -1,10 +1,10 @@
 namespace Coclico.Modules.Diagnostics.Services.Checks;
 
 using System.Diagnostics;
-using Microsoft.Win32;
 using Coclico.Modules.Diagnostics.Models;
 using Coclico.Modules.Diagnostics.Rules;
 using Coclico.Services;
+using Microsoft.Win32;
 
 public sealed class ProcessesCheck : IDiagnosticCheck
 {

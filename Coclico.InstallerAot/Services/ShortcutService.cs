@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 
 namespace Coclico.InstallerAot.Services;
+
 public static class ShortcutService
 {
     public static Task CreateShortcutsAsync(string installDir, string exeName)

@@ -16,7 +16,7 @@ using Coclico.Installer.Services;
 namespace Coclico.Installer;
 
 public partial class MainWindow : Window
-{ 
+{
     private readonly InstallConfig _config = new();
     private readonly DispatcherTimer _tipsTimer;
     private int _tipIndex = 0;
