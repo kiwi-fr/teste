@@ -464,13 +464,8 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
 
     internal static void ApplyTcpLines(TcpGlobalSettings settings, string netshOutput)
     {
-        foreach (string[] parts in netshOutput.Split('\n').Select(line => line.Split(':', 2)))
+        foreach (string[] parts in netshOutput.Split('\n').Select(line => line.Split(':', 2)).Where(parts => parts.Length == 2))
         {
-            if (parts.Length != 2)
-            {
-                continue;
-            }
-
             string key = parts[0].Trim().ToLowerInvariant();
             string val = NormalizeNetshValue(parts[1]);
 
@@ -544,12 +539,9 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
             (int exit, string output) = await RunProcessWithExitAsync("powershell.exe", BuildPowerShellArguments(script), ct).ConfigureAwait(false);
             if (exit == 0)
             {
-                foreach (string[] pair in output.Split('\n').Select(line => line.Split('=', 2)))
+                foreach (string[] pair in output.Split('\n').Select(line => line.Split('=', 2)).Where(pair => pair.Length == 2 && pair[0].Trim().Length > 0))
                 {
-                    if (pair.Length == 2 && pair[0].Trim().Length > 0)
-                    {
-                        props[pair[0].Trim()] = pair[1].Trim();
-                    }
+                    props[pair[0].Trim()] = pair[1].Trim();
                 }
             }
         }

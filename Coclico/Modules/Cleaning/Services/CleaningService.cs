@@ -525,12 +525,9 @@ public class CleaningService
         string firefoxProfilesDir = Path.Join(localAppData, @"Mozilla\Firefox\Profiles");
         if (Directory.Exists(firefoxProfilesDir))
         {
-            foreach (string cache2 in Directory.EnumerateDirectories(firefoxProfilesDir).Select(profile => Path.Join(profile, "cache2")))
+            foreach (string cache2 in Directory.EnumerateDirectories(firefoxProfilesDir).Select(profile => Path.Join(profile, "cache2")).Where(Directory.Exists))
             {
-                if (Directory.Exists(cache2))
-                {
-                    await CleanDirectorySafeAsync(cache2, cat, ct);
-                }
+                await CleanDirectorySafeAsync(cache2, cat, ct);
             }
         }
     }

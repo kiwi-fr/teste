@@ -31,7 +31,7 @@ jobs:
       - name: Run DevSkim scanner
         uses: microsoft/DevSkim-Action@734c6ed89671b1c7a5211ed334c79db261e3f221
         with:
-          ignore-globs: '**/.git/**,**/bin/**,**/Coclico.Tests/**'
+          ignore-globs: '**/.git/**,**/bin/**,**/Coclico.Tests/**,alertes*.json'
 
       - name: Upload DevSkim scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370

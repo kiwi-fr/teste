@@ -81,3 +81,5 @@ appsettings.Development.json
 
 # Worktrees
 .worktrees/
+
+alertes*.json

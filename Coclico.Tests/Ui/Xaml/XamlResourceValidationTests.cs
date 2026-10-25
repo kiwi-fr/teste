@@ -42,30 +42,19 @@ public sealed class XamlResourceValidationTests
                 available.UnionWith(ExtractKeys(raw));
                 CollectMergedDictionaryKeys(projectDir, raw, available, [file]);
 
-                foreach (string key in StaticResourceRegex.Matches(raw).OfType<Match>().Select(match => match.Groups[1].Value))
+                foreach (string key in StaticResourceRegex.Matches(raw).OfType<Match>().Select(match => match.Groups[1].Value).Where(key => !available.Contains(key)))
                 {
-                    if (!available.Contains(key))
-                    {
-                        violations.Add($"{Rel(repoRoot, file)} : clé StaticResource '{key}' introuvable (ni locale, ni App.xaml, ni dictionnaires fusionnés)");
-                    }
+                    violations.Add($"{Rel(repoRoot, file)} : clé StaticResource '{key}' introuvable (ni locale, ni App.xaml, ni dictionnaires fusionnés)");
                 }
 
-                foreach (string source in MergedDictionaryRegex.Matches(raw).OfType<Match>().Select(match => match.Groups[1].Value))
+                foreach (string source in MergedDictionaryRegex.Matches(raw).OfType<Match>().Select(match => match.Groups[1].Value).Where(source => !TryResolvePackUri(projectDir, source, out _)))
                 {
-                    if (!TryResolvePackUri(projectDir, source, out string? resolved))
-                    {
-                        violations.Add($"{Rel(repoRoot, file)} : dictionnaire fusionné introuvable '{source}'");
-                    }
+                    violations.Add($"{Rel(repoRoot, file)} : dictionnaire fusionné introuvable '{source}'");
                 }
 
-                foreach (string rawValue in IconSourceRegex.Matches(raw).OfType<Match>().Select(match => match.Groups[1].Value.Trim()))
+                foreach (string rawValue in IconSourceRegex.Matches(raw).OfType<Match>().Select(match => match.Groups[1].Value.Trim()).Where(IsImagePath))
                 {
                     string value = rawValue.Replace('/', '\\');
-                    if (!IsImagePath(rawValue))
-                    {
-                        continue;
-                    }
-
                     if (rawValue.StartsWith("pack://", StringComparison.OrdinalIgnoreCase))
                     {
                         var packMatch = PackResourceRegex.Match(rawValue);

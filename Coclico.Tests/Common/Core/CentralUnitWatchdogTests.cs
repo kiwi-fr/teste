@@ -107,28 +107,29 @@ public sealed class CentralUnitWatchdogTests : IDisposable
     [Fact]
     public async Task StartDrivesPeriodicChecksUntilStopped()
     {
-        var periodicWatchdog = new CentralUnitWatchdog(_store, _activity, TimeSpan.FromMilliseconds(60));
-        int revives = 0;
-        periodicWatchdog.Register("Stalled", TimeSpan.FromMilliseconds(30), () => Interlocked.Increment(ref revives));
-
-        _store.StartScheduler();
-        periodicWatchdog.Start();
-        periodicWatchdog.Start();
-
-        try
+        using (var periodicWatchdog = new CentralUnitWatchdog(_store, _activity, TimeSpan.FromMilliseconds(60)))
         {
-            DateTime deadline = DateTime.UtcNow + TimeSpan.FromSeconds(10);
-            while (Volatile.Read(ref revives) == 0 && DateTime.UtcNow < deadline)
+            int revives = 0;
+            periodicWatchdog.Register("Stalled", TimeSpan.FromMilliseconds(30), () => Interlocked.Increment(ref revives));
+
+            _store.StartScheduler();
+            periodicWatchdog.Start();
+            periodicWatchdog.Start();
+
+            try
             {
-                await Task.Delay(50);
+                DateTime deadline = DateTime.UtcNow + TimeSpan.FromSeconds(10);
+                while (Volatile.Read(ref revives) == 0 && DateTime.UtcNow < deadline)
+                {
+                    await Task.Delay(50);
+                }
             }
-        }
-        finally
-        {
-            periodicWatchdog.Stop();
-            periodicWatchdog.Dispose();
-        }
+            finally
+            {
+                periodicWatchdog.Stop();
+            }
 
-        Assert.True(revives >= 1);
+            Assert.True(revives >= 1);
+        }
     }
 }
