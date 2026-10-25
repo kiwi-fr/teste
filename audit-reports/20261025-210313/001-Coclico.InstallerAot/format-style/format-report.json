@@ -1,0 +1,182 @@
+[
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "0f7a99f3-e20d-41eb-8908-47e67330da8a"
+      },
+      "Id": "72941a65-7721-4db6-a117-aaa77fcaa888"
+    },
+    "FileName": "PayloadExtractor.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.InstallerAot\\Services\\PayloadExtractor.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 6,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.InstallerAot.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Installer.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "0f7a99f3-e20d-41eb-8908-47e67330da8a"
+      },
+      "Id": "44246607-c802-403e-b174-d1213dc101ea"
+    },
+    "FileName": "RegistryService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.InstallerAot\\Services\\RegistryService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.InstallerAot.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Installer.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "0f7a99f3-e20d-41eb-8908-47e67330da8a"
+      },
+      "Id": "44246607-c802-403e-b174-d1213dc101ea"
+    },
+    "FileName": "RegistryService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.InstallerAot\\Services\\RegistryService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 19,
+        "CharNumber": 9,
+        "DiagnosticId": "IDE0270",
+        "FormatDescription": "info IDE0270: Le contr\u00F4le de valeurs Null peut \u00EAtre simplifi\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "0f7a99f3-e20d-41eb-8908-47e67330da8a"
+      },
+      "Id": "f1195987-8860-4838-ae39-8078a205e01e"
+    },
+    "FileName": "ShortcutService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.InstallerAot\\Services\\ShortcutService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 6,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.InstallerAot.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Installer.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "0f7a99f3-e20d-41eb-8908-47e67330da8a"
+      },
+      "Id": "8fb745d0-8125-4864-9455-57fe94386ac9"
+    },
+    "FileName": "CudaRuntimeDownloader.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.InstallerAot\\Services\\CudaRuntimeDownloader.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 215,
+        "CharNumber": 13,
+        "DiagnosticId": "IDE0270",
+        "FormatDescription": "info IDE0270: Le contr\u00F4le de valeurs Null peut \u00EAtre simplifi\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "0f7a99f3-e20d-41eb-8908-47e67330da8a"
+      },
+      "Id": "8fb745d0-8125-4864-9455-57fe94386ac9"
+    },
+    "FileName": "CudaRuntimeDownloader.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.InstallerAot\\Services\\CudaRuntimeDownloader.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 387,
+        "CharNumber": 16,
+        "DiagnosticId": "IDE0290",
+        "FormatDescription": "info IDE0290: Utiliser le constructeur principal"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "0f7a99f3-e20d-41eb-8908-47e67330da8a"
+      },
+      "Id": "8fb745d0-8125-4864-9455-57fe94386ac9"
+    },
+    "FileName": "CudaRuntimeDownloader.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.InstallerAot\\Services\\CudaRuntimeDownloader.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 220,
+        "CharNumber": 13,
+        "DiagnosticId": "IDE0063",
+        "FormatDescription": "info IDE0063: L\u0027instruction \u0027using\u0027 peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "0f7a99f3-e20d-41eb-8908-47e67330da8a"
+      },
+      "Id": "7acfeb0b-885e-4c0a-903f-885ce9441593"
+    },
+    "FileName": "DotnetRuntimeService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.InstallerAot\\Services\\DotnetRuntimeService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 25,
+        "CharNumber": 26,
+        "DiagnosticId": "IDE0300",
+        "FormatDescription": "info IDE0300: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "0f7a99f3-e20d-41eb-8908-47e67330da8a"
+      },
+      "Id": "93376bac-84cb-43fc-b35f-b87ada4c4fdd"
+    },
+    "FileName": "InstallService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.InstallerAot\\Services\\InstallService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 266,
+        "CharNumber": 30,
+        "DiagnosticId": "IDE0028",
+        "FormatDescription": "info IDE0028: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "0f7a99f3-e20d-41eb-8908-47e67330da8a"
+      },
+      "Id": "2f9d72f8-46b6-47e7-b25b-8e6c5686f757"
+    },
+    "FileName": "NativeLibBundle.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.InstallerAot\\NativeLibBundle.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 13,
+        "CharNumber": 25,
+        "DiagnosticId": "IDE0300",
+        "FormatDescription": "info IDE0300: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  }
+]

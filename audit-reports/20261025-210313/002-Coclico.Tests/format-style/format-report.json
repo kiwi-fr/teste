@@ -1,0 +1,1046 @@
+[
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "a8618633-6315-4a05-8780-5db9d4efc297"
+    },
+    "FileName": "CacheServiceTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\CacheServiceTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "3c72f5c7-8431-40b9-93fe-f04a7cd67f32"
+    },
+    "FileName": "CentralCircuitBreakerTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\CentralCircuitBreakerTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "d1e990d6-a678-498f-9aa6-1c207a532cee"
+    },
+    "FileName": "CentralErrorTriageTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\CentralErrorTriageTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "ca3725fe-1e97-4a59-873a-f82e1cd5eac3"
+    },
+    "FileName": "CentralUnitActivityTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\CentralUnitActivityTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "a5841520-5773-4de9-a365-4e497de00628"
+    },
+    "FileName": "CentralUnitBusTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\CentralUnitBusTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "f472d622-7f77-47b7-afd6-ec166e413df5"
+    },
+    "FileName": "CentralUnitFlagStoreTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\CentralUnitFlagStoreTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "aff3abc7-bb81-469c-95bd-49e22cfa25e2"
+    },
+    "FileName": "CentralUnitServiceTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\CentralUnitServiceTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "f71be28c-021e-4642-b9af-96b268ee422d"
+    },
+    "FileName": "CentralUnitStigmergyTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\CentralUnitStigmergyTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "e595c188-e1c6-4e5c-a3d7-2ad047119656"
+    },
+    "FileName": "CentralUnitVariablesTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\CentralUnitVariablesTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "34db2abe-4ac2-4311-ac6c-b3fddc778eab"
+    },
+    "FileName": "CentralUnitWatchdogTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\CentralUnitWatchdogTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "34db2abe-4ac2-4311-ac6c-b3fddc778eab"
+    },
+    "FileName": "CentralUnitWatchdogTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\CentralUnitWatchdogTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 110,
+        "CharNumber": 9,
+        "DiagnosticId": "IDE0063",
+        "FormatDescription": "info IDE0063: L\u0027instruction \u0027using\u0027 peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "1ee3012e-c26d-44c2-b77f-cbccf520b57d"
+    },
+    "FileName": "LaunchModesTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\LaunchModesTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "e9296c7e-7836-40e2-b7e0-0998b6f8d836"
+    },
+    "FileName": "ServiceContainerTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\ServiceContainerTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "9ee07173-8a73-4930-a89b-de9f620a03be"
+    },
+    "FileName": "SettingsServiceTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\SettingsServiceTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "134b0df1-9970-4c21-ad73-ae311ab26f40"
+    },
+    "FileName": "SimpleStemmerTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\SimpleStemmerTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "eac8d52f-d604-4e55-8b81-301e2ee52013"
+    },
+    "FileName": "UpdateVersionTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Core\\UpdateVersionTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "9a20f847-412c-4249-a248-db49fff3d788"
+    },
+    "FileName": "AppLogTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Diagnostics\\AppLogTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Diagnostics\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "689057a2-9a0b-43ff-ab5c-f47b6667a17a"
+    },
+    "FileName": "AsyncEventSafeTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Diagnostics\\AsyncEventSafeTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Diagnostics\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "536ab762-7707-4d48-808c-26468a5cc494"
+    },
+    "FileName": "ProcessExecutionServiceTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Common\\Execution\\ProcessExecutionServiceTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Common.Execution\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "61881d9c-109a-4efd-a6a0-cddde8fb700b"
+    },
+    "FileName": "AiActionParserTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Ai\\AiActionParserTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Ai\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "e86de6c1-98a2-4cf0-ad35-e46c84b96ff1"
+    },
+    "FileName": "AiLocalOnlyTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Ai\\AiLocalOnlyTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Ai\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "e86de6c1-98a2-4cf0-ad35-e46c84b96ff1"
+    },
+    "FileName": "AiLocalOnlyTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Ai\\AiLocalOnlyTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 12,
+        "CharNumber": 22,
+        "DiagnosticId": "IDE0300",
+        "FormatDescription": "info IDE0300: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "7ee5efec-09a8-4a6d-bfa7-d1eabf9ec3ab"
+    },
+    "FileName": "AiToolExecutionServiceSanitizerTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Ai\\AiToolExecutionServiceSanitizerTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Ai\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "b26ca2e3-5a62-49c2-bd6f-2f6861f8f1f1"
+    },
+    "FileName": "RagServiceTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Ai\\RagServiceTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Ai\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "d529dfa6-04ec-42e0-b586-1e42bb2359aa"
+    },
+    "FileName": "AppsCatalogTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Apps\\AppsCatalogTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Apps\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "d2e58284-89de-4041-8bde-b3f3df0e4077"
+    },
+    "FileName": "CleaningModelsTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Cleaning\\CleaningModelsTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Cleaning\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "9352cec6-bef6-448f-baeb-2b4e4cbbaae1"
+    },
+    "FileName": "CleaningServiceTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Cleaning\\CleaningServiceTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 6,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Cleaning\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "9352cec6-bef6-448f-baeb-2b4e4cbbaae1"
+    },
+    "FileName": "CleaningServiceTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Cleaning\\CleaningServiceTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 54,
+        "CharNumber": 95,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "65d4643d-fef1-4394-86d4-eeabe0a4cbab"
+    },
+    "FileName": "CustomShortcutJsonTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Dashboard\\CustomShortcutJsonTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Dashboard\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "d4a891b5-134b-43ba-b3e4-250482fb7c39"
+    },
+    "FileName": "DiagnosticHistoryServiceTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Diagnostics\\DiagnosticHistoryServiceTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Diagnostics\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "f938e97f-4fde-4417-a02e-9541bd52ef02"
+    },
+    "FileName": "DiagnosticOrchestratorTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Diagnostics\\DiagnosticOrchestratorTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Diagnostics\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "f938e97f-4fde-4417-a02e-9541bd52ef02"
+    },
+    "FileName": "DiagnosticOrchestratorTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Diagnostics\\DiagnosticOrchestratorTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 217,
+        "CharNumber": 27,
+        "DiagnosticId": "IDE0062",
+        "FormatDescription": "info IDE0062: Une fonction locale peut \u00EAtre rendue statique"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "25c9b469-f36b-47b4-b1da-b3df08c035f5"
+    },
+    "FileName": "DiagnosticPrivacySanitizerTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Diagnostics\\DiagnosticPrivacySanitizerTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Diagnostics\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "735df36a-954d-42a6-80d5-15176b8c08c6"
+    },
+    "FileName": "DiagnosticResourceKeyTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Diagnostics\\DiagnosticResourceKeyTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Diagnostics\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "fde5dca2-5fc5-4e08-8047-31210836d0a1"
+    },
+    "FileName": "DiagnosticRuleEngineTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Diagnostics\\DiagnosticRuleEngineTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Diagnostics\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "fde5dca2-5fc5-4e08-8047-31210836d0a1"
+    },
+    "FileName": "DiagnosticRuleEngineTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Diagnostics\\DiagnosticRuleEngineTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 435,
+        "CharNumber": 69,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "105fa5fc-2592-439b-ba61-42d26ed4d3d1"
+    },
+    "FileName": "DiagnosticSummaryBuilderTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Diagnostics\\DiagnosticSummaryBuilderTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Diagnostics\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "105fa5fc-2592-439b-ba61-42d26ed4d3d1"
+    },
+    "FileName": "DiagnosticSummaryBuilderTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Diagnostics\\DiagnosticSummaryBuilderTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 94,
+        "CharNumber": 14,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "105fa5fc-2592-439b-ba61-42d26ed4d3d1"
+    },
+    "FileName": "DiagnosticSummaryBuilderTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Diagnostics\\DiagnosticSummaryBuilderTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 99,
+        "CharNumber": 73,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "cd770915-eaa6-4fc8-89cc-d4249e1ba351"
+    },
+    "FileName": "DiskAnalyzerTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\DiskAnalyzer\\DiskAnalyzerTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.DiskAnalyzer\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "f48871a8-3b78-4490-9695-dabcbc02519b"
+    },
+    "FileName": "DuplicateFinderTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\DiskAnalyzer\\DuplicateFinderTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.DiskAnalyzer\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "b489dfc2-8728-4000-a4b2-f9011ba1cf09"
+    },
+    "FileName": "SecurityPolicyTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\HealthDefense\\SecurityPolicyTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.HealthDefense\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "fd333fb2-afbf-4a82-b9ed-19d5d7c183bd"
+    },
+    "FileName": "NetworkSettingsGuardTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Network\\NetworkSettingsGuardTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Network\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "e63b9ddd-6d99-472e-9fc1-f1781ed80332"
+    },
+    "FileName": "NetworkTuningCatalogTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Network\\NetworkTuningCatalogTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 6,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Network\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "b6dc8946-1adc-421b-8c56-8d3c96c7ea7f"
+    },
+    "FileName": "AdaptivePowerRulesTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Power\\AdaptivePowerRulesTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Power\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "ce5c311c-77e1-4e30-ab8d-888315d68fc2"
+    },
+    "FileName": "PowerPlanCatalogTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Power\\PowerPlanCatalogTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Power\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "e0cafa6f-de5f-4ba2-8752-912d48d50d7a"
+    },
+    "FileName": "UninstallCommandParserTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Programs\\UninstallCommandParserTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Programs\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "b53e0cd7-2302-41e5-af0b-163e2bb7838d"
+    },
+    "FileName": "MemoryCleanerServiceTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\RamCleaner\\MemoryCleanerServiceTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.RamCleaner\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "e53c0a78-a31e-4012-83c0-25c0d849761c"
+    },
+    "FileName": "SmartMemoryDaemonServiceTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\RamCleaner\\SmartMemoryDaemonServiceTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.RamCleaner\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "c5e1aba3-a042-463f-aeab-e793d3933dc0"
+    },
+    "FileName": "ProfileServiceTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Settings\\ProfileServiceTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Modules.Settings\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "c5e1aba3-a042-463f-aeab-e793d3933dc0"
+    },
+    "FileName": "ProfileServiceTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Settings\\ProfileServiceTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 47,
+        "CharNumber": 79,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "b6e5f482-7846-4fe6-8e77-26bd5814f748"
+    },
+    "FileName": "ConvertersTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Ui\\Converters\\ConvertersTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 9,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Ui.Converters\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "b6e5f482-7846-4fe6-8e77-26bd5814f748"
+    },
+    "FileName": "ConvertersTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Ui\\Converters\\ConvertersTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 29,
+        "CharNumber": 43,
+        "DiagnosticId": "IDE0300",
+        "FormatDescription": "info IDE0300: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "b6e5f482-7846-4fe6-8e77-26bd5814f748"
+    },
+    "FileName": "ConvertersTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Ui\\Converters\\ConvertersTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 19,
+        "CharNumber": 43,
+        "DiagnosticId": "IDE0300",
+        "FormatDescription": "info IDE0300: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "b6e5f482-7846-4fe6-8e77-26bd5814f748"
+    },
+    "FileName": "ConvertersTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Ui\\Converters\\ConvertersTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 60,
+        "CharNumber": 43,
+        "DiagnosticId": "IDE0300",
+        "FormatDescription": "info IDE0300: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "b6e5f482-7846-4fe6-8e77-26bd5814f748"
+    },
+    "FileName": "ConvertersTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Ui\\Converters\\ConvertersTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 40,
+        "CharNumber": 13,
+        "DiagnosticId": "IDE0300",
+        "FormatDescription": "info IDE0300: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "b6e5f482-7846-4fe6-8e77-26bd5814f748"
+    },
+    "FileName": "ConvertersTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Ui\\Converters\\ConvertersTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 70,
+        "CharNumber": 43,
+        "DiagnosticId": "IDE0300",
+        "FormatDescription": "info IDE0300: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "098533dc-5b7d-4dea-9f8c-394f47f7fa4e"
+      },
+      "Id": "c293169c-a3eb-4212-b7bf-91998f4d7374"
+    },
+    "FileName": "XamlResourceValidationTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Ui\\Xaml\\XamlResourceValidationTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Tests\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Tests.Ui.Xaml\u0022"
+      }
+    ]
+  }
+]

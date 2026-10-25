@@ -1,0 +1,18 @@
+﻿LANCEMENT DE L'AUDIT
+===================
+
+Date : 2026-10-25 21:09:38
+Solution : C:\Users\Martin\Documents\projet1\version fini v2.1.0\veriosn beta\Coclico-main\Coclico.sln
+Code retour de la compilation globale : 1
+Journal global : C:\Users\Martin\Documents\projet1\version fini v2.1.0\veriosn beta\Coclico-main\audit-solution-20261025-210637.txt
+Audit detaille : Termine : consulter les codes de chaque etape dans etapes.csv
+Tests demandes : True
+
+IMPORTANT
+- Les rapports detailles sont dans audit-reports.
+- Verifier etapes.csv pour connaitre les controles ayant abouti.
+- Une compilation en echec peut limiter les analyses suivantes.
+- Plusieurs rapports peuvent contenir le meme diagnostic.
+- Le nombre de messages n'est pas un nombre de bugs uniques.
+- Aucun analyseur supplementaire n'a ete installe.
+- Aucun correctif automatique de code n'a ete demande.

@@ -1,0 +1,236 @@
+[
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "3a2d2548-be30-46cc-9588-920390d88c96"
+      },
+      "Id": "98f6334d-7317-4ede-80ad-373ad6352edb"
+    },
+    "FileName": "XamlResourceValidationTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Ui\\Xaml\\XamlResourceValidationTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 101,
+        "CharNumber": 29,
+        "DiagnosticId": "CA1865",
+        "FormatDescription": "info CA1865: Utilisez \u0027string.StartsWith(char)\u0027 \u00E0 la place de \u0027string.StartsWith(string)\u0027 quand vous avez une cha\u00EEne avec un seul caract\u00E8re"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "3a2d2548-be30-46cc-9588-920390d88c96"
+      },
+      "Id": "98f6334d-7317-4ede-80ad-373ad6352edb"
+    },
+    "FileName": "XamlResourceValidationTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Ui\\Xaml\\XamlResourceValidationTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 11,
+        "CharNumber": 59,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "3a2d2548-be30-46cc-9588-920390d88c96"
+      },
+      "Id": "98f6334d-7317-4ede-80ad-373ad6352edb"
+    },
+    "FileName": "XamlResourceValidationTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Ui\\Xaml\\XamlResourceValidationTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 13,
+        "CharNumber": 53,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "3a2d2548-be30-46cc-9588-920390d88c96"
+      },
+      "Id": "98f6334d-7317-4ede-80ad-373ad6352edb"
+    },
+    "FileName": "XamlResourceValidationTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Ui\\Xaml\\XamlResourceValidationTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 12,
+        "CharNumber": 55,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "3a2d2548-be30-46cc-9588-920390d88c96"
+      },
+      "Id": "98f6334d-7317-4ede-80ad-373ad6352edb"
+    },
+    "FileName": "XamlResourceValidationTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Ui\\Xaml\\XamlResourceValidationTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 14,
+        "CharNumber": 46,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "3a2d2548-be30-46cc-9588-920390d88c96"
+      },
+      "Id": "98f6334d-7317-4ede-80ad-373ad6352edb"
+    },
+    "FileName": "XamlResourceValidationTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Ui\\Xaml\\XamlResourceValidationTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 10,
+        "CharNumber": 57,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "3a2d2548-be30-46cc-9588-920390d88c96"
+      },
+      "Id": "98f6334d-7317-4ede-80ad-373ad6352edb"
+    },
+    "FileName": "XamlResourceValidationTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Ui\\Xaml\\XamlResourceValidationTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 259,
+        "CharNumber": 29,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "3a2d2548-be30-46cc-9588-920390d88c96"
+      },
+      "Id": "98f6334d-7317-4ede-80ad-373ad6352edb"
+    },
+    "FileName": "XamlResourceValidationTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Ui\\Xaml\\XamlResourceValidationTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 147,
+        "CharNumber": 23,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "3a2d2548-be30-46cc-9588-920390d88c96"
+      },
+      "Id": "5b1ec069-c76b-4f99-922a-63248ee422a4"
+    },
+    "FileName": "DiagnosticResourceKeyTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Diagnostics\\DiagnosticResourceKeyTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 119,
+        "CharNumber": 31,
+        "DiagnosticId": "CA2263",
+        "FormatDescription": "info CA2263: Pr\u00E9f\u00E9rer la surcharge g\u00E9n\u00E9rique \u0027System.Enum.GetNames\u003CTEnum\u003E()\u0027 au lieu de \u0027System.Enum.GetNames(System.Type)\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "3a2d2548-be30-46cc-9588-920390d88c96"
+      },
+      "Id": "5b1ec069-c76b-4f99-922a-63248ee422a4"
+    },
+    "FileName": "DiagnosticResourceKeyTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Diagnostics\\DiagnosticResourceKeyTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 105,
+        "CharNumber": 6,
+        "DiagnosticId": "xUnit1042",
+        "FormatDescription": "info xUnit1042: The member referenced by the MemberData attribute returns untyped data rows, such as object[]. Consider using TheoryData\u003C\u003E as the return type to provide better type safety."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "3a2d2548-be30-46cc-9588-920390d88c96"
+      },
+      "Id": "5b1ec069-c76b-4f99-922a-63248ee422a4"
+    },
+    "FileName": "DiagnosticResourceKeyTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Diagnostics\\DiagnosticResourceKeyTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 8,
+        "CharNumber": 46,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "3a2d2548-be30-46cc-9588-920390d88c96"
+      },
+      "Id": "af4ef994-d81e-4f4a-80f4-178f58d0ef6d"
+    },
+    "FileName": "AppsCatalogTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Apps\\AppsCatalogTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 27,
+        "CharNumber": 37,
+        "DiagnosticId": "CA1869",
+        "FormatDescription": "info CA1869: \u00C9vitez de cr\u00E9er une instance \u00AB JsonSerializerOptions \u00BB pour chaque op\u00E9ration de s\u00E9rialisation. Mettez en cache et r\u00E9utilisez les instances \u00E0 la place."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "3a2d2548-be30-46cc-9588-920390d88c96"
+      },
+      "Id": "af4ef994-d81e-4f4a-80f4-178f58d0ef6d"
+    },
+    "FileName": "AppsCatalogTests.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico.Tests\\Modules\\Apps\\AppsCatalogTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 117,
+        "CharNumber": 37,
+        "DiagnosticId": "CA1869",
+        "FormatDescription": "info CA1869: \u00C9vitez de cr\u00E9er une instance \u00AB JsonSerializerOptions \u00BB pour chaque op\u00E9ration de s\u00E9rialisation. Mettez en cache et r\u00E9utilisez les instances \u00E0 la place."
+      }
+    ]
+  }
+]

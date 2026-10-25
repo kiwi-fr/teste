@@ -1,0 +1,4 @@
+﻿C:\Users\Martin\Documents\projet1\version fini v2.1.0\veriosn beta\Coclico-main\Coclico.InstallerAot\Coclico.InstallerAot.csproj
+C:\Users\Martin\Documents\projet1\version fini v2.1.0\veriosn beta\Coclico-main\Coclico.Tests\Coclico.Tests.csproj
+C:\Users\Martin\Documents\projet1\version fini v2.1.0\veriosn beta\Coclico-main\Coclico\Coclico.csproj
+C:\Users\Martin\Documents\projet1\version fini v2.1.0\veriosn beta\Coclico-main\Coclico\Coclico_dgmc2jfe_wpftmp.csproj

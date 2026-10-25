@@ -1,0 +1,3818 @@
+[
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "78083a71-b84c-43fd-aa31-f40ad8c7b1bf"
+    },
+    "FileName": "CpuPowerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Power\\Services\\CpuPowerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 92,
+        "CharNumber": 42,
+        "DiagnosticId": "CA1865",
+        "FormatDescription": "info CA1865: Utilisez \u0027string.EndsWith(char)\u0027 \u00E0 la place de \u0027string.EndsWith(string)\u0027 quand vous avez une cha\u00EEne avec un seul caract\u00E8re"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "78083a71-b84c-43fd-aa31-f40ad8c7b1bf"
+    },
+    "FileName": "CpuPowerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Power\\Services\\CpuPowerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 99,
+        "CharNumber": 41,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027GetActiveSchemeAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "78083a71-b84c-43fd-aa31-f40ad8c7b1bf"
+    },
+    "FileName": "CpuPowerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Power\\Services\\CpuPowerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 78,
+        "CharNumber": 55,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027ListSchemesAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "78083a71-b84c-43fd-aa31-f40ad8c7b1bf"
+    },
+    "FileName": "CpuPowerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Power\\Services\\CpuPowerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 288,
+        "CharNumber": 33,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027DuplicateSchemeAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "78083a71-b84c-43fd-aa31-f40ad8c7b1bf"
+    },
+    "FileName": "CpuPowerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Power\\Services\\CpuPowerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 337,
+        "CharNumber": 61,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027QueryAvailableSettingsAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "78083a71-b84c-43fd-aa31-f40ad8c7b1bf"
+    },
+    "FileName": "CpuPowerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Power\\Services\\CpuPowerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 46,
+        "CharNumber": 17,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027IsElevated\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "78083a71-b84c-43fd-aa31-f40ad8c7b1bf"
+    },
+    "FileName": "CpuPowerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Power\\Services\\CpuPowerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 48,
+        "CharNumber": 17,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027HasBattery\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "78083a71-b84c-43fd-aa31-f40ad8c7b1bf"
+    },
+    "FileName": "CpuPowerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Power\\Services\\CpuPowerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 63,
+        "CharNumber": 17,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027IsOnAcPower\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "78083a71-b84c-43fd-aa31-f40ad8c7b1bf"
+    },
+    "FileName": "CpuPowerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Power\\Services\\CpuPowerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 419,
+        "CharNumber": 36,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0GetSystemPowerStatus\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "78083a71-b84c-43fd-aa31-f40ad8c7b1bf"
+    },
+    "FileName": "CpuPowerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Power\\Services\\CpuPowerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 33,
+        "CharNumber": 47,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 576,
+        "CharNumber": 32,
+        "DiagnosticId": "CA1866",
+        "FormatDescription": "info CA1866: Utilisez \u0027string.StartsWith(char)\u0027 \u00E0 la place de \u0027string.StartsWith(string)\u0027 quand vous avez une cha\u00EEne avec un seul caract\u00E8re"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 576,
+        "CharNumber": 56,
+        "DiagnosticId": "CA1866",
+        "FormatDescription": "info CA1866: Utilisez \u0027string.StartsWith(char)\u0027 \u00E0 la place de \u0027string.StartsWith(string)\u0027 quand vous avez une cha\u00EEne avec un seul caract\u00E8re"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 576,
+        "CharNumber": 80,
+        "DiagnosticId": "CA1866",
+        "FormatDescription": "info CA1866: Utilisez \u0027string.StartsWith(char)\u0027 \u00E0 la place de \u0027string.StartsWith(string)\u0027 quand vous avez une cha\u00EEne avec un seul caract\u00E8re"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 576,
+        "CharNumber": 104,
+        "DiagnosticId": "CA1866",
+        "FormatDescription": "info CA1866: Utilisez \u0027string.StartsWith(char)\u0027 \u00E0 la place de \u0027string.StartsWith(string)\u0027 quand vous avez une cha\u00EEne avec un seul caract\u00E8re"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 201,
+        "CharNumber": 34,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027ExtractActions\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 444,
+        "CharNumber": 19,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027StripActionTags\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 449,
+        "CharNumber": 19,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027GetDefaultActionConfirmation\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 507,
+        "CharNumber": 19,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027SanitizeStreamingText\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 620,
+        "CharNumber": 17,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027ShouldExecuteActions\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 227,
+        "CharNumber": 34,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027DetectUserIntentActions\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1351,
+        "CharNumber": 31,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027GetLiveDiagnosticsAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 836,
+        "CharNumber": 60,
+        "DiagnosticId": "CA1847",
+        "FormatDescription": "info CA1847: Utilisez \u2019String. Contient (Char)\u0027 \u00E0 la place de \u2019String. Contains (String)\u0027 lors de la recherche d\u2019un caract\u00E8re unique"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 569,
+        "CharNumber": 32,
+        "DiagnosticId": "CA1861",
+        "FormatDescription": "info CA1861: Pr\u00E9f\u00E9rer les champs \u0027static readonly\u0027 aux arguments de tableau de constantes si la m\u00E9thode appel\u00E9e est appel\u00E9e \u00E0 plusieurs reprises et ne mute pas le tableau pass\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 27,
+        "CharNumber": 51,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 24,
+        "CharNumber": 53,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 26,
+        "CharNumber": 60,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 23,
+        "CharNumber": 50,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 25,
+        "CharNumber": 56,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 19,
+        "CharNumber": 49,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 30,
+        "CharNumber": 56,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 28,
+        "CharNumber": 63,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 29,
+        "CharNumber": 62,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 658,
+        "CharNumber": 13,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 663,
+        "CharNumber": 16,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 664,
+        "CharNumber": 13,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 665,
+        "CharNumber": 13,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 666,
+        "CharNumber": 13,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 689,
+        "CharNumber": 13,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 690,
+        "CharNumber": 13,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 691,
+        "CharNumber": 13,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 699,
+        "CharNumber": 13,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 707,
+        "CharNumber": 13,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 707,
+        "CharNumber": 62,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 708,
+        "CharNumber": 13,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 715,
+        "CharNumber": 13,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 722,
+        "CharNumber": 13,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 729,
+        "CharNumber": 13,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 839,
+        "CharNumber": 34,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 852,
+        "CharNumber": 34,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "0ab34a13-ee1a-4de3-88e3-d439364d67e8"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 859,
+        "CharNumber": 36,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "e1649728-0273-44df-8bf3-9f41e85c4cca"
+    },
+    "FileName": "NetworkSettingsGuard.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkSettingsGuard.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 64,
+        "CharNumber": 43,
+        "DiagnosticId": "CA1870",
+        "FormatDescription": "info CA1870: Utiliser une instance \u00AB SearchValues \u00BB mis en cache pour am\u00E9liorer les performances de recherche"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "e1649728-0273-44df-8bf3-9f41e85c4cca"
+    },
+    "FileName": "NetworkSettingsGuard.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkSettingsGuard.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 71,
+        "CharNumber": 41,
+        "DiagnosticId": "CA1870",
+        "FormatDescription": "info CA1870: Utiliser une instance \u00AB SearchValues \u00BB mis en cache pour am\u00E9liorer les performances de recherche"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "8806e85b-48f2-45c9-a758-f96b3247e4da"
+    },
+    "FileName": "StartupService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\StartupService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 86,
+        "CharNumber": 13,
+        "DiagnosticId": "CA2016",
+        "FormatDescription": "info CA2016: Transf\u00E9rer le param\u00E8tre \u0027ct\u0027 \u00E0 la m\u00E9thode \u0027Run\u0027 ou passer explicitement \u0027CancellationToken.None\u0027 pour indiquer clairement de ne pas propager le jeton"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "8806e85b-48f2-45c9-a758-f96b3247e4da"
+    },
+    "FileName": "StartupService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\StartupService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 38,
+        "CharNumber": 24,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027RunCoreAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "423a985c-a1ea-4628-9795-9c501f512a6e"
+    },
+    "FileName": "WindowsHealthCheck.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Diagnostics\\Services\\Checks\\WindowsHealthCheck.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 77,
+        "CharNumber": 25,
+        "DiagnosticId": "CA1068",
+        "FormatDescription": "info CA1068: La m\u00E9thode \u0027Coclico.Modules.Diagnostics.Services.Checks.WindowsHealthCheck.CollectCriticalGroups(int, System.Threading.CancellationToken, System.Collections.Generic.List\u003CCoclico.Modules.Diagnostics.Rules.EventGroupFacts\u003E)\u0027 doit accepter CancellationToken en tant que dernier param\u00E8tre"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "bd2520ec-284a-422f-9894-932c12c4e585"
+    },
+    "FileName": "IProcessExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Execution\\IProcessExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 14,
+        "CharNumber": 34,
+        "DiagnosticId": "CA1068",
+        "FormatDescription": "info CA1068: La m\u00E9thode \u0027Coclico.Services.IProcessExecutionService.ExecuteAsync(string, System.Collections.Generic.IEnumerable\u003Cstring\u003E?, string?, System.TimeSpan?, System.Threading.CancellationToken, bool)\u0027 doit accepter CancellationToken en tant que dernier param\u00E8tre"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "d5ec053a-9ff1-47f6-bb4e-9a89fbbf9106"
+    },
+    "FileName": "AppsViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Apps\\ViewModels\\AppsViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1197,
+        "CharNumber": 24,
+        "DiagnosticId": "CA1068",
+        "FormatDescription": "info CA1068: La m\u00E9thode \u0027Coclico.ViewModels.AppsViewModel.InstallGithubItemsAsync(System.Collections.Generic.List\u003CCoclico.ViewModels.AppInstallItem\u003E, System.IProgress\u003Cstring\u003E, System.Threading.CancellationToken, int, int)\u0027 doit accepter CancellationToken en tant que dernier param\u00E8tre"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "279211bd-d2da-4905-a727-72b7ae20abb2"
+    },
+    "FileName": "RecycleBinHelper.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\Services\\RecycleBinHelper.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 47,
+        "CharNumber": 17,
+        "DiagnosticId": "CA1806",
+        "FormatDescription": "info CA1806: SendToRecycleBinIFileOperation appelle SHCreateItemFromParsingName mais n\u0027utilise pas la valeur HRESULT ou le code d\u0027erreur retourn\u00E9 par la m\u00E9thode. Cela peut entra\u00EEner un comportement inattendu dans les conditions d\u0027erreurs ou dans les situations o\u00F9 les ressources sont limit\u00E9es. Utilisez le r\u00E9sultat dans une instruction conditionnelle, assignez-le \u00E0 une variable ou passez-le en tant qu\u0027argument \u00E0 une autre m\u00E9thode."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "279211bd-d2da-4905-a727-72b7ae20abb2"
+    },
+    "FileName": "RecycleBinHelper.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\Services\\RecycleBinHelper.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 99,
+        "CharNumber": 23,
+        "DiagnosticId": "SYSLIB1096",
+        "FormatDescription": "info SYSLIB1096: Marquez le type \u0027IShellItem\u0027 avec \u0027GeneratedComInterfaceAttribute\u0027 au lieu de \u0027ComImportAttribute\u0027 pour g\u00E9n\u00E9rer le code de marshaling COM au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "279211bd-d2da-4905-a727-72b7ae20abb2"
+    },
+    "FileName": "RecycleBinHelper.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\Services\\RecycleBinHelper.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 106,
+        "CharNumber": 23,
+        "DiagnosticId": "SYSLIB1096",
+        "FormatDescription": "info SYSLIB1096: Marquez le type \u0027IFileOperation\u0027 avec \u0027GeneratedComInterfaceAttribute\u0027 au lieu de \u0027ComImportAttribute\u0027 pour g\u00E9n\u00E9rer le code de marshaling COM au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "279211bd-d2da-4905-a727-72b7ae20abb2"
+    },
+    "FileName": "RecycleBinHelper.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\Services\\RecycleBinHelper.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 87,
+        "CharNumber": 31,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0SHFileOperation\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "279211bd-d2da-4905-a727-72b7ae20abb2"
+    },
+    "FileName": "RecycleBinHelper.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\Services\\RecycleBinHelper.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 90,
+        "CharNumber": 31,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0SHCreateItemFromParsingName\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "59db10ff-275f-4ab0-b83e-63ce54ddce26"
+    },
+    "FileName": "UserAccountService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Settings\\Services\\UserAccountService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 108,
+        "CharNumber": 17,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027OpenSettings\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "59db10ff-275f-4ab0-b83e-63ce54ddce26"
+    },
+    "FileName": "UserAccountService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Settings\\Services\\UserAccountService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 36,
+        "CharNumber": 57,
+        "DiagnosticId": "CA1847",
+        "FormatDescription": "info CA1847: Utilisez \u2019String. Contient (Char)\u0027 \u00E0 la place de \u2019String. Contains (String)\u0027 lors de la recherche d\u2019un caract\u00E8re unique"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "29d12cc6-ba43-4a9d-b7b0-e34d6c5ff14e"
+    },
+    "FileName": "CleaningService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Cleaning\\Services\\CleaningService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 89,
+        "CharNumber": 23,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027LaunchWindowsCleanupAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "29d12cc6-ba43-4a9d-b7b0-e34d6c5ff14e"
+    },
+    "FileName": "CleaningService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Cleaning\\Services\\CleaningService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 134,
+        "CharNumber": 35,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027GetAvailableCategories\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "29d12cc6-ba43-4a9d-b7b0-e34d6c5ff14e"
+    },
+    "FileName": "CleaningService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Cleaning\\Services\\CleaningService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 384,
+        "CharNumber": 39,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027ExecuteDeepCleanAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "29d12cc6-ba43-4a9d-b7b0-e34d6c5ff14e"
+    },
+    "FileName": "CleaningService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Cleaning\\Services\\CleaningService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 251,
+        "CharNumber": 23,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027ScanAllCategoriesAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "29d12cc6-ba43-4a9d-b7b0-e34d6c5ff14e"
+    },
+    "FileName": "CleaningService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Cleaning\\Services\\CleaningService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 13,
+        "CharNumber": 31,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0SHEmptyRecycleBin\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "29d12cc6-ba43-4a9d-b7b0-e34d6c5ff14e"
+    },
+    "FileName": "CleaningService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Cleaning\\Services\\CleaningService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 16,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0DnsFlushResolverCache\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "29d12cc6-ba43-4a9d-b7b0-e34d6c5ff14e"
+    },
+    "FileName": "CleaningService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Cleaning\\Services\\CleaningService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 27,
+        "CharNumber": 31,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0SHQueryRecycleBin\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "e7f3ee6b-9f34-467d-b7d9-edd4f2df647f"
+    },
+    "FileName": "CacheService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CacheService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 700,
+        "CharNumber": 20,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027GetSubdirPath\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "e7f3ee6b-9f34-467d-b7d9-edd4f2df647f"
+    },
+    "FileName": "CacheService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CacheService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 710,
+        "CharNumber": 20,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027GetPath\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "674028fe-5d2d-4296-8c64-d92b1fe8d809"
+    },
+    "FileName": "ProfileService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Settings\\Services\\ProfileService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 125,
+        "CharNumber": 23,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027Snapshot\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "674028fe-5d2d-4296-8c64-d92b1fe8d809"
+    },
+    "FileName": "ProfileService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Settings\\Services\\ProfileService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 157,
+        "CharNumber": 20,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027GetPath\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "8142d10a-23f6-4861-84b5-6854e5f88267"
+    },
+    "FileName": "DiagnosticPrivacySanitizer.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Diagnostics\\Services\\DiagnosticPrivacySanitizer.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 17,
+        "CharNumber": 19,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027SanitizeText\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "80860c2d-53dc-4133-83be-62dc351c5f1e"
+    },
+    "FileName": "SettingsViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Settings\\ViewModels\\SettingsViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 535,
+        "CharNumber": 18,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027OpenCacheFolder\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "3d10f33f-08ee-4b4b-8a61-9669a1ab38d8"
+    },
+    "FileName": "GitHubToolService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Apps\\Services\\GitHubToolService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 39,
+        "CharNumber": 36,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027GetLatestAssetAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "17719cb7-6b7f-43d9-abd2-888c2ee012cd"
+    },
+    "FileName": "DiagnosticOrchestrator.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Diagnostics\\Services\\DiagnosticOrchestrator.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 123,
+        "CharNumber": 47,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027RunOneAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "63aea6ac-186d-4dc0-91fe-e299254b25a3"
+    },
+    "FileName": "AppShortcutsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Apps\\Services\\AppShortcutsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 19,
+        "CharNumber": 16,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027CopyStartMenuShortcuts\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "141d7a24-c87c-4414-811a-b6c852825f21"
+    },
+    "FileName": "SettingsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\SettingsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 255,
+        "CharNumber": 17,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027EnableAutostart\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "141d7a24-c87c-4414-811a-b6c852825f21"
+    },
+    "FileName": "SettingsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\SettingsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 277,
+        "CharNumber": 17,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027DisableAutostart\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "141d7a24-c87c-4414-811a-b6c852825f21"
+    },
+    "FileName": "SettingsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\SettingsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 158,
+        "CharNumber": 54,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "31757cbe-2cfb-499e-b2ab-7452331626b4"
+    },
+    "FileName": "AuditLogService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Diagnostics\\AuditLogService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 158,
+        "CharNumber": 24,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027WriteAuditEntryAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "8d6451b6-13a8-47c9-b328-f0f0137d933c"
+    },
+    "FileName": "AiChatService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiChatService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 151,
+        "CharNumber": 19,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027GetLocalModelFullPath\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "8d6451b6-13a8-47c9-b328-f0f0137d933c"
+    },
+    "FileName": "AiChatService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiChatService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 528,
+        "CharNumber": 98,
+        "DiagnosticId": "CA1834",
+        "FormatDescription": "info CA1834: Utilisez \u0027StringBuilder.Append(char)\u0027 \u00E0 la place de \u0027StringBuilder.Append(string)\u0027 quand l\u0027entr\u00E9e est une cha\u00EEne d\u0027unit\u00E9 de constante"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "8d6451b6-13a8-47c9-b328-f0f0137d933c"
+    },
+    "FileName": "AiChatService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiChatService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 66,
+        "CharNumber": 62,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 488,
+        "CharNumber": 33,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027ResolveExpectedHashAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 58,
+        "CharNumber": 36,
+        "DiagnosticId": "CA1873",
+        "FormatDescription": "info CA1873: L\u2019\u00E9valuation de cet argument peut \u00EAtre co\u00FBteuse et inutile si la journalisation est d\u00E9sactiv\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 81,
+        "CharNumber": 40,
+        "DiagnosticId": "CA1873",
+        "FormatDescription": "info CA1873: L\u2019\u00E9valuation de cet argument peut \u00EAtre co\u00FBteuse et inutile si la journalisation est d\u00E9sactiv\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 221,
+        "CharNumber": 36,
+        "DiagnosticId": "CA1873",
+        "FormatDescription": "info CA1873: L\u2019\u00E9valuation de cet argument peut \u00EAtre co\u00FBteuse et inutile si la journalisation est d\u00E9sactiv\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 266,
+        "CharNumber": 36,
+        "DiagnosticId": "CA1873",
+        "FormatDescription": "info CA1873: L\u2019\u00E9valuation de cet argument peut \u00EAtre co\u00FBteuse et inutile si la journalisation est d\u00E9sactiv\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 58,
+        "CharNumber": 36,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogInformation(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 66,
+        "CharNumber": 36,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogWarning(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 81,
+        "CharNumber": 40,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogInformation(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 90,
+        "CharNumber": 30,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogError(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 95,
+        "CharNumber": 30,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogError(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 105,
+        "CharNumber": 30,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogError(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 119,
+        "CharNumber": 36,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogWarning(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 149,
+        "CharNumber": 34,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogError(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 181,
+        "CharNumber": 40,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogWarning(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 194,
+        "CharNumber": 38,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogError(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 200,
+        "CharNumber": 38,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogError(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 221,
+        "CharNumber": 36,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogInformation(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 226,
+        "CharNumber": 30,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogError(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 255,
+        "CharNumber": 34,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogError(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 262,
+        "CharNumber": 34,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogError(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 266,
+        "CharNumber": 36,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogInformation(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 283,
+        "CharNumber": 30,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogError(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 28,
+        "CharNumber": 55,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 30,
+        "CharNumber": 9,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "f1461652-c161-4ae8-9a0f-4fc3f8a9fa7a"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 27,
+        "CharNumber": 56,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "9873f6ba-004d-4d79-8748-2ee9177752c8"
+    },
+    "FileName": "StartupHealthService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\Services\\StartupHealthService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 89,
+        "CharNumber": 30,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027IsConnectedToInternetAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "9873f6ba-004d-4d79-8748-2ee9177752c8"
+    },
+    "FileName": "StartupHealthService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\Services\\StartupHealthService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 99,
+        "CharNumber": 30,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027IsWingetOperational\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "8393de25-0909-48e8-9f97-380f2ea1c5cf"
+    },
+    "FileName": "MultiProviderClient.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\MultiProviderClient.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 38,
+        "CharNumber": 43,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027StreamChatAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "908565c0-609a-4a79-8a72-e08fd1a4b8b8"
+    },
+    "FileName": "CustomShortcutsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Dashboard\\Services\\CustomShortcutsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 187,
+        "CharNumber": 23,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027ExecuteShortcutAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "652cdfa9-55b7-46ce-964d-10147830e774"
+    },
+    "FileName": "NetworkMonitorService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkMonitorService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 104,
+        "CharNumber": 32,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027ProbeLatencyAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "50945064-a019-4d0d-8ad6-6685eb411611"
+    },
+    "FileName": "InstalledProgramsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\Services\\InstalledProgramsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 215,
+        "CharNumber": 17,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027SaveCategories\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "50945064-a019-4d0d-8ad6-6685eb411611"
+    },
+    "FileName": "InstalledProgramsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\Services\\InstalledProgramsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 267,
+        "CharNumber": 17,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027SaveFilterGroups\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "50945064-a019-4d0d-8ad6-6685eb411611"
+    },
+    "FileName": "InstalledProgramsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\Services\\InstalledProgramsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1090,
+        "CharNumber": 57,
+        "DiagnosticId": "CA1859",
+        "FormatDescription": "info CA1859: Modifier le type de retour de m\u00E9thode \u00AB\u00A0LoadCustomAppsData\u00A0\u00BB de \u00AB\u00A0System.Collections.Generic.IReadOnlyDictionary\u003Cstring, Coclico.Services.InstalledProgramsService.CustomAppEntry\u003E\u00A0\u00BB en \u00AB\u00A0System.Collections.Generic.Dictionary\u003Cstring, Coclico.Services.InstalledProgramsService.CustomAppEntry\u003E\u00A0\u00BB pour am\u00E9liorer les performances"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "50945064-a019-4d0d-8ad6-6685eb411611"
+    },
+    "FileName": "InstalledProgramsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\Services\\InstalledProgramsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 845,
+        "CharNumber": 39,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "50945064-a019-4d0d-8ad6-6685eb411611"
+    },
+    "FileName": "InstalledProgramsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\Services\\InstalledProgramsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 906,
+        "CharNumber": 39,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "c2d95f2f-e91d-469f-af4d-125a2337a62f"
+    },
+    "FileName": "ThemeService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\ThemeService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 272,
+        "CharNumber": 18,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027IsSystemUsingLightTheme\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "da527f18-82cf-45ba-862a-7e1e47283cdb"
+    },
+    "FileName": "SystemHealthService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\Services\\SystemHealthService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 124,
+        "CharNumber": 29,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027LaunchMrtAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "da527f18-82cf-45ba-862a-7e1e47283cdb"
+    },
+    "FileName": "SystemHealthService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\Services\\SystemHealthService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 39,
+        "CharNumber": 43,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027GetDefenderStatusAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "da527f18-82cf-45ba-862a-7e1e47283cdb"
+    },
+    "FileName": "SystemHealthService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\Services\\SystemHealthService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 343,
+        "CharNumber": 42,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027ExecutePowerShellCommandAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "da527f18-82cf-45ba-862a-7e1e47283cdb"
+    },
+    "FileName": "SystemHealthService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\Services\\SystemHealthService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 406,
+        "CharNumber": 42,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027RunProcessAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "27640d83-a8a1-4d8f-a130-1195d99a7b0e"
+    },
+    "FileName": "DashboardViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Dashboard\\ViewModels\\DashboardViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 252,
+        "CharNumber": 24,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027RunModeAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "27640d83-a8a1-4d8f-a130-1195d99a7b0e"
+    },
+    "FileName": "DashboardViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Dashboard\\ViewModels\\DashboardViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 478,
+        "CharNumber": 17,
+        "DiagnosticId": "CA1816",
+        "FormatDescription": "info CA1816: Changez DashboardViewModel.Dispose() pour appeler GC.SuppressFinalize(object). Cette op\u00E9ration emp\u00EAche les types d\u00E9riv\u00E9s qui introduisent un finaliseur d\u0027avoir \u00E0 r\u00E9impl\u00E9menter \u0027IDisposable\u0027 pour l\u0027appeler."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "04a96b42-9784-4baf-8812-4276cefddcc6"
+    },
+    "FileName": "NetworkOptimizerViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\ViewModels\\NetworkOptimizerViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 270,
+        "CharNumber": 18,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027SafeInvokeOnDispatcher\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ba015f01-0b04-4a44-9dab-754aa225a189"
+    },
+    "FileName": "DiagnosticViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Diagnostics\\ViewModels\\DiagnosticViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 284,
+        "CharNumber": 34,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027ToRow\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ba015f01-0b04-4a44-9dab-754aa225a189"
+    },
+    "FileName": "DiagnosticViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Diagnostics\\ViewModels\\DiagnosticViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 507,
+        "CharNumber": 18,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027RunOnUi\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ba015f01-0b04-4a44-9dab-754aa225a189"
+    },
+    "FileName": "DiagnosticViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Diagnostics\\ViewModels\\DiagnosticViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 488,
+        "CharNumber": 26,
+        "DiagnosticId": "CA1859",
+        "FormatDescription": "info CA1859: Modifier le type de retour de m\u00E9thode \u00AB\u00A0FreezeBrush\u00A0\u00BB de \u00AB\u00A0System.Windows.Media.Brush\u00A0\u00BB en \u00AB\u00A0System.Windows.Media.SolidColorBrush\u00A0\u00BB pour am\u00E9liorer les performances"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ba015f01-0b04-4a44-9dab-754aa225a189"
+    },
+    "FileName": "DiagnosticViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Diagnostics\\ViewModels\\DiagnosticViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 523,
+        "CharNumber": 17,
+        "DiagnosticId": "CA1816",
+        "FormatDescription": "info CA1816: Changez DiagnosticViewModel.Dispose() pour appeler GC.SuppressFinalize(object). Cette op\u00E9ration emp\u00EAche les types d\u00E9riv\u00E9s qui introduisent un finaliseur d\u0027avoir \u00E0 r\u00E9impl\u00E9menter \u0027IDisposable\u0027 pour l\u0027appeler."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "3c183c38-d7d5-4c81-9c54-4335e1226054"
+    },
+    "FileName": "ProgramsViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\ViewModels\\ProgramsViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 712,
+        "CharNumber": 18,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027OpenFolder\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "4770c540-c5c4-4258-bb88-1c27570dea68"
+    },
+    "FileName": "DiskAnalyzerViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\ViewModels\\DiskAnalyzerViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1048,
+        "CharNumber": 18,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027OpenDuplicate\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "4770c540-c5c4-4258-bb88-1c27570dea68"
+    },
+    "FileName": "DiskAnalyzerViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\ViewModels\\DiskAnalyzerViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1057,
+        "CharNumber": 18,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027OpenLargeLocation\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "d46d2586-25bd-4c6e-9663-35a22301c572"
+    },
+    "FileName": "NetworkOptimizerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkOptimizerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 447,
+        "CharNumber": 44,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027GetTcpSettingsAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "d46d2586-25bd-4c6e-9663-35a22301c572"
+    },
+    "FileName": "NetworkOptimizerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkOptimizerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 583,
+        "CharNumber": 30,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027ApplyAdapterPowerManagementAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "d46d2586-25bd-4c6e-9663-35a22301c572"
+    },
+    "FileName": "NetworkOptimizerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkOptimizerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 561,
+        "CharNumber": 30,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027ApplyAdvancedPropertyAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "d46d2586-25bd-4c6e-9663-35a22301c572"
+    },
+    "FileName": "NetworkOptimizerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkOptimizerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 522,
+        "CharNumber": 52,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027GetAdapterPropertiesAsync\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "d46d2586-25bd-4c6e-9663-35a22301c572"
+    },
+    "FileName": "NetworkOptimizerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkOptimizerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 750,
+        "CharNumber": 59,
+        "DiagnosticId": "CA1826",
+        "FormatDescription": "info CA1826: N\u0027utilisez pas de m\u00E9thodes Enumerable sur les collections indexables. \u00C0 la place, utilisez directement la collection."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "bf785456-27fe-4c5a-b2a7-4b784a20fc10"
+    },
+    "FileName": "AiChatView.Actions.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Views\\AiChatView.Actions.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 89,
+        "CharNumber": 64,
+        "DiagnosticId": "CA1822",
+        "FormatDescription": "info CA1822: Le membre \u0027BuildActionHeader\u0027 n\u0027acc\u00E8de pas aux donn\u00E9es d\u0027instance et peut \u00EAtre marqu\u00E9 comme \u00E9tant static"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 110,
+        "CharNumber": 6,
+        "DiagnosticId": "CA2101",
+        "FormatDescription": "info CA2101: Sp\u00E9cifier le marshaling pour les arguments de cha\u00EEne P/Invoke"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 233,
+        "CharNumber": 25,
+        "DiagnosticId": "CA1837",
+        "FormatDescription": "info CA1837: Utiliser \u0027Environment.ProcessId\u0027 \u00E0 la place de \u0027Process.GetCurrentProcess().Id\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 15,
+        "CharNumber": 34,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0OpenProcess\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 12,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0SetProcessWorkingSetSize\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 79,
+        "CharNumber": 31,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0FlushIpNetTable\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 24,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0SetSystemFileCacheSize\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 18,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0CloseHandle\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 30,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0DnsFlushResolverCache\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 108,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0OpenProcessToken\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 21,
+        "CharNumber": 31,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0NtSetSystemInformationInt\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 83,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0GlobalMemoryStatusEx\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 111,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0LookupPrivilegeValue\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 114,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0AdjustTokenPrivileges\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 33,
+        "CharNumber": 34,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0GetProcessHeap\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 27,
+        "CharNumber": 31,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0RegFlushKey\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 45,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0CloseClipboard\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 48,
+        "CharNumber": 34,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0GetForegroundWindow\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 39,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0OpenClipboard\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 42,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0EmptyClipboard\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 36,
+        "CharNumber": 35,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0HeapCompact\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 51,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0GetWindowThreadProcessId\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 54,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0keybd_event\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "ca2af47c-dcab-4fa0-901c-401575b12f76"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 541,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0GetSystemTimes\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "02ba7326-ede5-49d6-b743-9041a935ce6b"
+    },
+    "FileName": "UpdateCheckService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateCheckService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 62,
+        "CharNumber": 32,
+        "DiagnosticId": "CA1873",
+        "FormatDescription": "info CA1873: L\u2019\u00E9valuation de cet argument peut \u00EAtre co\u00FBteuse et inutile si la journalisation est d\u00E9sactiv\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "02ba7326-ede5-49d6-b743-9041a935ce6b"
+    },
+    "FileName": "UpdateCheckService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateCheckService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 70,
+        "CharNumber": 40,
+        "DiagnosticId": "CA1873",
+        "FormatDescription": "info CA1873: L\u2019\u00E9valuation de cet argument peut \u00EAtre co\u00FBteuse et inutile si la journalisation est d\u00E9sactiv\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "02ba7326-ede5-49d6-b743-9041a935ce6b"
+    },
+    "FileName": "UpdateCheckService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateCheckService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 62,
+        "CharNumber": 32,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogInformation(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "02ba7326-ede5-49d6-b743-9041a935ce6b"
+    },
+    "FileName": "UpdateCheckService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateCheckService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 70,
+        "CharNumber": 40,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogInformation(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "02ba7326-ede5-49d6-b743-9041a935ce6b"
+    },
+    "FileName": "UpdateCheckService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateCheckService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 82,
+        "CharNumber": 30,
+        "DiagnosticId": "CA2254",
+        "FormatDescription": "info CA2254: Le mod\u00E8le de message de journalisation ne doit pas varier entre les appels \u00E0 \u0027LoggerExtensions.LogError(ILogger, string?, params object?[])\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "9df56d2a-1eea-4d9a-92ec-70c9fbfa4fc0"
+    },
+    "FileName": "AiProviderContracts.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiProviderContracts.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 96,
+        "CharNumber": 17,
+        "DiagnosticId": "CA1869",
+        "FormatDescription": "info CA1869: \u00C9vitez de cr\u00E9er une instance \u00AB JsonSerializerOptions \u00BB pour chaque op\u00E9ration de s\u00E9rialisation. Mettez en cache et r\u00E9utilisez les instances \u00E0 la place."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "5d7d8270-740c-431d-937d-62b5ef40b5c9"
+    },
+    "FileName": "FirstCharConverter.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Converters\\UI\\FirstCharConverter.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 104,
+        "CharNumber": 33,
+        "DiagnosticId": "CA1859",
+        "FormatDescription": "info CA1859: Modifier le type de retour de m\u00E9thode \u00AB\u00A0CreatePlaceholder\u00A0\u00BB de \u00AB\u00A0System.Windows.Media.Imaging.BitmapSource\u00A0\u00BB en \u00AB\u00A0System.Windows.Media.Imaging.WriteableBitmap\u00A0\u00BB pour am\u00E9liorer les performances"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "5d7d8270-740c-431d-937d-62b5ef40b5c9"
+    },
+    "FileName": "FirstCharConverter.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Converters\\UI\\FirstCharConverter.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 20,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0DeleteObject\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "8847c456-1bbc-41fd-801e-511ef3df060f"
+    },
+    "FileName": "PowerOptimizerView.xaml.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Power\\Views\\PowerOptimizerView.xaml.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 96,
+        "CharNumber": 55,
+        "DiagnosticId": "CA1859",
+        "FormatDescription": "info CA1859: Modifier le type de param\u00E8tre \u00AB\u00A0plans\u00A0\u00BB de \u00AB\u00A0System.Collections.Generic.IReadOnlyDictionary\u003CCoclico.Modules.Power.Services.CoclicoPowerMode, string\u003E\u00A0\u00BB en \u00AB\u00A0System.Collections.Generic.Dictionary\u003CCoclico.Modules.Power.Services.CoclicoPowerMode, string\u003E\u00A0\u00BB pour am\u00E9liorer les performances"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "14b6703d-0466-4c91-98d8-d702ba383153"
+    },
+    "FileName": "RamCleanerView.xaml.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Views\\RamCleanerView.xaml.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 116,
+        "CharNumber": 26,
+        "DiagnosticId": "CA1859",
+        "FormatDescription": "info CA1859: Modifier le type de retour de m\u00E9thode \u00AB\u00A0CreateSparklineBrush\u00A0\u00BB de \u00AB\u00A0System.Windows.Media.Brush\u00A0\u00BB en \u00AB\u00A0System.Windows.Media.SolidColorBrush\u00A0\u00BB pour am\u00E9liorer les performances"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "86f0a049-26a6-49ad-b4b9-3f890cad6840"
+    },
+    "FileName": "MainWindow.Navigation.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\MainWindow.Navigation.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 203,
+        "CharNumber": 23,
+        "DiagnosticId": "CA1859",
+        "FormatDescription": "info CA1859: Modifier le type de retour de m\u00E9thode \u00AB\u00A0CreateErrorFallback\u00A0\u00BB de \u00AB\u00A0System.Windows.UIElement\u00A0\u00BB en \u00AB\u00A0System.Windows.Controls.Border\u00A0\u00BB pour am\u00E9liorer les performances"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "2a4938ca-97c4-4a63-8794-69b9c0150571"
+    },
+    "FileName": "ToastService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\ToastService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 9,
+        "CharNumber": 38,
+        "DiagnosticId": "CA1859",
+        "FormatDescription": "info CA1859: Modifier le type de champ \u00AB\u00A0_svc\u00A0\u00BB de \u00AB\u00A0Wpf.Ui.ISnackbarService?\u00A0\u00BB en \u00AB\u00A0Wpf.Ui.SnackbarService?\u00A0\u00BB pour am\u00E9liorer les performances"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "5b66ae29-8452-4db5-abe5-3836e326b215"
+    },
+    "FileName": "AiVisionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiVisionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 163,
+        "CharNumber": 33,
+        "DiagnosticId": "CA1859",
+        "FormatDescription": "info CA1859: Modifier le type de retour de m\u00E9thode \u00AB\u00A0LoadBitmapSource\u00A0\u00BB de \u00AB\u00A0System.Windows.Media.Imaging.BitmapSource\u00A0\u00BB en \u00AB\u00A0System.Windows.Media.Imaging.BitmapImage\u00A0\u00BB pour am\u00E9liorer les performances"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "2b98a599-210f-4bbc-9863-6551da717308"
+    },
+    "FileName": "RamCleanerViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\ViewModels\\RamCleanerViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 50,
+        "CharNumber": 26,
+        "DiagnosticId": "CA1859",
+        "FormatDescription": "info CA1859: Modifier le type de retour de m\u00E9thode \u00AB\u00A0FreezeBrush\u00A0\u00BB de \u00AB\u00A0System.Windows.Media.Brush\u00A0\u00BB en \u00AB\u00A0System.Windows.Media.SolidColorBrush\u00A0\u00BB pour am\u00E9liorer les performances"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "2b98a599-210f-4bbc-9863-6551da717308"
+    },
+    "FileName": "RamCleanerViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\ViewModels\\RamCleanerViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 315,
+        "CharNumber": 17,
+        "DiagnosticId": "CA1816",
+        "FormatDescription": "info CA1816: Changez RamCleanerViewModel.Dispose() pour appeler GC.SuppressFinalize(object). Cette op\u00E9ration emp\u00EAche les types d\u00E9riv\u00E9s qui introduisent un finaliseur d\u0027avoir \u00E0 r\u00E9impl\u00E9menter \u0027IDisposable\u0027 pour l\u0027appeler."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "758629e2-c59d-4bee-90d7-7955b507b385"
+    },
+    "FileName": "TrayService.Win32.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\TrayService.Win32.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 106,
+        "CharNumber": 17,
+        "DiagnosticId": "CA1816",
+        "FormatDescription": "info CA1816: Changez TrayService.Dispose() pour appeler GC.SuppressFinalize(object). Cette op\u00E9ration emp\u00EAche les types d\u00E9riv\u00E9s qui introduisent un finaliseur d\u0027avoir \u00E0 r\u00E9impl\u00E9menter \u0027IDisposable\u0027 pour l\u0027appeler."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "758629e2-c59d-4bee-90d7-7955b507b385"
+    },
+    "FileName": "TrayService.Win32.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\TrayService.Win32.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 241,
+        "CharNumber": 34,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0CreatePopupMenu\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "758629e2-c59d-4bee-90d7-7955b507b385"
+    },
+    "FileName": "TrayService.Win32.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\TrayService.Win32.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 238,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0Shell_NotifyIcon\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "758629e2-c59d-4bee-90d7-7955b507b385"
+    },
+    "FileName": "TrayService.Win32.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\TrayService.Win32.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 247,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0DestroyMenu\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "758629e2-c59d-4bee-90d7-7955b507b385"
+    },
+    "FileName": "TrayService.Win32.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\TrayService.Win32.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 250,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0TrackPopupMenuEx\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "758629e2-c59d-4bee-90d7-7955b507b385"
+    },
+    "FileName": "TrayService.Win32.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\TrayService.Win32.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 244,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0AppendMenuW\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "758629e2-c59d-4bee-90d7-7955b507b385"
+    },
+    "FileName": "TrayService.Win32.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\TrayService.Win32.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 259,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0PostMessage\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "758629e2-c59d-4bee-90d7-7955b507b385"
+    },
+    "FileName": "TrayService.Win32.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\TrayService.Win32.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 262,
+        "CharNumber": 34,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0SendMessageW\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "758629e2-c59d-4bee-90d7-7955b507b385"
+    },
+    "FileName": "TrayService.Win32.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\TrayService.Win32.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 265,
+        "CharNumber": 34,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0LoadIconW\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "758629e2-c59d-4bee-90d7-7955b507b385"
+    },
+    "FileName": "TrayService.Win32.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\TrayService.Win32.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 256,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0SetForegroundWindow\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "758629e2-c59d-4bee-90d7-7955b507b385"
+    },
+    "FileName": "TrayService.Win32.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\TrayService.Win32.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 253,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0GetCursorPos\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "2c938551-bf83-4063-8bfd-dd1b706483d8"
+    },
+    "FileName": "AiChatView.xaml.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Views\\AiChatView.xaml.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 193,
+        "CharNumber": 21,
+        "DiagnosticId": "CA1826",
+        "FormatDescription": "info CA1826: N\u0027utilisez pas de m\u00E9thodes Enumerable sur les collections indexables. \u00C0 la place, utilisez directement la collection."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "bc2c02be-109b-4cb0-b2f6-44054fd6d758"
+    },
+    "FileName": "UpdateWindow.xaml.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Windows\\UpdateWindow.xaml.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 12,
+        "CharNumber": 60,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "bc2c02be-109b-4cb0-b2f6-44054fd6d758"
+    },
+    "FileName": "UpdateWindow.xaml.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Windows\\UpdateWindow.xaml.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 11,
+        "CharNumber": 57,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "7dd0865d-cc74-4b77-8be1-253e424d9654"
+    },
+    "FileName": "WingetEngineService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Apps\\Services\\WingetEngineService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 27,
+        "CharNumber": 52,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "7dd0865d-cc74-4b77-8be1-253e424d9654"
+    },
+    "FileName": "WingetEngineService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Apps\\Services\\WingetEngineService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 26,
+        "CharNumber": 58,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "41b55f2d-bce3-46af-acc7-f94ecbc5387b"
+    },
+    "FileName": "NativeDiag.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Diagnostics\\Services\\NativeDiag.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 20,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0GetSystemPowerStatus\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "2e1f277b-668a-43aa-a1c7-9669bc3bbb95"
+    },
+    "FileName": "CentralUnitService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 523,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0GlobalMemoryStatusEx\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "2e1f277b-668a-43aa-a1c7-9669bc3bbb95"
+    },
+    "FileName": "CentralUnitService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 519,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0GetSystemTimes\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "2e1f277b-668a-43aa-a1c7-9669bc3bbb95"
+    },
+    "FileName": "CentralUnitService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 527,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0SetProcessInformation\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "2e1f277b-668a-43aa-a1c7-9669bc3bbb95"
+    },
+    "FileName": "CentralUnitService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 535,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0SetThreadInformation\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "2e1f277b-668a-43aa-a1c7-9669bc3bbb95"
+    },
+    "FileName": "CentralUnitService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 539,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0SetThreadInformation\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "2e1f277b-668a-43aa-a1c7-9669bc3bbb95"
+    },
+    "FileName": "CentralUnitService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 531,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0SetProcessInformation\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "2e1f277b-668a-43aa-a1c7-9669bc3bbb95"
+    },
+    "FileName": "CentralUnitService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 542,
+        "CharNumber": 34,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0GetCurrentThread\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "16dee072-4b55-440f-bc89-bad545f4919a"
+    },
+    "FileName": "DuplicateFinderService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\Services\\DuplicateFinderService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 344,
+        "CharNumber": 32,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0GetFileInformationByHandle\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "090a5c18-03a7-4ac5-a1af-5a6498995752"
+    },
+    "FileName": "KeyboardShortcutsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\KeyboardShortcutsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 70,
+        "CharNumber": 58,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0UnregisterHotKey\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "090a5c18-03a7-4ac5-a1af-5a6498995752"
+    },
+    "FileName": "KeyboardShortcutsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\KeyboardShortcutsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 69,
+        "CharNumber": 58,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0RegisterHotKey\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "b146855f-ba1e-4dbe-9935-a85066b926cf"
+    },
+    "FileName": "AdaptivePowerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Power\\Services\\AdaptivePowerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 461,
+        "CharNumber": 36,
+        "DiagnosticId": "SYSLIB1054",
+        "FormatDescription": "info SYSLIB1054: Marquer la m\u00E9thode \u00AB\u00A0GetSystemTimes\u00A0\u00BB avec \u00AB\u00A0LibraryImportAttribute\u00A0\u00BB \u00E0 la place de \u00AB\u00A0DllImportAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer du code de marshaling P/Invoke au moment de la compilation"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "b56d8f65-916a-4b19-a1fa-6ea9cc18f275"
+    },
+    "FileName": "RagService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\RagService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 25,
+        "CharNumber": 52,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "b56d8f65-916a-4b19-a1fa-6ea9cc18f275"
+    },
+    "FileName": "RagService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\RagService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 24,
+        "CharNumber": 49,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "9aae579a-917b-4379-b548-6459b0f9057c"
+      },
+      "Id": "a60d72d4-4064-460c-8c9a-a67cf075fe6e"
+    },
+    "FileName": "SecurityPolicyService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\Services\\SecurityPolicyService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 153,
+        "CharNumber": 9,
+        "DiagnosticId": "SYSLIB1045",
+        "FormatDescription": "info SYSLIB1045: Utilisez \u00AB\u00A0GeneratedRegexAttribute\u00A0\u00BB pour g\u00E9n\u00E9rer l\u2019impl\u00E9mentation d\u2019expression r\u00E9guli\u00E8re au moment de la compilation."
+      }
+    ]
+  }
+]

@@ -1,0 +1,3926 @@
+[
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "77d5447e-87b7-4227-a5f4-50ff5bc63f27"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 660,
+        "CharNumber": 13,
+        "DiagnosticId": "IDE0220",
+        "FormatDescription": "info IDE0220: \u00AB\u00A0foreach\u00A0\u00BB convertit implicitement \u00AB\u00A0System.Management.ManagementBaseObject\u00A0\u00BB en \u00AB\u00A0System.Management.ManagementObject\u00A0\u00BB. Ajouter un cast explicite pour rendre l\u2019intention plus claire, car elle peut \u00E9chouer au moment de l\u2019ex\u00E9cution"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "77d5447e-87b7-4227-a5f4-50ff5bc63f27"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 684,
+        "CharNumber": 13,
+        "DiagnosticId": "IDE0220",
+        "FormatDescription": "info IDE0220: \u00AB\u00A0foreach\u00A0\u00BB convertit implicitement \u00AB\u00A0System.Management.ManagementBaseObject\u00A0\u00BB en \u00AB\u00A0System.Management.ManagementObject\u00A0\u00BB. Ajouter un cast explicite pour rendre l\u2019intention plus claire, car elle peut \u00E9chouer au moment de l\u2019ex\u00E9cution"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "77d5447e-87b7-4227-a5f4-50ff5bc63f27"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 7,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.RamCleaner.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "77d5447e-87b7-4227-a5f4-50ff5bc63f27"
+    },
+    "FileName": "MemoryCleanerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\MemoryCleanerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 142,
+        "CharNumber": 36,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "48396c08-55b3-4ed9-ba0c-3b3137975fd8"
+    },
+    "FileName": "HomeCustomizationModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Dashboard\\Models\\HomeCustomizationModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 3,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Models\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.Dashboard.Models\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "11479c8f-d879-49bf-bda2-0254f3db2204"
+    },
+    "FileName": "SimpleStemmer.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\SimpleStemmer.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services.Algorithms\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "11479c8f-d879-49bf-bda2-0254f3db2204"
+    },
+    "FileName": "SimpleStemmer.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\SimpleStemmer.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 101,
+        "CharNumber": 14,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "23117dc8-1531-4e11-991d-17a6c0638bec"
+    },
+    "FileName": "CacheService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CacheService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "23117dc8-1531-4e11-991d-17a6c0638bec"
+    },
+    "FileName": "CacheService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CacheService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 14,
+        "CharNumber": 83,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "c4e378e5-d468-4bb4-9135-1a3a23dadb83"
+    },
+    "FileName": "TextFormatService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\TextFormatService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "83ad32f4-5880-4cbd-b053-cc65da5ab4ab"
+    },
+    "FileName": "CleaningViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Cleaning\\ViewModels\\CleaningViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 11,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.ViewModels\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.Cleaning.ViewModels\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "83ad32f4-5880-4cbd-b053-cc65da5ab4ab"
+    },
+    "FileName": "CleaningViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Cleaning\\ViewModels\\CleaningViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 206,
+        "CharNumber": 78,
+        "DiagnosticId": "IDE0060",
+        "FormatDescription": "info IDE0060: Supprimer le param\u00E8tre inutilis\u00E9 \u0027dialogService\u0027 si celui-ci ne fait pas partie d\u2019une API publique livr\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "83ad32f4-5880-4cbd-b053-cc65da5ab4ab"
+    },
+    "FileName": "CleaningViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Cleaning\\ViewModels\\CleaningViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 349,
+        "CharNumber": 90,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "83ad32f4-5880-4cbd-b053-cc65da5ab4ab"
+    },
+    "FileName": "CleaningViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Cleaning\\ViewModels\\CleaningViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 418,
+        "CharNumber": 80,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "83ad32f4-5880-4cbd-b053-cc65da5ab4ab"
+    },
+    "FileName": "CleaningViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Cleaning\\ViewModels\\CleaningViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 423,
+        "CharNumber": 90,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "83ad32f4-5880-4cbd-b053-cc65da5ab4ab"
+    },
+    "FileName": "CleaningViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Cleaning\\ViewModels\\CleaningViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 233,
+        "CharNumber": 9,
+        "DiagnosticId": "IDE0031",
+        "FormatDescription": "info IDE0031: Le contr\u00F4le de valeurs Null peut \u00EAtre simplifi\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "83ad32f4-5880-4cbd-b053-cc65da5ab4ab"
+    },
+    "FileName": "CleaningViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Cleaning\\ViewModels\\CleaningViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 19,
+        "CharNumber": 12,
+        "DiagnosticId": "IDE0290",
+        "FormatDescription": "info IDE0290: Utiliser le constructeur principal"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "6feb3850-ea3b-47aa-bbcc-d79c8e4e6d97"
+    },
+    "FileName": "FileIconConverter.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Converters\\System\\FileIconConverter.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Converters\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Converters.System\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "2c0552e2-ca9b-47e0-9f69-f04d42d25407"
+    },
+    "FileName": "AiHardwareService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiHardwareService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 7,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services.AI\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.AI.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "2c0552e2-ca9b-47e0-9f69-f04d42d25407"
+    },
+    "FileName": "AiHardwareService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiHardwareService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 439,
+        "CharNumber": 13,
+        "DiagnosticId": "IDE0270",
+        "FormatDescription": "info IDE0270: Le contr\u00F4le de valeurs Null peut \u00EAtre simplifi\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "2c0552e2-ca9b-47e0-9f69-f04d42d25407"
+    },
+    "FileName": "AiHardwareService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiHardwareService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 444,
+        "CharNumber": 13,
+        "DiagnosticId": "IDE0063",
+        "FormatDescription": "info IDE0063: L\u0027instruction \u0027using\u0027 peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "76f6545b-042d-4dc0-abe8-ed60243c2358"
+    },
+    "FileName": "CentralCircuitBreaker.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralCircuitBreaker.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core.CentralUnit\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "76f6545b-042d-4dc0-abe8-ed60243c2358"
+    },
+    "FileName": "CentralCircuitBreaker.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralCircuitBreaker.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 81,
+        "CharNumber": 60,
+        "DiagnosticId": "IDE0060",
+        "FormatDescription": "info IDE0060: Supprimer le param\u00E8tre inutilis\u00E9 \u0027exception\u0027 si celui-ci ne fait pas partie d\u2019une API publique livr\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "76f6545b-042d-4dc0-abe8-ed60243c2358"
+    },
+    "FileName": "CentralCircuitBreaker.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralCircuitBreaker.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 119,
+        "CharNumber": 18,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "76f6545b-042d-4dc0-abe8-ed60243c2358"
+    },
+    "FileName": "CentralCircuitBreaker.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralCircuitBreaker.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 23,
+        "CharNumber": 12,
+        "DiagnosticId": "IDE0290",
+        "FormatDescription": "info IDE0290: Utiliser le constructeur principal"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "76f6545b-042d-4dc0-abe8-ed60243c2358"
+    },
+    "FileName": "CentralCircuitBreaker.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralCircuitBreaker.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 16,
+        "CharNumber": 29,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "0d78c6df-e6c6-4b24-abee-1060739603ea"
+    },
+    "FileName": "EqualityToBoolConverter.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Converters\\UI\\EqualityToBoolConverter.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Converters\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Converters.UI\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "0d78c6df-e6c6-4b24-abee-1060739603ea"
+    },
+    "FileName": "EqualityToBoolConverter.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Converters\\UI\\EqualityToBoolConverter.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 20,
+        "CharNumber": 22,
+        "DiagnosticId": "IDE0301",
+        "FormatDescription": "info IDE0301: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "7885848d-2c03-41ff-a5ea-1a9c8895754c"
+    },
+    "FileName": "CentralErrorTriage.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralErrorTriage.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core.CentralUnit\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "7885848d-2c03-41ff-a5ea-1a9c8895754c"
+    },
+    "FileName": "CentralErrorTriage.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralErrorTriage.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 90,
+        "CharNumber": 18,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "7885848d-2c03-41ff-a5ea-1a9c8895754c"
+    },
+    "FileName": "CentralErrorTriage.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralErrorTriage.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 107,
+        "CharNumber": 14,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "7885848d-2c03-41ff-a5ea-1a9c8895754c"
+    },
+    "FileName": "CentralErrorTriage.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralErrorTriage.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 24,
+        "CharNumber": 29,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "36259936-4ced-4480-91db-29015b281aae"
+    },
+    "FileName": "AiProviderContracts.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiProviderContracts.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 2,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services.AI\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.AI.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "36259936-4ced-4480-91db-29015b281aae"
+    },
+    "FileName": "AiProviderContracts.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiProviderContracts.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 132,
+        "CharNumber": 61,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "4ab22a2a-83a9-48a7-8ce4-02174139d8d4"
+    },
+    "FileName": "HealthDefenseViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\ViewModels\\HealthDefenseViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 9,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.ViewModels\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.HealthDefense.ViewModels\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "ee00a685-6ca7-44bc-bd52-bb59dd3cf39a"
+    },
+    "FileName": "CentralUnitActivity.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitActivity.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core.CentralUnit\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "ee00a685-6ca7-44bc-bd52-bb59dd3cf39a"
+    },
+    "FileName": "CentralUnitActivity.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitActivity.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 14,
+        "CharNumber": 29,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "4006bc79-d144-4a3e-9751-c98129806cbd"
+    },
+    "FileName": "FirstCharConverter.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Converters\\UI\\FirstCharConverter.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 10,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Converters\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Converters.UI\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "4006bc79-d144-4a3e-9751-c98129806cbd"
+    },
+    "FileName": "FirstCharConverter.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Converters\\UI\\FirstCharConverter.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 143,
+        "CharNumber": 103,
+        "DiagnosticId": "IDE0028",
+        "FormatDescription": "info IDE0028: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "4006bc79-d144-4a3e-9751-c98129806cbd"
+    },
+    "FileName": "FirstCharConverter.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Converters\\UI\\FirstCharConverter.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 144,
+        "CharNumber": 33,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "d5e6bbcd-389f-4d96-804f-c6e7aa682ed6"
+    },
+    "FileName": "CentralUnitBus.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitBus.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 3,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core.CentralUnit\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "d5e6bbcd-389f-4d96-804f-c6e7aa682ed6"
+    },
+    "FileName": "CentralUnitBus.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitBus.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 101,
+        "CharNumber": 113,
+        "DiagnosticId": "IDE0060",
+        "FormatDescription": "info IDE0060: Supprimer le param\u00E8tre \u0027ttl\u0027 inutilis\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "2436d38a-eb2e-4b64-87df-fc31488aefd2"
+    },
+    "FileName": "HexToBrushConverter.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Converters\\UI\\HexToBrushConverter.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 6,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Converters\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Converters.UI\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "54b96c44-b018-4f4d-9ba7-40d7f2fd2762"
+    },
+    "FileName": "InverseBoolToVisibilityConverter.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Converters\\UI\\InverseBoolToVisibilityConverter.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Converters\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Converters.UI\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "374aa4e3-9518-416d-9686-0298a1522f84"
+    },
+    "FileName": "CentralUnitFlagStore.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitFlagStore.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 3,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core.CentralUnit\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "374aa4e3-9518-416d-9686-0298a1522f84"
+    },
+    "FileName": "CentralUnitFlagStore.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitFlagStore.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 241,
+        "CharNumber": 18,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "374aa4e3-9518-416d-9686-0298a1522f84"
+    },
+    "FileName": "CentralUnitFlagStore.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitFlagStore.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 133,
+        "CharNumber": 38,
+        "DiagnosticId": "IDE0028",
+        "FormatDescription": "info IDE0028: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "374aa4e3-9518-416d-9686-0298a1522f84"
+    },
+    "FileName": "CentralUnitFlagStore.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitFlagStore.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 26,
+        "CharNumber": 29,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "3a73ee92-17fc-4caa-b41b-c672965a89a2"
+    },
+    "FileName": "NetworkOptimizerViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\ViewModels\\NetworkOptimizerViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 9,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.ViewModels\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.Network.ViewModels\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "3a73ee92-17fc-4caa-b41b-c672965a89a2"
+    },
+    "FileName": "NetworkOptimizerViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\ViewModels\\NetworkOptimizerViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 217,
+        "CharNumber": 80,
+        "DiagnosticId": "IDE0060",
+        "FormatDescription": "info IDE0060: Supprimer le param\u00E8tre \u0027higherIsBetter\u0027 inutilis\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "3a73ee92-17fc-4caa-b41b-c672965a89a2"
+    },
+    "FileName": "NetworkOptimizerViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\ViewModels\\NetworkOptimizerViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 314,
+        "CharNumber": 17,
+        "DiagnosticId": "IDE0074",
+        "FormatDescription": "info IDE0074: Utiliser une assignation compos\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "29f907a4-c40c-4df7-bdbc-db4d433f4a63"
+    },
+    "FileName": "CentralUnitService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core.CentralUnit\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "29f907a4-c40c-4df7-bdbc-db4d433f4a63"
+    },
+    "FileName": "CentralUnitService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 60,
+        "CharNumber": 29,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "60b82786-92ef-4a51-9e21-49789b06cb01"
+    },
+    "FileName": "CentralUnitStigmergy.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitStigmergy.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core.CentralUnit\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "60b82786-92ef-4a51-9e21-49789b06cb01"
+    },
+    "FileName": "CentralUnitStigmergy.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitStigmergy.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 190,
+        "CharNumber": 18,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "60b82786-92ef-4a51-9e21-49789b06cb01"
+    },
+    "FileName": "CentralUnitStigmergy.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitStigmergy.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 271,
+        "CharNumber": 18,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "60b82786-92ef-4a51-9e21-49789b06cb01"
+    },
+    "FileName": "CentralUnitStigmergy.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitStigmergy.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 290,
+        "CharNumber": 65,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "60b82786-92ef-4a51-9e21-49789b06cb01"
+    },
+    "FileName": "CentralUnitStigmergy.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitStigmergy.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 301,
+        "CharNumber": 18,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "60b82786-92ef-4a51-9e21-49789b06cb01"
+    },
+    "FileName": "CentralUnitStigmergy.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitStigmergy.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 430,
+        "CharNumber": 16,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "60b82786-92ef-4a51-9e21-49789b06cb01"
+    },
+    "FileName": "CentralUnitStigmergy.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitStigmergy.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 439,
+        "CharNumber": 18,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "60b82786-92ef-4a51-9e21-49789b06cb01"
+    },
+    "FileName": "CentralUnitStigmergy.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitStigmergy.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 448,
+        "CharNumber": 18,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "60b82786-92ef-4a51-9e21-49789b06cb01"
+    },
+    "FileName": "CentralUnitStigmergy.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitStigmergy.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 457,
+        "CharNumber": 16,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "60b82786-92ef-4a51-9e21-49789b06cb01"
+    },
+    "FileName": "CentralUnitStigmergy.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitStigmergy.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 43,
+        "CharNumber": 84,
+        "DiagnosticId": "IDE0028",
+        "FormatDescription": "info IDE0028: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "60b82786-92ef-4a51-9e21-49789b06cb01"
+    },
+    "FileName": "CentralUnitStigmergy.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitStigmergy.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 38,
+        "CharNumber": 29,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "60b82786-92ef-4a51-9e21-49789b06cb01"
+    },
+    "FileName": "CentralUnitStigmergy.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitStigmergy.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 45,
+        "CharNumber": 29,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "bca88b00-2e07-4e41-a936-09a7b98df755"
+    },
+    "FileName": "CentralUnitVariables.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitVariables.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 3,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core.CentralUnit\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "bca88b00-2e07-4e41-a936-09a7b98df755"
+    },
+    "FileName": "CentralUnitVariables.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitVariables.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 105,
+        "CharNumber": 24,
+        "DiagnosticId": "IDE0306",
+        "FormatDescription": "info IDE0306: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "bca88b00-2e07-4e41-a936-09a7b98df755"
+    },
+    "FileName": "CentralUnitVariables.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitVariables.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 74,
+        "CharNumber": 24,
+        "DiagnosticId": "IDE0028",
+        "FormatDescription": "info IDE0028: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "bca88b00-2e07-4e41-a936-09a7b98df755"
+    },
+    "FileName": "CentralUnitVariables.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitVariables.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 105,
+        "CharNumber": 24,
+        "DiagnosticId": "IDE0028",
+        "FormatDescription": "info IDE0028: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "bca88b00-2e07-4e41-a936-09a7b98df755"
+    },
+    "FileName": "CentralUnitVariables.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitVariables.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 108,
+        "CharNumber": 20,
+        "DiagnosticId": "IDE0028",
+        "FormatDescription": "info IDE0028: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "bca88b00-2e07-4e41-a936-09a7b98df755"
+    },
+    "FileName": "CentralUnitVariables.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitVariables.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 20,
+        "CharNumber": 29,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "48241b65-cb23-40be-b59e-b457eaba2fe4"
+    },
+    "FileName": "CentralUnitWatchdog.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitWatchdog.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core.CentralUnit\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "48241b65-cb23-40be-b59e-b457eaba2fe4"
+    },
+    "FileName": "CentralUnitWatchdog.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitWatchdog.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 127,
+        "CharNumber": 18,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "48241b65-cb23-40be-b59e-b457eaba2fe4"
+    },
+    "FileName": "CentralUnitWatchdog.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitWatchdog.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 35,
+        "CharNumber": 12,
+        "DiagnosticId": "IDE0290",
+        "FormatDescription": "info IDE0290: Utiliser le constructeur principal"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "48241b65-cb23-40be-b59e-b457eaba2fe4"
+    },
+    "FileName": "CentralUnitWatchdog.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\CentralUnit\\CentralUnitWatchdog.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 29,
+        "CharNumber": 29,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "d902477f-3349-4214-bc8b-740f2566b9ed"
+    },
+    "FileName": "ICacheService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\ICacheService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "f86c54cd-25e1-41ea-824a-ca0cf318bde4"
+    },
+    "FileName": "LaunchMode.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\LaunchMode.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "799f5f18-d724-464f-94c6-caa784477e7d"
+    },
+    "FileName": "ServiceContainer.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\ServiceContainer.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "585a5897-c275-4eab-a2d4-73f5dd6ac302"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 11,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services.AI\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.AI.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "585a5897-c275-4eab-a2d4-73f5dd6ac302"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1134,
+        "CharNumber": 88,
+        "DiagnosticId": "IDE0060",
+        "FormatDescription": "info IDE0060: Supprimer le param\u00E8tre \u0027ct\u0027 inutilis\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "585a5897-c275-4eab-a2d4-73f5dd6ac302"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 569,
+        "CharNumber": 32,
+        "DiagnosticId": "IDE0300",
+        "FormatDescription": "info IDE0300: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "585a5897-c275-4eab-a2d4-73f5dd6ac302"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 759,
+        "CharNumber": 115,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "585a5897-c275-4eab-a2d4-73f5dd6ac302"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 760,
+        "CharNumber": 114,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "585a5897-c275-4eab-a2d4-73f5dd6ac302"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 761,
+        "CharNumber": 82,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "585a5897-c275-4eab-a2d4-73f5dd6ac302"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1284,
+        "CharNumber": 22,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "585a5897-c275-4eab-a2d4-73f5dd6ac302"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1041,
+        "CharNumber": 103,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "585a5897-c275-4eab-a2d4-73f5dd6ac302"
+    },
+    "FileName": "AiToolExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiToolExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1380,
+        "CharNumber": 64,
+        "DiagnosticId": "IDE0028",
+        "FormatDescription": "info IDE0028: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "d6cfbf2f-2f25-4146-9f6d-87d63da826f6"
+    },
+    "FileName": "AiVisionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiVisionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 8,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services.AI\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.AI.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "d6cfbf2f-2f25-4146-9f6d-87d63da826f6"
+    },
+    "FileName": "AiVisionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiVisionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 131,
+        "CharNumber": 9,
+        "DiagnosticId": "IDE0063",
+        "FormatDescription": "info IDE0063: L\u0027instruction \u0027using\u0027 peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "172c823d-1733-4649-a976-ee57d9152034"
+    },
+    "FileName": "SettingsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\SettingsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 9,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "9f6eb9a9-0436-4efd-ac0c-83614ad98dd0"
+    },
+    "FileName": "MultiProviderClient.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\MultiProviderClient.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 8,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services.AI\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.AI.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "cc882240-dd41-4509-a18f-c246675c1c62"
+    },
+    "FileName": "StartupService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\StartupService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "c5e59fad-0610-40c4-a1ba-29fc3a59b255"
+    },
+    "FileName": "UpdateCheckService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateCheckService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 6,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "38c66854-65b8-44f5-b933-9a8dd0a259c2"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 12,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Core\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "38c66854-65b8-44f5-b933-9a8dd0a259c2"
+    },
+    "FileName": "UpdateManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Core\\UpdateManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 546,
+        "CharNumber": 14,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "4948fde2-654c-482d-8003-b23bb877b8b7"
+    },
+    "FileName": "AppErrorManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Diagnostics\\AppErrorManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Diagnostics\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "922f0d5b-a981-48a9-88c0-7e1149bbf68e"
+    },
+    "FileName": "AppLog.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Diagnostics\\AppLog.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Diagnostics\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "689898f2-56d2-49cf-8462-13dc7e2ab977"
+    },
+    "FileName": "AsyncEventSafe.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Diagnostics\\AsyncEventSafe.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Diagnostics\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "e8ff5e86-431a-4996-a868-fe69db251945"
+    },
+    "FileName": "AuditLogService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Diagnostics\\AuditLogService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 6,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Diagnostics\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "e8ff5e86-431a-4996-a868-fe69db251945"
+    },
+    "FileName": "AuditLogService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Diagnostics\\AuditLogService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 51,
+        "CharNumber": 18,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "db563f91-5f20-4c8b-8193-1beffae37dda"
+    },
+    "FileName": "IAppErrorManager.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Diagnostics\\IAppErrorManager.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Diagnostics\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "d392e34a-74fa-476d-872d-3e7c89db7612"
+    },
+    "FileName": "IAuditLog.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Diagnostics\\IAuditLog.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Diagnostics\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "91882034-d107-4e33-af70-4fecf2c755fe"
+    },
+    "FileName": "LoggingService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Diagnostics\\LoggingService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Diagnostics\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "91882034-d107-4e33-af70-4fecf2c755fe"
+    },
+    "FileName": "LoggingService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Diagnostics\\LoggingService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 12,
+        "CharNumber": 36,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "08cca261-5cf2-461c-b11f-5cd724f5cdad"
+    },
+    "FileName": "IProcessExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Execution\\IProcessExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Execution\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "baed0f6c-6887-4740-b278-655eb8b04824"
+    },
+    "FileName": "IResourceAllocator.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Execution\\IResourceAllocator.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Execution\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "553b34f6-a925-4479-bda9-b3c551d70e79"
+    },
+    "FileName": "ProcessExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Execution\\ProcessExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Execution\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "553b34f6-a925-4479-bda9-b3c551d70e79"
+    },
+    "FileName": "ProcessExecutionService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Execution\\ProcessExecutionService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 11,
+        "CharNumber": 12,
+        "DiagnosticId": "IDE0290",
+        "FormatDescription": "info IDE0290: Utiliser le constructeur principal"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "ff3be5b1-3cd1-4b39-a73b-285b036ae4f5"
+    },
+    "FileName": "ProcessWatcherService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Execution\\ProcessWatcherService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 3,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Execution\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "ff3be5b1-3cd1-4b39-a73b-285b036ae4f5"
+    },
+    "FileName": "ProcessWatcherService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Execution\\ProcessWatcherService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 12,
+        "CharNumber": 29,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "1831c805-b85b-498f-8c78-d4664a4083fa"
+    },
+    "FileName": "ResourceAllocatorService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Execution\\ResourceAllocatorService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 3,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Execution\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "f0724e75-434a-4c6d-9083-1448908d10b5"
+    },
+    "FileName": "ResourceGuardService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\Execution\\ResourceGuardService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 3,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.Execution\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "4f70dc83-c927-47ff-8d6d-e8be00655ec6"
+    },
+    "FileName": "DialogService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\DialogService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.UI\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "14df0e57-f19f-4518-abba-f1d96d9b0b3f"
+    },
+    "FileName": "IDialogService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\IDialogService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.UI\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "4d89071a-d693-4f8e-a148-c008f6bc5697"
+    },
+    "FileName": "KeyboardShortcutsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\KeyboardShortcutsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 8,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.UI\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "e78804ce-4da4-4008-9f80-74f3964a7350"
+    },
+    "FileName": "LocalizationService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\LocalizationService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 3,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.UI\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "8ddf0c95-55b7-49af-892b-3faaa200974d"
+    },
+    "FileName": "NotificationService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\NotificationService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.UI\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "621d298b-af91-4bb8-9412-6ebcf2835191"
+    },
+    "FileName": "ThemeService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\ThemeService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 6,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.UI\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "5bd5c256-a9bc-4b06-92e1-420312ea75ec"
+    },
+    "FileName": "ToastService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\ToastService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.UI\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "72f911fb-1834-4df6-9c0a-08c21e9a3e9c"
+    },
+    "FileName": "TrayService.Win32.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\TrayService.Win32.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 6,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Common.UI\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "72f911fb-1834-4df6-9c0a-08c21e9a3e9c"
+    },
+    "FileName": "TrayService.Win32.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Common\\UI\\TrayService.Win32.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 35,
+        "CharNumber": 9,
+        "DiagnosticId": "IDE0270",
+        "FormatDescription": "info IDE0270: Le contr\u00F4le de valeurs Null peut \u00EAtre simplifi\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "79108897-431e-4ee4-95fb-457fd04f27ae"
+    },
+    "FileName": "AiChatService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiChatService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 11,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.AI.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "79108897-431e-4ee4-95fb-457fd04f27ae"
+    },
+    "FileName": "AiChatService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiChatService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 705,
+        "CharNumber": 9,
+        "DiagnosticId": "IDE0270",
+        "FormatDescription": "info IDE0270: Le contr\u00F4le de valeurs Null peut \u00EAtre simplifi\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "79108897-431e-4ee4-95fb-457fd04f27ae"
+    },
+    "FileName": "AiChatService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiChatService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 779,
+        "CharNumber": 52,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "79108897-431e-4ee4-95fb-457fd04f27ae"
+    },
+    "FileName": "AiChatService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiChatService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 866,
+        "CharNumber": 50,
+        "DiagnosticId": "IDE0057",
+        "FormatDescription": "info IDE0057: Substring peut \u00EAtre simplifi\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "79108897-431e-4ee4-95fb-457fd04f27ae"
+    },
+    "FileName": "AiChatService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiChatService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 25,
+        "CharNumber": 36,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "79108897-431e-4ee4-95fb-457fd04f27ae"
+    },
+    "FileName": "AiChatService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\AiChatService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 76,
+        "CharNumber": 29,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "461a9fb1-3c08-4336-bd55-8142993aa115"
+    },
+    "FileName": "IAiService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\IAiService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 3,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.AI.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "fbeb6e00-7ca8-4a72-a14c-f5c2718b5264"
+    },
+    "FileName": "RagService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\RagService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.AI.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "fbeb6e00-7ca8-4a72-a14c-f5c2718b5264"
+    },
+    "FileName": "RagService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Services\\RagService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 278,
+        "CharNumber": 14,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "d1f365f8-49a4-4afa-87ca-35808b609e47"
+    },
+    "FileName": "CustomShortcutsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Dashboard\\Services\\CustomShortcutsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 7,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.Dashboard.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "27edb586-5964-40ff-97ee-dc36034c97ac"
+    },
+    "FileName": "HomeCustomizationService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Dashboard\\Services\\HomeCustomizationService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 7,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.Dashboard.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "27edb586-5964-40ff-97ee-dc36034c97ac"
+    },
+    "FileName": "HomeCustomizationService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Dashboard\\Services\\HomeCustomizationService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 188,
+        "CharNumber": 39,
+        "DiagnosticId": "IDE0060",
+        "FormatDescription": "info IDE0060: Supprimer le param\u00E8tre inutilis\u00E9 \u0027tileKey\u0027 si celui-ci ne fait pas partie d\u2019une API publique livr\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "27edb586-5964-40ff-97ee-dc36034c97ac"
+    },
+    "FileName": "HomeCustomizationService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Dashboard\\Services\\HomeCustomizationService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 177,
+        "CharNumber": 35,
+        "DiagnosticId": "IDE0060",
+        "FormatDescription": "info IDE0060: Supprimer le param\u00E8tre inutilis\u00E9 \u0027tileKey\u0027 si celui-ci ne fait pas partie d\u2019une API publique livr\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "ea141476-2dc5-44ab-b3c8-e4f7da96292f"
+    },
+    "FileName": "ISecurityPolicy.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\Services\\ISecurityPolicy.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.HealthDefense.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "75cb96b9-9753-41e7-8423-4735189f7722"
+    },
+    "FileName": "SecurityPolicyService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\Services\\SecurityPolicyService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 7,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.HealthDefense.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "75cb96b9-9753-41e7-8423-4735189f7722"
+    },
+    "FileName": "SecurityPolicyService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\Services\\SecurityPolicyService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 119,
+        "CharNumber": 67,
+        "DiagnosticId": "IDE0301",
+        "FormatDescription": "info IDE0301: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "75cb96b9-9753-41e7-8423-4735189f7722"
+    },
+    "FileName": "SecurityPolicyService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\Services\\SecurityPolicyService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 118,
+        "CharNumber": 63,
+        "DiagnosticId": "IDE0301",
+        "FormatDescription": "info IDE0301: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "75cb96b9-9753-41e7-8423-4735189f7722"
+    },
+    "FileName": "SecurityPolicyService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\Services\\SecurityPolicyService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 117,
+        "CharNumber": 64,
+        "DiagnosticId": "IDE0301",
+        "FormatDescription": "info IDE0301: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "0c4d432c-a415-4ccd-886e-5c2de2a271aa"
+    },
+    "FileName": "StartupHealthService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\Services\\StartupHealthService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.HealthDefense.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "0c4d432c-a415-4ccd-886e-5c2de2a271aa"
+    },
+    "FileName": "StartupHealthService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\Services\\StartupHealthService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 9,
+        "CharNumber": 57,
+        "DiagnosticId": "IDE0300",
+        "FormatDescription": "info IDE0300: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "9b056982-56a7-41a8-8d17-548d1d760377"
+    },
+    "FileName": "SystemHealthService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\HealthDefense\\Services\\SystemHealthService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 6,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.HealthDefense.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "c82f4f88-7d96-4601-9a40-5a9f8872456d"
+    },
+    "FileName": "NetworkMonitorService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkMonitorService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 5,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.Network.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "0229d9b7-ab4d-4c5e-9e3a-1ad23680e804"
+    },
+    "FileName": "UninstallCommandParser.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\Services\\UninstallCommandParser.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.Programs.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "4960f841-0e30-4270-9efc-95ebb1800095"
+    },
+    "FileName": "ISmartMemoryDaemonService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\ISmartMemoryDaemonService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.RamCleaner.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "b25814f3-33d1-431d-873c-044b5f6ac26d"
+    },
+    "FileName": "SmartMemoryDaemonService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\SmartMemoryDaemonService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.RamCleaner.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "b25814f3-33d1-431d-873c-044b5f6ac26d"
+    },
+    "FileName": "SmartMemoryDaemonService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\RamCleaner\\Services\\SmartMemoryDaemonService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 10,
+        "CharNumber": 29,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "0fe2062a-963f-4d15-9d81-00cdc4eb7630"
+    },
+    "FileName": "ProfileService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Settings\\Services\\ProfileService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.Settings.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "bffbcf85-fde6-4cd6-92fb-1d6b5a2ab2b1"
+    },
+    "FileName": "UserAccountService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Settings\\Services\\UserAccountService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 7,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.Settings.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "87f20272-5f13-4b74-973e-e87263336e8a"
+    },
+    "FileName": "NetworkModels.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Models\\NetworkModels.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Models.Network\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.Network.Models\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "b1e2cb02-855c-43b3-af50-941b1f1674b1"
+    },
+    "FileName": "INetworkServices.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\INetworkServices.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 3,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services.Network\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.Network.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "62008892-ef08-45b9-9b3f-896fefc17360"
+    },
+    "FileName": "NetworkBenchmarkService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkBenchmarkService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 6,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services.Network\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.Network.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "85844d3d-1b8b-4a92-b26d-a12c150ea11e"
+    },
+    "FileName": "NetworkOptimizerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkOptimizerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 11,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services.Network\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.Network.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "85844d3d-1b8b-4a92-b26d-a12c150ea11e"
+    },
+    "FileName": "NetworkOptimizerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkOptimizerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 698,
+        "CharNumber": 13,
+        "DiagnosticId": "IDE0066",
+        "FormatDescription": "info IDE0066: Utiliser l\u0027expression \u0027switch\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "85844d3d-1b8b-4a92-b26d-a12c150ea11e"
+    },
+    "FileName": "NetworkOptimizerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkOptimizerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 669,
+        "CharNumber": 9,
+        "DiagnosticId": "IDE0066",
+        "FormatDescription": "info IDE0066: Utiliser l\u0027expression \u0027switch\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "85844d3d-1b8b-4a92-b26d-a12c150ea11e"
+    },
+    "FileName": "NetworkOptimizerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkOptimizerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 667,
+        "CharNumber": 117,
+        "DiagnosticId": "IDE0060",
+        "FormatDescription": "info IDE0060: Supprimer le param\u00E8tre \u0027adapterProps\u0027 inutilis\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "85844d3d-1b8b-4a92-b26d-a12c150ea11e"
+    },
+    "FileName": "NetworkOptimizerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkOptimizerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 40,
+        "CharNumber": 12,
+        "DiagnosticId": "IDE0290",
+        "FormatDescription": "info IDE0290: Utiliser le constructeur principal"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "bbce234e-36ee-45e0-a350-b248c05daa75"
+    },
+    "FileName": "NetworkSettingsGuard.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkSettingsGuard.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 4,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services.Network\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.Network.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "97a3b36b-fdd7-456f-bec6-06bfbd47c317"
+    },
+    "FileName": "NetworkTuningCatalog.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Network\\Services\\NetworkTuningCatalog.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 3,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0130",
+        "FormatDescription": "info IDE0130: Le namespace \u0022Coclico.Services.Network\u0022 ne correspond pas \u00E0 la structure de dossiers. R\u00E9sultat attendu\u00A0: \u0022Coclico.Modules.Network.Services\u0022"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "49fd3970-9e14-4928-a945-34a5cd5c8226"
+    },
+    "FileName": "UpdateWindow.xaml.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Windows\\UpdateWindow.xaml.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 38,
+        "CharNumber": 106,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "3dad64b9-59a3-40b2-8eeb-a6e8f9d1d5f9"
+    },
+    "FileName": "App.Elevation.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\App.Elevation.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 89,
+        "CharNumber": 43,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "a37adbc6-0c34-4835-bef0-9a0a69e2d90b"
+    },
+    "FileName": "SettingsViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Settings\\ViewModels\\SettingsViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 347,
+        "CharNumber": 45,
+        "DiagnosticId": "IDE0060",
+        "FormatDescription": "info IDE0060: Supprimer le param\u00E8tre inutilis\u00E9 \u0027dialogService\u0027 si celui-ci ne fait pas partie d\u2019une API publique livr\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "381436ab-216e-4d73-bd70-862e39d13f9d"
+    },
+    "FileName": "AiChatView.xaml.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Views\\AiChatView.xaml.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 43,
+        "CharNumber": 9,
+        "DiagnosticId": "IDE0031",
+        "FormatDescription": "info IDE0031: Le contr\u00F4le de valeurs Null peut \u00EAtre simplifi\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "381436ab-216e-4d73-bd70-862e39d13f9d"
+    },
+    "FileName": "AiChatView.xaml.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\AI\\Views\\AiChatView.xaml.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 50,
+        "CharNumber": 13,
+        "DiagnosticId": "IDE0031",
+        "FormatDescription": "info IDE0031: Le contr\u00F4le de valeurs Null peut \u00EAtre simplifi\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "2b8e5c30-3325-4735-92c1-1d49f9301bac"
+    },
+    "FileName": "ProgramsViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\ViewModels\\ProgramsViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 379,
+        "CharNumber": 56,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "2b8e5c30-3325-4735-92c1-1d49f9301bac"
+    },
+    "FileName": "ProgramsViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\ViewModels\\ProgramsViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 477,
+        "CharNumber": 18,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "2b8e5c30-3325-4735-92c1-1d49f9301bac"
+    },
+    "FileName": "ProgramsViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\ViewModels\\ProgramsViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 479,
+        "CharNumber": 56,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "2b8e5c30-3325-4735-92c1-1d49f9301bac"
+    },
+    "FileName": "ProgramsViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\ViewModels\\ProgramsViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 561,
+        "CharNumber": 113,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "2b8e5c30-3325-4735-92c1-1d49f9301bac"
+    },
+    "FileName": "ProgramsViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\ViewModels\\ProgramsViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 992,
+        "CharNumber": 60,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "2b8e5c30-3325-4735-92c1-1d49f9301bac"
+    },
+    "FileName": "ProgramsViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\ViewModels\\ProgramsViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 976,
+        "CharNumber": 60,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "2b8e5c30-3325-4735-92c1-1d49f9301bac"
+    },
+    "FileName": "ProgramsViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\ViewModels\\ProgramsViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1013,
+        "CharNumber": 56,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "2b8e5c30-3325-4735-92c1-1d49f9301bac"
+    },
+    "FileName": "ProgramsViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\ViewModels\\ProgramsViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1034,
+        "CharNumber": 56,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "2b8e5c30-3325-4735-92c1-1d49f9301bac"
+    },
+    "FileName": "ProgramsViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\ViewModels\\ProgramsViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1101,
+        "CharNumber": 52,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "2b8e5c30-3325-4735-92c1-1d49f9301bac"
+    },
+    "FileName": "ProgramsViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\ViewModels\\ProgramsViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1070,
+        "CharNumber": 60,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "75548698-9d94-419d-a185-0a605201ea22"
+    },
+    "FileName": "DiagnosticRuleEngine.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Diagnostics\\Rules\\DiagnosticRuleEngine.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 563,
+        "CharNumber": 14,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "75548698-9d94-419d-a185-0a605201ea22"
+    },
+    "FileName": "DiagnosticRuleEngine.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Diagnostics\\Rules\\DiagnosticRuleEngine.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 572,
+        "CharNumber": 14,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "1d5c3a6c-b8cb-4040-aa88-fd6fd9896b0e"
+    },
+    "FileName": "DiskAnalyzerViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\ViewModels\\DiskAnalyzerViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 548,
+        "CharNumber": 54,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "1d5c3a6c-b8cb-4040-aa88-fd6fd9896b0e"
+    },
+    "FileName": "DiskAnalyzerViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\ViewModels\\DiskAnalyzerViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 887,
+        "CharNumber": 16,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "1d5c3a6c-b8cb-4040-aa88-fd6fd9896b0e"
+    },
+    "FileName": "DiskAnalyzerViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\ViewModels\\DiskAnalyzerViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 934,
+        "CharNumber": 14,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "1d5c3a6c-b8cb-4040-aa88-fd6fd9896b0e"
+    },
+    "FileName": "DiskAnalyzerViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\ViewModels\\DiskAnalyzerViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 886,
+        "CharNumber": 20,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "11c78cd9-7c6c-4be5-b560-f0e57a2fb262"
+    },
+    "FileName": "DuplicateFinderService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\Services\\DuplicateFinderService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 128,
+        "CharNumber": 14,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "11c78cd9-7c6c-4be5-b560-f0e57a2fb262"
+    },
+    "FileName": "DuplicateFinderService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\Services\\DuplicateFinderService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 180,
+        "CharNumber": 14,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "11c78cd9-7c6c-4be5-b560-f0e57a2fb262"
+    },
+    "FileName": "DuplicateFinderService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\Services\\DuplicateFinderService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 243,
+        "CharNumber": 14,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "11c78cd9-7c6c-4be5-b560-f0e57a2fb262"
+    },
+    "FileName": "DuplicateFinderService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\Services\\DuplicateFinderService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 200,
+        "CharNumber": 14,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "11c78cd9-7c6c-4be5-b560-f0e57a2fb262"
+    },
+    "FileName": "DuplicateFinderService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\Services\\DuplicateFinderService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 188,
+        "CharNumber": 104,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "4097005f-36c9-45bd-95f3-f6bf5c477cbc"
+    },
+    "FileName": "DiskAnalyzerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\Services\\DiskAnalyzerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 60,
+        "CharNumber": 18,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "4097005f-36c9-45bd-95f3-f6bf5c477cbc"
+    },
+    "FileName": "DiskAnalyzerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\Services\\DiskAnalyzerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 16,
+        "CharNumber": 12,
+        "DiagnosticId": "IDE0290",
+        "FormatDescription": "info IDE0290: Utiliser le constructeur principal"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "ee620999-b6a0-4f90-8561-b4ce418a7e4c"
+    },
+    "FileName": "InstalledProgramsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\Services\\InstalledProgramsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 664,
+        "CharNumber": 26,
+        "DiagnosticId": "IDE0300",
+        "FormatDescription": "info IDE0300: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "ee620999-b6a0-4f90-8561-b4ce418a7e4c"
+    },
+    "FileName": "InstalledProgramsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\Services\\InstalledProgramsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 704,
+        "CharNumber": 101,
+        "DiagnosticId": "IDE0300",
+        "FormatDescription": "info IDE0300: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "ee620999-b6a0-4f90-8561-b4ce418a7e4c"
+    },
+    "FileName": "InstalledProgramsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\Services\\InstalledProgramsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1026,
+        "CharNumber": 92,
+        "DiagnosticId": "IDE0300",
+        "FormatDescription": "info IDE0300: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "ee620999-b6a0-4f90-8561-b4ce418a7e4c"
+    },
+    "FileName": "InstalledProgramsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\Services\\InstalledProgramsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 345,
+        "CharNumber": 32,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "ee620999-b6a0-4f90-8561-b4ce418a7e4c"
+    },
+    "FileName": "InstalledProgramsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\Services\\InstalledProgramsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1358,
+        "CharNumber": 11,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "ee620999-b6a0-4f90-8561-b4ce418a7e4c"
+    },
+    "FileName": "InstalledProgramsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\Services\\InstalledProgramsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 308,
+        "CharNumber": 34,
+        "DiagnosticId": "IDE0042",
+        "FormatDescription": "info IDE0042: La d\u00E9claration de variable peut \u00EAtre d\u00E9construite"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "ee620999-b6a0-4f90-8561-b4ce418a7e4c"
+    },
+    "FileName": "InstalledProgramsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Programs\\Services\\InstalledProgramsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 97,
+        "CharNumber": 29,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "7b387192-d43f-44a5-acd4-513ef6b8b083"
+    },
+    "FileName": "DashboardView.xaml.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Dashboard\\Views\\DashboardView.xaml.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 103,
+        "CharNumber": 22,
+        "DiagnosticId": "IDE0042",
+        "FormatDescription": "info IDE0042: La d\u00E9claration de variable peut \u00EAtre d\u00E9construite"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "1f3048b7-95cd-472a-bed9-a4a73b88e6ed"
+    },
+    "FileName": "WingetEngineService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Apps\\Services\\WingetEngineService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 52,
+        "CharNumber": 12,
+        "DiagnosticId": "IDE0290",
+        "FormatDescription": "info IDE0290: Utiliser le constructeur principal"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "c7b8042b-e071-4476-9e3e-98dd9b847122"
+    },
+    "FileName": "AppShortcutsService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Apps\\Services\\AppShortcutsService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 30,
+        "CharNumber": 84,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "cd4a9af1-ec02-481c-aee9-acc1468d0588"
+    },
+    "FileName": "MainWindow.xaml.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\MainWindow.xaml.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 195,
+        "CharNumber": 13,
+        "DiagnosticId": "IDE0031",
+        "FormatDescription": "info IDE0031: Le contr\u00F4le de valeurs Null peut \u00EAtre simplifi\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "30640b1d-75c1-41b3-b7d4-54f0f71ba9d4"
+    },
+    "FileName": "GitHubToolService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Apps\\Services\\GitHubToolService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 143,
+        "CharNumber": 14,
+        "DiagnosticId": "IDE0305",
+        "FormatDescription": "info IDE0305: L\u0027initialisation des collections peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "30640b1d-75c1-41b3-b7d4-54f0f71ba9d4"
+    },
+    "FileName": "GitHubToolService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Apps\\Services\\GitHubToolService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 64,
+        "CharNumber": 35,
+        "DiagnosticId": "IDE0042",
+        "FormatDescription": "info IDE0042: La d\u00E9claration de variable peut \u00EAtre d\u00E9construite"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "30640b1d-75c1-41b3-b7d4-54f0f71ba9d4"
+    },
+    "FileName": "GitHubToolService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Apps\\Services\\GitHubToolService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 24,
+        "CharNumber": 12,
+        "DiagnosticId": "IDE0290",
+        "FormatDescription": "info IDE0290: Utiliser le constructeur principal"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "30640b1d-75c1-41b3-b7d4-54f0f71ba9d4"
+    },
+    "FileName": "GitHubToolService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Apps\\Services\\GitHubToolService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 98,
+        "CharNumber": 23,
+        "DiagnosticId": "IDE0063",
+        "FormatDescription": "info IDE0063: L\u0027instruction \u0027using\u0027 peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "77fc6bc6-4832-4f5b-bded-df3be71bdc9d"
+    },
+    "FileName": "DiskAnalyzerView.xaml.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\Views\\DiskAnalyzerView.xaml.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 246,
+        "CharNumber": 23,
+        "DiagnosticId": "IDE0017",
+        "FormatDescription": "info IDE0017: L\u0027initialisation de l\u0027objet peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "77fc6bc6-4832-4f5b-bded-df3be71bdc9d"
+    },
+    "FileName": "DiskAnalyzerView.xaml.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\DiskAnalyzer\\Views\\DiskAnalyzerView.xaml.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 247,
+        "CharNumber": 9,
+        "DiagnosticId": "IDE0017",
+        "FormatDescription": "info IDE0017: L\u0027initialisation de l\u0027objet peut \u00EAtre simplifi\u00E9e"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "77bf914e-0741-4e9b-8985-49c69de3f3cb"
+    },
+    "FileName": "ProcessesCheck.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Diagnostics\\Services\\Checks\\ProcessesCheck.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 24,
+        "CharNumber": 17,
+        "DiagnosticId": "IDE0059",
+        "FormatDescription": "info IDE0059: Assignation inutile d\u0027une valeur \u00E0 \u0027topCpuName\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "77bf914e-0741-4e9b-8985-49c69de3f3cb"
+    },
+    "FileName": "ProcessesCheck.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Diagnostics\\Services\\Checks\\ProcessesCheck.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 25,
+        "CharNumber": 17,
+        "DiagnosticId": "IDE0059",
+        "FormatDescription": "info IDE0059: Assignation inutile d\u0027une valeur \u00E0 \u0027topCpuPercent\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "7577f334-7318-4c4b-82f4-a378ea967459"
+    },
+    "FileName": "AdaptivePowerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Power\\Services\\AdaptivePowerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 36,
+        "CharNumber": 12,
+        "DiagnosticId": "IDE0290",
+        "FormatDescription": "info IDE0290: Utiliser le constructeur principal"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "7577f334-7318-4c4b-82f4-a378ea967459"
+    },
+    "FileName": "AdaptivePowerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Power\\Services\\AdaptivePowerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 125,
+        "CharNumber": 12,
+        "DiagnosticId": "IDE0290",
+        "FormatDescription": "info IDE0290: Utiliser le constructeur principal"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "7577f334-7318-4c4b-82f4-a378ea967459"
+    },
+    "FileName": "AdaptivePowerService.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Power\\Services\\AdaptivePowerService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 109,
+        "CharNumber": 29,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "8785ce92-2924-4f8a-a336-3a7399bb59a3"
+    },
+    "FileName": "MainWindow.AiChat.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\MainWindow.AiChat.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 22,
+        "CharNumber": 65,
+        "DiagnosticId": "IDE0060",
+        "FormatDescription": "info IDE0060: Supprimer le param\u00E8tre \u0027sender\u0027 inutilis\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "0998f9d3-9d54-4df9-b382-b5282844ee62"
+    },
+    "FileName": "AppsViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Apps\\ViewModels\\AppsViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 323,
+        "CharNumber": 9,
+        "DiagnosticId": "IDE0031",
+        "FormatDescription": "info IDE0031: Le contr\u00F4le de valeurs Null peut \u00EAtre simplifi\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "c2980dc5-e2cd-4a78-b608-61295e9ea62f"
+    },
+    "FileName": "HomeCustomizerWindow.xaml.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Dashboard\\Windows\\HomeCustomizerWindow.xaml.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 189,
+        "CharNumber": 22,
+        "DiagnosticId": "IDE0042",
+        "FormatDescription": "info IDE0042: La d\u00E9claration de variable peut \u00EAtre d\u00E9construite"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "6329b9f3-8072-4004-be3c-b87d70fd3be7"
+    },
+    "FileName": "HelpView.xaml.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Help\\Views\\HelpView.xaml.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 16,
+        "CharNumber": 9,
+        "DiagnosticId": "IDE0031",
+        "FormatDescription": "info IDE0031: Le contr\u00F4le de valeurs Null peut \u00EAtre simplifi\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "6329b9f3-8072-4004-be3c-b87d70fd3be7"
+    },
+    "FileName": "HelpView.xaml.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Help\\Views\\HelpView.xaml.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 23,
+        "CharNumber": 13,
+        "DiagnosticId": "IDE0031",
+        "FormatDescription": "info IDE0031: Le contr\u00F4le de valeurs Null peut \u00EAtre simplifi\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "efe0d4a2-83ee-44b8-b09c-42c0e80cf66f"
+    },
+    "FileName": "MainWindow.Navigation.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\MainWindow.Navigation.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 252,
+        "CharNumber": 9,
+        "DiagnosticId": "IDE0031",
+        "FormatDescription": "info IDE0031: Le contr\u00F4le de valeurs Null peut \u00EAtre simplifi\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "efe0d4a2-83ee-44b8-b09c-42c0e80cf66f"
+    },
+    "FileName": "MainWindow.Navigation.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\MainWindow.Navigation.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 324,
+        "CharNumber": 13,
+        "DiagnosticId": "IDE0031",
+        "FormatDescription": "info IDE0031: Le contr\u00F4le de valeurs Null peut \u00EAtre simplifi\u00E9"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "df6780cc-8b61-4edf-a508-69ad1b5d2bc4"
+    },
+    "FileName": "DiagnosticOrchestrator.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Diagnostics\\Services\\DiagnosticOrchestrator.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 24,
+        "CharNumber": 12,
+        "DiagnosticId": "IDE0290",
+        "FormatDescription": "info IDE0290: Utiliser le constructeur principal"
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "2c44b1f1-e12e-40c4-a7ff-4633c1a2e772"
+      },
+      "Id": "4e6afa09-b9a9-4a37-857e-fce1fcc025e3"
+    },
+    "FileName": "DashboardViewModel.cs",
+    "FilePath": "C:\\Users\\Martin\\Documents\\projet1\\version fini v2.1.0\\veriosn beta\\Coclico-main\\Coclico\\Modules\\Dashboard\\ViewModels\\DashboardViewModel.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 29,
+        "CharNumber": 29,
+        "DiagnosticId": "IDE0330",
+        "FormatDescription": "info IDE0330: Utilisez \u0027System.Threading.Lock\u0027"
+      }
+    ]
+  }
+]
