@@ -40,6 +40,7 @@ permissions:
 
 jobs:
   Analysis:
+    if: ${{ secrets.SONAR_TOKEN != '' }}
     runs-on: ubuntu-latest
 
     steps:

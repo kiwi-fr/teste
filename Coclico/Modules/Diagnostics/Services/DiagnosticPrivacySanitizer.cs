@@ -5,7 +5,7 @@ using Coclico.Modules.Diagnostics.Models;
 
 public sealed partial class DiagnosticPrivacySanitizer
 {
-    [GeneratedRegex(@"(?i)^[A-Z]:\\Users\\[^\\]+\\")]
+    [GeneratedRegex(@"(?i)[A-Z]:\\Users\\[^\\]+\\?")]
     private static partial Regex UserProfilePathRegex();
 
     [GeneratedRegex(@"(?i)\b(serial(?:\s*number)?\s*[:=]\s*)[A-Z0-9\-]{4,}\b")]

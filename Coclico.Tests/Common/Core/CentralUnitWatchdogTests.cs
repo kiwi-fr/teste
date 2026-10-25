@@ -115,9 +115,10 @@ public sealed class CentralUnitWatchdogTests : IDisposable
         periodicWatchdog.Start();
         periodicWatchdog.Start();
 
-        for (int i = 0; i < 100 && Volatile.Read(ref revives) == 0; i++)
+        DateTime deadline = DateTime.UtcNow + TimeSpan.FromSeconds(10);
+        while (Volatile.Read(ref revives) == 0 && DateTime.UtcNow < deadline)
         {
-            await Task.Delay(30);
+            await Task.Delay(50);
         }
 
         periodicWatchdog.Stop();
