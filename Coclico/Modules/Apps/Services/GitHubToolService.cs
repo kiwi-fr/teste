@@ -117,25 +117,8 @@ public sealed class GitHubToolService
             if (asset.Name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
             {
                 Directory.CreateDirectory(toolDir);
-                string rootFullPath = Path.GetFullPath(toolDir);
                 using ZipArchive archive = ZipFile.OpenRead(destination);
-                foreach (ZipArchiveEntry entry in archive.Entries)
-                {
-                    string destPath = Path.GetFullPath(Path.Combine(toolDir, entry.FullName));
-                    if (!destPath.StartsWith(rootFullPath, StringComparison.OrdinalIgnoreCase))
-                    {
-                        continue;
-                    }
-
-                    if (entry.Name.Length == 0)
-                    {
-                        Directory.CreateDirectory(destPath);
-                        continue;
-                    }
-
-                    Directory.CreateDirectory(Path.GetDirectoryName(destPath)!);
-                    entry.ExtractToFile(destPath, overwrite: true);
-                }
+                archive.ExtractToDirectory(toolDir, overwriteFiles: true);
 
                 log?.Report($"Extrait dans {toolDir}");
                 exePath = FindMainExecutable(toolDir, toolName);

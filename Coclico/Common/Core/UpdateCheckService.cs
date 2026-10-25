@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Security.Cryptography;
 using Microsoft.Extensions.Logging;
 using Timer = System.Timers.Timer;
 
@@ -32,7 +33,7 @@ public class UpdateCheckService(
 
         _ = CheckForUpdatesAsync();
 
-        TimeSpan interval = TimeSpan.FromHours(6) + TimeSpan.FromMinutes(Random.Shared.Next(0, 30));
+        TimeSpan interval = TimeSpan.FromHours(6) + TimeSpan.FromMinutes(RandomNumberGenerator.GetInt32(0, 30));
         _updateCheckTimer = new Timer(interval.TotalMilliseconds)
         {
             AutoReset = true

@@ -12,6 +12,8 @@ public static class PayloadExtractor
     public static bool HasPayload()
         => Assembly.GetExecutingAssembly().GetManifestResourceInfo(PayloadResourceName) is not null;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("SecurityCodeScan", "SCS0018",
+        Justification = "payload.zip embarque a la compilation, non controle par l'utilisateur; prefixe verifie avant File.Create")]
     public static void Extract(string destinationDir, IProgress<double>? progress = null)
     {
         var assembly = Assembly.GetExecutingAssembly();

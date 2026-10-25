@@ -56,6 +56,15 @@ public sealed class DiagnosticHistoryService : IDiagnosticHistoryService
 
         File.Move(tempPath, filePath, overwrite: true);
 
+        try
+        {
+            File.SetLastWriteTimeUtc(filePath, run.StartedAtUtc);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            LoggingService.LogException(ex, $"{Subsystem}.Timestamp");
+        }
+
         ApplyRetentionPolicy();
     }
 

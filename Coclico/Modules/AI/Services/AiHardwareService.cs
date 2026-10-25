@@ -335,6 +335,7 @@ public static class AiHardwareService
         }
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("SecurityCodeScan", "SCS0018", Justification = "ZipArchiveEntry.Name ne contient jamais de separateur de chemin, garde Path.GetFileName appliquee avant extraction")]
     private static async Task DownloadAndExtractFolderAsync(
         string packageId, string version, string entryFolder,
         string targetDir, string label, int stepIndex,
@@ -356,14 +357,12 @@ public static class AiHardwareService
                     continue;
                 }
 
-                string fileName = entry.FullName[entryFolder.Length..];
-                if (string.IsNullOrWhiteSpace(fileName))
+                if (entry.Name.Length == 0 || Path.GetFileName(entry.Name) != entry.Name)
                 {
                     continue;
                 }
 
-                string destination = Path.Combine(targetDir, fileName.Replace('/', '\\'));
-                _ = Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+                string destination = Path.Combine(targetDir, entry.Name);
                 entry.ExtractToFile(destination, overwrite: true);
             }
         }

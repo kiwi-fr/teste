@@ -434,6 +434,7 @@ public sealed class WingetEngineService
         return failed == 0;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("SecurityCodeScan", "SCS0018", Justification = "ZipArchiveEntry.Name ne contient jamais de separateur de chemin, garde Path.GetFileName appliquee avant extraction")]
     private static List<string> ExtractX64Dependencies(string zipPath, string dir)
     {
         var paths = new List<string>();
@@ -444,7 +445,12 @@ public sealed class WingetEngineService
             if (p.StartsWith("x64/", StringComparison.OrdinalIgnoreCase)
                 && p.EndsWith(".appx", StringComparison.OrdinalIgnoreCase))
             {
-                string destination = Path.Combine(dir, Path.GetFileName(p));
+                if (Path.GetFileName(entry.Name) != entry.Name)
+                {
+                    continue;
+                }
+
+                string destination = Path.Combine(dir, entry.Name);
                 entry.ExtractToFile(destination, overwrite: true);
                 paths.Add(destination);
             }
