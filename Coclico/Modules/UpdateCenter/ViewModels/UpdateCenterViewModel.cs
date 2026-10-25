@@ -19,19 +19,23 @@ public sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
 {
     private readonly UpdateScanService _scanService;
     private readonly WingetUpdateService _wingetService;
+    private readonly DriverUpdateService _driverService;
     private readonly RestorePointService _restorePointService;
     private CancellationTokenSource? _cts;
     private UpdateCenterState _state = UpdateCenterState.Idle;
     private DateTimeOffset? _lastScan;
     private string? _lastScanSummary;
+    private string _searchText = string.Empty;
 
     public UpdateCenterViewModel(
         UpdateScanService scanService,
         WingetUpdateService wingetService,
+        DriverUpdateService driverService,
         RestorePointService restorePointService)
     {
         _scanService = scanService;
         _wingetService = wingetService;
+        _driverService = driverService;
         _restorePointService = restorePointService;
 
         CheckAllCommand = new RelayCommand(_ => CheckAll(), _ => State is UpdateCenterState.Idle or UpdateCenterState.Ready);
@@ -85,6 +89,19 @@ public sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
         }
     }
 
+    public string SearchText
+    {
+        get => _searchText;
+        set
+        {
+            if (_searchText == value) return;
+            _searchText = value;
+            OnPropertyChanged();
+            foreach (var section in Sections)
+                section.ApplyFilter(value);
+        }
+    }
+
     public IEnumerable<UpdateItemViewModel> SelectedItems => Sections.SelectMany(s => s.Items).Where(i => i.IsSelected);
 
     public void CheckAll()
@@ -116,6 +133,9 @@ public sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
                 : $"{result.AvailableCount} mise(s) à jour";
 
             State = UpdateCenterState.Ready;
+
+            foreach (var section in Sections)
+                section.ApplyFilter(SearchText);
         }
         catch (OperationCanceledException)
         {
@@ -138,7 +158,7 @@ public sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
 
     public async Task UpdateSelectedAsync()
     {
-        var selected = SelectedItems.Where(i => i.Kind == UpdateKind.Application).ToList();
+        var selected = SelectedItems.Where(i => i.Kind is UpdateKind.Application or UpdateKind.Driver).ToList();
         if (selected.Count == 0 || State == UpdateCenterState.Updating)
             return;
 
@@ -146,7 +166,7 @@ public sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
         _cts?.Dispose();
         _cts = new CancellationTokenSource();
 
-        var hasDriver = SelectedItems.Any(i => i.Kind == UpdateKind.Driver);
+        var hasDriver = selected.Any(i => i.Kind == UpdateKind.Driver);
         if (hasDriver)
             _ = _restorePointService.Create("Coclico — mise à jour de pilotes");
 
@@ -158,9 +178,15 @@ public sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
             item.SetStatus(UpdateItemStatus.Updating);
             try
             {
-                var upgraded = await _wingetService.UpgradeAsync(item.Id, _cts.Token).ConfigureAwait(true);
-                item.SetStatus(upgraded ? UpdateItemStatus.Succeeded : UpdateItemStatus.Failed);
-                if (upgraded) success++;
+                var updated = item.Kind switch
+                {
+                    UpdateKind.Application => await _wingetService.UpgradeAsync(item.Id, _cts.Token).ConfigureAwait(true),
+                    UpdateKind.Driver => await _driverService.InstallAsync(item.Model, _cts.Token).ConfigureAwait(true),
+                    _ => false
+                };
+
+                item.SetStatus(updated ? UpdateItemStatus.Succeeded : UpdateItemStatus.Failed);
+                if (updated) success++;
                 else failures.Add(item.Name);
             }
             catch (OperationCanceledException)
@@ -175,11 +201,13 @@ public sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
             }
         }
 
-        LastScanSummary = failures.Count == 0
-            ? $"{success} application(s) mise(s) à jour"
-            : $"{success} réussie(s) · {failures.Count} échec(s)";
-
         await CheckAllAsync(_cts.Token).ConfigureAwait(true);
+
+        // Après le re-scan, on réaffiche le résultat de la mise à jour (sinon il serait
+        // écrasé par le résumé du scan).
+        LastScanSummary = failures.Count == 0
+            ? $"{success} élément(s) mis à jour"
+            : $"{success} réussie(s) · {failures.Count} échec(s)";
     }
 
     public void Cancel()

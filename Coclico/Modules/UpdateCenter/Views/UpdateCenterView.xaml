@@ -18,6 +18,13 @@
                     Command="{Binding CheckAllCommand}"
                     MinWidth="140"
                     Padding="16,8"/>
+            <DockPanel DockPanel.Dock="Right" Margin="0,0,10,0" VerticalAlignment="Center">
+                <TextBlock Text="&#x1F50D;" DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBox Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Width="220"
+                         Padding="8,6"
+                         VerticalContentAlignment="Center"/>
+            </DockPanel>
             <StackPanel VerticalAlignment="Center">
                 <TextBlock Text="Update Center" FontSize="22" FontWeight="SemiBold"/>
                 <TextBlock Text="{Binding LastScanSummary}" Opacity="0.7" Margin="0,2,0,0"/>

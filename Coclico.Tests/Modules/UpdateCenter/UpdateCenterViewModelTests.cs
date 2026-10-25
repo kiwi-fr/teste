@@ -29,15 +29,37 @@ public sealed class UpdateCenterViewModelTests
 
     private sealed class StubWingetService : WingetUpdateService
     {
+        public int UpgradeCalls { get; private set; }
+
         public StubWingetService() : base(new SecureProcessRunner()) { }
 
         public override Task<bool> UpgradeAsync(string packageId, CancellationToken ct)
-            => Task.FromResult(true);
+        {
+            UpgradeCalls++;
+            return Task.FromResult(true);
+        }
+    }
+
+    private sealed class StubDriverService : DriverUpdateService
+    {
+        public int InstallCalls { get; private set; }
+
+        public override Task<bool> InstallAsync(UpdateItem item, CancellationToken ct)
+        {
+            InstallCalls++;
+            return Task.FromResult(true);
+        }
     }
 
     private sealed class StubRestorePointService : RestorePointService
     {
-        public override bool Create(string description) => true;
+        public int RestorePointCalls { get; private set; }
+
+        public override bool Create(string description)
+        {
+            RestorePointCalls++;
+            return true;
+        }
     }
 
     private static UpdateItem AppItem(string id, UpdateItemStatus status = UpdateItemStatus.Available) => new()
@@ -51,8 +73,21 @@ public sealed class UpdateCenterViewModelTests
         AvailableVersion = "2.0"
     };
 
-    private static UpdateCenterViewModel CreateViewModel(StubScanService scanService)
-        => new(scanService, new StubWingetService(), new StubRestorePointService());
+    private static UpdateItem DriverItem(string id, string name) => new()
+    {
+        Id = id,
+        Name = name,
+        Kind = UpdateKind.Driver,
+        Source = UpdateSource.WindowsUpdate,
+        Status = UpdateItemStatus.Available
+    };
+
+    private static UpdateCenterViewModel CreateViewModel(
+        StubScanService scanService,
+        StubWingetService? winget = null,
+        StubDriverService? drivers = null,
+        StubRestorePointService? restore = null)
+        => new(scanService, winget ?? new StubWingetService(), drivers ?? new StubDriverService(), restore ?? new StubRestorePointService());
 
     [Fact]
     public async Task CheckAll_FillsSections_AndBecomesReady()
@@ -93,6 +128,64 @@ public sealed class UpdateCenterViewModelTests
 
         Assert.False(upToDate.IsSelected);
         Assert.Empty(viewModel.SelectedItems);
+    }
+
+    [Fact]
+    public async Task UpdateSelected_InstallsDrivers_AndCreatesRestorePointFirst()
+    {
+        var scanService = new StubScanService
+        {
+            Result = new[]
+            {
+                DriverItem("d1", "NVIDIA GeForce Driver"),
+                DriverItem("d2", "Intel Audio Driver")
+            }
+        };
+
+        var drivers = new StubDriverService();
+        var restore = new StubRestorePointService();
+        var viewModel = CreateViewModel(scanService, drivers: drivers, restore: restore);
+
+        viewModel.CheckAll();
+        await WaitUntilAsync(() => viewModel.State == UpdateCenterState.Ready);
+
+        foreach (var item in viewModel.Drivers.Items)
+            item.IsSelected = true;
+
+        await viewModel.UpdateSelectedAsync();
+
+        Assert.Equal(2, drivers.InstallCalls);
+        Assert.Equal(1, restore.RestorePointCalls);
+        Assert.Contains("2 élément(s) mis à jour", viewModel.LastScanSummary);
+    }
+
+    [Fact]
+    public async Task UpdateSelected_UpdatesAppsAndDriversTogether()
+    {
+        var scanService = new StubScanService
+        {
+            Result = new[]
+            {
+                AppItem("Mozilla.Firefox"),
+                DriverItem("d1", "AMD Graphics Driver")
+            }
+        };
+
+        var winget = new StubWingetService();
+        var drivers = new StubDriverService();
+        var viewModel = CreateViewModel(scanService, winget: winget, drivers: drivers);
+
+        viewModel.CheckAll();
+        await WaitUntilAsync(() => viewModel.State == UpdateCenterState.Ready);
+
+        foreach (var section in viewModel.Sections)
+            foreach (var item in section.Items)
+                item.IsSelected = true;
+
+        await viewModel.UpdateSelectedAsync();
+
+        Assert.Equal(1, winget.UpgradeCalls);
+        Assert.Equal(1, drivers.InstallCalls);
     }
 
     private static async Task WaitUntilAsync(Func<bool> condition)

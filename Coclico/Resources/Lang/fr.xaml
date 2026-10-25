@@ -310,7 +310,6 @@ Estimation : {0} répartis sur {1} catégories.</system:String>
     <system:String x:Key="Help_Version_Title">Version {0} </system:String>
     <system:String x:Key="HomeCustomizer_Title">Personnaliser l&apos;Accueil - Coclico</system:String>
     <system:String x:Key="Installer_AllUpToDate">Tous vos logiciels sont à jour !</system:String>
-    <system:String x:Key="Installer_AllUpToDateDesc">Aucune mise à jour en attente pour votre système.</system:String>
     <system:String x:Key="Installer_AlreadyInstalled">Déjà installé</system:String>
     <system:String x:Key="Installer_AvailableCount">{0} disponible(s)</system:String>
     <system:String x:Key="Installer_ClearBtn">Effacer</system:String>
@@ -323,9 +322,6 @@ Estimation : {0} répartis sur {1} catégories.</system:String>
     <system:String x:Key="Installer_Dialog_UpdateAllTitle">Confirmation de mise à jour globale</system:String>
     <system:String x:Key="Installer_Install">Installer</system:String>
     <system:String x:Key="Installer_InstallSelected">Installer la sélection</system:String>
-    <system:String x:Key="Installer_ScanUpgradesBtn">Lancer l&apos;analyse des MÀJ</system:String>
-    <system:String x:Key="Installer_ScanningUpgrades">Recherche des mises à jour logicielles...</system:String>
-    <system:String x:Key="Installer_ScanningUpgradesDetail">Interrogation du dépôt Microsoft Winget...</system:String>
     <system:String x:Key="Installer_SearchAnyApp">Rechercher n&apos;importe quel logiciel</system:String>
     <system:String x:Key="Installer_SearchAnyAppDesc">Tapez le nom d&apos;un logiciel (ex: Steam, VLC, Chrome, Discord, Blender, Spotify, Git, 7-Zip...) puis appuyez sur Entrée ou cliquez sur Rechercher.</system:String>
     <system:String x:Key="Installer_SearchBtn">Rechercher</system:String>
@@ -353,11 +349,7 @@ Estimation : {0} répartis sur {1} catégories.</system:String>
     <system:String x:Key="Apps_WingetReady">WinGet prêt - installation possible</system:String>
     <system:String x:Key="Apps_WingetMissing">WinGet absent - réparation nécessaire</system:String>
     <system:String x:Key="Apps_WingetRepair">Réparer WinGet</system:String>
-    <system:String x:Key="Apps_TabUpdates">Mises à jour</system:String>
     <system:String x:Key="Installer_Title">Installeur Rapide</system:String>
-    <system:String x:Key="Installer_UpdateBtn">Mettre à jour</system:String>
-    <system:String x:Key="Installer_UpgradeAll">Tout mettre à jour</system:String>
-    <system:String x:Key="Installer_UpgradesTitle">Mises à jour des applications installées</system:String>
     <system:String x:Key="MainWindow_DashboardLoadError">Impossible de charger le tableau de bord. Veuillez redémarrer l&apos;application.</system:String>
     <system:String x:Key="MainWindow_ElevateAdminFailed">L&apos;élévation administrateur n&apos;a pas pu être effectuée ou a été refusée.</system:String>
     <system:String x:Key="MainWindow_ElevateAdminPrompt">Voulez-vous relancer Coclico avec les privilèges Administrateur pour débloquer toutes les fonctionnalités système ?</system:String>
@@ -1085,3 +1077,4 @@ Estimation : {0} répartis sur {1} catégories.</system:String>
     <system:String x:Key="Menu_Diagnostics">Diagnostic du PC</system:String>
     <system:String x:Key="Menu_UpdateCenter">Mises à jour</system:String>
 </ResourceDictionary>
+

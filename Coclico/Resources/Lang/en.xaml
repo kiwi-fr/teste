@@ -310,7 +310,6 @@ Estimated: {0} across {1} categories.</system:String>
     <system:String x:Key="Help_Version_Title">Version {0}</system:String>
     <system:String x:Key="HomeCustomizer_Title">Customize Home - Coclico</system:String>
     <system:String x:Key="Installer_AllUpToDate">All your software is up to date!</system:String>
-    <system:String x:Key="Installer_AllUpToDateDesc">No pending updates or patches for your system.</system:String>
     <system:String x:Key="Installer_AlreadyInstalled">Already installed</system:String>
     <system:String x:Key="Installer_AvailableCount">{0} available</system:String>
     <system:String x:Key="Installer_ClearBtn">Clear</system:String>
@@ -323,9 +322,6 @@ Estimated: {0} across {1} categories.</system:String>
     <system:String x:Key="Installer_Dialog_UpdateAllTitle">Bulk update confirmation</system:String>
     <system:String x:Key="Installer_Install">Install</system:String>
     <system:String x:Key="Installer_InstallSelected">Install Selection</system:String>
-    <system:String x:Key="Installer_ScanUpgradesBtn">Start Update Scan</system:String>
-    <system:String x:Key="Installer_ScanningUpgrades">Checking for software updates...</system:String>
-    <system:String x:Key="Installer_ScanningUpgradesDetail">Querying Microsoft Winget repository...</system:String>
     <system:String x:Key="Installer_SearchAnyApp">Search for any software</system:String>
     <system:String x:Key="Installer_SearchAnyAppDesc">Type a software name (e.g. Steam, VLC, Chrome, Discord, Blender, Spotify, Git, 7-Zip...) then press Enter or click Search.</system:String>
     <system:String x:Key="Installer_SearchBtn">Search</system:String>
@@ -353,11 +349,7 @@ Estimated: {0} across {1} categories.</system:String>
     <system:String x:Key="Apps_WingetReady">WinGet ready - installation available</system:String>
     <system:String x:Key="Apps_WingetMissing">WinGet missing - repair required</system:String>
     <system:String x:Key="Apps_WingetRepair">Repair WinGet</system:String>
-    <system:String x:Key="Apps_TabUpdates">Updates</system:String>
     <system:String x:Key="Installer_Title">Installer &amp; Updates</system:String>
-    <system:String x:Key="Installer_UpdateBtn">Update</system:String>
-    <system:String x:Key="Installer_UpgradeAll">Update All</system:String>
-    <system:String x:Key="Installer_UpgradesTitle">Installed Application Updates</system:String>
     <system:String x:Key="MainWindow_DashboardLoadError">Unable to load the dashboard. Please restart the application.</system:String>
     <system:String x:Key="MainWindow_ElevateAdminFailed">Administrator elevation could not be performed or was denied.</system:String>
     <system:String x:Key="MainWindow_ElevateAdminPrompt">Do you want to restart Coclico with Administrator privileges to unlock all system features?</system:String>
@@ -1085,3 +1077,4 @@ Estimated: {0} across {1} categories.</system:String>
     <system:String x:Key="Menu_Diagnostics">PC Diagnostics</system:String>
     <system:String x:Key="Menu_UpdateCenter">Updates</system:String>
 </ResourceDictionary>
+
