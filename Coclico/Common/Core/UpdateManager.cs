@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -261,6 +262,22 @@ public class UpdateManager(ILogger<UpdateManager> logger)
             {
                 _logger.LogError($"Refusing to launch an installer whose file version does not match {expectedVersion}.");
                 return false;
+            }
+
+            // Intégrité ≠ identité : le SHA-256 vérifié ci-dessus prouve que le fichier n'a pas été
+            // modifié depuis la publication de la release, mais pas QUI l'a produit. La signature
+            // Authenticode (WinVerifyTrust) atteste l'identité de l'éditeur du binaire. Tant que les
+            // releases ne sont pas toutes signées, on reste en mode avertissement : mettre
+            // EnforceAuthenticodeSignature à true dès que la signature de code est en place.
+            if (!IsAuthenticodeValid(fullPath))
+            {
+                if (EnforceAuthenticodeSignature)
+                {
+                    _logger.LogError("Refusing to launch an unsigned or invalidly signed installer.");
+                    return false;
+                }
+
+                _logger.LogWarning("Installer is not Authenticode-signed; proceeding (SHA-256 integrity verified only).");
             }
 
             _logger.LogInformation($"Launching verified installer: {fullPath}");
@@ -563,6 +580,53 @@ public class UpdateManager(ILogger<UpdateManager> logger)
             return false;
         }
     }
+
+    /// <summary>
+    /// Vérifie la signature Authenticode d'un fichier via WinVerifyTrust. Retourne false si le
+    /// fichier n'est pas signé, ou si la signature ou le certificat sont invalides/non approuvés.
+    /// </summary>
+    private static bool IsAuthenticodeValid(string filePath)
+    {
+        try
+        {
+            WinTrustFileInfo info = new()
+            {
+                cbStruct = (uint)Marshal.SizeOf<WinTrustFileInfo>(),
+                pcwszFilePath = filePath
+            };
+            Guid action = WinTrustActionGenericVerifyV2;
+            return WinVerifyTrust(IntPtr.Zero, ref action, ref info) == 0;
+        }
+        catch (Exception ex) when (ex is not OutOfMemoryException)
+        {
+            LoggingService.LogException(ex, "UpdateManager.IsAuthenticodeValid");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// false = simple avertissement (releases actuelles non signées) ; true = refus de lancer un
+    /// installateur non signé ou mal signé. À basculer à true une fois la signature de code en place.
+    /// </summary>
+    // static readonly (et non const) : le compilateur ne replie pas la branche de refus ci-dessus,
+    // qui resterait sinon du code inatteignable (CS0162) tant que la valeur reste false.
+    private static readonly bool EnforceAuthenticodeSignature = false;
+
+    private static readonly Guid WinTrustActionGenericVerifyV2 = new("00AAC56B-CD44-11d0-8CC2-00C04FC295EE");
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    private struct WinTrustFileInfo
+    {
+        public uint cbStruct;
+        public IntPtr hFile;
+        [MarshalAs(UnmanagedType.LPWStr)]
+        public string pcwszFilePath;
+        public IntPtr pgKnownSubject;
+    }
+
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+    [DllImport("wintrust.dll", ExactSpelling = true, SetLastError = false)]
+    private static extern uint WinVerifyTrust([In] IntPtr hwnd, [In] ref Guid pgActionId, [In] ref WinTrustFileInfo pWVTData);
 }
 
 public class GitHubRelease

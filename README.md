@@ -133,6 +133,7 @@ Three complementary modes:
 - Manual purge with several profiles: quick, normal, deep, smart;
 - History and total memory freed since the session started;
 - **Smart automatic cleaning**: by interval, by usage threshold, or hybrid. The foreground application is protected: Coclico never purges what you are currently using.
+- **How this works, honestly**: purging asks Windows to trim the working sets of background processes (the foreground app is protected). Windows manages memory on its own: freed RAM is not a speed gain in itself, and trimmed pages can be reloaded when you reopen an app. Use it to release memory pressure before a game or a heavy task — not as a magic booster.
 
 ### Network Settings - nine useful settings, zero placebo
 
@@ -201,7 +202,7 @@ Some available packs: Gaming Pack, Controller Pack, GPU Drivers Pack, Browsers P
 **Example: play with a controller outside Steam.** The Controller Pack sets up everything for a DualShock 4 or a DualSense:
 
 1. **DS4Windows**: the software that configures the controller (vibration, gyroscope, per-game profiles). Downloaded from its official GitHub repository.
-2. **ViGEmBus**: the virtual controller driver. It makes Windows believe an Xbox controller is plugged in.
+2. **ViGEmBus**: the virtual controller driver. It makes Windows believe an Xbox controller is plugged in. (Upstream project retired by its author in 2023: still functional, but no longer updated.)
 3. **HidHide**: hides the physical controller. Without it, some games see the controller twice.
 
 One click, and all three are installed in the right order. The same principle applies to every pack.
@@ -308,7 +309,7 @@ Coclico/                 WPF application
   Common/                Shared services (core, diagnostics, execution, UI)
   Modules/               Home, AI, cleaning, network, power, disk, programs…
   Resources/             Themes, languages and icons
-Coclico.Installer/       Standalone installer (built by the script, outside the solution)
+Coclico.InstallerAot/    Standalone installer (built by the script, outside the solution)
 Coclico.Tests/           Unit and XAML validation tests
 installer/               Installer build script
 docs/                    Screenshots used by the READMEs

@@ -8,48 +8,63 @@ namespace Coclico.Services;
 
 public static class MemoryCleanerService
 {
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll")]
     private static extern bool SetProcessWorkingSetSize(IntPtr hProcess, IntPtr dwMin, IntPtr dwMax);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll")]
     private static extern IntPtr OpenProcess(uint dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll")]
     private static extern bool CloseHandle(IntPtr hObject);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("ntdll.dll", EntryPoint = "NtSetSystemInformation")]
     private static extern int NtSetSystemInformationInt(int SystemInformationClass, ref int SystemInformation, int SystemInformationLength);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool SetSystemFileCacheSize(IntPtr MinimumFileCacheSize, IntPtr MaximumFileCacheSize, uint Flags);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("advapi32.dll")]
     private static extern int RegFlushKey(IntPtr hKey);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("dnsapi.dll")]
     private static extern bool DnsFlushResolverCache();
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern IntPtr GetProcessHeap();
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern UIntPtr HeapCompact(IntPtr hHeap, uint dwFlags);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("user32.dll", SetLastError = true)]
     private static extern bool OpenClipboard(IntPtr hWndNewOwner);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("user32.dll")]
     private static extern bool EmptyClipboard();
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("user32.dll")]
     private static extern bool CloseClipboard();
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("user32.dll", SetLastError = true)]
     private static extern IntPtr GetForegroundWindow();
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("user32.dll")]
     private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("user32.dll")]
     private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
@@ -75,9 +90,11 @@ public static class MemoryCleanerService
         catch (Exception ex) when (ex is not System.OutOfMemoryException) { return -1; }
     }
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("iphlpapi.dll", SetLastError = true)]
     private static extern int FlushIpNetTable(uint dwIfIndex);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool GlobalMemoryStatusEx([In, Out] ref MEMORYSTATUSEX lpBuffer);
@@ -104,12 +121,15 @@ public static class MemoryCleanerService
         public int Attr;
     }
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
     private static extern bool OpenProcessToken(IntPtr h, int acc, ref IntPtr phtok);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Auto)]
     private static extern bool LookupPrivilegeValue(string? host, string name, ref long pluid);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
     private static extern bool AdjustTokenPrivileges(IntPtr htok, bool disall, ref TokPriv1Luid newst, int len, IntPtr prev, IntPtr relen);
 
@@ -537,6 +557,7 @@ public static class MemoryCleanerService
     [StructLayout(LayoutKind.Sequential)]
     private struct FILETIME { public uint Low; public uint High; }
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool GetSystemTimes(
         out FILETIME idleTime, out FILETIME kernelTime, out FILETIME userTime);

@@ -133,6 +133,7 @@ Trois modes complémentaires :
 - Purge manuelle avec plusieurs profils : rapide, normal, profond, intelligent ;
 - Historique et total de mémoire libérée depuis le début de la session ;
 - **Nettoyage automatique intelligent** : par intervalle, par seuil d'utilisation, ou hybride. L'application au premier plan est protégée : Coclico ne purge jamais ce que tu es en train d'utiliser.
+- **Comment ça marche, honnêtement** : la purge demande à Windows de réduire le working set des processus en arrière-plan (l'application au premier plan est protégée). Windows gère la mémoire tout seul : la RAM libérée n'est pas un gain de vitesse en soi, et les pages réduites peuvent être rechargées à la réutilisation. Sers-t'en pour libérer de la mémoire avant un jeu ou une tâche lourde — pas comme un accélérateur magique.
 
 ### Réglage Réseau - neuf réglages utiles, zéro placebo
 
@@ -201,7 +202,7 @@ Quelques packs disponibles : Pack Gaming, Pack Manette, Pack Pilotes GPU, Pack N
 **Exemple : jouer à la manette hors Steam.** Le Pack Manette prépare tout pour une DualShock 4 ou une DualSense :
 
 1. **DS4Windows** : le logiciel qui configure la manette (vibration, gyroscope, profils par jeu). Téléchargé depuis son dépôt GitHub officiel.
-2. **ViGEmBus** : le pilote de manette virtuelle. C'est lui qui fait croire à Windows qu'une manette Xbox est branchée.
+2. **ViGEmBus** : le pilote de manette virtuelle. C'est lui qui fait croire à Windows qu'une manette Xbox est branchée. (Projet retiré par son auteur en 2023 : fonctionnel, mais plus mis à jour.)
 3. **HidHide** : masque la manette physique. Sans lui, certains jeux voient la manette deux fois.
 
 Un seul clic, et les trois sont installés dans le bon ordre. Le même principe s'applique à tous les packs.
@@ -308,7 +309,7 @@ Coclico/                 Application WPF
   Common/                Services partagés (noyau, diagnostics, exécution, interface)
   Modules/               Accueil, IA, nettoyage, réseau, alimentation, disque, applications…
   Resources/             Thèmes, langues et icônes
-Coclico.Installer/       Installeur autonome (compilé par le script, hors solution)
+Coclico.InstallerAot/    Installeur autonome (compilé par le script, hors solution)
 Coclico.Tests/           Tests unitaires et validation XAML
 installer/               Script de génération de l'installeur
 docs/                    Captures d'écran des README

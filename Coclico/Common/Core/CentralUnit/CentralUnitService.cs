@@ -39,6 +39,10 @@ public sealed class CentralUnitService : IDisposable
     private const uint PowerThrottlingIgnoreTimerResolution = 0x4;
     private const uint MemoryPriorityVeryLow = 1;
     private const uint MemoryPriorityNormal = 5;
+    // HYSTÉRÉSIS asymétrique : entrée en mode « pression externe » après 3 échantillons CPU
+    // consécutifs à 85 % ou plus (ou RAM ≥ 92 %), sortie après 2 échantillons consécutifs sous
+    // 60 %. L'écart entre les seuils d'entrée et de sortie empêche la CentralUnit d'osciller
+    // quand la charge tourne autour d'un seul seuil.
     private const int ExternalPressureCpuEnterPercent = 85;
     private const int ExternalPressureCpuExitPercent = 60;
     private const int ExternalPressureRamPercent = 92;
@@ -249,6 +253,10 @@ public sealed class CentralUnitService : IDisposable
     {
         try
         {
+            // POURQUOI EcoQoS : PowerThrottling demande au CPU de downclocker ce thread (EcoQoS)
+            // et d'ignorer la résolution des timers ; la MemoryPriority très basse en fait une
+            // cible prioritaire du trimmer mémoire de Windows. Sans ce dosage, la CentralUnit
+            // deviendrait elle-même une charge de fond contraproduite.
             PowerThrottlingState state = new PowerThrottlingState
             {
                 Version = PowerThrottlingStateVersion,
@@ -514,30 +522,37 @@ public sealed class CentralUnitService : IDisposable
         public uint MemoryPriority;
     }
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool GetSystemTimes(out NativeFileTime idleTime, out NativeFileTime kernelTime, out NativeFileTime userTime);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool GlobalMemoryStatusEx(ref MemoryStatus buffer);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool SetProcessInformation(IntPtr process, int processInformationClass, ref PowerThrottlingState processInformation, int processInformationSize);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool SetProcessInformation(IntPtr process, int processInformationClass, ref MemoryPriorityInformation processInformation, int processInformationSize);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool SetThreadInformation(IntPtr thread, int threadInformationClass, ref PowerThrottlingState threadInformation, int threadInformationSize);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool SetThreadInformation(IntPtr thread, int threadInformationClass, ref MemoryPriorityInformation threadInformation, int threadInformationSize);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll")]
     private static extern IntPtr GetCurrentThread();
 }

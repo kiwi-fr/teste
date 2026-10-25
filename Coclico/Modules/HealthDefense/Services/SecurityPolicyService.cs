@@ -29,6 +29,12 @@ public sealed class SecurityPolicyService : ISecurityPolicy
 
     private readonly SemaphoreSlim _lock = new(1, 1);
 
+    // FILTRAGE HYBRIDE — pourquoi une liste noire de motifs : elle est contournable par
+    // construction (obfuscation, alias, outils absents de la liste). Elle reste utile comme
+    // garde-fou contre les commandes destructives courantes, et reste extensible via
+    // security-policy.json — qui ne peut que RAJOUTER des motifs, jamais en retirer.
+    // Le mécanisme robuste reste la liste blanche IsApplicationAllowed : à terme, la liste
+    // noire devrait migrer vers une whitelist d'opérations explicitement autorisées.
     private static readonly IReadOnlyList<string> _defaultCmdPatterns =
     [
         "format ", "format/", "rd /s /q", "rmdir /s /q",
@@ -37,6 +43,7 @@ public sealed class SecurityPolicyService : ISecurityPolicy
         "reg delete hklm", "reg delete hkcc",
         "net user", "net localgroup administrators",
         "icacls", "takeown", "cacls", "sc delete", "sc stop",
+        "rd /s", "rmdir /s", "del /f", "del /q", "erase /s", "vssadmin delete", "wbadmin delete", "reg delete hkcr",
     ];
 
     private static readonly IReadOnlyList<string> _defaultPsPatterns =
@@ -55,11 +62,13 @@ public sealed class SecurityPolicyService : ISecurityPolicy
         "disable-windowsoptionalfeature",
         "net user", "net localgroup", "add-localgroup",
         "new-localuser", "remove-itemproperty",
+        "remove-item -recurse:$true", "ri -r", "rm -r", "rm -rec", "del -r", "erase -r", "-ec ", "-encoded ", "downloaddata", "start-bitstransfer", "certutil -urlcache", "bitsadmin",
     ];
 
     private static readonly IReadOnlyList<string> _defaultPsWildcards =
     [
         @"set-itemproperty.*hklm",
+        @"set-itemproperty.*hkcr", @"set-itemproperty.*hkcc", @"new-itemproperty.*hkcr", @"remove-itemproperty.*hkcr",
     ];
 
     private static readonly IReadOnlyList<string> _defaultProtectedPaths =
@@ -140,7 +149,7 @@ public sealed class SecurityPolicyService : ISecurityPolicy
 
         foreach (string p in _cmdPatterns)
         {
-            if (collapsed.Contains(p, StringComparison.Ordinal))
+            if (collapsed.Contains(p, StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
@@ -156,7 +165,7 @@ public sealed class SecurityPolicyService : ISecurityPolicy
     {
         foreach (string p in _psPatterns)
         {
-            if (normalizedPs.Contains(p, StringComparison.Ordinal))
+            if (normalizedPs.Contains(p, StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
@@ -177,7 +186,7 @@ public sealed class SecurityPolicyService : ISecurityPolicy
     {
         foreach (string seg in _protectedPaths)
         {
-            if (lowerCasePath.Contains(seg, StringComparison.Ordinal))
+            if (lowerCasePath.Contains(seg, StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }

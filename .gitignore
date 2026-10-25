@@ -86,3 +86,10 @@ appsettings.Development.json
 .worktrees/
 
 alertes*.json
+
+# Rapports d'audit locaux (Audit-Complet.ps1 / Lancer-Audit.ps1)
+audit-reports/
+audit-solution-*.txt
+
+# Projets temporaires générés par le compilateur XAML WPF
+*_wpftmp.csproj

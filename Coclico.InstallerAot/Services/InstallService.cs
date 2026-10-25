@@ -28,6 +28,7 @@ public static class InstallService
 
     private const uint MOVEFILE_DELAY_UNTIL_REBOOT = 0x4;
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool MoveFileEx(string lpExistingFileName, string? lpNewFileName, uint dwFlags);

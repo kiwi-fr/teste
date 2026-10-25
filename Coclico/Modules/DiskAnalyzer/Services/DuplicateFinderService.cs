@@ -339,6 +339,7 @@ public static class DuplicateFinderService
         public uint FileIndexLow;
     }
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool GetFileInformationByHandle(SafeFileHandle handle, out ByHandleFileInformation information);

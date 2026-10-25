@@ -15,6 +15,7 @@ internal static class NativeDiag
         public int BatteryFullLifeTime;
     }
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", SetLastError = false)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool GetSystemPowerStatus(out SYSTEM_POWER_STATUS status);

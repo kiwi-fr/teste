@@ -16,6 +16,7 @@ public class FileIconConverter : IValueConverter
     private static readonly LruIconCache _cache = new(MaxCacheSize);
     private static readonly BitmapSource _placeholder = CreatePlaceholder();
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("gdi32.dll")]
     private static extern bool DeleteObject(IntPtr hObject);
 

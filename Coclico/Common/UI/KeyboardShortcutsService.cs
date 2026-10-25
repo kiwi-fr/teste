@@ -66,7 +66,9 @@ public sealed class KeyboardShortcutsService : IDisposable
     private HwndSource? _hwndSource;
     private int _nextId = 9000;
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("user32.dll")] private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("user32.dll")] private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
     public event Action<KeyboardShortcut>? ShortcutTriggered;
