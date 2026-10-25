@@ -7,7 +7,9 @@ param(
     [switch]$IncludeCuda,
     [switch]$SkipClean,
     [switch]$SkipPortable,
-    [string]$OutputDir = "artifacts\installer"
+    [string]$OutputDir = "artifacts\installer",
+    # Mode CI (GitHub Actions) : desactive les prompts interactifs et le "Appuyez sur Entree" final.
+    [switch]$CI
 )
 
 $ErrorActionPreference = "Stop"
@@ -17,23 +19,30 @@ chcp 65001 > $null 2>&1
 
 $autoLang = if ($PSUICulture -like "fr*") { "FR" } else { "EN" }
 
-Write-Host ""
-Write-Host "  ==============================" -ForegroundColor Cyan
-Write-Host "        C O C L I C O           " -ForegroundColor Cyan
-Write-Host "     Installer Builder          " -ForegroundColor Cyan
-Write-Host "  ==============================" -ForegroundColor Cyan
-Write-Host ""
-Write-Host "  1. Francais" -ForegroundColor White
-Write-Host "  2. English" -ForegroundColor White
-Write-Host ""
-Write-Host "  [$autoLang]" -ForegroundColor DarkGray -NoNewline
-$langChoice = Read-Host " Choix / Choice (1-2, Entree = auto)"
-Write-Host ""
+if ($CI) {
+    # En CI, pas de terminal interactif : langue automatique, aucun prompt.
+    $Lang = $autoLang
+    Write-Host "[CI] Mode non interactif : langue = $Lang"
+}
+else {
+    Write-Host ""
+    Write-Host "  ==============================" -ForegroundColor Cyan
+    Write-Host "        C O C L I C O           " -ForegroundColor Cyan
+    Write-Host "     Installer Builder          " -ForegroundColor Cyan
+    Write-Host "  ==============================" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "  1. Francais" -ForegroundColor White
+    Write-Host "  2. English" -ForegroundColor White
+    Write-Host ""
+    Write-Host "  [$autoLang]" -ForegroundColor DarkGray -NoNewline
+    $langChoice = Read-Host " Choix / Choice (1-2, Entree = auto)"
+    Write-Host ""
 
-switch ($langChoice) {
-    "1" { $Lang = "FR" }
-    "2" { $Lang = "EN" }
-    default { $Lang = $autoLang }
+    switch ($langChoice) {
+        "1" { $Lang = "FR" }
+        "2" { $Lang = "EN" }
+        default { $Lang = $autoLang }
+    }
 }
 
 function T {
@@ -418,12 +427,17 @@ catch {
     Write-Host "------------------------------------------" -ForegroundColor DarkGray
     Write-Host ""
     Write-Host "$(T "CONSEILS :" "HINTS:")" -ForegroundColor Cyan
-    Write-Host "  - dotnet build Coclico.sln" -ForegroundColor Cyan
+    Write-Host "  - dotnet build Coclico.slnx" -ForegroundColor Cyan
     Write-Host "  - dotnet --list-sdks" -ForegroundColor Cyan
     Write-Host "  $(T "- Relancer sans -SkipPublish" "- Retry without -SkipPublish")" -ForegroundColor Cyan
     Write-Host ""
+    # Important : sans exit 1, PowerShell renvoie 0 et la CI croit que le build a reussi.
+    $global:LASTEXITCODE = 1
+    exit 1
 }
 finally {
     Pop-Location -ErrorAction SilentlyContinue
-    Read-Host (T "Appuyez sur Entree pour fermer..." "Press Enter to close...") | Out-Null
+    if (-not $CI) {
+        Read-Host (T "Appuyez sur Entree pour fermer..." "Press Enter to close...") | Out-Null
+    }
 }

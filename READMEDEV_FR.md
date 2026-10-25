@@ -60,7 +60,7 @@ Réglages de build notables dans `Coclico/Coclico.csproj` :
 - `EnableWindowsTargeting` : la CI peut compiler la cible Windows depuis un agent non-Windows.
 - `InternalsVisibleTo("Coclico.Tests")` : les tests atteignent les membres `internal`.
 
-La solution (`Coclico.slnx`, aussi mirroir en `Coclico.sln`) contient **deux projets** :
+La solution (`Coclico.slnx`) contient **deux projets** :
 
 ```text
 Coclico/         Application WPF (l'application principale)
@@ -417,7 +417,7 @@ dotnet test Coclico.slnx --configuration Release --no-build --no-restore
 
 ### Politique zéro warning
 
-Les trois projets (`Coclico`, `Coclico.Tests`, `Coclico.InstallerAot`) définissent `<TreatWarningsAsErrors>true</TreatWarningsAsErrors>`, et `installer/build-installer.ps1` passe `-warnaserror` à chaque `dotnet publish`. Tout warning fait donc échouer le build et l'installeur. Pour un balayage complet (les builds incrémentaux ne réaffichent pas les warnings existants) : `dotnet build Coclico.sln -t:Rebuild -warnaserror`, en Debug et en Release.
+Les trois projets (`Coclico`, `Coclico.Tests`, `Coclico.InstallerAot`) définissent `<TreatWarningsAsErrors>true</TreatWarningsAsErrors>`, et `installer/build-installer.ps1` passe `-warnaserror` à chaque `dotnet publish`. Tout warning fait donc échouer le build et l'installeur. Pour un balayage complet (les builds incrémentaux ne réaffichent pas les warnings existants) : `dotnet build Coclico.slnx -t:Rebuild -warnaserror`, en Debug et en Release.
 
 **Exception documentée — IL3053 dans `Coclico.InstallerAot`** : cet avertissement NativeAOT provient de `MicroCom.Runtime` (dépendance tierce d'Avalonia, COM interop non provable statiquement). Audit : les chemins COM concernés ne sont pas utilisés au runtime par l'installeur ; l'avertissement est supprimé de façon ciblée via `<NoWarn>IL3053</NoWarn>` dans `Coclico.InstallerAot.csproj`. Tout autre code reste une erreur. Le code source est volontairement sans aucun commentaire ; cette justification vit ici, dans la documentation.
 
@@ -438,8 +438,8 @@ Ce que fait `installer/build-installer.ps1`, pas à pas (console interactive FR/
 2. **Tests d'abord** : `dotnet test` avant tout empaquetage (`-SkipTests` pour sauter). L'installeur n'est jamais construit sur une suite rouge.
 3. **Nettoyage** : `publish/` et `artifacts/installer_build` sont vidés (`-SkipClean`).
 4. **Publish de Coclico** : `dotnet publish` win-x64, **dépendant du framework** (`--self-contained false`), sans single file, sans PDB → `publish/`.
-5. **Payload** : `publish/` est zippé en `payload.zip` dans `Coclico.Installer/`. Exclus : `.pdb` et, sauf `-IncludeCuda`, les fichiers du runtime CUDA. Sans les DLL CUDA, LLamaSharp utilise proprement le backend CPU ; les utilisateurs NVIDIA téléchargent le runtime CUDA à l'installation c'est ainsi que l'installeur reste léger.
-6. **Installeur final** : `Coclico.Installer` est publié en SingleFile autonome compressé avec `payload.zip` embarqué → `artifacts/installer/Coclico-<version>.exe` (variante `-Full-CUDA`), SHA-256 affiché.
+5. **Payload** : `publish/` est zippé en `payload.zip` dans `Coclico.InstallerAot/` (artefact de build — à ne jamais committer, il est gitignoré). Exclus : `.pdb` et, sauf `-IncludeCuda`, les fichiers du runtime CUDA. Sans les DLL CUDA, LLamaSharp utilise proprement le backend CPU ; les utilisateurs NVIDIA téléchargent le runtime CUDA à l'installation c'est ainsi que l'installeur reste léger.
+6. **Installeur final** : `Coclico.InstallerAot` est publié en exe natif unique avec `payload.zip` embarqué → `artifacts/installer/Coclico-<version>.exe` (variante `-Full-CUDA`), SHA-256 affiché.
 7. `-SkipPublish` réutilise le dossier `publish/` existant (c'est ce que fait la CI de release).
 
 À l'installation, le projet autonome `Coclico.Installer` prend le relais (`Services/`) :

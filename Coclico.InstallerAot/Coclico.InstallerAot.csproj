@@ -14,12 +14,10 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>Coclico.Installer</RootNamespace>
     <AssemblyName>Coclico.Installer</AssemblyName>
-
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>2.1.0</Version>
     <Product>Coclico Setup</Product>
     <Description>Installeur Coclico — Avalonia NativeAOT</Description>
-    <Copyright>© 2026 Coclico</Copyright>
+    <Copyright>© $([System.DateTime]::UtcNow.Year) Coclico</Copyright>
 
     <SatelliteResourceLanguages>fr</SatelliteResourceLanguages>
     <DebugType>None</DebugType>

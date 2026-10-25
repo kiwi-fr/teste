@@ -42,12 +42,13 @@ jobs:
 
       - name: Build installer
         shell: pwsh
-        run: ./installer/build-installer.ps1
+        run: ./installer/build-installer.ps1 -CI
 
       - name: Préparer les artefacts et générer SHA256SUMS
         shell: pwsh
         run: |
-          $searchDirs = @('./installer/output', './publish')
+          # Le script build-installer.ps1 écrit ses sorties dans artifacts/installer
+          $searchDirs = @('./artifacts/installer', './installer/output')
           $files = @()
           foreach ($dir in $searchDirs) {
             if (Test-Path $dir) {

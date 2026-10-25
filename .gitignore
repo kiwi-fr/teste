@@ -43,7 +43,10 @@ artifacts/
 *.pubxml.user
 
 # Installer build intermediates (produced by installer/build-installer.ps1)
-Coclico.Installer/payload.zip
+# ATTENTION : le projet s'appelle Coclico.InstallerAot (l'ancien chemin
+# Coclico.Installer/ ne correspondait a rien, et payload.zip etait committe).
+Coclico.InstallerAot/payload.zip
+Coclico.InstallerAot/uninstaller.bin
 Coclico.Installer/uninstaller.bin
 
 # Local backups (git history is the backup)
