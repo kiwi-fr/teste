@@ -14,15 +14,15 @@ public class InstallConfig
     public bool CreateStartMenuShortcut { get; set; } = true;
     public bool AutoLaunchOnFinish { get; set; } = true;
 
-    public bool InstallCuda { get; set; } = false;
-    public bool InstallAiModel { get; set; } = false;
+    public bool InstallCuda { get; set; }
+    public bool InstallAiModel { get; set; }
     public InstallerAiModel SelectedAiModel { get; set; } = InstallerAiCatalog.Models[0];
 
-    public bool HasNvidiaGpu { get; set; } = false;
+    public bool HasNvidiaGpu { get; set; }
     public string GpuName { get; set; } = string.Empty;
-    public bool HasDotNet10 { get; set; } = false;
+    public bool HasDotNet10 { get; set; }
     public string DotNetVersion { get; set; } = string.Empty;
-    public long AvailableDiskSpaceBytes { get; set; } = 0;
+    public long AvailableDiskSpaceBytes { get; set; }
     public string TargetDriveLetter { get; set; } = "C:";
 
     public int CalculateRequiredSpaceMb()

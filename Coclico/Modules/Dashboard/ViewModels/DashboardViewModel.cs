@@ -521,7 +521,7 @@ public partial class DashboardViewModel : INotifyPropertyChanged, IDisposable
 
     protected void OnPropertyChanged([CallerMemberName] string? name = null)
     {
-        if (Application.Current?.Dispatcher?.CheckAccess() == true)
+        if (Application.Current?.Dispatcher?.CheckAccess() is true)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }

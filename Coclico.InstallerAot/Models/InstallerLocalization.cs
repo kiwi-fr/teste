@@ -9,7 +9,7 @@ public enum InstallerLanguage
     English
 }
 
-public class InstallerLocalization
+public static class InstallerLocalization
 {
     public static InstallerLanguage CurrentLanguage { get; set; } =
         System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("fr", StringComparison.OrdinalIgnoreCase)

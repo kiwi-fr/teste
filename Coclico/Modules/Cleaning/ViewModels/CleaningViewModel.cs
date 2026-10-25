@@ -446,7 +446,7 @@ public partial class CleaningViewModel : INotifyPropertyChanged
 
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
-        if (Application.Current?.Dispatcher?.CheckAccess() == true)
+        if (Application.Current?.Dispatcher?.CheckAccess() is true)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

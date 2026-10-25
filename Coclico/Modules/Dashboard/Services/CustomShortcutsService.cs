@@ -240,7 +240,7 @@ public sealed class CustomShortcutsService
 
         ISecurityPolicy? policy = ServiceContainer.GetOptional<ISecurityPolicy>();
 
-        if (policy?.IsCommandBlocked(trimmed.ToLowerInvariant()) == true)
+        if (policy?.IsCommandBlocked(trimmed.ToLowerInvariant()) is true)
         {
             return false;
         }

@@ -35,22 +35,22 @@ public class AppSettings
     public string WingetScope { get; set; } = "machine";
 
     [JsonPropertyName("launchAtStartup")]
-    public bool LaunchAtStartup { get; set; } = false;
+    public bool LaunchAtStartup { get; set; }
 
     [JsonPropertyName("minimizeToTray")]
-    public bool MinimizeToTray { get; set; } = false;
+    public bool MinimizeToTray { get; set; }
 
     [JsonPropertyName("firstRun")]
     public bool FirstRun { get; set; } = true;
 
     [JsonPropertyName("skipUninstallConfirmation")]
-    public bool SkipUninstallConfirmation { get; set; } = false;
+    public bool SkipUninstallConfirmation { get; set; }
 
     [JsonPropertyName("hasSeenWelcome")]
-    public bool HasSeenWelcome { get; set; } = false;
+    public bool HasSeenWelcome { get; set; }
 
     [JsonPropertyName("hasSeenCoclico20Welcome")]
-    public bool HasSeenCoclico20Welcome { get; set; } = false;
+    public bool HasSeenCoclico20Welcome { get; set; }
 
     [JsonPropertyName("launchMode")]
     public string LaunchMode { get; set; } = "Normal";
@@ -65,7 +65,7 @@ public class AppSettings
     public bool DiagnosticEnableHardwareSensors { get; set; } = true;
 
     [JsonPropertyName("diagnosticEnableLiveMonitoring")]
-    public bool DiagnosticEnableLiveMonitoring { get; set; } = false;
+    public bool DiagnosticEnableLiveMonitoring { get; set; }
 
     [JsonPropertyName("diagnosticHistoryRetentionCount")]
     public int DiagnosticHistoryRetentionCount { get; set; } = 30;
@@ -80,7 +80,7 @@ public class AppSettings
     public int DiagnosticMaxParallelChecks { get; set; } = 3;
 
     [JsonPropertyName("diagnosticEnableExternalBandwidthTest")]
-    public bool DiagnosticEnableExternalBandwidthTest { get; set; } = false;
+    public bool DiagnosticEnableExternalBandwidthTest { get; set; }
 
     [JsonPropertyName("aiIdleTimeoutMinutes")]
     public int AiIdleTimeoutMinutes { get; set; } = 5;
@@ -108,7 +108,7 @@ public class AppSettings
     public int AiGpuLayers { get; set; } = 32;
 
     [JsonPropertyName("autoCleanEnabled")]
-    public bool AutoCleanEnabled { get; set; } = false;
+    public bool AutoCleanEnabled { get; set; }
 
     [JsonPropertyName("autoCleanMode")]
     public string AutoCleanMode { get; set; } = "Interval";
@@ -129,7 +129,7 @@ public class AppSettings
     public string MenuExpandedGroups { get; set; } = "Maintenance,Performance,Applications";
 
     [JsonPropertyName("adaptivePowerEnabled")]
-    public bool AdaptivePowerEnabled { get; set; } = false;
+    public bool AdaptivePowerEnabled { get; set; }
 
     [JsonPropertyName("powerPreferredMode")]
     public string PowerPreferredMode { get; set; } = "Optimal";

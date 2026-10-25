@@ -201,14 +201,14 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
     public string JitterBeforeText => BeforeTest?.JitterDisplay ?? "--";
     public string JitterAfterText => AfterTest?.JitterDisplay ?? "--";
 
-    public string DownloadDeltaText => ComputeDeltaText(BeforeTest?.DownloadSucceeded == true ? BeforeTest.DownloadMbps : null,
-        AfterTest?.DownloadSucceeded == true ? AfterTest.DownloadMbps : null, higherIsBetter: true);
-    public string DownloadDeltaColor => ComputeDeltaColor(BeforeTest?.DownloadSucceeded == true ? BeforeTest.DownloadMbps : null,
-        AfterTest?.DownloadSucceeded == true ? AfterTest.DownloadMbps : null, higherIsBetter: true);
-    public string UploadDeltaText => ComputeDeltaText(BeforeTest?.UploadSucceeded == true ? BeforeTest.UploadMbps : null,
-        AfterTest?.UploadSucceeded == true ? AfterTest.UploadMbps : null, higherIsBetter: true);
-    public string UploadDeltaColor => ComputeDeltaColor(BeforeTest?.UploadSucceeded == true ? BeforeTest.UploadMbps : null,
-        AfterTest?.UploadSucceeded == true ? AfterTest.UploadMbps : null, higherIsBetter: true);
+    public string DownloadDeltaText => ComputeDeltaText(BeforeTest?.DownloadSucceeded is true ? BeforeTest.DownloadMbps : null,
+        AfterTest?.DownloadSucceeded is true ? AfterTest.DownloadMbps : null, higherIsBetter: true);
+    public string DownloadDeltaColor => ComputeDeltaColor(BeforeTest?.DownloadSucceeded is true ? BeforeTest.DownloadMbps : null,
+        AfterTest?.DownloadSucceeded is true ? AfterTest.DownloadMbps : null, higherIsBetter: true);
+    public string UploadDeltaText => ComputeDeltaText(BeforeTest?.UploadSucceeded is true ? BeforeTest.UploadMbps : null,
+        AfterTest?.UploadSucceeded is true ? AfterTest.UploadMbps : null, higherIsBetter: true);
+    public string UploadDeltaColor => ComputeDeltaColor(BeforeTest?.UploadSucceeded is true ? BeforeTest.UploadMbps : null,
+        AfterTest?.UploadSucceeded is true ? AfterTest.UploadMbps : null, higherIsBetter: true);
     public string LatencyDeltaText => ComputeDeltaText(BeforeTest?.LatencyMs, AfterTest?.LatencyMs, higherIsBetter: false);
     public string LatencyDeltaColor => ComputeDeltaColor(BeforeTest?.LatencyMs, AfterTest?.LatencyMs, higherIsBetter: false);
     public string JitterDeltaText => ComputeDeltaText(BeforeTest?.JitterMs, AfterTest?.JitterMs, higherIsBetter: false);

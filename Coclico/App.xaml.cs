@@ -278,7 +278,7 @@ public partial class App : Application
     private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
     {
         if (e.Exception is NullReferenceException &&
-            (e.Exception.StackTrace?.Contains("TitleBar.HwndSourceHook") == true))
+            (e.Exception.StackTrace?.Contains("TitleBar.HwndSourceHook") is true))
         {
             LoggingService.LogDebug($"[App] TitleBar.HwndSourceHook NRE avalée (connue) : {e.Exception.Message}");
             e.Handled = true;

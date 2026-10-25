@@ -72,7 +72,7 @@ public partial class ProfileWindow : Window
         {
             Filter = "Images|*.png;*.jpg;*.jpeg;*.bmp;*.gif|All files|*.*"
         };
-        if (dlg.ShowDialog(this) == true)
+        if (dlg.ShowDialog(this) is true)
         {
             try
             {

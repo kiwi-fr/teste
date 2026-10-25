@@ -15,7 +15,7 @@ public sealed class StartupHealthService
     {
         public bool IsHealthy { get; set; } = true;
         public string Message { get; set; } = string.Empty;
-        public bool RequiresAdmin { get; set; } = false;
+        public bool RequiresAdmin { get; set; }
     }
 
     public async Task<HealthReport> CheckAndRepairAsync(bool autoRepair = false)

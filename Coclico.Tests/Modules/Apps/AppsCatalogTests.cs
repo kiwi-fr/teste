@@ -80,7 +80,7 @@ public sealed class AppsCatalogTests
     {
         List<CatalogApp> apps = LoadCatalog();
         Assert.Contains(apps, a => a.WingetId == "beeradmoore.dlss-swapper");
-        Assert.DoesNotContain(apps, a => a.WingetId?.Contains("beeradmore", StringComparison.OrdinalIgnoreCase) == true);
+        Assert.DoesNotContain(apps, a => a.WingetId?.Contains("beeradmore", StringComparison.OrdinalIgnoreCase) is true);
     }
 
     [Fact]

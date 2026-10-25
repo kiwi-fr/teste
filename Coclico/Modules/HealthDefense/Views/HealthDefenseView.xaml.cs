@@ -19,7 +19,7 @@ public partial class HealthDefenseView : UserControl
         {
             if (e.Action == NotifyCollectionChangedAction.Add && ConsoleListBox.Items.Count > 0)
             {
-                _ = Dispatcher.InvokeAsync(() =>
+                Dispatcher.InvokeAsync(() =>
                 {
                     if (ConsoleListBox.Items.Count > 0)
                     {

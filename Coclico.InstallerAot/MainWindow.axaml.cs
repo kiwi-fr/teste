@@ -136,7 +136,7 @@ public partial class MainWindow : Window
 
             UpdateAiModelSizeDisplay();
 
-            CmbAiModel.IsEnabled = ChkAiModel.IsChecked == true;
+            CmbAiModel.IsEnabled = ChkAiModel.IsChecked is true;
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
@@ -146,7 +146,7 @@ public partial class MainWindow : Window
 
     private void OnAiModelCheckChanged(object? sender, RoutedEventArgs e)
     {
-        CmbAiModel.IsEnabled = ChkAiModel.IsChecked == true;
+        CmbAiModel.IsEnabled = ChkAiModel.IsChecked is true;
         UpdateAiModelSizeDisplay();
         UpdateSpaceCalculations();
     }
@@ -243,8 +243,8 @@ public partial class MainWindow : Window
 
     private void UpdateSpaceCalculations()
     {
-        _config.InstallCuda = ChkCuda.IsChecked == true;
-        _config.InstallAiModel = ChkAiModel.IsChecked == true;
+        _config.InstallCuda = ChkCuda.IsChecked is true;
+        _config.InstallAiModel = ChkAiModel.IsChecked is true;
         int reqMb = _config.CalculateRequiredSpaceMb();
         TxtSpaceRequired.Text = TextFormatService.Format(InstallerLocalization.Get("SpaceRequired"), reqMb);
     }
@@ -356,7 +356,7 @@ public partial class MainWindow : Window
             case 2:
                 ViewStepLicense.IsVisible = true;
                 BtnBack.IsVisible = true;
-                BtnNext.IsEnabled = ChkAcceptLicense.IsChecked == true;
+                BtnNext.IsEnabled = ChkAcceptLicense.IsChecked is true;
                 NavBar.IsVisible = true;
                 break;
             case 3:
@@ -444,14 +444,14 @@ public partial class MainWindow : Window
 
         var compList = new StringBuilder();
         compList.AppendLine("• Application Coclico Core");
-        if (ChkCuda.IsChecked == true)
+        if (ChkCuda.IsChecked is true)
             compList.AppendLine("• Runtime NVIDIA CUDA 12 (~1,2 Go - téléchargé à la demande)");
-        if (ChkAiModel.IsChecked == true)
+        if (ChkAiModel.IsChecked is true)
             compList.AppendLine("• Modèle IA Local Coclico Copilot (~1.1 Go)");
 
-        if (ChkDesktop.IsChecked == true)
+        if (ChkDesktop.IsChecked is true)
             compList.AppendLine("• Raccourci sur le Bureau");
-        if (ChkStartMenu.IsChecked == true)
+        if (ChkStartMenu.IsChecked is true)
             compList.AppendLine("• Entrée dans le Menu Démarrer");
 
         TxtSummaryComponentsList.Text = compList.ToString().TrimEnd();
@@ -487,7 +487,7 @@ public partial class MainWindow : Window
     {
         if (_currentStep == 2)
         {
-            BtnNext.IsEnabled = ChkAcceptLicense.IsChecked == true;
+            BtnNext.IsEnabled = ChkAcceptLicense.IsChecked is true;
         }
     }
 
@@ -528,11 +528,11 @@ public partial class MainWindow : Window
     private async Task StartInstallationAsync()
     {
         _config.InstallPath = TxtInstallPath.Text!;
-        _config.CreateDesktopShortcut = ChkDesktop.IsChecked == true;
-        _config.CreateStartMenuShortcut = ChkStartMenu.IsChecked == true;
-        _config.AutoLaunchOnFinish = ChkAutoLaunch.IsChecked == true;
-        _config.InstallCuda = ChkCuda.IsChecked == true;
-        _config.InstallAiModel = ChkAiModel.IsChecked == true;
+        _config.CreateDesktopShortcut = ChkDesktop.IsChecked is true;
+        _config.CreateStartMenuShortcut = ChkStartMenu.IsChecked is true;
+        _config.AutoLaunchOnFinish = ChkAutoLaunch.IsChecked is true;
+        _config.InstallCuda = ChkCuda.IsChecked is true;
+        _config.InstallAiModel = ChkAiModel.IsChecked is true;
 
         _tipsTimer.Start();
 

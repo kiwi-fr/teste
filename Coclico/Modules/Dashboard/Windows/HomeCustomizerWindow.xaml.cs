@@ -271,12 +271,12 @@ public partial class HomeCustomizerWindow : Window
             return;
         }
 
-        _service.Settings.ShowTileRam = ChkTileRam.IsChecked == true;
-        _service.Settings.ShowTileCleaning = ChkTileCleaning.IsChecked == true;
-        _service.Settings.ShowTilePrograms = ChkTilePrograms.IsChecked == true;
-        _service.Settings.ShowTileInstaller = ChkTileInstaller.IsChecked == true;
-        _service.Settings.ShowTileHealth = ChkTileHealth.IsChecked == true;
-        _service.Settings.ShowTileNetwork = ChkTileNetwork.IsChecked == true;
+        _service.Settings.ShowTileRam = ChkTileRam.IsChecked is true;
+        _service.Settings.ShowTileCleaning = ChkTileCleaning.IsChecked is true;
+        _service.Settings.ShowTilePrograms = ChkTilePrograms.IsChecked is true;
+        _service.Settings.ShowTileInstaller = ChkTileInstaller.IsChecked is true;
+        _service.Settings.ShowTileHealth = ChkTileHealth.IsChecked is true;
+        _service.Settings.ShowTileNetwork = ChkTileNetwork.IsChecked is true;
         _service.NotifyChanged();
     }
 
@@ -288,7 +288,7 @@ public partial class HomeCustomizerWindow : Window
         }
 
         string? id = cb.Tag?.ToString();
-        bool isChecked = cb.IsChecked == true;
+        bool isChecked = cb.IsChecked is true;
 
         switch (id)
         {

@@ -91,7 +91,7 @@ public partial class AvatarCropWindow : Window
 
     protected override void OnClosed(EventArgs e)
     {
-        if (DialogResult != true && !string.IsNullOrEmpty(ResultFilePath))
+        if (DialogResult is not true && !string.IsNullOrEmpty(ResultFilePath))
         {
             try
             {

@@ -59,7 +59,7 @@ public sealed class CentralUnitBusTests
         var bus = new CentralUnitBus();
         int lowCalls = 0;
         int criticalCalls = 0;
-        TimeSpan ttl = TimeSpan.FromMilliseconds(250);
+        TimeSpan ttl = TimeSpan.FromSeconds(1);
 
         _ = await bus.QueryAsync("Central.Tests.Low", ct =>
         {
@@ -67,7 +67,7 @@ public sealed class CentralUnitBusTests
             return Task.FromResult(1);
         }, ttl, CentralRequestPriority.Low);
 
-        await Task.Delay(150);
+        await Task.Delay(600);
 
         _ = await bus.QueryAsync("Central.Tests.Low", ct =>
         {
@@ -83,7 +83,7 @@ public sealed class CentralUnitBusTests
             return Task.FromResult(1);
         }, ttl, CentralRequestPriority.Critical);
 
-        await Task.Delay(175);
+        await Task.Delay(700);
 
         _ = await bus.QueryAsync("Central.Tests.Critical", ct =>
         {

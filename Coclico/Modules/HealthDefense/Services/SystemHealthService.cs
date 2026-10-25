@@ -363,7 +363,7 @@ public sealed class SystemHealthService
                 {
                     if (!string.IsNullOrWhiteSpace(e.Data))
                     {
-                        _ = sb.AppendLine(e.Data);
+                        sb.AppendLine(e.Data);
                         onOutput?.Invoke(e.Data);
                     }
                 };
@@ -371,7 +371,7 @@ public sealed class SystemHealthService
                 {
                     if (!string.IsNullOrWhiteSpace(e.Data))
                     {
-                        _ = sb.AppendLine($"[ERR] {e.Data}");
+                        sb.AppendLine($"[ERR] {e.Data}");
                         onOutput?.Invoke($"⚠️ {e.Data}");
                     }
                 };
@@ -426,7 +426,7 @@ public sealed class SystemHealthService
                 {
                     if (!string.IsNullOrWhiteSpace(e.Data))
                     {
-                        _ = sb.AppendLine(e.Data);
+                        sb.AppendLine(e.Data);
                         onOutput?.Invoke(e.Data);
                     }
                 };
@@ -434,7 +434,7 @@ public sealed class SystemHealthService
                 {
                     if (!string.IsNullOrWhiteSpace(e.Data))
                     {
-                        _ = sb.AppendLine($"[ERR] {e.Data}");
+                        sb.AppendLine($"[ERR] {e.Data}");
                         onOutput?.Invoke($"⚠️ {e.Data}");
                     }
                 };

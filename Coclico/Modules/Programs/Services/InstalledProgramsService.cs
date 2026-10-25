@@ -304,7 +304,7 @@ public partial class InstalledProgramsService
                 List<ProgramInfo>? cached = await ServiceContainer.GetRequired<ICacheService>().GetAsync<List<ProgramInfo>>(cacheKey).ConfigureAwait(false);
                 if (cached != null && cached.Count > 0)
                 {
-                    Dictionary<string, CustomAppEntry> cachedCustomData = LoadCustomAppsData();
+                    IReadOnlyDictionary<string, CustomAppEntry> cachedCustomData = LoadCustomAppsData();
                     foreach (var personnalise in cached
                         .Select(p => (Programme: p, Entree: TryGetCustomAppEntry(cachedCustomData, p, out CustomAppEntry entry) ? entry : null))
                         .Where(personnalise => personnalise.Entree != null))
@@ -333,7 +333,7 @@ public partial class InstalledProgramsService
         }
 
         var rawList = new List<ProgramInfo>(512);
-        Dictionary<string, CustomAppEntry> customData = LoadCustomAppsData();
+        IReadOnlyDictionary<string, CustomAppEntry> customData = LoadCustomAppsData();
 
         int maxPar = Math.Max(1, Environment.ProcessorCount);
         using var sem = new SemaphoreSlim(maxPar);
@@ -507,13 +507,15 @@ public partial class InstalledProgramsService
             return "Composant";
         }
 
-        return name.Contains("adobe") || name.Contains("premiere") || name.Contains("vegas") || name.Contains("da vinci") || name.Contains("blender") || name.Contains("editing") || name.Contains("montage")
-            ? "Video Montage"
-            : name.Contains("visual studio") || name.Contains("code") || name.Contains("docker") || name.Contains("sql") || name.Contains("office") || name.Contains("excel") || name.Contains("word")
-            ? "Professionnel"
-            : path.Contains("\\windows\\") || name.Contains("system") || p.Source == "Microsoft Store"
-            ? "Outils Windows"
-            : IsKnownGame(p.Name) || path.Contains("games") || path.Contains("jeux") ? "Jeux" : "Logiciel";
+        bool outilVideo = name.Contains("adobe") || name.Contains("premiere") || name.Contains("vegas") || name.Contains("da vinci") || name.Contains("blender") || name.Contains("editing") || name.Contains("montage");
+        bool outilPro = name.Contains("visual studio") || name.Contains("code") || name.Contains("docker") || name.Contains("sql") || name.Contains("office") || name.Contains("excel") || name.Contains("word");
+        bool outilSysteme = path.Contains("\\windows\\") || name.Contains("system") || p.Source == "Microsoft Store";
+        bool jeu = IsKnownGame(p.Name) || path.Contains("games") || path.Contains("jeux");
+
+        return outilVideo ? "Video Montage"
+            : outilPro ? "Professionnel"
+            : outilSysteme ? "Outils Windows"
+            : jeu ? "Jeux" : "Logiciel";
     }
 
     private static List<ProgramInfo> ScanEA(CancellationToken cancellationToken)
@@ -1071,7 +1073,7 @@ public partial class InstalledProgramsService
     }
 
     private static bool TryGetCustomAppEntry(
-        Dictionary<string, CustomAppEntry> data,
+        IReadOnlyDictionary<string, CustomAppEntry> data,
         ProgramInfo app,
         out CustomAppEntry entry)
     {
@@ -1085,7 +1087,7 @@ public partial class InstalledProgramsService
         return data.TryGetValue(fallbackKey, out entry!);
     }
 
-    private Dictionary<string, CustomAppEntry> LoadCustomAppsData()
+    private IReadOnlyDictionary<string, CustomAppEntry> LoadCustomAppsData()
     {
         if (_customAppsDataCache != null)
         {
@@ -1164,7 +1166,7 @@ public partial class InstalledProgramsService
     {
         try
         {
-            Dictionary<string, CustomAppEntry> data = LoadCustomAppsData();
+            Dictionary<string, CustomAppEntry> data = new(LoadCustomAppsData());
             if (!string.IsNullOrWhiteSpace(category))
             {
                 category = MigrateCategory(category);

@@ -119,7 +119,7 @@ public class LocalizationService
 
     private string GetInternal(string key)
     {
-        if (_currentDict?.Contains(key) == true)
+        if (_currentDict?.Contains(key) is true)
         {
             string? val = _currentDict[key] as string;
             if (!string.IsNullOrEmpty(val))
@@ -128,7 +128,7 @@ public class LocalizationService
             }
         }
 
-        if (Application.Current?.Resources.Contains(key) == true)
+        if (Application.Current?.Resources.Contains(key) is true)
         {
             string? val = Application.Current.Resources[key] as string;
             if (!string.IsNullOrEmpty(val))

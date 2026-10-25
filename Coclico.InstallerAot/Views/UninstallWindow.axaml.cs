@@ -130,7 +130,7 @@ public partial class UninstallWindow : Window
 
     private async Task BtnStartUninstall_ClickAsync()
     {
-        if (ChkConfirmCompleteRemoval.IsChecked != true)
+        if (ChkConfirmCompleteRemoval.IsChecked is not true)
         {
             ChkConfirmCompleteRemoval.Focus();
             await MessageDialog.ShowWarningAsync(this,
@@ -158,7 +158,7 @@ public partial class UninstallWindow : Window
             });
 
             string? targetPath = string.IsNullOrEmpty(_installPath) ? null : _installPath;
-            await InstallService.FullUninstallAsync(progress, targetPath, ChkKeepUserData.IsChecked == true, _cts.Token);
+            await InstallService.FullUninstallAsync(progress, targetPath, ChkKeepUserData.IsChecked is true, _cts.Token);
 
             PanelMain.IsVisible = false;
             PanelGoodbye.IsVisible = true;

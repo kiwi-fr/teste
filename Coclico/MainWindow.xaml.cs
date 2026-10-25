@@ -40,8 +40,8 @@ public partial class MainWindow : FluentWindow
 
     private readonly Dictionary<string, UIElement> _viewCache = new(StringComparer.OrdinalIgnoreCase);
 
-    private bool _isChatOpen = false;
-    private bool _isDropdownOpen = false;
+    private bool _isChatOpen;
+    private bool _isDropdownOpen;
     private GitHubRelease? _pendingUpdate;
 
     public RadioButton? FindNavButton(string? tag)

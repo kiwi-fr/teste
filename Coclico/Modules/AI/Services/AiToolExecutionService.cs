@@ -242,9 +242,11 @@ public sealed class AiToolExecutionService
             return list;
         }
 
-        if ((clean.Contains("ram") || clean.Contains("memoire") || clean.Contains("mémoire")) &&
-            (clean.Contains("profil") || clean.Contains("mode")) &&
-            (clean.Contains("gamer") || clean.Contains("extreme") || clean.Contains("extrême") || clean.Contains("ultra") || clean.Contains("agressif") || clean.Contains("smart")))
+        bool demandeProfilRam = (clean.Contains("ram") || clean.Contains("memoire") || clean.Contains("mémoire")) &&
+                                 (clean.Contains("profil") || clean.Contains("mode"));
+        bool profilRamConnu = clean.Contains("gamer") || clean.Contains("extreme") || clean.Contains("extrême") || clean.Contains("ultra") || clean.Contains("agressif") || clean.Contains("smart");
+
+        if (demandeProfilRam && profilRamConnu)
         {
             string prof = clean.Contains("gamer") ? "Gamer" :
                           clean.Contains("extreme") || clean.Contains("extrême") || clean.Contains("ultra") ? "Extreme" :
@@ -283,8 +285,11 @@ public sealed class AiToolExecutionService
             return list;
         }
 
-        if (clean.Contains("antivirus") || clean.Contains("defender") ||
-            ((clean.Contains("scan") || clean.Contains("analyse") || clean.Contains("analys")) && (clean.Contains("virus") || clean.Contains("malware"))))
+        bool demandeAntivirus = clean.Contains("antivirus") || clean.Contains("defender");
+        bool demandeScanVirus = (clean.Contains("scan") || clean.Contains("analyse") || clean.Contains("analys")) &&
+                                 (clean.Contains("virus") || clean.Contains("malware"));
+
+        if (demandeAntivirus || demandeScanVirus)
         {
             list.Add(new AiActionRequest("DEFENDER_SCAN", null, "[ACTION:DEFENDER_SCAN]"));
             return list;

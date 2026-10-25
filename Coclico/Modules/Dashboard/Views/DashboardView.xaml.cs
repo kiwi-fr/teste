@@ -328,7 +328,7 @@ public partial class DashboardView : UserControl
             Title = "Sélectionner une application"
         };
 
-        if (dlg.ShowDialog() == true && CurrentViewModel is { } vm)
+        if (dlg.ShowDialog() is true && CurrentViewModel is { } vm)
         {
             string exeName = Path.GetFileNameWithoutExtension(dlg.FileName);
             vm.AddShortcut(new CustomShortcut
