@@ -91,33 +91,57 @@ public static class InstallService
             if (zipStream != null)
             {
                 using (zipStream)
-                using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Read))
                 {
-                    int totalEntries = archive.Entries.Count;
-                    int extracted = 0;
-
-                    foreach (var entry in archive.Entries)
+                    string extractDir = Path.Join(Path.GetTempPath(), "coclico-install-extract");
+                    if (Directory.Exists(extractDir))
                     {
-                        ct.ThrowIfCancellationRequested();
+                        Directory.Delete(extractDir, recursive: true);
+                    }
 
-                        if (string.IsNullOrEmpty(entry.Name))
+                    try
+                    {
+                        using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Read))
                         {
-                            Directory.CreateDirectory(Path.Combine(config.InstallPath, entry.FullName));
-                            continue;
+                            archive.ExtractToDirectory(extractDir, overwriteFiles: true);
                         }
 
-                        string destinationPath = Path.Combine(config.InstallPath, entry.FullName);
-                        string? targetDir = Path.GetDirectoryName(destinationPath);
-                        if (!string.IsNullOrEmpty(targetDir) && !Directory.Exists(targetDir))
+                        foreach (string sourceDir in Directory.GetDirectories(extractDir, "*", SearchOption.AllDirectories))
                         {
-                            Directory.CreateDirectory(targetDir);
+                            Directory.CreateDirectory(Path.Join(config.InstallPath, Path.GetRelativePath(extractDir, sourceDir)));
                         }
 
-                        entry.ExtractToFile(destinationPath, overwrite: true);
-                        extracted++;
+                        string[] files = Directory.GetFiles(extractDir, "*", SearchOption.AllDirectories);
+                        int totalEntries = files.Length;
+                        int extracted = 0;
 
-                        double percent = 15 + ((double)extracted / totalEntries * 70);
-                        progress.Report(new InstallProgressReport(percent, $"Extraction : {entry.Name}", $"{extracted}/{totalEntries} fichiers"));
+                        foreach (string file in files)
+                        {
+                            ct.ThrowIfCancellationRequested();
+
+                            string destinationPath = Path.Join(config.InstallPath, Path.GetRelativePath(extractDir, file));
+                            string? targetDir = Path.GetDirectoryName(destinationPath);
+                            if (!string.IsNullOrEmpty(targetDir))
+                            {
+                                Directory.CreateDirectory(targetDir);
+                            }
+
+                            File.Copy(file, destinationPath, overwrite: true);
+                            extracted++;
+
+                            double percent = 15 + ((double)extracted / totalEntries * 70);
+                            progress.Report(new InstallProgressReport(percent, $"Extraction : {Path.GetFileName(file)}", $"{extracted}/{totalEntries} fichiers"));
+                        }
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            if (Directory.Exists(extractDir))
+                            {
+                                Directory.Delete(extractDir, recursive: true);
+                            }
+                        }
+                        catch { }
                     }
                 }
             }

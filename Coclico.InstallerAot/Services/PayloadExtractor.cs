@@ -12,8 +12,6 @@ public static class PayloadExtractor
     public static bool HasPayload()
         => Assembly.GetExecutingAssembly().GetManifestResourceInfo(PayloadResourceName) is not null;
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("SecurityCodeScan", "SCS0018",
-        Justification = "payload.zip embarque a la compilation, non controle par l'utilisateur; prefixe verifie avant File.Create")]
     public static void Extract(string destinationDir, IProgress<double>? progress = null)
     {
         var assembly = Assembly.GetExecutingAssembly();
@@ -21,46 +19,50 @@ public static class PayloadExtractor
             ?? throw new InvalidOperationException(
                 $"Ressource embarquee '{PayloadResourceName}' introuvable. " +
                 "Recompilez avec payload.zip present dans le dossier du projet.");
-        long totalBytes = 0;
-        using (var sizeArchive = new ZipArchive(stream, ZipArchiveMode.Read, leaveOpen: true))
+
+        string extractDir = Path.Join(Path.GetTempPath(), "coclico-payload-extract");
+        if (Directory.Exists(extractDir))
         {
-            foreach (var entry in sizeArchive.Entries)
-            {
-                totalBytes += entry.Length;
-            }
+            Directory.Delete(extractDir, recursive: true);
         }
 
-        long copied = 0;
-        stream.Position = 0;
-        using var archive = new ZipArchive(stream, ZipArchiveMode.Read);
-        foreach (var entry in archive.Entries)
+        try
         {
-            var destinationPath = Path.Combine(destinationDir, entry.FullName);
-            var fullDest = Path.GetFullPath(destinationPath);
-            if (!fullDest.StartsWith(Path.GetFullPath(destinationDir), StringComparison.OrdinalIgnoreCase))
+            using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
             {
-                throw new InvalidOperationException($"Entree suspecte dans le payload : {entry.FullName}");
+                archive.ExtractToDirectory(extractDir, overwriteFiles: true);
             }
 
-            var dir = Path.GetDirectoryName(fullDest);
-            if (!string.IsNullOrEmpty(dir))
+            foreach (string sourceDir in Directory.GetDirectories(extractDir, "*", SearchOption.AllDirectories))
             {
-                Directory.CreateDirectory(dir);
+                Directory.CreateDirectory(Path.Join(destinationDir, Path.GetRelativePath(extractDir, sourceDir)));
             }
 
-            if (entry.Length == 0 && string.IsNullOrEmpty(entry.Name))
+            string[] files = Directory.GetFiles(extractDir, "*", SearchOption.AllDirectories);
+            long totalBytes = 0;
+            foreach (string file in files)
             {
-                continue;
+                totalBytes += new FileInfo(file).Length;
             }
 
-            using (var input = entry.Open())
-            using (var output = File.Create(fullDest))
+            long copied = 0;
+            foreach (string file in files)
             {
-                input.CopyTo(output);
+                File.Copy(file, Path.Join(destinationDir, Path.GetRelativePath(extractDir, file)), overwrite: true);
+                copied += new FileInfo(file).Length;
+                progress?.Report(totalBytes > 0 ? (double)copied / totalBytes * 100.0 : 100.0);
             }
-
-            copied += entry.Length;
-            progress?.Report(totalBytes > 0 ? (double)copied / totalBytes * 100.0 : 100.0);
+        }
+        finally
+        {
+            try
+            {
+                if (Directory.Exists(extractDir))
+                {
+                    Directory.Delete(extractDir, recursive: true);
+                }
+            }
+            catch { }
         }
     }
 }

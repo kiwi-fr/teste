@@ -434,26 +434,46 @@ public sealed class WingetEngineService
         return failed == 0;
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("SecurityCodeScan", "SCS0018", Justification = "ZipArchiveEntry.Name ne contient jamais de separateur de chemin, garde Path.GetFileName appliquee avant extraction")]
     private static List<string> ExtractX64Dependencies(string zipPath, string dir)
     {
         var paths = new List<string>();
-        using ZipArchive archive = ZipFile.OpenRead(zipPath);
-        foreach (ZipArchiveEntry entry in archive.Entries)
+        string extractDir = Path.Join(Path.GetTempPath(), "coclico-winget-deps");
+
+        if (Directory.Exists(extractDir))
         {
-            string p = entry.FullName.Replace('\\', '/');
-            if (p.StartsWith("x64/", StringComparison.OrdinalIgnoreCase)
-                && p.EndsWith(".appx", StringComparison.OrdinalIgnoreCase))
+            Directory.Delete(extractDir, recursive: true);
+        }
+
+        try
+        {
+            using (ZipArchive archive = ZipFile.OpenRead(zipPath))
             {
-                if (Path.GetFileName(entry.Name) != entry.Name)
+                archive.ExtractToDirectory(extractDir, overwriteFiles: true);
+            }
+
+            foreach (string file in Directory.EnumerateFiles(extractDir, "*.appx", SearchOption.AllDirectories))
+            {
+                string relative = Path.GetRelativePath(extractDir, file).Replace('\\', '/');
+                if (!relative.StartsWith("x64/", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
-                string destination = Path.Combine(dir, entry.Name);
-                entry.ExtractToFile(destination, overwrite: true);
+                string destination = Path.Join(dir, Path.GetFileName(file));
+                File.Copy(file, destination, overwrite: true);
                 paths.Add(destination);
             }
+        }
+        finally
+        {
+            try
+            {
+                if (Directory.Exists(extractDir))
+                {
+                    Directory.Delete(extractDir, recursive: true);
+                }
+            }
+            catch { }
         }
 
         return paths.Count > 0

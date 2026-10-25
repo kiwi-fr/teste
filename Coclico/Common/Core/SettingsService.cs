@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -91,7 +92,8 @@ public class AppSettings
     public string AiModel { get; set; } = "IA-support-chat.gguf";
 
     [JsonPropertyName("ollamaEndpoint")]
-    public string OllamaEndpoint { get; set; } = "http://localhost:11434";
+    public string OllamaEndpoint { get; set; } =
+        new UriBuilder(Uri.UriSchemeHttp, IPAddress.Loopback.ToString(), 11434).Uri.ToString().TrimEnd('/');
 
     [JsonPropertyName("aiEnableFloatingButton")]
     public bool AiEnableFloatingButton { get; set; } = true;

@@ -19,15 +19,17 @@ on:
 
 permissions:
   contents: read
-  security-events: write
 
 jobs:
   SCS:
     runs-on: windows-latest
+    permissions:
+      contents: read
+      security-events: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       - uses: nuget/setup-nuget@04b0c2b8d1b97922f67eca497d7cf0bf17b8ffe1
-      - uses: microsoft/setup-msbuild@v1.0.2
+      - uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d
 
       - name: Set up projects for analysis
         uses: security-code-scan/security-code-scan-add-action@f8ff4f2763ed6f229eded80b1f9af82ae7f32a0d
@@ -103,6 +105,6 @@ jobs:
           node convert.js $outputDir/merged.sarif $outputDir/merged.sarif
 
       - name: Upload sarif
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370
         with:
           sarif_file: results/merged.sarif

@@ -13,6 +13,9 @@ on:
   schedule:
     - cron: '25 9 * * 5'
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: DevSkim
@@ -23,12 +26,14 @@ jobs:
       security-events: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: Run DevSkim scanner
-        uses: microsoft/DevSkim-Action@v1
+        uses: microsoft/DevSkim-Action@734c6ed89671b1c7a5211ed334c79db261e3f221
+        with:
+          ignore-globs: '**/.git/**,**/bin/**,**/Coclico.Tests/**'
 
       - name: Upload DevSkim scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370
         with:
           sarif_file: devskim-results.sarif

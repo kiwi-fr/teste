@@ -6,10 +6,12 @@ queries:
 
 paths:
   - Coclico
-  - Coclico.Installer
+  - Coclico.InstallerAot
   - Coclico.Tests
 
 paths-ignore:
   - docs
   - installer
   - "**/*.md"
+  - "**/obj/**"
+  - "**/bin/**"

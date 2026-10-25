@@ -327,7 +327,7 @@ public sealed class SystemHealthService
         }
         else
         {
-            onOutput?.Invoke("⚠️ RÉPARATION INTÉGRALE TERMINÉE AVEC DES ERREURS.");
+            onOutput?.Invoke("⚠️ RÉPARATION INTÉGRALE TERMINÉE AVEC ERREURS.");
             onOutput?.Invoke("Certaines étapes ont échoué - consultez le détail ci-dessus pour identifier lesquelles.");
         }
         onOutput?.Invoke("=================================================");

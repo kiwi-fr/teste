@@ -335,7 +335,6 @@ public static class AiHardwareService
         }
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("SecurityCodeScan", "SCS0018", Justification = "ZipArchiveEntry.Name ne contient jamais de separateur de chemin, garde Path.GetFileName appliquee avant extraction")]
     private static async Task DownloadAndExtractFolderAsync(
         string packageId, string version, string entryFolder,
         string targetDir, string label, int stepIndex,
@@ -343,32 +342,44 @@ public static class AiHardwareService
     {
         string url = $"{NugetFlatContainer}{packageId}/{version}/{packageId}.{version}.nupkg";
         string tempNupkg = Path.Combine(Path.GetTempPath(), $"coclico-{packageId}.nupkg");
+        string extractDir = Path.Join(Path.GetTempPath(), $"coclico-extract-{packageId}");
 
         try
         {
             await DownloadFileAsync(url, tempNupkg, label, stepIndex, progress, ct).ConfigureAwait(false);
 
-            using var archive = ZipFile.OpenRead(tempNupkg);
-            foreach (ZipArchiveEntry entry in archive.Entries)
+            if (Directory.Exists(extractDir))
             {
-                if (!entry.FullName.StartsWith(entryFolder, StringComparison.OrdinalIgnoreCase) ||
-                    !entry.FullName.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
+                Directory.Delete(extractDir, recursive: true);
+            }
+
+            using (var archive = ZipFile.OpenRead(tempNupkg))
+            {
+                archive.ExtractToDirectory(extractDir, overwriteFiles: true);
+            }
+
+            foreach (string file in Directory.EnumerateFiles(extractDir, "*.dll", SearchOption.AllDirectories))
+            {
+                string relative = Path.GetRelativePath(extractDir, file).Replace('\\', '/');
+                if (!relative.StartsWith(entryFolder, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
-                if (entry.Name.Length == 0 || Path.GetFileName(entry.Name) != entry.Name)
-                {
-                    continue;
-                }
-
-                string destination = Path.Combine(targetDir, entry.Name);
-                entry.ExtractToFile(destination, overwrite: true);
+                File.Copy(file, Path.Join(targetDir, Path.GetFileName(file)), overwrite: true);
             }
         }
         finally
         {
-            try { File.Delete(tempNupkg); } catch { }
+            try
+            {
+                File.Delete(tempNupkg);
+                if (Directory.Exists(extractDir))
+                {
+                    Directory.Delete(extractDir, recursive: true);
+                }
+            }
+            catch { }
         }
     }
 
@@ -441,7 +452,11 @@ public static class AiHardwareService
                 throw new InvalidDataException($"Fragment introuvable dans le package {packageId}.");
             }
 
-            entry.ExtractToFile(destinationFile, overwrite: true);
+            using (Stream source = entry.Open())
+            using (FileStream target = File.Create(destinationFile))
+            {
+                source.CopyTo(target);
+            }
         }
         finally
         {
