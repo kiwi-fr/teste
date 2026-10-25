@@ -198,7 +198,11 @@ public sealed class DiagnosticOrchestratorTests
         DiagnosticRun run = await CreateOrchestrator(history, a, b, c)
             .RunAsync(DiagnosticRequest.Quick(), progress, CancellationToken.None);
 
-        await Task.Delay(200, CancellationToken.None);
+        DateTime deadline = DateTime.UtcNow + TimeSpan.FromSeconds(5);
+        while (reports.Count < 3 && DateTime.UtcNow < deadline)
+        {
+            await Task.Delay(25, CancellationToken.None);
+        }
 
         Assert.Equal(3, run.Checks.Count);
         Assert.Equal(3, reports.Count);
