@@ -8,6 +8,7 @@ param(
     [switch]$SkipClean,
     [switch]$SkipPortable,
     [string]$OutputDir = "artifacts\installer",
+
     [switch]$CI
 )
 
