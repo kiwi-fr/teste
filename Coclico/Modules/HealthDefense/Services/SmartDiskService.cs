@@ -2,13 +2,6 @@ using System.Management;
 
 namespace Coclico.Services;
 
-/// <summary>
-/// Santé des disques physiques (S.M.A.R.T.), en LECTURE SEULE via WMI.
-/// Indique si un disque dur prévoit une panne imminente — une information réelle et
-/// vérifiable, sans « score global » inventé, alignée sur l'approche honnête de Coclico.
-/// Certains contrôleurs/fabricants n'exposent pas la classe WMI : dans ce cas la liste
-/// est vide et l'échec est journalisé (aucune erreur affichée à l'utilisateur).
-/// </summary>
 public sealed record SmartDiskStatus(
     string InstanceName,
     bool PredictsFailure,
@@ -17,10 +10,7 @@ public sealed record SmartDiskStatus(
 
 public static class SmartDiskService
 {
-    /// <summary>
-    /// Retourne l'état S.M.A.R.T. de chaque disque physique exposé par Windows.
-    /// Ne lève jamais d'exception.
-    /// </summary>
+
     public static List<SmartDiskStatus> GetDiskStatus()
     {
         var results = new List<SmartDiskStatus>();
@@ -57,8 +47,7 @@ public static class SmartDiskService
         }
         catch (Exception ex) when (ex is ManagementException or System.Runtime.InteropServices.COMException or System.IO.IOException or System.UnauthorizedAccessException)
         {
-            // Racine WMI absente ou accès refusé (certains contrôleurs RAID/NVMe) :
-            // silencieux côté utilisateur, tracé côté journaux.
+
             LoggingService.LogException(ex, "SmartDiskService.GetDiskStatus");
         }
 

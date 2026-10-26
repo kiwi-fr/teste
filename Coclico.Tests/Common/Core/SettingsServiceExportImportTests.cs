@@ -3,9 +3,6 @@ using Xunit;
 
 namespace Coclico.Tests.Common.Core;
 
-/// <summary>
-/// Tests de l'export/import des réglages (SettingsService.ExportToAsync / ImportFromAsync).
-/// </summary>
 public sealed class SettingsServiceExportImportTests : IDisposable
 {
     private readonly string _tempDir = Path.Combine(Path.GetTempPath(), "coclico-tests-" + Guid.NewGuid().ToString("N"));
@@ -23,7 +20,7 @@ public sealed class SettingsServiceExportImportTests : IDisposable
         }
         catch (IOException)
         {
-            // Le nettoyage des fichiers temporaires n'est pas l'objet du test.
+
         }
     }
 
@@ -84,7 +81,7 @@ public sealed class SettingsServiceExportImportTests : IDisposable
     public async Task ImportFromAsync_PreservesInstallationFields()
     {
         string path = Path.Combine(_tempDir, "installation-fields.json");
-        await File.WriteAllTextAsync(path, /*lang=json,strict*/ "{ \"firstRun\": true, \"hasSeenWelcome\": true, \"language\": \"en\" }");
+        await File.WriteAllTextAsync(path,  "{ \"firstRun\": true, \"hasSeenWelcome\": true, \"language\": \"en\" }");
 
         var importer = new SettingsService();
         importer.Settings.FirstRun = false;
@@ -115,7 +112,7 @@ public sealed class SettingsServiceExportImportTests : IDisposable
     public async Task ImportFromAsync_UnknownLanguage_IsSanitized()
     {
         string path = Path.Combine(_tempDir, "langue-invalide.json");
-        await File.WriteAllTextAsync(path, /*lang=json,strict*/ "{ \"language\": \"zz\" }");
+        await File.WriteAllTextAsync(path,  "{ \"language\": \"zz\" }");
 
         var service = new SettingsService();
 

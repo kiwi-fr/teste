@@ -3,21 +3,10 @@ using System.IO;
 
 namespace Coclico.Services;
 
-/// <summary>
-/// Rapport batterie : génère le rapport HTML officiel de Windows (powercfg /batteryreport)
-/// dans le dossier de données de Coclico, puis l'ouvre dans le navigateur par défaut.
-/// Lecture seule — aucune modification du système. Utile pour vérifier la capacité
-/// réelle restante de la batterie et son usure avant de juger l'autonomie.
-/// </summary>
 public static class BatteryReportService
 {
     private static string ReportsDir => Path.Join(SettingsService.SettingsDir, "reports");
 
-    /// <summary>
-    /// Génère le rapport batterie de Windows.
-    /// Retourne le chemin du HTML généré, ou null en cas d'échec
-    /// (machine fixe sans batterie, accès refusé, powercfg indisponible…).
-    /// </summary>
     public static async Task<string?> GenerateReportAsync()
     {
         try
@@ -25,7 +14,6 @@ public static class BatteryReportService
             _ = Directory.CreateDirectory(ReportsDir);
             string outputPath = Path.Join(ReportsDir, "battery-report.html");
 
-            // Supprime l'ancien rapport pour ne jamais afficher un résultat périmé.
             try
             {
                 File.Delete(outputPath);
@@ -65,10 +53,6 @@ public static class BatteryReportService
         }
     }
 
-    /// <summary>
-    /// Ouvre un fichier rapport avec l'application par défaut de Windows.
-    /// Ne lève jamais d'exception.
-    /// </summary>
     public static void OpenReport(string reportPath)
     {
         try

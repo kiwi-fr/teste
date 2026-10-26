@@ -51,18 +51,12 @@ public sealed class UpdateSectionViewModel : INotifyPropertyChanged
 
     public void RefreshCount() => OnPropertyChanged(nameof(AvailableCount));
 
-    /// <summary>
-    /// Filtre les éléments affichés par nom (insensible à la casse). Chaîne vide ou nulle = pas de filtre.
-    /// Important : ne crée pas la vue par défaut tant qu'aucun filtre n'a été activé. Un CollectionView
-    /// attache la collection à son thread de création et interdit ensuite toute modification depuis
-    /// un autre thread (NotSupportedException hors thread Dispatcher).
-    /// </summary>
     public void ApplyFilter(string? text)
     {
         if (string.IsNullOrWhiteSpace(text))
         {
             if (_activeFilter is null)
-                return; // Jamais filtré : rien à faire, et surtout ne pas créer la vue.
+                return;
 
             _activeFilter = null;
             CollectionViewSource.GetDefaultView(Items).Filter = null;

@@ -15,10 +15,8 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
 
     public ObservableCollection<string> OutputLog { get; } = [];
 
-    /// <summary>Programmes qui se lancent au démarrage de Windows (modifiable, réversible).</summary>
     public ObservableCollection<StartupEntryItem> StartupEntries { get; } = [];
 
-    /// <summary>État S.M.A.R.T. des disques physiques (lecture seule).</summary>
     public ObservableCollection<SmartDiskItem> DiskHealth { get; } = [];
 
     public bool IsBusy
@@ -319,10 +317,6 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
         });
     }
 
-    /// <summary>
-    /// Charge la liste des programmes qui se lancent au démarrage de Windows.
-    /// Ne lève jamais d'exception : les erreurs partent dans le journal de la vue.
-    /// </summary>
     private void LoadStartupEntries()
     {
         try
@@ -344,11 +338,6 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
         }
     }
 
-    /// <summary>
-    /// Active/désactive une entrée de démarrage via StartupApproved (mécanisme du
-    /// Gestionnaire des tâches) : rien n'est supprimé, tout est réversible en un clic.
-    /// Retourne false si le service a refusé (entrée HKLM protégée).
-    /// </summary>
     private bool ToggleStartupEntry(StartupEntryItem item, bool enabled)
     {
         bool ok = StartupManagerService.SetEntryEnabled(item.Entry, enabled);
@@ -358,11 +347,6 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
         return ok;
     }
 
-    /// <summary>
-    /// Vérifie l'état S.M.A.R.T. de chaque disque physique (lecture seule via WMI).
-    /// Certains contrôleurs NVMe/RAID n'exposent pas ces données : la liste reste
-    /// alors vide et un avertissement est journalisé, aucune erreur affichée.
-    /// </summary>
     private async Task CheckDiskHealthAsync()
     {
         await ExecuteActionWrapperAsync("Vérification S.M.A.R.T. des disques", async _ =>
@@ -400,4 +384,3 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }
-

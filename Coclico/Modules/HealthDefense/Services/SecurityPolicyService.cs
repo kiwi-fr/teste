@@ -29,12 +29,6 @@ public sealed class SecurityPolicyService : ISecurityPolicy
 
     private readonly SemaphoreSlim _lock = new(1, 1);
 
-    // FILTRAGE HYBRIDE — pourquoi une liste noire de motifs : elle est contournable par
-    // construction (obfuscation, alias, outils absents de la liste). Elle reste utile comme
-    // garde-fou contre les commandes destructives courantes, et reste extensible via
-    // security-policy.json — qui ne peut que RAJOUTER des motifs, jamais en retirer.
-    // Le mécanisme robuste reste la liste blanche IsApplicationAllowed : à terme, la liste
-    // noire devrait migrer vers une whitelist d'opérations explicitement autorisées.
     private static readonly IReadOnlyList<string> _defaultCmdPatterns =
     [
         "format ", "format/", "rd /s /q", "rmdir /s /q",

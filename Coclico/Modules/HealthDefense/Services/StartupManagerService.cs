@@ -3,15 +3,6 @@ using Microsoft.Win32;
 
 namespace Coclico.Services;
 
-/// <summary>
-/// Gestionnaire de démarrage : liste les programmes qui se lancent au démarrage de Windows
-/// et permet de les activer/désactiver, comme le Gestionnaire des tâches.
-/// Lecture : HKCU + HKLM (clé Run) et le dossier Démarrage de l'utilisateur.
-/// Modification : uniquement les entrées de l'utilisateur (HKCU et dossier Démarrage) —
-/// les entrées HKLM restent en lecture seule car elles exigent des droits administrateur.
-/// La désactivation n'efface RIEN : elle s'appuie sur la clé Windows « StartupApproved »,
-/// le même mécanisme que le Gestionnaire des tâches, donc réversible en un clic.
-/// </summary>
 public sealed record StartupEntry(
     string Name,
     string Command,
@@ -25,15 +16,10 @@ public static class StartupManagerService
     private const string ApprovedKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run";
     private const string ApprovedFolderKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder";
 
-    /// <summary>
-    /// Liste toutes les entrées de démarrage visibles (registre HKCU/HKLM + dossier Démarrage).
-    /// Ne lève jamais d'exception : en cas d'échec d'une source, elle est ignorée et journalisée.
-    /// </summary>
     public static List<StartupEntry> ListStartupEntries()
     {
         var entries = new List<StartupEntry>();
 
-        // --- HKCU (modifiable) ---
         try
         {
             using RegistryKey? runKey = Registry.CurrentUser.OpenSubKey(RunKeyPath);
@@ -61,7 +47,6 @@ public static class StartupManagerService
             LoggingService.LogException(ex, "StartupManagerService.ListHkcu");
         }
 
-        // --- HKLM (lecture seule : exige l'élévation pour basculer) ---
         try
         {
             using RegistryKey? runKey = Registry.LocalMachine.OpenSubKey(RunKeyPath);
@@ -89,7 +74,6 @@ public static class StartupManagerService
             LoggingService.LogException(ex, "StartupManagerService.ListHklm");
         }
 
-        // --- Dossier Démarrage de l'utilisateur (modifiable) ---
         try
         {
             string startupDir = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
@@ -115,11 +99,6 @@ public static class StartupManagerService
         return entries;
     }
 
-    /// <summary>
-    /// Active ou désactive une entrée de démarrage de l'utilisateur (HKCU ou dossier Démarrage).
-    /// Aucune suppression : la valeur de registre Run d'origine est conservée intacte,
-    /// seul le drapeau « StartupApproved » de Windows est modifié — réversible en un clic.
-    /// </summary>
     public static bool SetEntryEnabled(StartupEntry entry, bool enabled)
     {
         if (entry is null || !entry.CanToggle)
@@ -158,10 +137,10 @@ public static class StartupManagerService
             using RegistryKey? approved = Registry.CurrentUser.OpenSubKey(ApprovedKeyPath);
             if (approved?.GetValue(name) is not byte[] value || value.Length == 0)
             {
-                return true; // Absence de drapeau = activé par défaut (convention Windows).
+                return true;
             }
 
-            return value[0] % 2 == 0; // Pair = activé (0x02), impair = désactivé (0x03).
+            return value[0] % 2 == 0;
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
@@ -189,10 +168,6 @@ public static class StartupManagerService
         }
     }
 
-    /// <summary>
-    /// Construit la valeur binaire « StartupApproved » au format du Gestionnaire des tâches :
-    /// octet 0 : 0x02 (activé) ou 0x03 (désactivé), octets 1-3 : zéro, octets 4-11 : horodatage FILETIME.
-    /// </summary>
     private static byte[] BuildApprovalValue(bool enabled)
     {
         byte[] value = new byte[12];

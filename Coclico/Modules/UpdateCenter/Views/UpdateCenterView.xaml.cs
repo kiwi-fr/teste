@@ -9,6 +9,7 @@ public partial class UpdateCenterView : UserControl
     {
         DataContext = viewModel;
         InitializeComponent();
+        Loaded += (_, _) => viewModel.CheckAllIfStale();
         Unloaded += (_, _) => viewModel.Dispose();
     }
 }

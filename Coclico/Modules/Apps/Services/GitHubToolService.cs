@@ -71,11 +71,6 @@ public sealed class GitHubToolService
         return new GithubAsset(match.Name, match.Url);
     }
 
-    /// <summary>
-    /// Récupère la somme de contrôle SHA-256 publiée par la release GitHub, si l'un de ses
-    /// assets est un fichier .sha256 / SHA256SUMS / SHA256SUMS.txt / checksums.txt.
-    /// Retourne null si aucune somme n'est publiée : le téléchargement n'est alors pas vérifiable.
-    /// </summary>
     private async Task<string?> TryGetExpectedChecksumAsync(string repo, string assetName, CancellationToken ct)
     {
         try
@@ -182,10 +177,6 @@ public sealed class GitHubToolService
                 return new GithubToolResult(false, string.Empty, null, "Fichier téléchargé vide ou absent.");
             }
 
-            // Intégrité : valider le fichier contre la somme SHA-256 publiée par la release,
-            // quand il y en a une. Sans elle, le téléchargement n'est pas vérifiable : c'est
-            // tracé, mais l'installation d'un outil dont la release ne publie aucun checksum
-            // n'est pas bloquée pour autant.
             string? expectedHash = await TryGetExpectedChecksumAsync(repo, asset.Name, ct).ConfigureAwait(false);
             if (expectedHash is not null)
             {

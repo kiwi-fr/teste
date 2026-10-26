@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
@@ -1077,4 +1078,3 @@ Estimation : {0} répartis sur {1} catégories.</system:String>
     <system:String x:Key="Menu_Diagnostics">Diagnostic du PC</system:String>
     <system:String x:Key="Menu_UpdateCenter">Mises à jour</system:String>
 </ResourceDictionary>
-

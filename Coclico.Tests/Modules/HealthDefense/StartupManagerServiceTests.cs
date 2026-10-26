@@ -4,11 +4,6 @@ using Xunit;
 
 namespace Coclico.Tests.Modules.HealthDefense;
 
-/// <summary>
-/// Tests du gestionnaire de démarrage (StartupManagerService).
-/// Utilise une entrée de registre HKCU jetable, créée puis supprimée dans finally :
-/// aucun test ne modifie l'état réel de la machine de l'utilisateur au-delà du nettoyage.
-/// </summary>
 public sealed class StartupManagerServiceTests
 {
     private const string RunKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
@@ -122,7 +117,7 @@ public sealed class StartupManagerServiceTests
         }
         catch (Exception ex) when (ex is System.IO.IOException or System.Security.SecurityException)
         {
-            // Nettoyage best-effort : l'entrée est fictive et inoffensive.
+
         }
 
         try
@@ -132,7 +127,7 @@ public sealed class StartupManagerServiceTests
         }
         catch (Exception ex) when (ex is System.IO.IOException or System.Security.SecurityException)
         {
-            // Nettoyage best-effort.
+
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Coclico.Modules.Power.Views;
 public partial class PowerOptimizerView : UserControl
 {
     private readonly CpuPowerService _cpuPower = ServiceContainer.GetRequired<CpuPowerService>();
+    private bool _batteryReportRunning;
     private readonly AdaptivePowerService _adaptive = ServiceContainer.GetRequired<AdaptivePowerService>();
     private readonly DispatcherTimer _gaugeTimer;
     private readonly Action<string> _onAdaptiveStatus;
@@ -469,15 +470,6 @@ public partial class PowerOptimizerView : UserControl
             }
         }
     }
-
-    private bool _batteryReportRunning;
-
-    /// <summary>
-    /// Génère le rapport batterie officiel de Windows (powercfg /batteryreport),
-    /// puis l'ouvre dans le navigateur par défaut. Lecture seule, aucune
-    /// modification du système ; sur un PC fixe sans batterie, powercfg échoue
-    /// et l'utilisateur est prévenu sans erreur technique.
-    /// </summary>
     private async void BtnBatteryReport_Click(object sender, RoutedEventArgs e)
     {
         if (_batteryReportRunning)
@@ -512,4 +504,3 @@ public partial class PowerOptimizerView : UserControl
         }
     }
 }
-

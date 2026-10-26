@@ -8,7 +8,6 @@ param(
     [switch]$SkipClean,
     [switch]$SkipPortable,
     [string]$OutputDir = "artifacts\installer",
-    # Mode CI (GitHub Actions) : desactive les prompts interactifs et le "Appuyez sur Entree" final.
     [switch]$CI
 )
 
@@ -20,7 +19,7 @@ chcp 65001 > $null 2>&1
 $autoLang = if ($PSUICulture -like "fr*") { "FR" } else { "EN" }
 
 if ($CI) {
-    # En CI, pas de terminal interactif : langue automatique, aucun prompt.
+
     $Lang = $autoLang
     Write-Host "[CI] Mode non interactif : langue = $Lang"
 }
@@ -431,7 +430,7 @@ catch {
     Write-Host "  - dotnet --list-sdks" -ForegroundColor Cyan
     Write-Host "  $(T "- Relancer sans -SkipPublish" "- Retry without -SkipPublish")" -ForegroundColor Cyan
     Write-Host ""
-    # Important : sans exit 1, PowerShell renvoie 0 et la CI croit que le build a reussi.
+
     $global:LASTEXITCODE = 1
     exit 1
 }

@@ -31,15 +31,9 @@ public partial class HealthDefenseView : UserControl
             }
         };
 
-        // Onglet actif au démarrage : Protection & Diagnostic.
         ShowTab(PanelDefense, TabDefense);
     }
 
-    /// <summary>
-    /// Navigation par onglets : Protection &amp; Diagnostic / Démarrage Windows / Santé disque.
-    /// Le journal live reste visible sous tous les onglets : chaque action
-    /// (scan, bascule de démarrage, S.M.A.R.T.) s'y trace.
-    /// </summary>
     private void Tab_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button tab || tab.Tag is not string tag)

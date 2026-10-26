@@ -31,7 +31,6 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      # Cache des packages NuGet : accelere sensiblement le restore.
       - name: Cache NuGet packages
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
         with:
@@ -46,9 +45,6 @@ jobs:
       - name: Build (Release)
         run: dotnet build Coclico.slnx -c Release --no-restore
 
-      # Le format check est bloquant : un `exit 0` forcé rendait cette étape
-      # purement cosmétique (elle ne pouvait jamais échouer), ce qui masquait
-      # les dérives de formatage. Elle fait maintenant échouer la CI le cas échéant.
       - name: Format check
         run: dotnet format Coclico.slnx --verify-no-changes
 

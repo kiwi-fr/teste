@@ -17,6 +17,8 @@ public enum UpdateCenterState
 
 public sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
 {
+    private static readonly TimeSpan AutoScanInterval = TimeSpan.FromMinutes(10);
+
     private readonly UpdateScanService _scanService;
     private readonly WingetUpdateService _wingetService;
     private readonly DriverUpdateService _driverService;
@@ -111,6 +113,21 @@ public sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
         _ = CheckAllAsync(_cts.Token);
     }
 
+    public void CheckAllIfStale()
+    {
+        if (State is UpdateCenterState.Scanning or UpdateCenterState.Updating)
+        {
+            return;
+        }
+
+        if (LastScan is { } last && DateTimeOffset.Now - last < AutoScanInterval)
+        {
+            return;
+        }
+
+        CheckAll();
+    }
+
     private async Task CheckAllAsync(CancellationToken cancellationToken)
     {
         State = UpdateCenterState.Scanning;
@@ -203,8 +220,6 @@ public sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
 
         await CheckAllAsync(_cts.Token).ConfigureAwait(true);
 
-        // Après le re-scan, on réaffiche le résultat de la mise à jour (sinon il serait
-        // écrasé par le résumé du scan).
         LastScanSummary = failures.Count == 0
             ? $"{success} élément(s) mis à jour"
             : $"{success} réussie(s) · {failures.Count} échec(s)";

@@ -3,11 +3,6 @@ using Xunit;
 
 namespace Coclico.Tests.Modules.HealthDefense;
 
-/// <summary>
-/// La garantie contractuelle de SmartDiskService est de ne JAMAIS lever d'exception,
-/// même sur une machine sans racine WMI S.M.A.R.T. (contrôleurs RAID/NVMe, accès refusé) :
-/// c'est exactement ce que ces tests vérifient.
-/// </summary>
 public sealed class SmartDiskServiceTests
 {
     [Fact]

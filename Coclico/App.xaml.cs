@@ -123,7 +123,6 @@ public partial class App : Application
                     _ = services.AddTransient<Coclico.Modules.Diagnostics.Services.IDiagnosticCheck, Coclico.Modules.Diagnostics.Services.Checks.MotherboardCheck>();
                     _ = services.AddSingleton<Coclico.Modules.Diagnostics.Services.IDiagnosticOrchestrator, Coclico.Modules.Diagnostics.Services.DiagnosticOrchestrator>();
 
-                    // ===== UPDATE CENTER =====
                     _ = services.AddSingleton<Coclico.Modules.UpdateCenter.Services.SecureProcessRunner>();
                     _ = services.AddSingleton<Coclico.Modules.UpdateCenter.Services.WingetUpdateService>();
                     _ = services.AddSingleton<Coclico.Modules.UpdateCenter.Services.DriverUpdateService>();
@@ -132,7 +131,6 @@ public partial class App : Application
                     _ = services.AddSingleton<Coclico.Modules.UpdateCenter.Services.UpdateScanService>();
                     _ = services.AddSingleton<Coclico.Modules.UpdateCenter.ViewModels.UpdateCenterViewModel>();
                     _ = services.AddSingleton<Coclico.Modules.UpdateCenter.Views.UpdateCenterView>();
-                    // =========================
 
                     _ = services.AddTransient<Coclico.ViewModels.DashboardViewModel>();
                     _ = services.AddTransient<Coclico.ViewModels.CleaningViewModel>();

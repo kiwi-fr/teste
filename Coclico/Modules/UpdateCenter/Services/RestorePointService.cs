@@ -16,8 +16,7 @@ public class RestorePointService
             dwEventType = 100,
             dwRestorePointType = DriverUpdateType,
             llSequenceNumber = 0,
-            // CORRECTION : la description validée n'était jamais transmise à l'API Windows
-            // (szDescription restait null), ce qui faisait échouer la création du point de restauration.
+
             szDescription = description
         };
         return SRSetRestorePointW(ref state, out _);

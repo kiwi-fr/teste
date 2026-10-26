@@ -3,11 +3,6 @@ using Xunit;
 
 namespace Coclico.Tests.Modules.UpdateCenter;
 
-/// <summary>
-/// Validation des arguments de RestorePointService.Create.
-/// Le chemin valide n'est PAS appelé ici : créer un vrai point de restauration
-/// pendant un test modifierait la machine de l'utilisateur.
-/// </summary>
 public sealed class RestorePointServiceTests
 {
     [Theory]

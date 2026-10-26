@@ -119,33 +119,6 @@ public class AppPackItem : INotifyPropertyChanged
     }
 }
 
-public class UpgradeItem : INotifyPropertyChanged
-{
-    public required string Name { get; init; }
-    public required string Id { get; init; }
-    public required string Version { get; init; }
-    public required string AvailableVersion { get; init; }
-
-    public bool IsBusy
-    {
-        get;
-        set { field = value; OnPropertyChanged(); }
-    }
-
-    public string Status
-    {
-        get;
-        set { field = value; OnPropertyChanged(); }
-    } = string.Empty;
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    private void OnPropertyChanged([CallerMemberName] string? name = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
-}
-
 public partial class AppsViewModel : INotifyPropertyChanged
 {
     private readonly AppCatalogService _catalog;
@@ -162,7 +135,6 @@ public partial class AppsViewModel : INotifyPropertyChanged
     public ObservableCollection<AppInstallItem> FilteredApps { get; } = [];
     public ObservableCollection<string> Categories { get; } = [];
     public ObservableCollection<AppPackItem> Packs { get; } = [];
-    public ObservableCollection<UpgradeItem> AvailableUpgrades { get; } = [];
     public ObservableCollection<WingetEngineService.WingetRow> SearchResults { get; } = [];
     public ObservableCollection<string> OutputLog { get; } = [];
 
@@ -177,14 +149,12 @@ public partial class AppsViewModel : INotifyPropertyChanged
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsTabInstaller));
                 OnPropertyChanged(nameof(IsTabPacks));
-                OnPropertyChanged(nameof(IsTabUpdates));
             }
         }
     } = "Installer";
 
     public bool IsTabInstaller => CurrentTab == "Installer";
     public bool IsTabPacks => CurrentTab == "Packs";
-    public bool IsTabUpdates => CurrentTab == "Updates";
 
     public string SelectedCategory
     {
@@ -235,21 +205,6 @@ public partial class AppsViewModel : INotifyPropertyChanged
         }
     }
 
-    public bool IsCheckingUpgrades
-    {
-        get;
-        set
-        {
-            if (field != value)
-            {
-                field = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(IsNotBusy));
-                CommandManager.InvalidateRequerySuggested();
-            }
-        }
-    }
-
     public bool IsSearching
     {
         get;
@@ -265,7 +220,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         }
     }
 
-    public bool IsNotBusy => !IsOperating && !IsCheckingUpgrades && !IsSearching;
+    public bool IsNotBusy => !IsOperating && !IsSearching;
 
     public bool IsWingetReady
     {
@@ -307,9 +262,6 @@ public partial class AppsViewModel : INotifyPropertyChanged
 
     public bool HasSelected => SelectedCount > 0;
 
-    public int UpgradesCount => AvailableUpgrades.Count;
-    public bool HasUpgrades => AvailableUpgrades.Count > 0;
-    public string UpgradesCountText => TextFormatService.Format(_loc?.Get("Installer_AvailableCount") ?? "{0} disponible(s)", UpgradesCount);
     public bool HasSearchResults => SearchResults.Count > 0;
 
     public AppsViewModel(AppCatalogService catalog, WingetEngineService winget, GitHubToolService github, AppShortcutsService shortcuts)
@@ -325,7 +277,6 @@ public partial class AppsViewModel : INotifyPropertyChanged
             _loc.LanguageChanged += _ =>
             {
                 OnPropertyChanged(nameof(SelectedCountText));
-                OnPropertyChanged(nameof(UpgradesCountText));
                 UpdateWingetStatusText();
             };
         }
@@ -337,18 +288,6 @@ public partial class AppsViewModel : INotifyPropertyChanged
         {
             try { await DetectInstalledAsync(); }
             catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "AppsViewModel.DetectInstalledAsync"); }
-        });
-        _ = Task.Run(async () =>
-        {
-            try
-            {
-                await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
-                if (await _winget.IsWingetAvailableAsync().ConfigureAwait(false))
-                {
-                    await CheckUpgradesCoreAsync(autoScan: true).ConfigureAwait(false);
-                }
-            }
-            catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "AppsViewModel.AutoScanUpgrades"); }
         });
     }
 
@@ -722,229 +661,6 @@ public partial class AppsViewModel : INotifyPropertyChanged
         finally
         {
             item.IsBusy = false;
-            IsOperating = false;
-        }
-    }
-
-    [RelayCommand]
-    private Task CheckUpgradesAsync()
-    {
-        return CheckUpgradesCoreAsync(autoScan: false);
-    }
-
-    private async Task CheckUpgradesCoreAsync(bool autoScan)
-    {
-        if (IsCheckingUpgrades)
-        {
-            return;
-        }
-
-        IsCheckingUpgrades = true;
-        OperationStatus = L("Installer_Status_CheckingUpdates", "Recherche des mises à jour logicielles...");
-        _cts = new CancellationTokenSource();
-        AppendLog(L("Installer_Status_CheckingWinget", "Recherche des mises à jour disponibles via Winget..."));
-
-        try
-        {
-            List<WingetEngineService.WingetRow> upgrades = await _winget.GetAvailableUpgradesAsync(_cts.Token).ConfigureAwait(true);
-            await Application.Current.Dispatcher.InvokeAsync(() =>
-            {
-                AvailableUpgrades.Clear();
-                foreach (WingetEngineService.WingetRow upgrade in upgrades)
-                {
-                    AvailableUpgrades.Add(new UpgradeItem
-                    {
-                        Name = upgrade.Name,
-                        Id = upgrade.Id,
-                        Version = upgrade.Version,
-                        AvailableVersion = upgrade.AvailableVersion
-                    });
-                }
-
-                OnPropertyChanged(nameof(UpgradesCount));
-                OnPropertyChanged(nameof(HasUpgrades));
-                OnPropertyChanged(nameof(UpgradesCountText));
-            });
-
-            OperationStatus = upgrades.Count > 0
-                ? $"{upgrades.Count} mise(s) à jour logicielle(s) disponible(s)."
-                : L("Installer_AllUpToDate", "Tous vos logiciels sont à jour !");
-            AppendLog($"Résultat : {upgrades.Count} mise(s) à jour disponible(s).");
-
-            if (autoScan && upgrades.Count > 0)
-            {
-                Notify?.Invoke($"{upgrades.Count} mise(s) à jour d'applications disponible(s) - onglet Mises à jour.", "Coclico");
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            OperationStatus = L("Installer_Status_CheckCancelled", "Vérification annulée.");
-        }
-        catch (Exception ex) when (ex is System.InvalidOperationException or System.OperationCanceledException)
-        {
-            OperationStatus = TextFormatService.Format(L("Installer_Status_CheckError", "Erreur vérification : {0}"), ex.Message);
-            LoggingService.LogException(ex, "AppsViewModel.CheckUpgradesAsync");
-        }
-        finally
-        {
-            IsCheckingUpgrades = false;
-        }
-    }
-
-    [RelayCommand]
-    private async Task UpgradeOneAsync(UpgradeItem? item)
-    {
-        if (item == null || IsOperating)
-        {
-            return;
-        }
-
-        IsOperating = true;
-        _cts = new CancellationTokenSource();
-        item.IsBusy = true;
-        item.Status = L("Installer_Status_Updating", "Mise à jour...");
-        OperationStatus = TextFormatService.Format(L("Installer_Status_UpdatingPkg", "Mise à jour de {0}..."), item.Name);
-        AppendLog(OperationStatus);
-
-        try
-        {
-            WingetEngineService.InstallResult result = await _winget.UpgradeAsync(item.Id,
-                new Progress<string>(AppendLog), _cts.Token).ConfigureAwait(true);
-            if (result.Status is WingetEngineService.InstallStatus.Succeeded
-                or WingetEngineService.InstallStatus.RestartRequired
-                or WingetEngineService.InstallStatus.AlreadyUpToDate
-                or WingetEngineService.InstallStatus.AlreadyInstalled)
-            {
-                item.Status = "À jour";
-                AppendLog($"{item.Name} : mise à jour terminée.");
-                await Application.Current.Dispatcher.InvokeAsync(() =>
-                {
-                    _ = AvailableUpgrades.Remove(item);
-                    OnPropertyChanged(nameof(UpgradesCount));
-                    OnPropertyChanged(nameof(HasUpgrades));
-                    OnPropertyChanged(nameof(UpgradesCountText));
-                });
-                OperationStatus = $"{item.Name} est à jour.";
-            }
-            else
-            {
-                item.Status = result.Status == WingetEngineService.InstallStatus.AdminRequired
-                    ? "Droits administrateur requis"
-                    : $"Échec (code {result.ExitCode})";
-                OperationStatus = $"{item.Name} : {item.Status}";
-                AppendLog(OperationStatus);
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            item.Status = "Annulé";
-            OperationStatus = L("Installer_Status_BatchCancelled", "Opération annulée.");
-        }
-        catch (Exception ex) when (ex is System.InvalidOperationException or System.OperationCanceledException)
-        {
-            LoggingService.LogException(ex, "AppsViewModel.UpgradeOneAsync");
-            item.Status = $"Erreur : {ex.Message}";
-            OperationStatus = item.Status;
-        }
-        finally
-        {
-            item.IsBusy = false;
-            IsOperating = false;
-        }
-    }
-
-    [RelayCommand]
-    private async Task UpgradeAllAsync()
-    {
-        if (IsOperating)
-        {
-            return;
-        }
-
-        if (AvailableUpgrades.Count == 0)
-        {
-            Notify?.Invoke(
-                L("Installer_Dialog_NoUpdatesMsg", "Aucune mise à jour détectée pour le moment."),
-                L("Installer_Dialog_NoUpdatesTitle", "Mises à jour"));
-            return;
-        }
-
-        bool confirmed = Confirm?.Invoke(
-            TextFormatService.Format(L("Installer_Dialog_UpdateAllMsg", "Mettre à jour les {0} applications détectées ?"), AvailableUpgrades.Count),
-            L("Installer_Dialog_UpdateAllTitle", "Mise à jour globale")) ?? false;
-        if (!confirmed)
-        {
-            return;
-        }
-
-        IsOperating = true;
-        _cts = new CancellationTokenSource();
-        OverallProgress = 0;
-        var progress = new Progress<string>(AppendLog);
-        List<UpgradeItem> items = [.. AvailableUpgrades];
-        int done = 0;
-        int failed = 0;
-        OperationStatus = "Mise à jour globale en cours...";
-
-        try
-        {
-            foreach (UpgradeItem item in items)
-            {
-                _cts.Token.ThrowIfCancellationRequested();
-                item.IsBusy = true;
-                item.Status = L("Installer_Status_Updating", "Mise à jour...");
-                AppendLog(TextFormatService.Format(L("Installer_Status_UpdatingPkg", "Mise à jour de {0}..."), item.Name));
-
-                WingetEngineService.InstallResult result = await _winget.UpgradeAsync(item.Id, progress, _cts.Token).ConfigureAwait(true);
-                if (result.Status is WingetEngineService.InstallStatus.Succeeded
-                    or WingetEngineService.InstallStatus.RestartRequired
-                    or WingetEngineService.InstallStatus.AlreadyUpToDate
-                    or WingetEngineService.InstallStatus.AlreadyInstalled)
-                {
-                    item.Status = "À jour";
-                    await Application.Current.Dispatcher.InvokeAsync(() => _ = AvailableUpgrades.Remove(item));
-                }
-                else
-                {
-                    item.Status = result.Status == WingetEngineService.InstallStatus.AdminRequired
-                        ? "Droits administrateur requis"
-                        : $"Échec (code {result.ExitCode})";
-                    failed++;
-                }
-
-                item.IsBusy = false;
-                done++;
-                OverallProgress = 100.0 * done / items.Count;
-                AppendLog($"{item.Name} : {item.Status}");
-            }
-
-            OnPropertyChanged(nameof(UpgradesCount));
-            OnPropertyChanged(nameof(HasUpgrades));
-            OnPropertyChanged(nameof(UpgradesCountText));
-            OperationStatus = failed == 0
-                ? "Mise à jour globale terminée avec succès."
-                : $"Mise à jour globale terminée avec {failed} échec(s).";
-            Notify?.Invoke(OperationStatus, "Coclico");
-            AppendLog(OperationStatus);
-        }
-        catch (OperationCanceledException)
-        {
-            OperationStatus = L("Installer_Status_BatchCancelled", "Opération annulée.");
-            AppendLog(OperationStatus);
-        }
-        catch (Exception ex) when (ex is System.InvalidOperationException or System.OperationCanceledException)
-        {
-            LoggingService.LogException(ex, "AppsViewModel.UpgradeAllAsync");
-            OperationStatus = $"Erreur : {ex.Message}";
-            AppendLog(OperationStatus);
-        }
-        finally
-        {
-            foreach (UpgradeItem item in items)
-            {
-                item.IsBusy = false;
-            }
-
             IsOperating = false;
         }
     }

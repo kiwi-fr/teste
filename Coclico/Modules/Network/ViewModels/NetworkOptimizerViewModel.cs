@@ -16,6 +16,14 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
     private readonly NetworkMonitorService? _monitorService;
     private readonly IDisposable? _monitorSubscription;
     private CancellationTokenSource? _cts;
+    private NetworkAdapterInfo? _selectedAdapter;
+    private bool _isBusy;
+    private double _progressValue;
+    private string _statusText = string.Empty;
+    private string _livePingText = "--";
+    private string _liveDownloadText = "--";
+    private NetworkTestReport? _beforeTest;
+    private NetworkTestReport? _afterTest;
 
     public ObservableCollection<NetworkAdapterInfo> Adapters { get; } = [];
     public ObservableCollection<NetworkTuningParameter> TuningParameters { get; } = [];
@@ -66,8 +74,6 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
 
         _ = RefreshAsync();
     }
-
-    private NetworkAdapterInfo? _selectedAdapter;
     public NetworkAdapterInfo? SelectedAdapter
     {
         get => _selectedAdapter;
@@ -84,8 +90,6 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
             }
         }
     }
-
-    private bool _isBusy;
     public bool IsBusy
     {
         get => _isBusy;
@@ -111,8 +115,6 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
     }
 
     public bool IsNotBusy => !IsBusy;
-
-    private double _progressValue;
     public double ProgressValue
     {
         get => _progressValue;
@@ -125,8 +127,6 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
             }
         }
     }
-
-    private string _statusText = string.Empty;
     public string StatusText
     {
         get => _statusText;
@@ -139,8 +139,6 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
             }
         }
     }
-
-    private string _livePingText = "--";
     public string LivePingText
     {
         get => _livePingText;
@@ -153,8 +151,6 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
             }
         }
     }
-
-    private string _liveDownloadText = "--";
     public string LiveDownloadText
     {
         get => _liveDownloadText;
@@ -167,8 +163,6 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
             }
         }
     }
-
-    private NetworkTestReport? _beforeTest;
     public NetworkTestReport? BeforeTest
     {
         get => _beforeTest;
@@ -179,8 +173,6 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
             RefreshComparison();
         }
     }
-
-    private NetworkTestReport? _afterTest;
     public NetworkTestReport? AfterTest
     {
         get => _afterTest;

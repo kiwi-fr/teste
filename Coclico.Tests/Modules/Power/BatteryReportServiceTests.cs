@@ -3,11 +3,6 @@ using Xunit;
 
 namespace Coclico.Tests.Modules.Power;
 
-/// <summary>
-/// La garantie contractuelle de BatteryReportService est d'échouer proprement (retour null,
-/// journal) plutôt que de lever une exception : machine fixe sans batterie, powercfg
-/// indisponible, conteneur de services non construit. C'est ce que ces tests vérifient.
-/// </summary>
 public sealed class BatteryReportServiceTests
 {
     [Fact]
@@ -22,7 +17,7 @@ public sealed class BatteryReportServiceTests
             string? reportPath = await BatteryReportService.GenerateReportAsync();
             if (reportPath != null)
             {
-                // Si un rapport est produit, il doit exister sur le disque.
+
                 Assert.True(File.Exists(reportPath));
             }
         }

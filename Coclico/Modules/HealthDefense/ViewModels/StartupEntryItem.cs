@@ -4,11 +4,6 @@ using Coclico.Services;
 
 namespace Coclico.ViewModels;
 
-/// <summary>
-/// Entrée de démarrage prête pour l'affichage dans la vue Santé &amp; Défense.
-/// Le basculement passe par le gestionnaire du ViewModel : si le service refuse
-/// (entrée HKLM protégée), la propriété re-notifie l'UI pour revenir à l'état réel.
-/// </summary>
 public sealed class StartupEntryItem : INotifyPropertyChanged
 {
     private readonly Func<StartupEntryItem, bool, bool> _toggle;
@@ -43,8 +38,6 @@ public sealed class StartupEntryItem : INotifyPropertyChanged
                 _isEnabled = value;
             }
 
-            // Notifie toujours : si le changement a été refusé, l'interrupteur
-            // de l'UI revient visuellement à l'état réel de l'entrée.
             OnPropertyChanged();
         }
     }

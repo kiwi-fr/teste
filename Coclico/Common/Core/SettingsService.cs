@@ -288,12 +288,6 @@ public class SettingsService
         }
     }
 
-    /// <summary>
-    /// Importe des réglages depuis un fichier JSON exporté précédemment, puis les sauvegarde.
-    /// Les champs propres à l'installation actuelle (première exécution, écrans de bienvenue,
-    /// version ignorée) ne sont PAS importés.
-    /// Retourne false si le fichier est absent ou invalide (l'erreur est journalisée).
-    /// </summary>
     public async Task<bool> ImportFromAsync(string sourcePath)
     {
         if (string.IsNullOrWhiteSpace(sourcePath) || !File.Exists(sourcePath))
@@ -307,7 +301,6 @@ public class SettingsService
             AppSettings imported = JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
             AppSettings copy = Sanitize(imported, out _);
 
-            // Les champs « uniques à cette installation » ne sont pas importés.
             copy.FirstRun = Settings.FirstRun;
             copy.HasSeenWelcome = Settings.HasSeenWelcome;
             copy.HasSeenCoclico20Welcome = Settings.HasSeenCoclico20Welcome;
