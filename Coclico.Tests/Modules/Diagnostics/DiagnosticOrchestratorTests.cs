@@ -64,6 +64,21 @@ public sealed class DiagnosticOrchestratorTests
             => Task.CompletedTask;
     }
 
+    private sealed class CollectingProgress : IProgress<DiagnosticProgress>
+    {
+        private readonly object _gate = new();
+
+        public List<DiagnosticProgress> Reports { get; } = [];
+
+        public void Report(DiagnosticProgress value)
+        {
+            lock (_gate)
+            {
+                Reports.Add(value);
+            }
+        }
+    }
+
     private static DiagnosticOrchestrator CreateOrchestrator(
         FakeHistory history, params IDiagnosticCheck[] checks)
         => new(checks, history, new DiagnosticPrivacySanitizer());
@@ -191,19 +206,12 @@ public sealed class DiagnosticOrchestratorTests
         FakeCheck b = new("b.check", DiagnosticCategory.Memory, IsQuick: true);
         FakeCheck c = new("c.check", DiagnosticCategory.Storage, IsQuick: true);
         FakeHistory history = new();
-
-        List<DiagnosticProgress> reports = [];
-        Progress<DiagnosticProgress> progress = new(p => reports.Add(p));
+        CollectingProgress progress = new();
 
         DiagnosticRun run = await CreateOrchestrator(history, a, b, c)
             .RunAsync(DiagnosticRequest.Quick(), progress, CancellationToken.None);
 
-        DateTime deadline = DateTime.UtcNow + TimeSpan.FromSeconds(5);
-        while (reports.Count < 3 && DateTime.UtcNow < deadline)
-        {
-            await Task.Delay(25, CancellationToken.None);
-        }
-
+        List<DiagnosticProgress> reports = progress.Reports;
         Assert.Equal(3, run.Checks.Count);
         Assert.Equal(3, reports.Count);
         Assert.All(reports, r => Assert.Equal(3, r.TotalChecks));

@@ -658,7 +658,7 @@ public sealed class CacheService : ICacheService
         }
         catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
         {
-            LoggingService.LogException(ex, "CacheService.DeleteBestEffort");
+            LoggingService.LogWarning($"[CacheService] Fichier cache occupé, suppression ignorée : {ex.Message}");
         }
     }
 
