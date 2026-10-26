@@ -25,6 +25,7 @@ public sealed class CentralUnitFlagStore : IDisposable
     private readonly ConcurrentDictionary<string, byte> _criticalFlags = new(StringComparer.Ordinal);
     private readonly object _scheduleLock = new();
     private readonly Dictionary<string, DateTime> _schedules = new(StringComparer.Ordinal);
+    private DateTime _nextDueUtc = DateTime.MaxValue;
     private CancellationTokenSource _wakeCts = new();
     private CancellationTokenSource? _loopCts;
     private Task? _loopTask;
@@ -112,7 +113,11 @@ public sealed class CentralUnitFlagStore : IDisposable
         lock (_scheduleLock)
         {
             _schedules[flag] = dueUtc;
-            WakeSchedulerLocked();
+            if (dueUtc < _nextDueUtc)
+            {
+                _nextDueUtc = dueUtc;
+                WakeSchedulerLocked();
+            }
         }
     }
 
@@ -121,7 +126,6 @@ public sealed class CentralUnitFlagStore : IDisposable
         lock (_scheduleLock)
         {
             _schedules.Remove(flag);
-            WakeSchedulerLocked();
         }
     }
 
@@ -197,6 +201,7 @@ public sealed class CentralUnitFlagStore : IDisposable
                 lock (_scheduleLock)
                 {
                     DateTime next = _schedules.Count == 0 ? DateTime.MaxValue : _schedules.Values.Min();
+                    _nextDueUtc = next;
 
                     TimeSpan remaining = next == DateTime.MaxValue ? MaxSchedulerSleep : next - DateTime.UtcNow;
                     delay = remaining <= TimeSpan.Zero ? TimeSpan.Zero : remaining > MaxSchedulerSleep ? MaxSchedulerSleep : remaining;

@@ -132,4 +132,17 @@ public sealed class CentralUnitWatchdogTests : IDisposable
             Assert.True(revives >= 1);
         }
     }
+
+    [Fact]
+    public void StopIsIdempotentAndKeepsManualChecksUsable()
+    {
+        _watchdog.Register("Manual", TimeSpan.FromSeconds(30));
+        _watchdog.Beat("Manual");
+
+        _watchdog.Stop();
+        _watchdog.Stop();
+
+        Assert.Equal(0, _watchdog.CheckAll());
+        Assert.Single(_watchdog.GetSnapshot());
+    }
 }

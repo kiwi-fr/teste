@@ -175,4 +175,36 @@ public sealed class CentralUnitBusTests
 
         await Assert.ThrowsAsync<KeyNotFoundException>(() => bus.SendAsync("Central.Tests.Unknown", "command"));
     }
+
+    [Fact]
+    public async Task CacheEvictsLeastRecentlyUsedEntriesBeyondCapacity()
+    {
+        var bus = new CentralUnitBus(maxCacheEntries: 4);
+        int factoryCalls = 0;
+
+        Task<int> Query(string key) => bus.QueryAsync(key, ct =>
+        {
+            Interlocked.Increment(ref factoryCalls);
+            return Task.FromResult(1);
+        }, TimeSpan.FromMinutes(1));
+
+        await Query("Central.Tests.A");
+        await Query("Central.Tests.B");
+        await Query("Central.Tests.C");
+        await Query("Central.Tests.D");
+        _ = await Query("Central.Tests.A");
+        await Query("Central.Tests.E");
+
+        Assert.Equal(5, factoryCalls);
+        Assert.Equal(1, bus.EvictedEntries);
+
+        await Query("Central.Tests.B");
+
+        Assert.Equal(6, factoryCalls);
+        Assert.Equal(2, bus.EvictedEntries);
+
+        _ = await Query("Central.Tests.A");
+
+        Assert.Equal(6, factoryCalls);
+    }
 }

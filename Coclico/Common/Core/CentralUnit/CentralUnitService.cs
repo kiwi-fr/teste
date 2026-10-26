@@ -404,7 +404,8 @@ public sealed class CentralUnitService : IDisposable
 
         ulong idleTicks = ToTicks(idleTime);
         ulong totalTicks = ToTicks(kernelTime) + ToTicks(userTime);
-        TimeSpan ownCpuTime = Process.GetCurrentProcess().TotalProcessorTime;
+        using Process currentProcess = Process.GetCurrentProcess();
+        TimeSpan ownCpuTime = currentProcess.TotalProcessorTime;
 
         if (!_lastSampleValid || totalTicks <= _lastTotalTicks)
         {

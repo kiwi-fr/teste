@@ -157,12 +157,14 @@ public sealed class CentralUnitWatchdog : IDisposable
     {
         Action<CentralActivityLevel>? handler;
         CancellationTokenSource? loopCts;
+        Task? loopTask;
         lock (_stateLock)
         {
             handler = _levelChangedHandler;
             _levelChangedHandler = null;
             loopCts = _loopCts;
             _loopCts = null;
+            loopTask = _loopTask;
             _loopTask = null;
         }
 
@@ -172,6 +174,18 @@ public sealed class CentralUnitWatchdog : IDisposable
         }
 
         loopCts?.Cancel();
+        if (loopTask != null)
+        {
+            try
+            {
+                _ = loopTask.Wait(TimeSpan.FromSeconds(2));
+            }
+            catch (AggregateException ex)
+            {
+                LoggingService.LogException(ex, "CentralUnitWatchdog.Stop");
+            }
+        }
+
         loopCts?.Dispose();
         _flags.CancelSchedule(CentralFlags.WatchdogCheckDue);
     }
