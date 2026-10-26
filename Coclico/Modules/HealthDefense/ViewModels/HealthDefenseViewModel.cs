@@ -15,6 +15,12 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
 
     public ObservableCollection<string> OutputLog { get; } = [];
 
+    /// <summary>Programmes qui se lancent au démarrage de Windows (modifiable, réversible).</summary>
+    public ObservableCollection<StartupEntryItem> StartupEntries { get; } = [];
+
+    /// <summary>État S.M.A.R.T. des disques physiques (lecture seule).</summary>
+    public ObservableCollection<SmartDiskItem> DiskHealth { get; } = [];
+
     public bool IsBusy
     {
         get;
@@ -94,6 +100,8 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
     public IAsyncRelayCommand ResetUpdateCommand { get; }
     public IRelayCommand CancelCommand { get; }
     public IRelayCommand ClearLogCommand { get; }
+    public IRelayCommand RefreshStartupCommand { get; }
+    public IAsyncRelayCommand CheckDiskHealthCommand { get; }
 
     public HealthDefenseViewModel(SystemHealthService healthService)
     {
@@ -113,8 +121,11 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
         ResetUpdateCommand = new AsyncRelayCommand(ResetUpdateAsync);
         CancelCommand = new RelayCommand(CancelOperation);
         ClearLogCommand = new RelayCommand(OutputLog.Clear);
+        RefreshStartupCommand = new RelayCommand(LoadStartupEntries);
+        CheckDiskHealthCommand = new AsyncRelayCommand(CheckDiskHealthAsync);
 
         _ = RefreshStatusAsync();
+        LoadStartupEntries();
     }
 
     public async Task RefreshStatusAsync()
@@ -308,6 +319,76 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
         });
     }
 
+    /// <summary>
+    /// Charge la liste des programmes qui se lancent au démarrage de Windows.
+    /// Ne lève jamais d'exception : les erreurs partent dans le journal de la vue.
+    /// </summary>
+    private void LoadStartupEntries()
+    {
+        try
+        {
+            List<StartupEntry> entries = StartupManagerService.ListStartupEntries();
+
+            StartupEntries.Clear();
+            foreach (StartupEntry entry in entries)
+            {
+                StartupEntries.Add(new StartupEntryItem(entry, ToggleStartupEntry));
+            }
+
+            AppendLog($"Gestionnaire de démarrage : {StartupEntries.Count} entrée(s) chargée(s) (HKCU, HKLM, dossier Démarrage).");
+        }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
+        {
+            AppendLog("⚠️ Impossible de lister les programmes au démarrage.");
+            LoggingService.LogException(ex, "HealthDefenseVM.LoadStartupEntries");
+        }
+    }
+
+    /// <summary>
+    /// Active/désactive une entrée de démarrage via StartupApproved (mécanisme du
+    /// Gestionnaire des tâches) : rien n'est supprimé, tout est réversible en un clic.
+    /// Retourne false si le service a refusé (entrée HKLM protégée).
+    /// </summary>
+    private bool ToggleStartupEntry(StartupEntryItem item, bool enabled)
+    {
+        bool ok = StartupManagerService.SetEntryEnabled(item.Entry, enabled);
+        AppendLog(ok
+            ? $"Démarrage : « {item.Name} » {(enabled ? "réactivée" : "désactivée")} — réversible à tout moment, rien n'est supprimé."
+            : $"⚠️ Impossible de modifier « {item.Name} » : entrée système (HKLM) qui exige les droits administrateur.");
+        return ok;
+    }
+
+    /// <summary>
+    /// Vérifie l'état S.M.A.R.T. de chaque disque physique (lecture seule via WMI).
+    /// Certains contrôleurs NVMe/RAID n'exposent pas ces données : la liste reste
+    /// alors vide et un avertissement est journalisé, aucune erreur affichée.
+    /// </summary>
+    private async Task CheckDiskHealthAsync()
+    {
+        await ExecuteActionWrapperAsync("Vérification S.M.A.R.T. des disques", async _ =>
+        {
+            AppendLog("Lecture de l'état S.M.A.R.T. des disques physiques (lecture seule)…");
+            List<SmartDiskStatus> statuses = await Task.Run(SmartDiskService.GetDiskStatus);
+
+            DiskHealth.Clear();
+            foreach (SmartDiskStatus status in statuses)
+            {
+                DiskHealth.Add(new SmartDiskItem(status));
+            }
+
+            if (statuses.Count == 0)
+            {
+                AppendLog("⚠️ Aucune donnée S.M.A.R.T. exposée par ce contrôleur (courant sur certains NVMe/RAID).");
+            }
+            else
+            {
+                AppendLog(statuses.Exists(s => s.PredictsFailure)
+                    ? $"❌ Santé disque : {statuses.Count} disque(s) vérifié(s), au moins un signale un risque de panne imminente. Sauvegardez vos données importantes !"
+                    : $"Santé disque : {statuses.Count} disque(s) vérifié(s), aucun signe de panne imminente.");
+            }
+        });
+    }
+
     private void CancelOperation()
     {
         _cts?.Cancel();
@@ -319,3 +400,4 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }
+

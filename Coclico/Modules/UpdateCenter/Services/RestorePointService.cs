@@ -11,7 +11,15 @@ public class RestorePointService
         if (string.IsNullOrWhiteSpace(description) || description.Length > 64)
             throw new ArgumentException("Description must be between 1 and 64 characters.");
 
-        var state = new RestoreState { dwRestorePointType = DriverUpdateType, dwEventType = 100, llSequenceNumber = 0 };
+        var state = new RestoreState
+        {
+            dwEventType = 100,
+            dwRestorePointType = DriverUpdateType,
+            llSequenceNumber = 0,
+            // CORRECTION : la description validée n'était jamais transmise à l'API Windows
+            // (szDescription restait null), ce qui faisait échouer la création du point de restauration.
+            szDescription = description
+        };
         return SRSetRestorePointW(ref state, out _);
     }
 

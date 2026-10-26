@@ -22,6 +22,10 @@
     <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
     <ServerGarbageCollection>false</ServerGarbageCollection>
     <PublishTrimmed>false</PublishTrimmed>
+    <!-- ReadyToRun : précompilation AOT partielle qui réduit le travail du JIT au démarrage.
+         Activé uniquement sur le publish win-x64 (le binaire final est plus gros, en échange
+         d'un cold start et d'une première utilisation plus rapides). -->
+    <PublishReadyToRun Condition="'$(RuntimeIdentifier)' == 'win-x64'">true</PublishReadyToRun>
     <InvariantGlobalization>false</InvariantGlobalization>
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>

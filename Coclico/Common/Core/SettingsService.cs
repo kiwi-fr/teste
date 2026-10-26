@@ -252,6 +252,88 @@ public class SettingsService
         Save();
     }
 
+    public async Task<bool> ExportToAsync(string destinationPath)
+    {
+        if (string.IsNullOrWhiteSpace(destinationPath))
+        {
+            return false;
+        }
+
+        try
+        {
+            string? dir = Path.GetDirectoryName(destinationPath);
+            if (!string.IsNullOrEmpty(dir))
+            {
+                _ = Directory.CreateDirectory(dir);
+            }
+
+            await _ioLock.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                string json = JsonSerializer.Serialize(Settings, _writeOptions);
+                await File.WriteAllTextAsync(destinationPath, json).ConfigureAwait(false);
+            }
+            finally
+            {
+                _ = _ioLock.Release();
+            }
+
+            LoggingService.LogInfo($"[SettingsService] Réglages exportés vers « {destinationPath} »");
+            return true;
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Security.SecurityException)
+        {
+            LoggingService.LogException(ex, "SettingsService.ExportTo");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Importe des réglages depuis un fichier JSON exporté précédemment, puis les sauvegarde.
+    /// Les champs propres à l'installation actuelle (première exécution, écrans de bienvenue,
+    /// version ignorée) ne sont PAS importés.
+    /// Retourne false si le fichier est absent ou invalide (l'erreur est journalisée).
+    /// </summary>
+    public async Task<bool> ImportFromAsync(string sourcePath)
+    {
+        if (string.IsNullOrWhiteSpace(sourcePath) || !File.Exists(sourcePath))
+        {
+            return false;
+        }
+
+        try
+        {
+            string json = await File.ReadAllTextAsync(sourcePath).ConfigureAwait(false);
+            AppSettings imported = JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
+            AppSettings copy = Sanitize(imported, out _);
+
+            // Les champs « uniques à cette installation » ne sont pas importés.
+            copy.FirstRun = Settings.FirstRun;
+            copy.HasSeenWelcome = Settings.HasSeenWelcome;
+            copy.HasSeenCoclico20Welcome = Settings.HasSeenCoclico20Welcome;
+            copy.SkippedUpdateVersion = Settings.SkippedUpdateVersion;
+
+            await _ioLock.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                Settings = copy;
+            }
+            finally
+            {
+                _ = _ioLock.Release();
+            }
+
+            await SaveCoreAsync().ConfigureAwait(false);
+            LoggingService.LogInfo($"[SettingsService] Réglages importés depuis « {sourcePath} »");
+            return true;
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Text.Json.JsonException or System.FormatException)
+        {
+            LoggingService.LogException(ex, "SettingsService.ImportFrom");
+            return false;
+        }
+    }
+
     public void EnableAutostart()
     {
         try

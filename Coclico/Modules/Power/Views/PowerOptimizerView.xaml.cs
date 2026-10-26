@@ -469,4 +469,47 @@ public partial class PowerOptimizerView : UserControl
             }
         }
     }
+
+    private bool _batteryReportRunning;
+
+    /// <summary>
+    /// Génère le rapport batterie officiel de Windows (powercfg /batteryreport),
+    /// puis l'ouvre dans le navigateur par défaut. Lecture seule, aucune
+    /// modification du système ; sur un PC fixe sans batterie, powercfg échoue
+    /// et l'utilisateur est prévenu sans erreur technique.
+    /// </summary>
+    private async void BtnBatteryReport_Click(object sender, RoutedEventArgs e)
+    {
+        if (_batteryReportRunning)
+        {
+            return;
+        }
+
+        _batteryReportRunning = true;
+        try
+        {
+            StatusText.Text = "Génération du rapport batterie Windows (powercfg)…";
+            string? reportPath = await BatteryReportService.GenerateReportAsync();
+
+            if (reportPath == null)
+            {
+                StatusText.Text = "Rapport batterie non généré (PC fixe sans batterie ou powercfg indisponible — détails dans les journaux).";
+                ToastService.ShowWarning("Impossible de générer le rapport batterie : sur un PC fixe sans batterie, Windows n'en produit pas.");
+                return;
+            }
+
+            StatusText.Text = $"Rapport batterie généré : {reportPath}";
+            BatteryReportService.OpenReport(reportPath);
+        }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
+        {
+            LoggingService.LogException(ex, "PowerOptimizerView.BatteryReport");
+            StatusText.Text = "Erreur inattendue pendant la génération du rapport batterie (détails dans les journaux).";
+        }
+        finally
+        {
+            _batteryReportRunning = false;
+        }
+    }
 }
+

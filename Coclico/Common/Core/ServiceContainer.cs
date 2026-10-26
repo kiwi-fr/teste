@@ -35,7 +35,12 @@ public static class ServiceContainer
 
             return services.BuildServiceProvider(new ServiceProviderOptions
             {
+#if DEBUG
+
                 ValidateOnBuild = true,
+#else
+                ValidateOnBuild = false,
+#endif
                 ValidateScopes = false
             });
         }, LazyThreadSafetyMode.ExecutionAndPublication);

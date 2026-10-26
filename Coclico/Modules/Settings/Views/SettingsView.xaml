@@ -447,6 +447,20 @@
                                 <Button Grid.Column="1" Content="{DynamicResource Settings_Rename}" Command="{Binding RenameProfileCommand}" Margin="8,0,0,0" Style="{StaticResource SecondaryButton}" Padding="12,7"/>
                             </Grid>
                         </Border>
+
+                        <TextBlock Text="SAUVEGARDE DES RÉGLAGES" Style="{StaticResource GroupLabel}" Margin="0,14,0,0"/>
+                        <Border Style="{StaticResource OptionRow}">
+                            <StackPanel>
+                                <TextBlock Text="Exportez tous vos réglages Coclico dans un fichier JSON pour les mettre en sécurité ou les transférer sur un autre PC. L'import ne touche jamais les données propres à cette installation (première exécution, écrans de bienvenue)."
+                                           Style="{StaticResource OptionDesc}" Margin="0,0,0,12"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Exporter mes réglages" Click="BtnExportSettings_Click" Margin="0,0,12,0" Style="{StaticResource SecondaryButton}" Padding="14,8"
+                                            AutomationProperties.Name="Exporter les réglages dans un fichier JSON"/>
+                                    <Button Content="Importer des réglages" Click="BtnImportSettings_Click" Style="{StaticResource PrimaryButton}" Padding="14,8"
+                                            AutomationProperties.Name="Importer les réglages depuis un fichier JSON"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </Grid>
             </Border>
