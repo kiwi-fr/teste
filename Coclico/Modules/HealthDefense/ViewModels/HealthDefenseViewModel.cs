@@ -362,7 +362,7 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
 
             if (statuses.Count == 0)
             {
-                AppendLog("⚠️ Aucune donnée S.M.A.R.T. exposée par ce contrôleur (courant sur certains NVMe/RAID).");
+                AppendLog("⚠️ Aucune donnée de santé exposée par Windows pour vos disques (cas rare : certains contrôleurs RAID matériels).");
             }
             else
             {

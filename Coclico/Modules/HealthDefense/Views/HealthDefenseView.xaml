@@ -604,7 +604,7 @@
                         <TextBlock Text="SANTÉ DISQUE S.M.A.R.T." FontSize="11" FontWeight="Black"
                                    Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <TextBlock Text="Lecture seule de l'état S.M.A.R.T. de vos disques physiques : Windows signale-t-il un risque de panne imminente ? Vraie information matérielle, sans score global inventé. Certains contrôleurs NVMe/RAID n'exposent pas ces données — dans ce cas la liste reste vide et un message s'affiche dans le journal."
+                    <TextBlock Text="Lecture seule de l'état S.M.A.R.T. de vos disques physiques : Windows signale-t-il un risque de panne imminente ? Vraie information matérielle, sans score global inventé. L'état de santé est lu via l'API de stockage Windows, y compris les disques NVMe. Certains contrôleurs RAID matériels masquent ces données — dans ce cas la liste reste vide et un message s'affiche dans le journal."
                                FontSize="11" TextWrapping="Wrap" Margin="0,8,0,0"
                                Foreground="{DynamicResource TextSecondaryBrush}"/>
                     <Button Command="{Binding CheckDiskHealthCommand}" IsEnabled="{Binding IsNotBusy}" Cursor="Hand" Margin="0,10,0,0"
