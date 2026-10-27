@@ -2,12 +2,7 @@ using System.Security.Cryptography;
 
 namespace Coclico.Security.Infrastructure;
 
-public interface IJournalKeyStore
-{
-    byte[]? LoadOrCreateKey(string keyPath);
-}
-
-public sealed class DpapiJournalKeyStore : IJournalKeyStore
+public sealed class DpapiJournalKeyStore
 {
     private static readonly byte[] Entropy = System.Text.Encoding.UTF8.GetBytes("Coclico.SecurityJournal.Key.v1");
 
@@ -50,20 +45,5 @@ public sealed class DpapiJournalKeyStore : IJournalKeyStore
         {
             return null;
         }
-    }
-}
-
-public sealed class InMemoryJournalKeyStore : IJournalKeyStore
-{
-    private readonly byte[] _key;
-
-    public InMemoryJournalKeyStore()
-    {
-        _key = RandomNumberGenerator.GetBytes(32);
-    }
-
-    public byte[]? LoadOrCreateKey(string keyPath)
-    {
-        return (byte[])_key.Clone();
     }
 }

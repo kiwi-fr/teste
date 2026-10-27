@@ -46,7 +46,7 @@ Coclico démarre en utilisateur standard. Les outils qui ont besoin des droits a
 Le menu principal est un accordéon, inspiré des Paramètres Windows. Les modules sont rangés en trois sections dépliables, qui se souviennent de ce que tu as ouvert :
 
 <p align="center">
-  <img src="docs/Menu.png" alt="Menu principal de Coclico" width="480">
+  <img src="docs/menu.png" alt="Menu principal de Coclico" width="480">
 </p>
 
 | Section | Modules |

@@ -251,7 +251,7 @@ All screenshots live in `docs/`. They also illustrate the user guides.
 
 <p align="center">
   <img src="docs/accueil.png" alt="Dashboard" width="400">
-  <img src="docs/Menu.png" alt="Menu" width="400">
+  <img src="docs/menu.png" alt="Menu" width="400">
   <br>
   <em>Dashboard (left) and navigation drawer (right) three collapsible groups.</em>
 </p>

@@ -251,7 +251,7 @@ Toutes les captures sont dans `docs/`. Elles illustrent aussi les guides utilisa
 
 <p align="center">
   <img src="docs/accueil.png" alt="Accueil" width="400">
-  <img src="docs/Menu.png" alt="Menu" width="400">
+  <img src="docs/menu.png" alt="Menu" width="400">
   <br>
   <em>Accueil (gauche) et tiroir de navigation (droite) trois groupes dépliables.</em>
 </p>

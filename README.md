@@ -46,7 +46,7 @@ Coclico starts as a standard user. Tools that need administrator rights ask for 
 The main menu is a grouped accordion, inspired by Windows Settings. Modules live in three collapsible sections that remember what you expanded:
 
 <p align="center">
-  <img src="docs/Menu.png" alt="Coclico main menu" width="480">
+  <img src="docs/menu.png" alt="Coclico main menu" width="480">
 </p>
 
 | Section | Modules |
