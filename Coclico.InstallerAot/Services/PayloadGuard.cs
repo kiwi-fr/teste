@@ -65,7 +65,7 @@ public static class PayloadGuard
 
             if (string.IsNullOrEmpty(entry.Name))
             {
-                if (!IsSafeArchiveEntry(entry.FullName))
+                if (entry.FullName.Contains("..", StringComparison.Ordinal) || !IsSafeArchiveEntry(entry.FullName))
                 {
                     throw new InvalidOperationException($"rejected archive entry '{entry.FullName}'");
                 }
@@ -81,7 +81,7 @@ public static class PayloadGuard
                 continue;
             }
 
-            if (!IsSafeArchiveEntry(entry.FullName))
+            if (entry.FullName.Contains("..", StringComparison.Ordinal) || !IsSafeArchiveEntry(entry.FullName))
             {
                 throw new InvalidOperationException($"rejected archive entry '{entry.FullName}'");
             }
@@ -462,8 +462,13 @@ public static class PayloadGuard
                 return [];
             }
 
-            using var reader = new StreamReader(stream);
-            JsonNode? root = JsonNode.Parse(reader.ReadToEnd());
+            string policyJson;
+            using (var reader = new StreamReader(stream))
+            {
+                policyJson = reader.ReadToEnd();
+            }
+
+            JsonNode? root = JsonNode.Parse(policyJson);
             if (root is not JsonObject rootObject || rootObject["keys"] is not JsonArray keys)
             {
                 return [];

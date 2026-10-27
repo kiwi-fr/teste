@@ -22,40 +22,32 @@ public partial class WingetUpdateService(SecureProcessRunner runner)
 
     public static IReadOnlyList<UpdateItem> Parse(string output)
     {
-        var items = new List<UpdateItem>();
-
-        foreach (var columns in output.Replace("\r", string.Empty)
+        return output.Replace("\r", string.Empty)
             .Split('\n')
             .Select(rawLine => rawLine.Trim())
             .Where(raw => raw.Length > 0 && !raw.StartsWith('-'))
             .Select(line => ColumnSeparator().Split(line))
-            .Where(cols => cols.Length >= 4 && !cols[0].Equals("Name", StringComparison.OrdinalIgnoreCase)))
-        {
-            var name = columns[0].Trim();
-            var id = columns[1].Trim();
-            var current = columns[2].Trim();
-            var available = columns[3].Trim();
-
-            if (id.Length == 0 || current.Length == 0 || available.Length == 0)
-                continue;
-
-            var unknown = current.Equals("Unknown", StringComparison.OrdinalIgnoreCase);
-
-            items.Add(new UpdateItem
+            .Where(cols => cols.Length >= 4 && !cols[0].Equals("Name", StringComparison.OrdinalIgnoreCase))
+            .Select(columns => (
+                Name: columns[0].Trim(),
+                Id: columns[1].Trim(),
+                Current: columns[2].Trim(),
+                Available: columns[3].Trim()))
+            .Where(columns => columns.Id.Length > 0 && columns.Current.Length > 0 && columns.Available.Length > 0)
+            .Select(columns => new UpdateItem
             {
-                Id = id,
-                Name = name,
+                Id = columns.Id,
+                Name = columns.Name,
                 Kind = UpdateKind.Application,
                 Source = UpdateSource.Winget,
-                Status = unknown ? UpdateItemStatus.UnknownVersion : UpdateItemStatus.Available,
-                CurrentVersion = current,
-                AvailableVersion = available
-            });
-        }
-
-        return items
-            .Where(i => !string.IsNullOrWhiteSpace(i.Name))
-            .GroupBy(i => i.Id, StringComparer.OrdinalIgnoreCase)
+                Status = columns.Current.Equals("Unknown", StringComparison.OrdinalIgnoreCase)
+                    ? UpdateItemStatus.UnknownVersion
+                    : UpdateItemStatus.Available,
+                CurrentVersion = columns.Current,
+                AvailableVersion = columns.Available
+            })
+            .Where(item => !string.IsNullOrWhiteSpace(item.Name))
+            .GroupBy(item => item.Id, StringComparer.OrdinalIgnoreCase)
             .Select(g => g.First())
             .ToList();
     }

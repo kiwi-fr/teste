@@ -174,7 +174,7 @@ public class NetworkMonitorService : IDisposable
             }
 
             var snapshot = new NetworkStats(now, totalSent, totalReceived, uploadKbps, downloadKbps, tcpConnections, pingMs);
-            if (Volatile.Read(ref _disposeState) != 0)
+            if (_cts.IsCancellationRequested || Volatile.Read(ref _disposeState) != 0)
             {
                 return;
             }

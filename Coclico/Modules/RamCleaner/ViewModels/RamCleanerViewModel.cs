@@ -317,7 +317,9 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
         if (_disposed) return;
         _disposed = true;
         Detach();
-        try { Interlocked.Exchange(ref _cleanCts, null)?.Cancel(); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, $"{Subsystem}.Dispose.CancelCts"); }
+        CancellationTokenSource? cts = Interlocked.Exchange(ref _cleanCts, null);
+        try { cts?.Cancel(); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, $"{Subsystem}.Dispose.CancelCts"); }
+        cts?.Dispose();
     }
 
     [RelayCommand]

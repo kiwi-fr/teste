@@ -52,9 +52,9 @@ public static class FileIntegrityScanner
 
         try
         {
-            foreach (string file in Directory.EnumerateFiles(rootDir, "*", SearchOption.AllDirectories))
+            foreach (string relative in Directory.EnumerateFiles(rootDir, "*", SearchOption.AllDirectories)
+                .Select(file => PathValidator.NormalizeSeparators(Path.GetRelativePath(rootDir, file))))
             {
-                string relative = PathValidator.NormalizeSeparators(Path.GetRelativePath(rootDir, file));
                 if (IsVariable(relative, variableRelativePaths))
                 {
                     continue;

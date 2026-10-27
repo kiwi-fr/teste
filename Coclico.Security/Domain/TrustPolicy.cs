@@ -12,8 +12,8 @@ public sealed class TrustedKey
 
     public bool IsActiveAt(DateTime atUtc)
     {
-        return !string.IsNullOrWhiteSpace(KeyId) &&
-            !string.IsNullOrWhiteSpace(PublicKeyBase64) &&
+        return string.IsNullOrWhiteSpace(KeyId) is false &&
+            string.IsNullOrWhiteSpace(PublicKeyBase64) is false &&
             atUtc >= ActiveFromUtc &&
             RevokedUtc is null;
     }

@@ -252,18 +252,18 @@ public sealed class SecurityJournal
             return "-";
         }
 
-        var builder = new StringBuilder(value.Length);
-        foreach (char c in value)
+        string sanitized = value
+            .Replace("|", " ")
+            .Replace("\n", " ")
+            .Replace("\r", " ")
+            .Replace("\t", " ");
+
+        if (sanitized.Length > 512)
         {
-            _ = builder.Append(c is '|' or '\n' or '\r' or '\t' ? ' ' : c);
+            sanitized = sanitized[..512];
         }
 
-        if (builder.Length > 512)
-        {
-            builder.Length = 512;
-        }
-
-        return builder.ToString();
+        return sanitized;
     }
 }
 

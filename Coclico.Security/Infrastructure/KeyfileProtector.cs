@@ -14,33 +14,25 @@ public static class KeyfileProtector
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(password);
 
-        var rsa = RSA.Create(4096);
-        try
-        {
-            string publicBase64 = ExportPublicKeyBase64(rsa);
-            string keyId = ComputeKeyId(publicBase64);
+        using var rsa = RSA.Create(4096);
+        string publicBase64 = ExportPublicKeyBase64(rsa);
+        string keyId = ComputeKeyId(publicBase64);
 
-            byte[] privateBytes = rsa.ExportPkcs8PrivateKey();
-            byte[] salt = RandomNumberGenerator.GetBytes(SaltSize);
-            byte[] nonce = RandomNumberGenerator.GetBytes(NonceSize);
-            byte[] key = DeriveKey(password, salt);
-            byte[] sealedBytes = AesGcmEncrypt(key, nonce, privateBytes);
+        byte[] privateBytes = rsa.ExportPkcs8PrivateKey();
+        byte[] salt = RandomNumberGenerator.GetBytes(SaltSize);
+        byte[] nonce = RandomNumberGenerator.GetBytes(NonceSize);
+        byte[] key = DeriveKey(password, salt);
+        byte[] sealedBytes = AesGcmEncrypt(key, nonce, privateBytes);
 
-            using var stream = new FileStream(keyfilePath, FileMode.Create, FileAccess.Write, FileShare.None);
-            stream.Write(System.Text.Encoding.UTF8.GetBytes(SecurityLimits.KeyFileMagic));
-            stream.Write([(byte)3]);
-            stream.Write(BitConverter.GetBytes(SecurityLimits.KeyFileIterations));
-            stream.Write(salt);
-            stream.Write(nonce);
-            stream.Write(sealedBytes);
+        using var stream = new FileStream(keyfilePath, FileMode.Create, FileAccess.Write, FileShare.None);
+        stream.Write(System.Text.Encoding.UTF8.GetBytes(SecurityLimits.KeyFileMagic));
+        stream.Write([(byte)3]);
+        stream.Write(BitConverter.GetBytes(SecurityLimits.KeyFileIterations));
+        stream.Write(salt);
+        stream.Write(nonce);
+        stream.Write(sealedBytes);
 
-            return (rsa, keyId);
-        }
-        catch (Exception ex) when (ex is not OutOfMemoryException)
-        {
-            rsa.Dispose();
-            throw;
-        }
+        return (RSA.Create(rsa.ExportParameters(true)), keyId);
     }
 
     public static RSA LoadPrivateKey(string keyfilePath, string password)
