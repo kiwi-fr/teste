@@ -24,19 +24,13 @@ public partial class WingetUpdateService(SecureProcessRunner runner)
     {
         var items = new List<UpdateItem>();
 
-        foreach (var line in output.Replace("\r", string.Empty)
+        foreach (var columns in output.Replace("\r", string.Empty)
             .Split('\n')
             .Select(rawLine => rawLine.Trim())
-            .Where(raw => raw.Length > 0 && !raw.StartsWith('-')))
+            .Where(raw => raw.Length > 0 && !raw.StartsWith('-'))
+            .Select(line => ColumnSeparator().Split(line))
+            .Where(cols => cols.Length >= 4 && !cols[0].Equals("Name", StringComparison.OrdinalIgnoreCase)))
         {
-
-            var columns = ColumnSeparator().Split(line);
-            if (columns.Length < 4)
-                continue;
-
-            if (columns[0].Equals("Name", StringComparison.OrdinalIgnoreCase))
-                continue;
-
             var name = columns[0].Trim();
             var id = columns[1].Trim();
             var current = columns[2].Trim();

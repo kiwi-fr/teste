@@ -14,7 +14,7 @@ If you discover a security flaw in Coclico:
 2. Use the "Report a vulnerability" tool in the repository's Security tab
 3. Describe the issue and the steps to reproduce
 
-You will receive a response within 7 days. Valid flaws will be fixed as a priority and credited in the related release.
+You will receive a response within 7 days. Valid flaws will be fixed as a priority and credited in the related release. Private vulnerability reports can also be sent through https://github.com/kiwi-fr/teste/security/advisories. We follow a coordinated disclosure process: a confirmed vulnerability is fixed within 30 days of confirmation, and the fix is published no later than 90 days after the initial report.
 
 Si vous découvrez une faille de sécurité dans Coclico :
 
@@ -22,7 +22,7 @@ Si vous découvrez une faille de sécurité dans Coclico :
 2. Utilisez l'outil « Report a vulnerability » de l'onglet Security du dépôt
 3. Décrivez le problème et les étapes pour le reproduire
 
-Vous recevrez une réponse sous 7 jours. Les failles valides seront corrigées en priorité et créditées dans la release concernée.
+Vous recevrez une réponse sous 7 jours. Les failles valides seront corrigées en priorité et créditées dans la release concernée. Les signalements privés passent aussi par https://github.com/kiwi-fr/teste/security/advisories. Nous suivons un processus de divulgation coordonnée : une vulnérabilité confirmée est corrigée sous 30 jours après confirmation, et la correction est publiée au plus tard 90 jours après le signalement initial.
 
 ## Chaîne de confiance / Chain of trust
 

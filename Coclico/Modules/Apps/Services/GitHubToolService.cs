@@ -109,12 +109,11 @@ public sealed class GitHubToolService
                 }
 
                 string content = await Http.GetStringAsync(url, ct).ConfigureAwait(false);
-                foreach (string line in content.Split('\n')
+                foreach (string[] parts in content.Split('\n')
                     .Select(rawLine => rawLine.Trim().TrimStart('*', '-'))
-                    .Where(raw => raw.Length > 0))
+                    .Where(raw => raw.Length > 0)
+                    .Select(line => line.Split(' ', 2)))
                 {
-
-                    string[] parts = line.Split(' ', 2);
                     string hash = parts[0].Trim();
                     if (hash.Length != 64)
                     {
