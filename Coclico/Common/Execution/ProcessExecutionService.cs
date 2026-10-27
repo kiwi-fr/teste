@@ -26,6 +26,12 @@ public sealed class ProcessExecutionService : IProcessExecutionService
             return new ProcessExecutionResult(false, -1, string.Empty, string.Empty, "Executable path cannot be empty.");
         }
 
+        if (!IntegrityGate.IsSensitiveOperationAllowed("process-execution", out string integrityReason))
+        {
+            LoggingService.LogError($"[ProcessExecutionService] Execute blocked: {integrityReason}");
+            return new ProcessExecutionResult(false, -1, string.Empty, string.Empty, integrityReason);
+        }
+
         List<string> argList = arguments?.ToList() ?? [];
         string rawArgString = string.Join(" ", argList);
         string fullCommand = $"{executable} {rawArgString}".Trim();
@@ -179,6 +185,13 @@ public sealed class ProcessExecutionService : IProcessExecutionService
         {
             return false;
         }
+
+        if (!IntegrityGate.IsSensitiveOperationAllowed(asAdmin ? "launch-as-admin" : "launch-application", out string launchReason))
+        {
+            LoggingService.LogError($"[ProcessExecutionService] Launch blocked: {launchReason}");
+            return false;
+        }
+
         string safeArguments = RequoteArguments(arguments);
 
         string fullCommand = string.IsNullOrWhiteSpace(safeArguments) ? appPath : $"{appPath} {safeArguments}";

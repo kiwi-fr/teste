@@ -67,6 +67,111 @@ function Write-Success {
     param([string]$Message)
     Write-Host "[+] $Message" -ForegroundColor Green
 }
+function Read-SigningPassword {
+    param([string]$Prompt, [int]$MinLength = 0, [int]$MaxLength = 0)
+    while ($true) {
+        $secure = Read-Host $Prompt -AsSecureString
+        $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+        $password = ""
+        try {
+            $password = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr)
+        }
+        finally {
+            [void][Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
+        }
+        if ([string]::IsNullOrEmpty($password)) {
+            return ""
+        }
+        if (($MinLength -gt 0) -and ($password.Length -lt $MinLength)) {
+            Write-Host (T "  [!] Mot de passe trop court : $MinLength caracteres exactement, recommencez." "  [!] Password too short: exactly $MinLength characters, try again.") -ForegroundColor Yellow
+            continue
+        }
+        if (($MaxLength -gt 0) -and ($password.Length -gt $MaxLength)) {
+            Write-Host (T "  [!] Mot de passe trop long : $MaxLength caracteres exactement, recommencez." "  [!] Password too long: exactly $MaxLength characters, try again.") -ForegroundColor Yellow
+            continue
+        }
+        return $password
+    }
+}
+
+function Get-SigningPasswordVaultPath {
+    param([string]$KeyfilePath)
+    return Join-Path (Split-Path -Parent $KeyfilePath) "key.pwd.protected"
+}
+
+function Save-SigningPasswordVault {
+    param([string]$KeyfilePath, [string]$Password)
+    try {
+        Add-Type -AssemblyName System.Security
+        $plainBytes = [System.Text.Encoding]::UTF8.GetBytes($Password)
+        $entropyBytes = [System.Text.Encoding]::UTF8.GetBytes("coclico-signing-vault")
+        $protectedBytes = [System.Security.Cryptography.ProtectedData]::Protect($plainBytes, $entropyBytes, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
+        [System.IO.File]::WriteAllBytes((Get-SigningPasswordVaultPath -KeyfilePath $KeyfilePath), $protectedBytes)
+        return $true
+    }
+    catch {
+        return $false
+    }
+}
+
+function Load-SigningPasswordVault {
+    param([string]$KeyfilePath)
+    try {
+        $vaultPath = Get-SigningPasswordVaultPath -KeyfilePath $KeyfilePath
+        if (-not (Test-Path $vaultPath)) {
+            return $null
+        }
+        Add-Type -AssemblyName System.Security
+        $protectedBytes = [System.IO.File]::ReadAllBytes($vaultPath)
+        $entropyBytes = [System.Text.Encoding]::UTF8.GetBytes("coclico-signing-vault")
+        $plainBytes = [System.Security.Cryptography.ProtectedData]::Unprotect($protectedBytes, $entropyBytes, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
+        return [System.Text.Encoding]::UTF8.GetString($plainBytes)
+    }
+    catch {
+        return $null
+    }
+}
+
+function Clear-SigningPasswordVault {
+    param([string]$KeyfilePath)
+    $vaultPath = Get-SigningPasswordVaultPath -KeyfilePath $KeyfilePath
+    if (Test-Path $vaultPath) {
+        Remove-Item -LiteralPath $vaultPath -Force -ErrorAction SilentlyContinue
+    }
+}
+
+function Confirm-RememberSigningPassword {
+    param([string]$KeyfilePath, [string]$Password)
+    if ($CI -or [string]::IsNullOrEmpty($Password)) {
+        return
+    }
+    if (Test-Path (Get-SigningPasswordVaultPath -KeyfilePath $KeyfilePath)) {
+        return
+    }
+    $answer = Read-Host (T "Memoriser ce mot de passe sur cette machine pour ne plus le retaper ? (O/N)" "Remember this password on this machine to avoid retyping it? (Y/N)")
+    if ($answer -match '^[OoYy]$') {
+        if (Save-SigningPasswordVault -KeyfilePath $KeyfilePath -Password $Password) {
+            Write-Success (T "Mot de passe memorise : chiffre par Windows pour votre profil, les prochains builds ne le demanderont plus." "Password remembered: encrypted by Windows for your profile, next builds will not ask for it anymore.")
+        }
+        else {
+            Write-Host (T "  [-] Impossible de memoriser le mot de passe, il sera redemande au prochain build." "  [-] Could not remember the password, it will be asked again at next build.") -ForegroundColor DarkGray
+        }
+    }
+    else {
+        Write-Host (T "  [-] Mot de passe non memorise, il sera redemande au prochain build." "  [-] Password not remembered, it will be asked again at next build.") -ForegroundColor DarkGray
+    }
+}
+
+function Invoke-SigningTool {
+    param([string[]]$ToolArgs)
+    $fullArgs = [System.Collections.Generic.List[string]]::new()
+    [void]$fullArgs.AddRange([string[]]@(
+        "run", "--project", "$rootDir\Coclico.Security\Coclico.Security.csproj", "-c", "Release", "--"
+    ))
+    [void]$fullArgs.AddRange($ToolArgs)
+    & dotnet @fullArgs | Out-Host
+    return $LASTEXITCODE
+}
 
 function Write-ProgressBar {
     param([int]$Current, [int]$Total, [string]$Text)
@@ -232,12 +337,7 @@ try {
         Write-Success "$(T "Coclico publie dans : " "Coclico published to: ")$publishDir"
     }
 
-    Write-Section (T "CREATION DU PAYLOAD" "CREATING PAYLOAD")
-
-    $payloadZip = "$installerProjDir\payload.zip"
-
-    Add-Type -AssemblyName System.IO.Compression -ErrorAction SilentlyContinue
-    Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction SilentlyContinue
+    Write-Section (T "SIGNATURE DU MANIFESTE D'INTEGRITE" "INTEGRITY MANIFEST SIGNING")
 
     $cudaRuntimeFiles = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
     [void]$cudaRuntimeFiles.UnionWith([string[]]@(
@@ -250,6 +350,146 @@ try {
         "nvrtc64_120_0.alt.dll",
         "nvjitlink64_12.dll"
     ))
+    $cudaDirExclusion = "runtimes/win-x64/native/cuda12/"
+
+    $signExcludes = [System.Collections.Generic.List[string]]::new()
+    [void]$signExcludes.Add("*.pdb")
+    if (-not $IncludeCuda) {
+        [void]$signExcludes.Add($cudaDirExclusion)
+        foreach ($dll in $cudaRuntimeFiles) {
+            [void]$signExcludes.Add($dll)
+        }
+    }
+
+    $signingKeyfile = Join-Path $PSScriptRoot "Key\key.keyfile"
+    $signingPubfile = Join-Path $PSScriptRoot "Key\key.pub"
+    $signingPasswordMin = 128
+    $signingPasswordMax = 128
+    $signingGeneration = 1
+    if ($env:CCLICO_SIGNING_GENERATION) {
+        $signingGeneration = [int]$env:CCLICO_SIGNING_GENERATION
+    }
+    $signingReady = $false
+
+    if (Test-Path $signingKeyfile) {
+        Write-Step (T "Verification de la cle de signature existante..." "Validating existing signing key...")
+        Write-Host (T "  [+] Cle de signature existante trouvee : installer\Key\key.keyfile. Le script la reconnait, aucune nouvelle cle a generer." "  [+] Existing signing key found: installer\Key\key.keyfile. The script recognizes it, no new key to generate.") -ForegroundColor Green
+        $signingVaultUsed = $false
+        if (-not $env:CCLICO_SIGNING_PASSWORD -and -not $CI) {
+            $signingVaultPassword = Load-SigningPasswordVault -KeyfilePath $signingKeyfile
+            if ($signingVaultPassword) {
+                $env:CCLICO_SIGNING_PASSWORD = $signingVaultPassword
+                $signingVaultUsed = $true
+                Write-Host (T "  [+] Mot de passe memorise sur cette machine : aucune saisie necessaire." "  [+] Password remembered on this machine: no input needed.") -ForegroundColor Green
+            }
+        }
+        if (-not $env:CCLICO_SIGNING_PASSWORD -and -not $CI) {
+            Write-Host (T "  [i] La cle est chiffree : tapez son mot de passe pour la deverrouiller. Il pourra etre memorise pour les prochains builds." "  [i] The key is encrypted: type its password to unlock it. It can be remembered for next builds.") -ForegroundColor DarkGray
+            $env:CCLICO_SIGNING_PASSWORD = Read-SigningPassword (T "Mot de passe de la cle de signature ($signingPasswordMin caracteres exactement, vide = build sans signature)" "Signing key password (exactly $signingPasswordMin characters, empty = unsigned build)") -MinLength $signingPasswordMin -MaxLength $signingPasswordMax
+        }
+        if (-not $env:CCLICO_SIGNING_PASSWORD) {
+            Write-Host (T "  [-] Mot de passe non fourni, build sans signature." "  [-] Password not provided, unsigned build.") -ForegroundColor DarkGray
+        }
+        else {
+            $signingAttempts = 0
+            $signingMaxAttempts = 3
+            while (-not $signingReady) {
+                $exit = Invoke-SigningTool -ToolArgs @("check", "--keyfile", $signingKeyfile, "--password-env", "CCLICO_SIGNING_PASSWORD")
+                if ($exit -eq 0) {
+                    $signingReady = $true
+                    Write-Success (T "Cle de signature existante validee (keyId affiche ci-dessus)." "Existing signing key validated (keyId shown above).")
+                    Confirm-RememberSigningPassword -KeyfilePath $signingKeyfile -Password $env:CCLICO_SIGNING_PASSWORD
+                }
+                else {
+                    if ($signingVaultUsed) {
+                        $signingVaultUsed = $false
+                        Clear-SigningPasswordVault -KeyfilePath $signingKeyfile
+                        Write-Host (T "  [-] Le mot de passe memorise ne correspond plus a cette cle, memorisation supprimee." "  [-] The remembered password no longer matches this key, memorization removed.") -ForegroundColor DarkGray
+                    }
+                    $signingAttempts++
+                    Write-Host (T "  [!] Mot de passe incorrect ou cle de signature invalide (tentative $signingAttempts/$signingMaxAttempts)." "  [!] Wrong password or invalid signing key (attempt $signingAttempts/$signingMaxAttempts).") -ForegroundColor Yellow
+                    if ($CI -or $signingAttempts -ge $signingMaxAttempts) {
+                        Write-Host (T "  [!] Cle non validee, build sans signature." "  [!] Key not validated, unsigned build.") -ForegroundColor Yellow
+                        break
+                    }
+                    $env:CCLICO_SIGNING_PASSWORD = Read-SigningPassword (T "Reessayer : mot de passe de la cle ($signingPasswordMin caracteres exactement, vide = build sans signature)" "Retry: signing key password (exactly $signingPasswordMin characters, empty = unsigned build)") -MinLength $signingPasswordMin -MaxLength $signingPasswordMax
+                    if (-not $env:CCLICO_SIGNING_PASSWORD) {
+                        Write-Host (T "  [-] Mot de passe vide, build sans signature." "  [-] Empty password, unsigned build.") -ForegroundColor DarkGray
+                        break
+                    }
+                }
+            }
+        }
+    }
+    else {
+        Write-Host (T "  [-] Aucune cle de signature trouvee (installer\Key\key.keyfile)." "  [-] No signing key found (installer\Key\key.keyfile).") -ForegroundColor DarkGray
+        $generateKey = ""
+        if ($CI) {
+            Write-Host (T "  [-] Mode CI : build sans signature." "  [-] CI mode: unsigned build.") -ForegroundColor DarkGray
+        }
+        else {
+            $generateKey = Read-Host (T "Generer une nouvelle cle de signature ? (O/N)" "Generate a new signing key? (Y/N)")
+        }
+        if ($generateKey -match '^[OoYy]$') {
+            if ($env:CCLICO_SIGNING_PASSWORD -and (($env:CCLICO_SIGNING_PASSWORD.Length -lt $signingPasswordMin) -or ($env:CCLICO_SIGNING_PASSWORD.Length -gt $signingPasswordMax))) {
+                Write-Host (T "  [!] Mot de passe fourni non conforme ($signingPasswordMin caracteres exactement), il sera redemande." "  [!] Provided password is not compliant (exactly $signingPasswordMin characters), it will be asked again.") -ForegroundColor Yellow
+                $env:CCLICO_SIGNING_PASSWORD = ""
+            }
+            if (-not $env:CCLICO_SIGNING_PASSWORD) {
+                $env:CCLICO_SIGNING_PASSWORD = Read-SigningPassword (T "Mot de passe de la nouvelle cle de signature ($signingPasswordMin caracteres exactement)" "Password for the new signing key (exactly $signingPasswordMin characters)") -MinLength $signingPasswordMin -MaxLength $signingPasswordMax
+            }
+            if (-not $env:CCLICO_SIGNING_PASSWORD) {
+                Write-Host (T "  [-] Mot de passe vide, build sans signature." "  [-] Empty password, unsigned build.") -ForegroundColor DarkGray
+            }
+            else {
+                $signingDir = Split-Path -Parent $signingKeyfile
+                if (-not (Test-Path $signingDir)) {
+                    [void](New-Item -ItemType Directory -Path $signingDir -Force)
+                }
+                $exit = Invoke-SigningTool -ToolArgs @("keygen", "--out", $signingKeyfile, "--pubout", $signingPubfile, "--password-env", "CCLICO_SIGNING_PASSWORD")
+                if ($exit -ne 0) {
+                    throw (T "Echec de la generation de la cle de signature." "Signing key generation failed.")
+                }
+                Write-Success (T "Cle de signature generee dans installer\Key\key.keyfile." "Signing key generated at installer\Key\key.keyfile.")
+                Write-Host (T "  [!] Ancrez la cle publique (installer\Key\key.pub) dans Coclico\Security\trust-policy.json avant de publier une release." "  [!] Anchor the public key (installer\Key\key.pub) into Coclico\Security\trust-policy.json before publishing a release.") -ForegroundColor Yellow
+                Write-Host (T "  [!] Le fichier key.keyfile est exclu de Git par .gitignore : ne le committez jamais." "  [!] key.keyfile is excluded from Git by .gitignore: never commit it.") -ForegroundColor Yellow
+                Confirm-RememberSigningPassword -KeyfilePath $signingKeyfile -Password $env:CCLICO_SIGNING_PASSWORD
+                $signingReady = $true
+            }
+        }
+        else {
+            Write-Host (T "  [-] Generation refusee, build sans signature." "  [-] Generation declined, unsigned build.") -ForegroundColor DarkGray
+        }
+    }
+
+    if ($signingReady) {
+        Write-Step (T "Signature du dossier publish..." "Signing publish folder...")
+        $signArgs = [System.Collections.Generic.List[string]]::new()
+        [void]$signArgs.AddRange([string[]]@(
+            "run", "--project", "$rootDir\Coclico.Security\Coclico.Security.csproj", "-c", "Release", "--",
+            "sign", "--dir", $publishDir, "--keyfile", $signingKeyfile, "--version", $Version,
+            "--generation", "$signingGeneration", "--out", (Join-Path $publishDir "integrity.json"),
+            "--password-env", "CCLICO_SIGNING_PASSWORD"
+        ))
+        foreach ($exclude in $signExcludes) {
+            [void]$signArgs.AddRange([string[]]@("--exclude", $exclude))
+        }
+        & dotnet @signArgs
+        if ($LASTEXITCODE -ne 0) {
+            throw (T "Echec de la signature du manifeste d'integrite." "Integrity manifest signing failed.")
+        }
+        Write-Success (T "Manifeste integrity.json signe." "integrity.json manifest signed.")
+    }
+    else {
+        Write-Host (T "  [-] Build sans signature : le payload ne sera pas verifie par le garde d'integrite." "  [-] Unsigned build: the payload will not be verified by the integrity guard.") -ForegroundColor DarkGray
+    }
+
+    Write-Section (T "CREATION DU PAYLOAD" "CREATING PAYLOAD")
+
+    $payloadZip = "$installerProjDir\payload.zip"
+
+    Add-Type -AssemblyName System.IO.Compression -ErrorAction SilentlyContinue
+    Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction SilentlyContinue
 
     $allPublishFiles = @(Get-ChildItem -Path $publishDir -Recurse -File)
 
@@ -369,6 +609,25 @@ try {
             throw (T "Echec de dotnet publish pour la version portable" "dotnet publish failed for portable version")
         }
         Write-Success "$(T "Coclico publie en autonome dans : " "Coclico published self-contained to: ")$portableDir"
+
+        if ($signingReady) {
+            Write-Step (T "Signature de la version portable..." "Signing portable version...")
+            $portableSignArgs = [System.Collections.Generic.List[string]]::new()
+            [void]$portableSignArgs.AddRange([string[]]@(
+                "run", "--project", "$rootDir\Coclico.Security\Coclico.Security.csproj", "-c", "Release", "--",
+                "sign", "--dir", $portableDir, "--keyfile", $signingKeyfile, "--version", $Version,
+                "--generation", "$signingGeneration", "--out", (Join-Path $portableDir "integrity.json"),
+                "--password-env", "CCLICO_SIGNING_PASSWORD"
+            ))
+            foreach ($exclude in $signExcludes) {
+                [void]$portableSignArgs.AddRange([string[]]@("--exclude", $exclude))
+            }
+            & dotnet @portableSignArgs
+            if ($LASTEXITCODE -ne 0) {
+                throw (T "Echec de la signature du manifeste portable." "Portable manifest signing failed.")
+            }
+            Write-Success (T "Manifeste portable integrite signe." "Portable integrity manifest signed.")
+        }
 
         Write-Step (T "Creation de l'archive portable..." "Creating portable archive...")
         $portableZip = "$finalOutputDir\Coclico-Portable-$Version$suffix.zip"

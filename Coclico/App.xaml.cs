@@ -88,6 +88,7 @@ public partial class App : Application
                     _ = services.AddSingleton<ISmartMemoryDaemonService, SmartMemoryDaemonService>();
                     _ = services.AddSingleton<UpdateManager>();
                     _ = services.AddSingleton<UpdateCheckService>();
+                    _ = services.AddSingleton<IntegrityRuntimeService>();
 
                     _ = services.AddSingleton<TrayService>();
                     _ = services.AddSingleton<NotificationService>();
@@ -167,6 +168,12 @@ public partial class App : Application
 
             try { CentralUnitWatchdog.Current.Start(); }
             catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "App.WatchdogStart"); }
+
+            try { NativeLibraryGuard.Initialize(); }
+            catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "App.NativeLibraryGuardInit"); }
+
+            try { ServiceContainer.GetRequired<IntegrityRuntimeService>().Start(); }
+            catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "App.IntegrityRuntimeStart"); }
 
             var splash = new SplashWindow();
             splash.Show();

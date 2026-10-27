@@ -47,6 +47,9 @@ public partial class App
         try { CentralUnitService.Current.Shutdown(); }
         catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "App.Shutdown.CentralUnit"); }
 
+        try { ServiceContainer.GetOptional<IntegrityRuntimeService>()?.Dispose(); }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "App.Shutdown.DisposeIntegrityRuntime"); }
+
         try { ServiceContainer.GetOptional<ResourceGuardService>()?.Stop(); ServiceContainer.GetOptional<ResourceGuardService>()?.Dispose(); }
         catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "App.Shutdown.DisposeResourceGuard"); }
 

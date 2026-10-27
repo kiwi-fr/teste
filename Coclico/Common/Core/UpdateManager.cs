@@ -8,6 +8,8 @@ using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using Coclico.Security.Domain;
+using Coclico.Security.Infrastructure;
 using Microsoft.Extensions.Logging;
 
 namespace Coclico.Services;
@@ -79,6 +81,11 @@ public class UpdateManager(ILogger<UpdateManager> logger)
 
             if (IsNewerVersion(release.TagName, currentVersion))
             {
+                if (!await AuthenticateAndUpdatePolicyAsync(release, ct).ConfigureAwait(false))
+                {
+                    return null;
+                }
+
                 _logger.LogInformation($"Update available: {release.TagName} (current: {currentVersion})");
                 return release;
             }
@@ -106,6 +113,63 @@ public class UpdateManager(ILogger<UpdateManager> logger)
             _logger.LogError($"Unexpected error checking updates: {ex.Message}");
             return null;
         }
+    }
+
+    private async Task<bool> AuthenticateAndUpdatePolicyAsync(GitHubRelease release, CancellationToken ct)
+    {
+        TrustPolicyDocument document = LoadTrustPolicy();
+        TrustPolicy trustPolicy = new() { Keys = document.Keys };
+
+        ReleaseAuthenticationResult authentication = await ReleaseAuthentication
+            .AuthenticateAsync(_httpClient, release, trustPolicy, ct)
+            .ConfigureAwait(false);
+
+        if (authentication.IsTrustedKeyConfigured && !authentication.IsAuthenticated)
+        {
+            _logger.LogError($"Refusing release {release.TagName}: {authentication.Reason}");
+            return false;
+        }
+
+        if (!authentication.IsAuthenticated)
+        {
+            _logger.LogWarning($"Release {release.TagName} is not signed: {authentication.Reason}");
+        }
+
+        UpdatePolicyResult policyResult = UpdatePolicyChecker.Evaluate(
+            release.TagName,
+            authentication.SecurityGeneration,
+            document.UpdatePolicy);
+        if (policyResult.Decision == UpdatePolicyDecision.Blocked)
+        {
+            _logger.LogError($"Refusing release {release.TagName}: {policyResult.Reason}");
+            return false;
+        }
+
+        if (policyResult.Decision == UpdatePolicyDecision.RecoveryAllowed)
+        {
+            _logger.LogWarning($"Release {release.TagName} accepted as recovery: {policyResult.Reason}");
+        }
+
+        return true;
+    }
+
+    private static TrustPolicyDocument LoadTrustPolicy()
+    {
+        try
+        {
+            System.Reflection.Assembly assembly = typeof(UpdateManager).Assembly;
+            using System.IO.Stream? stream = assembly.GetManifestResourceStream("Coclico.Security.trust-policy.json");
+            if (stream != null)
+            {
+                return TrustStore.Load(stream);
+            }
+        }
+        catch (Exception ex) when (ex is IOException or InvalidOperationException or System.Text.Json.JsonException)
+        {
+            LoggingService.LogException(ex, "UpdateManager.LoadTrustPolicy");
+        }
+
+        return TrustStore.Empty();
     }
 
     public async Task<bool> DownloadReleaseAsync(

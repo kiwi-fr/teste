@@ -84,78 +84,101 @@ public static class InstallService
                 await DotnetRuntimeService.EnsureRuntimeAsync(runtimeProgress, ct);
             }
 
-            Directory.CreateDirectory(config.InstallPath);
+            string installFullPath = Path.GetFullPath(config.InstallPath);
+            string installParent = Path.GetDirectoryName(installFullPath) ?? Path.GetTempPath();
+            string stagingDir = Path.Join(installParent, ".coclico-stage-" + Guid.NewGuid().ToString("N"));
+            string? backupDir = null;
+            bool switched = false;
 
-            progress.Report(new InstallProgressReport(12, "Recherche des composants d'installation...", ""));
-            Stream? zipStream = GetPayloadStream();
-
-            if (zipStream != null)
+            try
             {
-                using (zipStream)
+                Directory.CreateDirectory(stagingDir);
+
+                progress.Report(new InstallProgressReport(12, "Recherche des composants d'installation...", ""));
+                Stream? zipStream = GetPayloadStream();
+
+                if (zipStream != null)
                 {
-                    string extractDir = Path.Join(Path.GetTempPath(), "coclico-install-extract");
-                    if (Directory.Exists(extractDir))
+                    using (zipStream)
                     {
-                        Directory.Delete(extractDir, recursive: true);
-                    }
-
-                    try
-                    {
-                        using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Read))
-                        {
-                            archive.ExtractToDirectory(extractDir, overwriteFiles: true);
-                        }
-
-                        foreach (string sourceDir in Directory.GetDirectories(extractDir, "*", SearchOption.AllDirectories))
-                        {
-                            Directory.CreateDirectory(Path.Join(config.InstallPath, Path.GetRelativePath(extractDir, sourceDir)));
-                        }
-
-                        string[] files = Directory.GetFiles(extractDir, "*", SearchOption.AllDirectories);
-                        int totalEntries = files.Length;
-                        int extracted = 0;
-
-                        foreach (string file in files)
+                        progress.Report(new InstallProgressReport(15, "Extraction sécurisée du payload...", "Chaque entrée de l'archive est validée avant écriture"));
+                        PayloadGuard.ExtractSafely(zipStream, stagingDir, (extracted, total) =>
                         {
                             ct.ThrowIfCancellationRequested();
-
-                            string destinationPath = Path.Join(config.InstallPath, Path.GetRelativePath(extractDir, file));
-                            string? targetDir = Path.GetDirectoryName(destinationPath);
-                            if (!string.IsNullOrEmpty(targetDir))
-                            {
-                                Directory.CreateDirectory(targetDir);
-                            }
-
-                            File.Copy(file, destinationPath, overwrite: true);
-                            extracted++;
-
-                            double percent = 15 + ((double)extracted / totalEntries * 70);
-                            progress.Report(new InstallProgressReport(percent, $"Extraction : {Path.GetFileName(file)}", $"{extracted}/{totalEntries} fichiers"));
-                        }
+                            double percent = 15 + ((double)extracted / Math.Max(1, total) * 50);
+                            progress.Report(new InstallProgressReport(percent, $"Extraction : {extracted}/{total} entrées", ""));
+                        });
                     }
-                    finally
-                    {
-                        try
-                        {
-                            if (Directory.Exists(extractDir))
-                            {
-                                Directory.Delete(extractDir, recursive: true);
-                            }
-                        }
-                        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
-                    }
-                }
-            }
-            else
-            {
-                string devPublishPath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "publish");
-                if (Directory.Exists(devPublishPath))
-                {
-                    CopyDirectoryWithProgress(devPublishPath, config.InstallPath, progress, ct);
                 }
                 else
                 {
-                    throw new FileNotFoundException("Archive d'installation introuvable (payload.zip absent).");
+                    string devPublishPath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "publish");
+                    if (Directory.Exists(devPublishPath))
+                    {
+                        CopyDirectoryWithProgress(devPublishPath, stagingDir, progress, ct);
+                    }
+                    else
+                    {
+                        throw new FileNotFoundException("Archive d'installation introuvable (payload.zip absent).");
+                    }
+                }
+
+                progress.Report(new InstallProgressReport(67, "Vérification cryptographique du payload...", "Manifeste d'intégrité signé"));
+                PayloadVerification verification = PayloadGuard.VerifyStaging(stagingDir);
+                if (verification.HasManifest && !verification.IsVerified)
+                {
+                    throw new InvalidOperationException("Payload rejeté : " + verification.Reason);
+                }
+
+                if (!verification.HasManifest)
+                {
+                    progress.Report(new InstallProgressReport(70, "Aucun manifeste d'intégrité dans le payload.", verification.Reason));
+                }
+
+                progress.Report(new InstallProgressReport(71, "Bascule contrôlée de l'installation...", "L'ancienne version est conservée jusqu'à validation"));
+                try
+                {
+                    if (Directory.Exists(installFullPath))
+                    {
+                        backupDir = installFullPath + ".backup-" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                        Directory.Move(installFullPath, backupDir);
+                    }
+
+                    Directory.Move(stagingDir, installFullPath);
+                    switched = true;
+                }
+                catch (Exception switchEx) when (switchEx is IOException or UnauthorizedAccessException)
+                {
+                    TryRestoreBackup(backupDir, installFullPath);
+                    throw new InvalidOperationException("Bascule impossible, l'installation existante a été restaurée : " + switchEx.Message, switchEx);
+                }
+
+                progress.Report(new InstallProgressReport(74, "Contrôle final des fichiers installés...", verification.Reason));
+                PayloadVerification finalCheck = PayloadGuard.VerifyStaging(installFullPath);
+                if (finalCheck.HasManifest && !finalCheck.IsVerified)
+                {
+                    RollbackSwitch(installFullPath, backupDir);
+                    throw new InvalidOperationException("Contrôle final échoué, retour à la version précédente : " + finalCheck.Reason);
+                }
+
+                if (backupDir != null)
+                {
+                    TryDeleteDirectory(backupDir);
+                    backupDir = null;
+                }
+
+                progress.Report(new InstallProgressReport(75, "Application des permissions Windows...", ""));
+                if (!PayloadGuard.TryHardenInstallAcl(installFullPath))
+                {
+                    Debug.WriteLine("[InstallService] Durcissement ACL non appliqué (non bloquant).");
+                }
+            }
+            finally
+            {
+                TryDeleteDirectory(stagingDir);
+                if (switched && backupDir != null)
+                {
+                    TryDeleteDirectory(backupDir);
                 }
             }
 
@@ -637,6 +660,57 @@ public static class InstallService
         {
             Debug.WriteLine($"[InstallService] Planification de la suppression au redémarrage impossible pour '{filePath}' : {ex.Message}");
             return false;
+        }
+    }
+
+    private static void TryRestoreBackup(string? backupDir, string installPath)
+    {
+        try
+        {
+            if (backupDir != null && Directory.Exists(backupDir) && !Directory.Exists(installPath))
+            {
+                Directory.Move(backupDir, installPath);
+            }
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
+        {
+            Debug.WriteLine($"[InstallService] Restauration de secours impossible : {ex.Message}");
+        }
+    }
+
+    private static void RollbackSwitch(string installPath, string? backupDir)
+    {
+        try
+        {
+            if (Directory.Exists(installPath))
+            {
+                string failedDir = installPath + ".failed-" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                Directory.Move(installPath, failedDir);
+            }
+
+            if (backupDir != null && Directory.Exists(backupDir))
+            {
+                Directory.Move(backupDir, installPath);
+            }
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
+        {
+            Debug.WriteLine($"[InstallService] Retour arrière impossible : {ex.Message}");
+        }
+    }
+
+    private static void TryDeleteDirectory(string path)
+    {
+        try
+        {
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, recursive: true);
+            }
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
+        {
+            Debug.WriteLine($"[InstallService] Nettoyage de '{path}' impossible : {ex.Message}");
         }
     }
 }

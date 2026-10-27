@@ -28,5 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Coclico\Coclico.csproj" />
+    <ProjectReference Include="..\Coclico.Security\Coclico.Security.csproj" />
   </ItemGroup>
 </Project>

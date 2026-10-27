@@ -74,3 +74,9 @@ audit-reports/
 audit-solution-*.txt
 
 *_wpftmp.csproj
+
+installer/Key/*.keyfile
+installer/Key/*.pwd.protected
+*.key
+*.pem
+*.pub

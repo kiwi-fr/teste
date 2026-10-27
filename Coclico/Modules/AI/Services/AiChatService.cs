@@ -490,6 +490,12 @@ public sealed class AiChatService : IAiService, IDisposable
                 return false;
             }
 
+            if (!NativeLibraryGuard.IsNativeLoadPathAllowed(path))
+            {
+                LoggingService.LogWarning($"[AiChatService] Bibliothèque native refusée par la politique de chargement : '{path}'.");
+                return false;
+            }
+
             try
             {
                 _ = System.Runtime.InteropServices.NativeLibrary.Load(path);
@@ -506,6 +512,12 @@ public sealed class AiChatService : IAiService, IDisposable
 
     private static void TryLoadOptional(string path)
     {
+        if (!NativeLibraryGuard.IsNativeLoadPathAllowed(path))
+        {
+            LoggingService.LogWarning($"[AiChatService] Bibliothèque native refusée par la politique de chargement : '{path}'.");
+            return;
+        }
+
         try
         {
             _ = System.Runtime.InteropServices.NativeLibrary.Load(path);

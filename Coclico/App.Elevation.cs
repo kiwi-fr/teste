@@ -35,6 +35,12 @@ public partial class App
 
     public static bool TryRestartAsAdmin(string[]? args = null)
     {
+        if (!IntegrityGate.IsSensitiveOperationAllowed("restart-as-admin", out string integrityReason))
+        {
+            LoggingService.LogError($"[App.TryRestartAsAdmin] Elevation refused: {integrityReason}");
+            return false;
+        }
+
         try
         {
             string exePath = Environment.ProcessPath ?? string.Empty;
