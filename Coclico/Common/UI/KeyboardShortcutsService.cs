@@ -83,12 +83,6 @@ public sealed class KeyboardShortcutsService : IDisposable
         Load();
         RegisterAll();
     }
-
-    public List<KeyboardShortcut> GetShortcuts()
-    {
-        return [.. _shortcuts];
-    }
-
     public void AddShortcut(KeyboardShortcut shortcut)
     {
         int existing = _shortcuts.FindIndex(s =>

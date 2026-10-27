@@ -384,13 +384,6 @@ public partial class SettingsViewModel : INotifyPropertyChanged
         _settings.Settings.ThemePreset = "Custom";
         _settings.Save();
     }
-
-    [RelayCommand]
-    private void SaveAll()
-    {
-        _settings.Save();
-    }
-
     public void RefreshProfiles()
     {
         List<AppProfile> profiles = _profiles.GetAllProfiles();

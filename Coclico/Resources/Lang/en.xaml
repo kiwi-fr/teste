@@ -126,8 +126,6 @@ Estimated: {0} across {1} categories.</system:String>
     <system:String x:Key="Common_Edit">Edit</system:String>
     <system:String x:Key="Common_Error">Error</system:String>
     <system:String x:Key="MainWindow_RamCleanedShortcut">RAM cleaned via shortcut</system:String>
-    <system:String x:Key="Programs_GroupNameExists">A group with this name already exists.</system:String>
-    <system:String x:Key="Programs_CategoryExists">This category already exists.</system:String>
     <system:String x:Key="Common_MoveDown">Move Down</system:String>
     <system:String x:Key="Common_MoveUp">Move Up</system:String>
     <system:String x:Key="Common_Open">Open</system:String>
@@ -591,6 +589,8 @@ Estimated: {0} across {1} categories.</system:String>
     <system:String x:Key="RamCleaner_ModeDeep_Badge">🔥 Reclaims maximum available RAM</system:String>
     <system:String x:Key="RamCleaner_ModeDeep_Item1_Desc">All network &amp; clipboard caches</system:String>
     <system:String x:Key="RamCleaner_ModeDeep_Item1_Title">Full purge</system:String>
+    <system:String x:Key="RamCleaner_ModeDeep_Item2_Desc">Working sets, file caches, standby &amp; registry</system:String>
+    <system:String x:Key="RamCleaner_ModeDeep_Item2_Title">Memory &amp; system caches</system:String>
     <system:String x:Key="RamCleaner_ModeDeep_Subtitle">Maximum purge of all memory layers:</system:String>
     <system:String x:Key="RamCleaner_ModeDeep_Title">Deep Clean (~5–10 s)</system:String>
     <system:String x:Key="RamCleaner_ModeNormal_Badge">✔ Recommended for daily usage</system:String>

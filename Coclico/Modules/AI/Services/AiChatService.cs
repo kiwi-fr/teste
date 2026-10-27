@@ -1055,20 +1055,6 @@ public sealed class AiChatService : IAiService, IDisposable
             _ = _chatSem.Release();
         }
     }
-
-    public async Task ResetContextOnlyAsync(CancellationToken ct = default)
-    {
-        await _chatSem.WaitAsync(ct).ConfigureAwait(false);
-        try
-        {
-            ResetContextOnlyInternal();
-        }
-        finally
-        {
-            _ = _chatSem.Release();
-        }
-    }
-
     private void ResetContextOnlyInternal()
     {
         if (_model == null)

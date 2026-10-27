@@ -173,18 +173,6 @@ public sealed class SystemHealthService
         onOutput?.Invoke("🔍 Lancement de la vérification d'intégrité SFC (System File Checker)...");
         return await RunProcessAsync("sfc.exe", "/scannow", onOutput, ct);
     }
-
-    public async Task<DiagnosticResult> RunDismScanHealthAsync(Action<string>? onOutput = null, CancellationToken ct = default)
-    {
-        if (RejectWithoutAdmin(onOutput, out DiagnosticResult denied))
-        {
-            return denied;
-        }
-
-        onOutput?.Invoke("🔍 Vérification de l'image Windows avec DISM /ScanHealth...");
-        return await RunProcessAsync("dism.exe", "/Online /Cleanup-Image /ScanHealth", onOutput, ct);
-    }
-
     public async Task<DiagnosticResult> RunDismRestoreHealthAsync(Action<string>? onOutput = null, CancellationToken ct = default)
     {
         if (RejectWithoutAdmin(onOutput, out DiagnosticResult denied))

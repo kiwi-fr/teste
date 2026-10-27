@@ -133,27 +133,4 @@ public sealed class StartupHealthService
     {
         _lastWingetAvailable = false;
     }
-
-    public SystemHealthSnapshot GetCurrentHealth()
-    {
-        MemoryCleanerService.RamInfo ramInfo = MemoryCleanerService.GetRamInfo();
-
-        return new SystemHealthSnapshot(
-            WingetAvailable: _lastWingetAvailable,
-            InternetAvailable: _lastInternetAvailable,
-            RollbackSnapshotCount: 0,
-            CpuPercent: MemoryCleanerService.GetSystemCpuPercent(),
-            MemoryUsedMb: ramInfo.UsedPhysBytes / (1024 * 1024),
-            MemoryTotalMb: ramInfo.TotalPhysBytes / (1024 * 1024),
-            CheckedAt: DateTimeOffset.UtcNow);
-    }
 }
-
-public sealed record SystemHealthSnapshot(
-    bool WingetAvailable,
-    bool InternetAvailable,
-    int RollbackSnapshotCount,
-    double CpuPercent,
-    long MemoryUsedMb,
-    long MemoryTotalMb,
-    DateTimeOffset CheckedAt);

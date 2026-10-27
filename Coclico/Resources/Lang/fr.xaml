@@ -126,8 +126,6 @@ Estimation : {0} répartis sur {1} catégories.</system:String>
     <system:String x:Key="Common_Edit">Éditer</system:String>
     <system:String x:Key="Common_Error">Erreur</system:String>
     <system:String x:Key="MainWindow_RamCleanedShortcut">RAM nettoyée via raccourci</system:String>
-    <system:String x:Key="Programs_GroupNameExists">Un groupe avec ce nom existe déjà.</system:String>
-    <system:String x:Key="Programs_CategoryExists">Cette catégorie existe déjà.</system:String>
     <system:String x:Key="Common_MoveDown">Descendre</system:String>
     <system:String x:Key="Common_MoveUp">Monter</system:String>
     <system:String x:Key="Common_Open">Ouvrir</system:String>
@@ -591,6 +589,8 @@ Estimation : {0} répartis sur {1} catégories.</system:String>
     <system:String x:Key="RamCleaner_ModeDeep_Badge">🔥 Récupère le maximum de RAM possible</system:String>
     <system:String x:Key="RamCleaner_ModeDeep_Item1_Desc">Tous caches réseau &amp; presse-papier</system:String>
     <system:String x:Key="RamCleaner_ModeDeep_Item1_Title">Purge intégrale</system:String>
+    <system:String x:Key="RamCleaner_ModeDeep_Item2_Desc">Working sets, caches fichiers, standby &amp; registre</system:String>
+    <system:String x:Key="RamCleaner_ModeDeep_Item2_Title">Mémoire &amp; caches système</system:String>
     <system:String x:Key="RamCleaner_ModeDeep_Subtitle">Purge maximale de toutes les couches mémoires :</system:String>
     <system:String x:Key="RamCleaner_ModeDeep_Title">Nettoyage Profond (~5–10 s)</system:String>
     <system:String x:Key="RamCleaner_ModeNormal_Badge">✔ Recommandé pour l&apos;usage quotidien</system:String>

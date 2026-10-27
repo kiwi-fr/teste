@@ -88,37 +88,6 @@ public class CleaningService
             ? $"{bytes / 1024.0:F0} {kbUnit}"
             : bytes < 1024L * 1024 * 1024 ? $"{bytes / (1024.0 * 1024):F1} {mbUnit}" : $"{bytes / (1024.0 * 1024 * 1024):F2} {gbUnit}";
     }
-
-    public async Task LaunchWindowsCleanupAsync()
-    {
-        string drive = GetWindowsDrive();
-        await Task.Run(async () =>
-        {
-            try
-            {
-                using var process = new Process
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = "cleanmgr.exe",
-                        Arguments = $"/d {drive}:",
-                        UseShellExecute = true,
-                        Verb = "runas",
-                        WindowStyle = ProcessWindowStyle.Normal
-                    }
-                };
-
-                _ = process.Start();
-                try { process.PriorityClass = ProcessPriorityClass.BelowNormal; } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "CleaningService.LaunchWindowsCleanup"); }
-                await process.WaitForExitAsync(CancellationToken.None).ConfigureAwait(false);
-            }
-            catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException or System.OperationCanceledException)
-            {
-                throw new InvalidOperationException($"Impossible de lancer le nettoyage Windows : {ex.Message}", ex);
-            }
-        });
-    }
-
     private static string GetWindowsDrive()
     {
         try
@@ -436,14 +405,6 @@ public class CleaningService
 
         return result;
     }
-
-    public async Task<long> EstimateCleanableBytesAsync(CancellationToken ct = default)
-    {
-        List<CleaningCategory> cats = GetAvailableCategories();
-        await ScanAllCategoriesAsync(cats, ct).ConfigureAwait(false);
-        return cats.Sum(c => c.BytesFound);
-    }
-
     private static async Task CleanWindowsTempAsync(CleaningCategory cat, CancellationToken ct)
     {
         string winTemp = Path.GetTempPath();

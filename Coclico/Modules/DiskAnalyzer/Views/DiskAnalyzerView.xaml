@@ -81,7 +81,7 @@
                         <ItemsControl x:Name="DrivesList" ItemsSource="{Binding Drives}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button Command="{Binding DataContext.SelectCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                    <Button Command="{Binding DataContext.SelectDriveCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                             CommandParameter="{Binding}" Cursor="Hand" Margin="0,0,0,8"
                                             Background="Transparent" BorderThickness="0" Padding="0"
                                             HorizontalContentAlignment="Stretch">

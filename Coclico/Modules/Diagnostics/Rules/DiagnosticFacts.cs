@@ -42,9 +42,6 @@ public sealed record CpuFacts(
     string? TopProcessName,
     double? TopProcessCpuPercent);
 
-public sealed record GpuFacts(
-    IReadOnlyList<GpuAdapterFacts> Adapters);
-
 public sealed record GpuAdapterFacts(
     string Name,
     string? DriverVersion,

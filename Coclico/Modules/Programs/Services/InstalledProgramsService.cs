@@ -1347,17 +1347,6 @@ public partial class InstalledProgramsService
         catch (IOException ex) { _ = ex; }
         catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
     }
-
-    public static List<ProgramInfo> DetectGames(List<ProgramInfo> allPrograms)
-    {
-        return allPrograms.Where(p =>
-            p.Source is "Steam" or "Epic Games" or "GOG" or "Ubisoft" or "EA" or "Rockstar" ||
-            p.InstallPath.Contains("games", StringComparison.OrdinalIgnoreCase) ||
-            p.InstallPath.Contains("jeux", StringComparison.OrdinalIgnoreCase) ||
-            IsKnownGame(p.Name) || p.Category == "Jeux"
-        ).ToList();
-    }
-
     public static bool IsKnownGame(string name)
     {
         return KnownGamesSet.Any(k => name.Contains(k, StringComparison.OrdinalIgnoreCase));

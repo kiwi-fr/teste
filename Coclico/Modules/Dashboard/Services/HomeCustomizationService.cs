@@ -173,26 +173,4 @@ public sealed class HomeCustomizationService
         b.Freeze();
         return b;
     }
-
-    public Brush GetTileBg(string tileKey, Brush defaultBg)
-    {
-        return Settings.Style switch
-        {
-            HomeThemeStyle.Minimalist => MinimalistBg,
-            HomeThemeStyle.Glassmorphism => GlassBg,
-            HomeThemeStyle.VibrantNeon => defaultBg,
-            _ => defaultBg
-        };
-    }
-
-    public Brush GetTileBorder(string tileKey, Brush defaultBorder, Brush neonAccent)
-    {
-        return Settings.Style switch
-        {
-            HomeThemeStyle.Minimalist => MinimalistBorder,
-            HomeThemeStyle.Glassmorphism => GlassBorder,
-            HomeThemeStyle.VibrantNeon => neonAccent,
-            _ => defaultBorder
-        };
-    }
 }
