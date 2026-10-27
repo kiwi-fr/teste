@@ -40,7 +40,7 @@ public sealed class ManifestVerifierTests : IDisposable
     {
         _ = _world.WriteFile("Coclico.exe", "binary-content");
         _ = _world.SaveManifest(_world.BuildManifest());
-        File.Delete(Path.Combine(_world.RootDir, "Coclico.exe"));
+        File.Delete(Path.Join(_world.RootDir, "Coclico.exe"));
 
         VerificationResult result = _world.Verify();
 

@@ -38,6 +38,7 @@ public static class PayloadGuard
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(stagingDir);
         string stagingRoot = Path.GetFullPath(stagingDir);
+        string normalizedRoot = stagingRoot.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         _ = Directory.CreateDirectory(stagingRoot);
 
         using var archive = new ZipArchive(zipStream, ZipArchiveMode.Read);
@@ -66,11 +67,14 @@ public static class PayloadGuard
             {
                 if (!IsSafeArchiveEntry(entry.FullName))
                 {
-                    throw new InvalidOperationException($"unsafe archive entry '{entry.FullName}'");
+                    throw new InvalidOperationException($"rejected archive entry '{entry.FullName}'");
                 }
 
                 string dirDest = Path.GetFullPath(Path.Join(stagingRoot, entry.FullName));
-                EnsureInsideStaging(dirDest, stagingRoot);
+                if (!dirDest.StartsWith(normalizedRoot + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new InvalidOperationException($"archive entry escapes the staging directory: '{dirDest}'");
+                }
                 _ = Directory.CreateDirectory(dirDest);
                 extracted++;
                 progress?.Invoke(extracted, total);
@@ -79,11 +83,14 @@ public static class PayloadGuard
 
             if (!IsSafeArchiveEntry(entry.FullName))
             {
-                throw new InvalidOperationException($"unsafe archive entry '{entry.FullName}'");
+                throw new InvalidOperationException($"rejected archive entry '{entry.FullName}'");
             }
 
             string destination = Path.GetFullPath(Path.Join(stagingRoot, entry.FullName));
-            EnsureInsideStaging(destination, stagingRoot);
+            if (!destination.StartsWith(normalizedRoot + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException($"archive entry escapes the staging directory: '{destination}'");
+            }
 
             string? parent = Path.GetDirectoryName(destination);
             if (!string.IsNullOrEmpty(parent))
@@ -336,15 +343,6 @@ public static class PayloadGuard
         }
     }
 
-    private static void EnsureInsideStaging(string destination, string stagingRoot)
-    {
-        string normalizedRoot = stagingRoot.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-        if (!destination.StartsWith(normalizedRoot + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
-        {
-            throw new InvalidOperationException($"archive entry escapes the staging directory: '{destination}'");
-        }
-    }
-
     private static bool TryVerifySignature(
         JsonObject manifest,
         List<TrustedKeyEntry> trustedKeys,
@@ -430,13 +428,11 @@ public static class PayloadGuard
         var entries = new SortedDictionary<string, (long Bytes, string Sha256)>(StringComparer.Ordinal);
         if (manifest["Files"] is JsonArray files)
         {
-            foreach (JsonNode? fileNode in files)
+            foreach (JsonObject file in files.OfType<JsonObject>()
+                .Where(file => file["Path"]?.GetValue<string>() is not null))
             {
-                if (fileNode is JsonObject file &&
-                    file["Path"]?.GetValue<string>() is { } path)
-                {
-                    entries[path] = (file["Bytes"]?.GetValue<long>() ?? 0, (file["Sha256"]?.GetValue<string>() ?? string.Empty).ToLowerInvariant());
-                }
+                string path = file["Path"]!.GetValue<string>();
+                entries[path] = (file["Bytes"]?.GetValue<long>() ?? 0, (file["Sha256"]?.GetValue<string>() ?? string.Empty).ToLowerInvariant());
             }
         }
 
@@ -466,25 +462,23 @@ public static class PayloadGuard
                 return [];
             }
 
-            JsonNode? root = JsonNode.Parse(new StreamReader(stream).ReadToEnd());
+            using var reader = new StreamReader(stream);
+            JsonNode? root = JsonNode.Parse(reader.ReadToEnd());
             if (root is not JsonObject rootObject || rootObject["keys"] is not JsonArray keys)
             {
                 return [];
             }
 
             var result = new List<TrustedKeyEntry>();
-            foreach (JsonNode? keyNode in keys)
+            foreach (JsonObject key in keys.OfType<JsonObject>()
+                .Where(key => key["keyId"]?.GetValue<string>() is not null &&
+                              key["publicKeyBase64"]?.GetValue<string>() is not null))
             {
-                if (keyNode is JsonObject key &&
-                    key["keyId"]?.GetValue<string>() is { } keyId &&
-                    key["publicKeyBase64"]?.GetValue<string>() is { } publicKey)
-                {
-                    result.Add(new TrustedKeyEntry(
-                        keyId,
-                        publicKey,
-                        DateTime.TryParse(key["activeFromUtc"]?.GetValue<string>(), null, System.Globalization.DateTimeStyles.RoundtripKind, out DateTime active) ? active : DateTime.UnixEpoch,
-                        DateTime.TryParse(key["revokedUtc"]?.GetValue<string>(), null, System.Globalization.DateTimeStyles.RoundtripKind, out DateTime revoked) ? revoked : null));
-                }
+                result.Add(new TrustedKeyEntry(
+                    key["keyId"]!.GetValue<string>(),
+                    key["publicKeyBase64"]!.GetValue<string>(),
+                    DateTime.TryParse(key["activeFromUtc"]?.GetValue<string>(), null, System.Globalization.DateTimeStyles.RoundtripKind, out DateTime active) ? active : DateTime.UnixEpoch,
+                    DateTime.TryParse(key["revokedUtc"]?.GetValue<string>(), null, System.Globalization.DateTimeStyles.RoundtripKind, out DateTime revoked) ? revoked : null));
             }
 
             return result;

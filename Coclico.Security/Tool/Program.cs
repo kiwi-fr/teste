@@ -59,7 +59,8 @@ public static class Program
         File.WriteAllText(publicKeyPath, publicBase64 + Environment.NewLine);
         Console.WriteLine($"keyId: {keyId}");
         Console.WriteLine($"public key written to {publicKeyPath}");
-        Console.WriteLine($"encrypted key file written to {keyfilePath}");        return 0;
+        Console.WriteLine($"encrypted key file written to {keyfilePath}");
+        return 0;
     }
 
     private static int RunSign(string[] args)
@@ -101,7 +102,7 @@ public static class Program
 
             if (!PathValidator.IsSafeRelativePath(relative))
             {
-                Console.Error.WriteLine($"unsafe path in payload: {relative}");
+                Console.Error.WriteLine($"rejected path in payload: {relative}");
                 return 2;
             }
 

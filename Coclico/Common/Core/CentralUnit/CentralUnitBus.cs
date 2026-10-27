@@ -134,13 +134,10 @@ public sealed class CentralUnitBus
 
         List<KeyValuePair<string, CacheEntry>> ordered = _cache.OrderBy(entry => entry.Value.LastAccessStamp).ToList();
         int excess = _cache.Count - _maxCacheEntries;
-        foreach (KeyValuePair<string, CacheEntry> entry in ordered.Take(excess))
-        {
-            if (_cache.TryRemove(KeyValuePair.Create(entry.Key, entry.Value)))
-            {
-                _ = Interlocked.Increment(ref _evictedEntries);
-            }
-        }
+        int evicted = ordered
+            .Take(excess)
+            .Count(entry => _cache.TryRemove(KeyValuePair.Create(entry.Key, entry.Value)));
+        _ = Interlocked.Add(ref _evictedEntries, evicted);
     }
 
     private sealed class CacheEntry

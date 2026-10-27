@@ -55,10 +55,11 @@ public sealed class SecurityFuzzTests : IDisposable
             "\t", "\n", "\0", " ", "x", "dll", "exe", "a", "sub", "win-x64", "native", "ünïcode", "日本語", "‮"
         ];
 
+        var builder = new System.Text.StringBuilder();
         for (int i = 0; i < 5000; i++)
         {
             int length = rng.Next(0, 12);
-            var builder = new System.Text.StringBuilder();
+            builder.Clear();
             for (int f = 0; f < length; f++)
             {
                 if (rng.Next(4) == 0)

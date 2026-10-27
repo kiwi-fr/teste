@@ -26,7 +26,7 @@ public sealed class BatteryReportServiceTests
     [Fact]
     public void OpenReport_NonexistentPath_DoesNotThrow()
     {
-        string nonexistent = Path.Combine(Path.GetTempPath(), "coclico-inexistant-" + Guid.NewGuid().ToString("N") + ".html");
+        string nonexistent = Path.Join(Path.GetTempPath(), "coclico-inexistant-" + Guid.NewGuid().ToString("N") + ".html");
 
         Exception? exception = Record.Exception(() => BatteryReportService.OpenReport(nonexistent));
 

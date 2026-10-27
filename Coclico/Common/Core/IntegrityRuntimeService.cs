@@ -34,7 +34,7 @@ public sealed class IntegrityRuntimeService : IDisposable
     public IntegrityRuntimeService()
     {
         _appDir = AppContext.BaseDirectory;
-        _manifestPath = Path.Combine(_appDir, ManifestFileName);
+        _manifestPath = Path.Join(_appDir, ManifestFileName);
         _appVersion = UpdateCheckService.GetCurrentVersion();
         TrustPolicyDocument document = LoadEmbeddedTrustPolicy();
         _trustPolicy = new TrustPolicy { Keys = document.Keys };
@@ -79,6 +79,11 @@ public sealed class IntegrityRuntimeService : IDisposable
 
     public static IntegrityRuntimeService? Current => _current;
 
+    private static void SetCurrent(IntegrityRuntimeService? service)
+    {
+        _current = service;
+    }
+
     public IntegrityStatus Status { get; private set; } = IntegrityStatus.Unknown;
 
     public VerificationResult? LastResult { get; private set; }
@@ -95,7 +100,7 @@ public sealed class IntegrityRuntimeService : IDisposable
         }
 
         _started = true;
-        _current = this;
+        SetCurrent(this);
         if (_watcher != null)
         {
             _watcher.EnableRaisingEvents = true;
@@ -184,19 +189,19 @@ public sealed class IntegrityRuntimeService : IDisposable
     {
         try
         {
-            string securityDir = Path.Combine(
+            string securityDir = Path.Join(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "Coclico",
                 "security");
             var keyStore = new DpapiJournalKeyStore();
-            byte[]? key = keyStore.LoadOrCreateKey(Path.Combine(securityDir, "journal.key"));
+            byte[]? key = keyStore.LoadOrCreateKey(Path.Join(securityDir, "journal.key"));
             if (key == null)
             {
                 LoggingService.LogWarning("[Integrity] Journal key store unavailable on this platform, journal disabled");
                 return null;
             }
 
-            return new SecurityJournal(Path.Combine(securityDir, "journal.log"), key);
+            return new SecurityJournal(Path.Join(securityDir, "journal.log"), key);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException or System.Security.Cryptography.CryptographicException)
         {
@@ -247,7 +252,7 @@ public sealed class IntegrityRuntimeService : IDisposable
 
         if (ReferenceEquals(_current, this))
         {
-            _current = null;
+            SetCurrent(null);
         }
     }
 }

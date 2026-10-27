@@ -158,7 +158,7 @@ public sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
         {
             State = UpdateCenterState.Idle;
         }
-        catch
+        catch (Exception ex) when (ex is not OutOfMemoryException)
         {
             LastScanSummary = "Analyse interrompue";
             State = UpdateCenterState.Idle;
@@ -211,7 +211,7 @@ public sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
                 item.SetStatus(UpdateItemStatus.Skipped);
                 break;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OutOfMemoryException)
             {
                 item.SetStatus(UpdateItemStatus.Failed);
                 failures.Add($"{item.Name} ({ex.Message})");

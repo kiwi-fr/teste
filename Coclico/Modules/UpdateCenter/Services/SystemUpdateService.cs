@@ -9,23 +9,33 @@ public class SystemUpdateService(SecureProcessRunner runner)
         try
         {
             runner.Timeout = TimeSpan.FromMinutes(2);
-            var (exitCode, output) = await runner.RunAsync("usoclient.exe", new[] { "ScanInstallWait" }, cancellationToken).ConfigureAwait(false);
+            var (exitCode, _) = await runner.RunAsync("usoclient.exe", new[] { "ScanInstallWait" }, cancellationToken).ConfigureAwait(false);
+            if (exitCode != 0)
+            {
+                return UnknownStatus();
+            }
+
             return UpdateItem.UpToDate("windows", "Windows Update", UpdateKind.Windows, UpdateSource.WindowsUpdate);
         }
         catch (OperationCanceledException)
         {
             throw;
         }
-        catch
+        catch (Exception ex) when (ex is not OutOfMemoryException)
         {
-            return new UpdateItem
-            {
-                Id = "windows",
-                Name = "Windows Update",
-                Kind = UpdateKind.Windows,
-                Source = UpdateSource.WindowsUpdate,
-                Status = UpdateItemStatus.UnknownVersion
-            };
+            return UnknownStatus();
         }
+    }
+
+    private static UpdateItem UnknownStatus()
+    {
+        return new UpdateItem
+        {
+            Id = "windows",
+            Name = "Windows Update",
+            Kind = UpdateKind.Windows,
+            Source = UpdateSource.WindowsUpdate,
+            Status = UpdateItemStatus.UnknownVersion
+        };
     }
 }

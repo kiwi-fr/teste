@@ -36,7 +36,7 @@ public class UpdateScanService(
         {
             throw;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not OutOfMemoryException)
         {
             errors[kind.ToString()] = ex.Message;
         }
@@ -54,7 +54,7 @@ public class UpdateScanService(
         {
             throw;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not OutOfMemoryException)
         {
             errors[kind.ToString()] = ex.Message;
         }

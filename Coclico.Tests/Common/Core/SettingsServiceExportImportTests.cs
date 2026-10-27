@@ -5,7 +5,7 @@ namespace Coclico.Tests.Common.Core;
 
 public sealed class SettingsServiceExportImportTests : IDisposable
 {
-    private readonly string _tempDir = Path.Combine(Path.GetTempPath(), "coclico-tests-" + Guid.NewGuid().ToString("N"));
+    private readonly string _tempDir = Path.Join(Path.GetTempPath(), "coclico-tests-" + Guid.NewGuid().ToString("N"));
 
     public SettingsServiceExportImportTests()
     {
@@ -20,7 +20,7 @@ public sealed class SettingsServiceExportImportTests : IDisposable
         }
         catch (IOException)
         {
-
+            return;
         }
     }
 
@@ -29,7 +29,7 @@ public sealed class SettingsServiceExportImportTests : IDisposable
     {
         var service = new SettingsService();
         service.Settings.Language = "en";
-        string path = Path.Combine(_tempDir, "export.json");
+        string path = Path.Join(_tempDir, "export.json");
 
         bool success = await service.ExportToAsync(path);
 
@@ -55,7 +55,7 @@ public sealed class SettingsServiceExportImportTests : IDisposable
     {
         var service = new SettingsService();
 
-        bool success = await service.ImportFromAsync(Path.Combine(_tempDir, "inexistant.json"));
+        bool success = await service.ImportFromAsync(Path.Join(_tempDir, "inexistant.json"));
 
         Assert.False(success);
     }
@@ -65,7 +65,7 @@ public sealed class SettingsServiceExportImportTests : IDisposable
     {
         var exporter = new SettingsService();
         exporter.Settings.Language = "en";
-        string path = Path.Combine(_tempDir, "roundtrip.json");
+        string path = Path.Join(_tempDir, "roundtrip.json");
         Assert.True(await exporter.ExportToAsync(path));
 
         var importer = new SettingsService();
@@ -80,8 +80,8 @@ public sealed class SettingsServiceExportImportTests : IDisposable
     [Fact]
     public async Task ImportFromAsync_PreservesInstallationFields()
     {
-        string path = Path.Combine(_tempDir, "installation-fields.json");
-        await File.WriteAllTextAsync(path,  "{ \"firstRun\": true, \"hasSeenWelcome\": true, \"language\": \"en\" }");
+        string path = Path.Join(_tempDir, "installation-fields.json");
+        await File.WriteAllTextAsync(path, "{ \"firstRun\": true, \"hasSeenWelcome\": true, \"language\": \"en\" }");
 
         var importer = new SettingsService();
         importer.Settings.FirstRun = false;
@@ -98,7 +98,7 @@ public sealed class SettingsServiceExportImportTests : IDisposable
     [Fact]
     public async Task ImportFromAsync_InvalidJson_ReturnsFalse()
     {
-        string path = Path.Combine(_tempDir, "invalide.json");
+        string path = Path.Join(_tempDir, "invalide.json");
         await File.WriteAllTextAsync(path, "ceci n'est pas du json");
 
         var service = new SettingsService();
@@ -111,8 +111,8 @@ public sealed class SettingsServiceExportImportTests : IDisposable
     [Fact]
     public async Task ImportFromAsync_UnknownLanguage_IsSanitized()
     {
-        string path = Path.Combine(_tempDir, "langue-invalide.json");
-        await File.WriteAllTextAsync(path,  "{ \"language\": \"zz\" }");
+        string path = Path.Join(_tempDir, "langue-invalide.json");
+        await File.WriteAllTextAsync(path, "{ \"language\": \"zz\" }");
 
         var service = new SettingsService();
 

@@ -18,9 +18,9 @@ public sealed class TestWorld : IDisposable
 
     public TestWorld()
     {
-        RootDir = Path.Combine(Path.GetTempPath(), "coclico-tests-" + Guid.NewGuid().ToString("N"));
+        RootDir = Path.Join(Path.GetTempPath(), "coclico-tests-" + Guid.NewGuid().ToString("N"));
         _ = Directory.CreateDirectory(RootDir);
-        ManifestPath = Path.Combine(RootDir, "integrity.json");
+        ManifestPath = Path.Join(RootDir, "integrity.json");
         PrivateKey = RSA.Create(2048);
         KeyId = KeyfileProtector.ComputeKeyId(KeyfileProtector.ExportPublicKeyBase64(PrivateKey));
         Policy = new TrustPolicy
@@ -39,7 +39,7 @@ public sealed class TestWorld : IDisposable
 
     public string WriteFile(string relativePath, string content)
     {
-        string full = Path.Combine(RootDir, relativePath.Replace('/', Path.DirectorySeparatorChar));
+        string full = Path.Join(RootDir, relativePath.Replace('/', Path.DirectorySeparatorChar));
         string? dir = Path.GetDirectoryName(full);
         if (!string.IsNullOrEmpty(dir))
         {
@@ -105,11 +105,9 @@ public sealed class TestWorld : IDisposable
         {
             Directory.Delete(RootDir, true);
         }
-        catch (IOException)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-        }
-        catch (UnauthorizedAccessException)
-        {
+            return;
         }
     }
 }

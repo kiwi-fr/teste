@@ -255,14 +255,7 @@ public sealed class SecurityJournal
         var builder = new StringBuilder(value.Length);
         foreach (char c in value)
         {
-            if (c is '|' or '\n' or '\r' or '\t')
-            {
-                _ = builder.Append(' ');
-            }
-            else
-            {
-                _ = builder.Append(c);
-            }
+            _ = builder.Append(c is '|' or '\n' or '\r' or '\t' ? ' ' : c);
         }
 
         if (builder.Length > 512)

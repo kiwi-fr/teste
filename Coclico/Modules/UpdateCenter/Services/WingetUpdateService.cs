@@ -24,11 +24,11 @@ public partial class WingetUpdateService(SecureProcessRunner runner)
     {
         var items = new List<UpdateItem>();
 
-        foreach (var rawLine in output.Replace("\r", string.Empty).Split('\n'))
+        foreach (var line in output.Replace("\r", string.Empty)
+            .Split('\n')
+            .Select(rawLine => rawLine.Trim())
+            .Where(raw => raw.Length > 0 && !raw.StartsWith('-')))
         {
-            var line = rawLine.Trim();
-            if (line.Length == 0 || line.StartsWith('-'))
-                continue;
 
             var columns = ColumnSeparator().Split(line);
             if (columns.Length < 4)

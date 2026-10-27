@@ -50,7 +50,7 @@ public static class IntegrityVerifier
             {
                 return VerificationResult.Unknown(
                     SecurityIncident.PathRejected,
-                    $"unsafe manifest path '{entry.Path}'");
+                    $"rejected manifest path '{entry.Path}'");
             }
 
             if (entry.Bytes <= 0 || !IsSha256Hex(entry.Sha256))

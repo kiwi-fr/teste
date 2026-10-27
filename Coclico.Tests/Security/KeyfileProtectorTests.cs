@@ -7,14 +7,14 @@ namespace Coclico.Tests;
 
 public sealed class KeyfileProtectorTests : IDisposable
 {
-    private readonly string _dir = Path.Combine(Path.GetTempPath(), "coclico-keytests-" + Guid.NewGuid().ToString("N"));
+    private readonly string _dir = Path.Join(Path.GetTempPath(), "coclico-keytests-" + Guid.NewGuid().ToString("N"));
 
     [Fact]
     public void GeneratedKeyFileRoundTrips()
     {
         _ = Directory.CreateDirectory(_dir);
-        string keyfile = Path.Combine(_dir, "release.keyfile");
-        string pubkey = Path.Combine(_dir, "release.pub");
+        string keyfile = Path.Join(_dir, "release.keyfile");
+        string pubkey = Path.Join(_dir, "release.pub");
 
         (RSA created, string keyId) = KeyfileProtector.GenerateKey(keyfile, "correct horse battery staple");
         File.WriteAllText(pubkey, KeyfileProtector.ExportPublicKeyBase64(created));
@@ -32,7 +32,7 @@ public sealed class KeyfileProtectorTests : IDisposable
     public void WrongPasswordFails()
     {
         _ = Directory.CreateDirectory(_dir);
-        string keyfile = Path.Combine(_dir, "release.keyfile");
+        string keyfile = Path.Join(_dir, "release.keyfile");
         _ = KeyfileProtector.GenerateKey(keyfile, "right-password");
 
         Assert.ThrowsAny<CryptographicException>(() => KeyfileProtector.LoadPrivateKey(keyfile, "wrong-password"));
@@ -42,7 +42,7 @@ public sealed class KeyfileProtectorTests : IDisposable
     public void KeyFileStartsWithMagicAndUsesStrongIterations()
     {
         _ = Directory.CreateDirectory(_dir);
-        string keyfile = Path.Combine(_dir, "release.keyfile");
+        string keyfile = Path.Join(_dir, "release.keyfile");
         _ = KeyfileProtector.GenerateKey(keyfile, "some-password");
 
         byte[] raw = File.ReadAllBytes(keyfile);
@@ -59,11 +59,9 @@ public sealed class KeyfileProtectorTests : IDisposable
         {
             Directory.Delete(_dir, true);
         }
-        catch (IOException)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-        }
-        catch (UnauthorizedAccessException)
-        {
+            return;
         }
     }
 }

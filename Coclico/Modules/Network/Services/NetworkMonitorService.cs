@@ -174,7 +174,7 @@ public class NetworkMonitorService : IDisposable
             }
 
             var snapshot = new NetworkStats(now, totalSent, totalReceived, uploadKbps, downloadKbps, tcpConnections, pingMs);
-            if (_disposeState != 0)
+            if (Volatile.Read(ref _disposeState) != 0)
             {
                 return;
             }
@@ -186,6 +186,7 @@ public class NetworkMonitorService : IDisposable
         }
         catch (ObjectDisposedException)
         {
+            return;
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
@@ -211,6 +212,7 @@ public class NetworkMonitorService : IDisposable
         }
         catch (ObjectDisposedException)
         {
+            LoggingService.LogWarning("NetworkMonitorService: token source already disposed");
         }
         try
         {

@@ -18,7 +18,7 @@ public static class NativeLibraryGuard
                 IsHardened = SetDefaultDllDirectories(LoadLibrarySearchDefaultDirs);
             }
         }
-        catch
+        catch (Exception ex) when (ex is not OutOfMemoryException)
         {
             IsHardened = false;
         }
@@ -74,9 +74,9 @@ public static class NativeLibraryGuard
     {
         yield return Path.GetTempPath();
 
-        yield return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+        yield return Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
 
-        yield return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp");
+        yield return Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp");
     }
 
     [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]

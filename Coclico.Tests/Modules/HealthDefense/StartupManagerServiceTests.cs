@@ -114,20 +114,12 @@ public sealed class StartupManagerServiceTests
         {
             using RegistryKey? runKey = Registry.CurrentUser.OpenSubKey(RunKeyPath, writable: true);
             runKey?.DeleteValue(TestEntryName, throwOnMissingValue: false);
-        }
-        catch (Exception ex) when (ex is System.IO.IOException or System.Security.SecurityException)
-        {
-
-        }
-
-        try
-        {
             using RegistryKey? approvedKey = Registry.CurrentUser.OpenSubKey(ApprovedKeyPath, writable: true);
             approvedKey?.DeleteValue(TestEntryName, throwOnMissingValue: false);
         }
         catch (Exception ex) when (ex is System.IO.IOException or System.Security.SecurityException)
         {
-
+            return;
         }
     }
 }

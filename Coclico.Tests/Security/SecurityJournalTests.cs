@@ -5,13 +5,13 @@ namespace Coclico.Tests;
 
 public sealed class SecurityJournalTests : IDisposable
 {
-    private readonly string _dir = Path.Combine(Path.GetTempPath(), "coclico-journaltests-" + Guid.NewGuid().ToString("N"));
+    private readonly string _dir = Path.Join(Path.GetTempPath(), "coclico-journaltests-" + Guid.NewGuid().ToString("N"));
 
     [Fact]
     public void ChainedEntriesVerify()
     {
         _ = Directory.CreateDirectory(_dir);
-        string journalPath = Path.Combine(_dir, "journal.log");
+        string journalPath = Path.Join(_dir, "journal.log");
         byte[] key = new byte[32];
         System.Security.Cryptography.RandomNumberGenerator.Fill(key);
 
@@ -27,7 +27,7 @@ public sealed class SecurityJournalTests : IDisposable
     public void TamperedLineIsDetected()
     {
         _ = Directory.CreateDirectory(_dir);
-        string journalPath = Path.Combine(_dir, "journal.log");
+        string journalPath = Path.Join(_dir, "journal.log");
         byte[] key = new byte[32];
         System.Security.Cryptography.RandomNumberGenerator.Fill(key);
 
@@ -47,7 +47,7 @@ public sealed class SecurityJournalTests : IDisposable
     public void TruncatedJournalIsDetected()
     {
         _ = Directory.CreateDirectory(_dir);
-        string journalPath = Path.Combine(_dir, "journal.log");
+        string journalPath = Path.Join(_dir, "journal.log");
         byte[] key = new byte[32];
         System.Security.Cryptography.RandomNumberGenerator.Fill(key);
 
@@ -76,7 +76,7 @@ public sealed class SecurityJournalTests : IDisposable
     public void SignedExportVerifiesAndTamperingIsDetected()
     {
         _ = Directory.CreateDirectory(_dir);
-        string journalPath = Path.Combine(_dir, "journal.log");
+        string journalPath = Path.Join(_dir, "journal.log");
         byte[] key = new byte[32];
         System.Security.Cryptography.RandomNumberGenerator.Fill(key);
 
@@ -84,7 +84,7 @@ public sealed class SecurityJournalTests : IDisposable
         journal.Append(DateTime.UtcNow, "2.2.0", "StartupCheck", "Integrity", "Valid", "None", "initial check");
         journal.Append(DateTime.UtcNow, "2.2.0", "PeriodicCheck", "Integrity", "Valid", "None", "periodic check");
 
-        string exportPath = Path.Combine(_dir, "export", "journal-export.log");
+        string exportPath = Path.Join(_dir, "export", "journal-export.log");
         JournalExportResult export = journal.ExportSigned(exportPath);
         Assert.True(export.IsExported);
         Assert.True(export.IsIntact);
@@ -110,7 +110,7 @@ public sealed class SecurityJournalTests : IDisposable
     public void ExportOfBrokenJournalReportsTheBrokenChain()
     {
         _ = Directory.CreateDirectory(_dir);
-        string journalPath = Path.Combine(_dir, "journal.log");
+        string journalPath = Path.Join(_dir, "journal.log");
         byte[] key = new byte[32];
         System.Security.Cryptography.RandomNumberGenerator.Fill(key);
 
@@ -121,7 +121,7 @@ public sealed class SecurityJournalTests : IDisposable
         File.WriteAllLines(journalPath, lines);
 
         var reloaded = new SecurityJournal(journalPath, key);
-        string exportPath = Path.Combine(_dir, "export", "journal-export.log");
+        string exportPath = Path.Join(_dir, "export", "journal-export.log");
         JournalExportResult export = reloaded.ExportSigned(exportPath);
         Assert.True(export.IsExported);
         Assert.False(export.IsIntact);
@@ -136,11 +136,9 @@ public sealed class SecurityJournalTests : IDisposable
         {
             Directory.Delete(_dir, true);
         }
-        catch (IOException)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-        }
-        catch (UnauthorizedAccessException)
-        {
+            return;
         }
     }
 }

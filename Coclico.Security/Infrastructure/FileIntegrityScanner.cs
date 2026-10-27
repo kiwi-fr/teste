@@ -31,7 +31,7 @@ public static class FileIntegrityScanner
 
             try
             {
-                string fullPath = Path.Combine(rootDir, relative.Replace('/', Path.DirectorySeparatorChar));
+                string fullPath = Path.Join(rootDir, relative.Replace('/', Path.DirectorySeparatorChar));
                 if (!File.Exists(fullPath))
                 {
                     outcome.Missing.Add(relative);
@@ -96,17 +96,10 @@ public static class FileIntegrityScanner
 
     private static bool IsVariable(string relativePath, IReadOnlySet<string> variableRelativePaths)
     {
-        foreach (string variable in variableRelativePaths)
-        {
-            string normalized = PathValidator.NormalizeForCompare(variable);
-            string candidate = PathValidator.NormalizeForCompare(relativePath);
-            if (candidate.Equals(normalized, StringComparison.Ordinal) ||
-                candidate.StartsWith(normalized + "/", StringComparison.Ordinal))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        string candidate = PathValidator.NormalizeForCompare(relativePath);
+        return variableRelativePaths
+            .Select(PathValidator.NormalizeForCompare)
+            .Any(normalized => candidate.Equals(normalized, StringComparison.Ordinal) ||
+                candidate.StartsWith(normalized + "/", StringComparison.Ordinal));
     }
 }

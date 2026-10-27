@@ -508,11 +508,18 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
 
         try
         {
-            using (CancellationTokenSource? oldCts = Interlocked.Exchange(ref _cleanCts, new CancellationTokenSource()))
+            CancellationTokenSource? previousCts = _cleanCts;
+            _cleanCts = new CancellationTokenSource();
+            try
             {
-                try { oldCts?.Cancel(); }
-                catch (Exception ex) when (ex is ObjectDisposedException or AggregateException) { LoggingService.LogException(ex, $"{Subsystem}.SafeCleanAsync.CancelPreviousCts"); }
+                previousCts?.Cancel();
             }
+            catch (Exception ex) when (ex is ObjectDisposedException or AggregateException)
+            {
+                LoggingService.LogException(ex, $"{Subsystem}.SafeCleanAsync.CancelPreviousCts");
+            }
+
+            previousCts?.Dispose();
 
             CancellationToken ct = _cleanCts!.Token;
 
