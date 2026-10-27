@@ -62,6 +62,7 @@ Home, Settings and Help always stay visible.
 | **Safety first** | Every destructive action asks for confirmation. Deleted files go to the Recycle Bin. Network and power settings roll back in one click. |
 | **Hardware aware** | Power plans are created only through `powercfg`. Every setting is validated against your actual PC before it is applied. |
 | **Local AI** | A local GGUF model or a local Ollama server. No cloud keys. Loopback addresses only. |
+| **Verified installs** | Every payload file is hashed into a manifest signed with an RSA-4096 key; the installer refuses anything that does not verify against the trusted keys anchored in the repository. |
 
 ## The modules, one by one
 
@@ -269,7 +270,7 @@ Open the [GitHub Releases](https://github.com/Coclico-cy/Coclico/releases) page:
 - `Coclico-<version>.exe`: the guided installer;
 - or the Windows x64 ZIP: for a portable folder install.
 
-Setup installs for the current Windows account, offers an optional desktop shortcut, and preserves Coclico settings and data when uninstalled. The standard setup omits the large optional CUDA runtime: choose that component only on a compatible NVIDIA system. The installer is not code-signed, so Windows may show a publisher warning.
+Setup installs for the current Windows account, offers an optional desktop shortcut, and preserves Coclico settings and data when uninstalled. The standard setup omits the large optional CUDA runtime: choose that component only on a compatible NVIDIA system. The installer binary carries no Authenticode signature, so Windows may show a publisher warning; integrity is still cryptographic: each payload file is hashed into a manifest signed with the project RSA-4096 key, and the installer verifies that manifest against the trusted keys anchored in the repository before installing anything.
 
 Every release ships a `SHA256SUMS.txt` file to verify both downloads.
 
@@ -309,9 +310,11 @@ Coclico/                 WPF application
   Common/                Shared services (core, diagnostics, execution, UI)
   Modules/               Home, AI, cleaning, network, power, disk, programs…
   Resources/             Themes, languages and icons
-Coclico.InstallerAot/    Standalone installer (built by the script, outside the solution)
-Coclico.Tests/           Unit and XAML validation tests
-installer/               Installer build script
+  Security/              trust-policy.json: anchored release signing keys
+Coclico.Security/        Release security: signing tool, integrity manifests, trust store
+Coclico.InstallerAot/    Standalone installer (Avalonia, NativeAOT)
+Coclico.Tests/           Unit, XAML and security tests
+installer/               Installer build script and local signing key (never committed)
 docs/                    Screenshots used by the READMEs
 .github/workflows/       Build, test and release automation
 ```
