@@ -7,7 +7,7 @@ using Coclico.Services;
 
 namespace Coclico.Modules.Apps.Services;
 
-public sealed class WingetEngineService
+internal sealed class WingetEngineService
 {
     private const string BundleUrl = "https://github.com/microsoft/winget-cli/releases/download/v1.10.340/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle";
     private const string DepsZipUrl = "https://github.com/microsoft/winget-cli/releases/download/v1.10.340/DesktopAppInstaller_Dependencies.zip";
@@ -18,7 +18,7 @@ public sealed class WingetEngineService
     private const int ExitAdminRequired = -1978335189;
     private const int ExitInstallerBusy = -1978334974;
 
-    private static readonly HttpClient Http = new()
+    private static readonly HttpClient Http = new(new Coclico.Security.Infrastructure.OutboundDomainGuardHandler())
     {
         Timeout = TimeSpan.FromMinutes(10)
     };
@@ -34,7 +34,7 @@ public sealed class WingetEngineService
     private readonly IProcessExecutionService _processExecution;
     private string? _cachedWingetPath;
 
-    public enum InstallStatus
+    internal enum InstallStatus
     {
         Succeeded,
         RestartRequired,
@@ -45,9 +45,9 @@ public sealed class WingetEngineService
         Busy
     }
 
-    public sealed record InstallResult(InstallStatus Status, int ExitCode);
+    internal sealed record InstallResult(InstallStatus Status, int ExitCode);
 
-    public sealed record WingetRow(string Name, string Id, string Version, string AvailableVersion);
+    internal sealed record WingetRow(string Name, string Id, string Version, string AvailableVersion);
 
     public WingetEngineService(IProcessExecutionService processExecution)
     {
@@ -251,7 +251,7 @@ public sealed class WingetEngineService
             {
                 ct.ThrowIfCancellationRequested();
                 string line = rawLine.Trim();
-                if (line.Length == 0 || line.StartsWith("---"))
+                if (line.Length == 0 || line.StartsWith("---", StringComparison.Ordinal))
                 {
                     continue;
                 }
@@ -296,7 +296,7 @@ public sealed class WingetEngineService
             {
                 ct.ThrowIfCancellationRequested();
                 string line = rawLine.Trim();
-                if (line.StartsWith("---"))
+                if (line.StartsWith("---", StringComparison.Ordinal))
                 {
                     headerPassed = true;
                     continue;
@@ -348,7 +348,7 @@ public sealed class WingetEngineService
             {
                 ct.ThrowIfCancellationRequested();
                 string line = rawLine.Trim();
-                if (line.StartsWith("---"))
+                if (line.StartsWith("---", StringComparison.Ordinal))
                 {
                     headerPassed = true;
                     continue;
@@ -522,18 +522,24 @@ public sealed class WingetEngineService
     {
         using HttpResponseMessage response = await Http.GetAsync(url, ct).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
-        await using FileStream fs = File.Create(destination);
-        await response.Content.CopyToAsync(fs, ct).ConfigureAwait(false);
+        FileStream fs = File.Create(destination);
+        await using (fs.ConfigureAwait(false))
+        {
+            await response.Content.CopyToAsync(fs, ct).ConfigureAwait(false);
+        }
     }
 
     private static async Task<bool> VerifyBundleSha256Async(string bundlePath, IProgress<string>? log, CancellationToken ct)
     {
         try
         {
-            await using FileStream fs = File.OpenRead(bundlePath);
-            byte[] actual = await SHA256.HashDataAsync(fs, ct).ConfigureAwait(false);
+            FileStream fs = File.OpenRead(bundlePath);
+            await using (fs.ConfigureAwait(false))
+            {
+                byte[] actual = await SHA256.HashDataAsync(fs, ct).ConfigureAwait(false);
             byte[] expected = Convert.FromHexString(BundleSha256);
             return CryptographicOperations.FixedTimeEquals(actual, expected);
+            }
         }
         catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Security.Cryptography.CryptographicException)
         {

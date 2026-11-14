@@ -9,6 +9,15 @@ public partial class App
     {
         try
         {
+            if (Current is App app)
+            {
+                app.ReleaseSingleInstanceLock();
+            }
+        }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "App.Shutdown.ReleaseMutex"); }
+
+        try
+        {
             if (Current != null)
             {
                 Dispatcher dispatcher = Current.Dispatcher;
@@ -67,6 +76,17 @@ public partial class App
 
         try { ServiceContainer.GetOptional<TrayService>()?.Dispose(); }
         catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "App.Shutdown.DisposeTrayService"); }
+
+        try
+        {
+            SettingsService? settings = ServiceContainer.GetOptional<SettingsService>();
+            if (settings != null)
+            {
+                settings.FlushPendingSavesAsync().Wait(TimeSpan.FromSeconds(2));
+                settings.SaveAsync().Wait(TimeSpan.FromSeconds(2));
+            }
+        }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "App.Shutdown.FlushSettings"); }
 
         try { ServiceContainer.Shutdown(); }
         catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "App.Shutdown.ServiceContainerShutdown"); }

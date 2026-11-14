@@ -2,7 +2,7 @@ using Coclico.Models.Network;
 
 namespace Coclico.Services.Network;
 
-public static class NetworkTuningCatalog
+internal static class NetworkTuningCatalog
 {
     public const string AutoTuningId = "tcp-autotuning";
     public const string ScalingHeuristicsId = "tcp-scalingheuristics";

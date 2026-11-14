@@ -6,7 +6,7 @@ namespace Coclico.Tests;
 public sealed class ProfileServiceTests
 {
     [Fact]
-    public void SaveLoadRoundTrip_PreservesNameAndSettings()
+    public void SaveLoadRoundTripPreservesNameAndSettings()
     {
         ProfileService service = new();
         string name = $"test-{Guid.NewGuid():N}";
@@ -36,7 +36,7 @@ public sealed class ProfileServiceTests
     }
 
     [Fact]
-    public void GetAllProfiles_ContainsSavedProfile()
+    public void GetAllProfilesContainsSavedProfile()
     {
         ProfileService service = new();
         string name = $"test-{Guid.NewGuid():N}";
@@ -55,7 +55,7 @@ public sealed class ProfileServiceTests
     }
 
     [Fact]
-    public void Rename_ChangesNameAndRemovesOldFile()
+    public void RenameChangesNameAndRemovesOldFile()
     {
         ProfileService service = new();
         string oldName = $"test-{Guid.NewGuid():N}";
@@ -81,7 +81,7 @@ public sealed class ProfileServiceTests
     }
 
     [Fact]
-    public void Delete_RemovesProfile()
+    public void DeleteRemovesProfile()
     {
         ProfileService service = new();
         string name = $"test-{Guid.NewGuid():N}";
@@ -95,7 +95,7 @@ public sealed class ProfileServiceTests
     }
 
     [Fact]
-    public void Load_NonexistentProfile_ReturnsNull()
+    public void LoadNonexistentProfileReturnsNull()
     {
         ProfileService service = new();
 
@@ -103,7 +103,7 @@ public sealed class ProfileServiceTests
     }
 
     [Fact]
-    public void Rename_NonexistentProfile_DoesNothing()
+    public void RenameNonexistentProfileDoesNothing()
     {
         ProfileService service = new();
         string oldName = $"ghost-{Guid.NewGuid():N}";
@@ -125,17 +125,17 @@ public sealed class ProfileServiceTests
     [Theory]
     [InlineData("martin")]
     [InlineData("Jean")]
-    public void AvatarInitials_ReturnsUppercaseFirstLetter(string name)
+    public void AvatarInitialsReturnsUppercaseFirstLetter(string name)
     {
         AppProfile profile = new() { Name = name };
 
-        Assert.Equal(name[..1].ToUpper(), profile.AvatarInitials);
+        Assert.Equal(name[..1].ToUpper(System.Globalization.CultureInfo.InvariantCulture), profile.AvatarInitials);
     }
 
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void AvatarInitials_EmptyName_ReturnsQuestionMark(string? name)
+    public void AvatarInitialsEmptyNameReturnsQuestionMark(string? name)
     {
         AppProfile profile = new() { Name = name ?? string.Empty };
 

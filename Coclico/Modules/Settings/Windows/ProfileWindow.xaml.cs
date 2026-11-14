@@ -10,7 +10,7 @@ public partial class ProfileWindow : Window
 {
     private readonly UserAccountService _userService;
 
-    public ProfileWindow(UserAccountService userService)
+    internal ProfileWindow(UserAccountService userService)
     {
         InitializeComponent();
         _userService = userService;
@@ -21,7 +21,7 @@ public partial class ProfileWindow : Window
     private void InitializeUI()
     {
         UserNameText.Text = _userService.DisplayName;
-        AccountTypeText.Text = _userService.IsMicrosoftAccount ? "Microsoft Account" : "Local Windows Account";
+        AccountTypeText.Text = Loc.Get(_userService.IsMicrosoftAccount ? "Profile_AccountMicrosoft" : "Profile_AccountLocal");
         UserEmailText.Text = _userService.Email;
         UserEmailText.Visibility = string.IsNullOrWhiteSpace(_userService.Email)
             ? Visibility.Collapsed
@@ -34,7 +34,7 @@ public partial class ProfileWindow : Window
         }
         else
         {
-            UserInitialText.Text = _userService.DisplayName is { Length: > 0 } n ? n[0].ToString().ToUpper() : "?";
+            UserInitialText.Text = _userService.DisplayName is { Length: > 0 } n ? n[0].ToString().ToUpperInvariant() : "?";
         }
     }
 

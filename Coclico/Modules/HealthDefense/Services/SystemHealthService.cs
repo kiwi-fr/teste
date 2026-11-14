@@ -5,19 +5,19 @@ using System.Text.Json;
 
 namespace Coclico.Services;
 
-public sealed class SystemHealthService
+internal sealed class SystemHealthService
 {
     private const string ElevationRequiredSummary =
         "Cette opération nécessite les droits administrateur. Relancez Coclico en tant qu'administrateur (bouton d'élévation dans la barre de titre) puis réessayez.";
 
-    public sealed record DefenderStatusInfo(
+    internal sealed record DefenderStatusInfo(
         bool IsAntivirusActive,
         bool IsRealTimeProtectionOn,
         string SignatureVersion,
         DateTime? LastUpdatedTime
     );
 
-    public sealed record DiagnosticResult(
+    internal sealed record DiagnosticResult(
         bool Success,
         string Summary,
         string Details
@@ -38,20 +38,23 @@ public sealed class SystemHealthService
 
     public async Task<DefenderStatusInfo> GetDefenderStatusAsync()
     {
-        return await Task.Run(() =>
+        return await Task.Run(async () =>
         {
             try
             {
                 string script = "$s = Get-MpComputerStatus; [PSCustomObject]@{ Active = $s.AntivirusEnabled; Realtime = $s.RealTimeProtectionEnabled; Version = $s.AntivirusSignatureVersion; Updated = $s.AntivirusSignatureLastUpdated } | ConvertTo-Json -Compress";
                 var psi = new ProcessStartInfo
                 {
-                    FileName = "powershell.exe",
-                    Arguments = $"-NoProfile -NonInteractive -Command \"{script}\"",
+                    FileName = SystemToolResolver.Resolve("powershell.exe"),
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     StandardOutputEncoding = Encoding.UTF8
                 };
+                psi.ArgumentList.Add("-NoProfile");
+                psi.ArgumentList.Add("-NonInteractive");
+                psi.ArgumentList.Add("-Command");
+                psi.ArgumentList.Add(script);
 
                 using var proc = Process.Start(psi);
                 if (proc == null)
@@ -59,7 +62,9 @@ public sealed class SystemHealthService
                     return new DefenderStatusInfo(false, false, "Statut inconnu (PowerShell indisponible)", null);
                 }
 
-                string output = proc.StandardOutput.ReadToEnd();
+                string output = await proc.StandardOutput.ReadToEndAsync()
+                    .WaitAsync(TimeSpan.FromSeconds(20))
+                    .ConfigureAwait(false);
                 _ = proc.WaitForExit(8000);
 
                 if (string.IsNullOrWhiteSpace(output))
@@ -73,19 +78,19 @@ public sealed class SystemHealthService
                 bool realtime = root.TryGetProperty("Realtime", out JsonElement pRt) && pRt.GetBoolean();
                 string version = root.TryGetProperty("Version", out JsonElement pVer) ? pVer.GetString() ?? "1.0" : "1.0";
                 DateTime? updated = null;
-                if (root.TryGetProperty("Updated", out JsonElement pUpd) && DateTime.TryParse(pUpd.GetString(), out DateTime d))
+                if (root.TryGetProperty("Updated", out JsonElement pUpd) && DateTime.TryParse(pUpd.GetString(), System.Globalization.CultureInfo.InvariantCulture, out DateTime d))
                 {
                     updated = d;
                 }
 
                 return new DefenderStatusInfo(active, realtime, version, updated);
             }
-            catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException or System.Text.Json.JsonException or System.FormatException)
+            catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException or JsonException or FormatException or TimeoutException)
             {
                 LoggingService.LogException(ex, "SystemHealthService.GetDefenderStatusAsync");
                 return new DefenderStatusInfo(false, false, "Statut inconnu (erreur de lecture)", null);
             }
-        });
+        }).ConfigureAwait(false);
     }
 
     public async Task<DiagnosticResult> UpdateDefenderSignaturesAsync(Action<string>? onOutput = null, CancellationToken ct = default)
@@ -96,7 +101,7 @@ public sealed class SystemHealthService
         }
 
         onOutput?.Invoke("🔄 Recherche et application des dernières définitions Microsoft Defender...");
-        return await ExecutePowerShellCommandAsync("Update-MpSignature", onOutput, ct);
+        return await ExecutePowerShellCommandAsync("Update-MpSignature", onOutput, ct).ConfigureAwait(false);
     }
 
     public async Task<DiagnosticResult> RunQuickDefenderScanAsync(Action<string>? onOutput = null, CancellationToken ct = default)
@@ -107,7 +112,7 @@ public sealed class SystemHealthService
         }
 
         onOutput?.Invoke("🛡️ Démarrage de l'analyse rapide de sécurité Windows Defender...");
-        return await ExecutePowerShellCommandAsync("Start-MpScan -ScanType QuickScan", onOutput, ct);
+        return await ExecutePowerShellCommandAsync("Start-MpScan -ScanType QuickScan", onOutput, ct).ConfigureAwait(false);
     }
 
     public async Task<DiagnosticResult> RunFullDefenderScanAsync(Action<string>? onOutput = null, CancellationToken ct = default)
@@ -118,7 +123,7 @@ public sealed class SystemHealthService
         }
 
         onOutput?.Invoke("🛡️ Démarrage de l'analyse complète du système Windows Defender...");
-        return await ExecutePowerShellCommandAsync("Start-MpScan -ScanType FullScan", onOutput, ct);
+        return await ExecutePowerShellCommandAsync("Start-MpScan -ScanType FullScan", onOutput, ct).ConfigureAwait(false);
     }
 
     public async Task<bool> LaunchMrtAsync(bool quiet = false)
@@ -144,12 +149,12 @@ public sealed class SystemHealthService
                 using var proc = Process.Start(psi);
                 return proc != null;
             }
-            catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.ComponentModel.Win32Exception or System.InvalidOperationException)
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.ComponentModel.Win32Exception or InvalidOperationException)
             {
                 LoggingService.LogException(ex, "SystemHealthService.LaunchMrtAsync");
                 return false;
             }
-        });
+        }).ConfigureAwait(false);
     }
 
     public async Task<DiagnosticResult> ScheduleOfflineDefenderScanAsync(Action<string>? onOutput = null, CancellationToken ct = default)
@@ -160,7 +165,7 @@ public sealed class SystemHealthService
         }
 
         onOutput?.Invoke("⚠️ Programmation de l'analyse hors-ligne Windows Defender (WDO)...");
-        return await ExecutePowerShellCommandAsync("Start-MpWDOScan", onOutput, ct);
+        return await ExecutePowerShellCommandAsync("Start-MpWDOScan", onOutput, ct).ConfigureAwait(false);
     }
 
     public async Task<DiagnosticResult> RunSfcScanAsync(Action<string>? onOutput = null, CancellationToken ct = default)
@@ -171,7 +176,7 @@ public sealed class SystemHealthService
         }
 
         onOutput?.Invoke("🔍 Lancement de la vérification d'intégrité SFC (System File Checker)...");
-        return await RunProcessAsync("sfc.exe", "/scannow", onOutput, ct);
+        return await RunProcessAsync("sfc.exe", "/scannow", onOutput, ct).ConfigureAwait(false);
     }
     public async Task<DiagnosticResult> RunDismRestoreHealthAsync(Action<string>? onOutput = null, CancellationToken ct = default)
     {
@@ -181,7 +186,7 @@ public sealed class SystemHealthService
         }
 
         onOutput?.Invoke("🛠️ Réparation des composants Windows avec DISM /RestoreHealth...");
-        return await RunProcessAsync("dism.exe", "/Online /Cleanup-Image /RestoreHealth", onOutput, ct);
+        return await RunProcessAsync("dism.exe", "/Online /Cleanup-Image /RestoreHealth", onOutput, ct).ConfigureAwait(false);
     }
 
     public async Task<DiagnosticResult> RunDismComponentCleanupAsync(Action<string>? onOutput = null, CancellationToken ct = default)
@@ -192,7 +197,7 @@ public sealed class SystemHealthService
         }
 
         onOutput?.Invoke("🧹 Nettoyage du magasin des composants Windows (WinSxS)...");
-        return await RunProcessAsync("dism.exe", "/Online /Cleanup-Image /StartComponentCleanup", onOutput, ct);
+        return await RunProcessAsync("dism.exe", "/Online /Cleanup-Image /StartComponentCleanup", onOutput, ct).ConfigureAwait(false);
     }
 
     public async Task<DiagnosticResult> RunChkdskScanAsync(Action<string>? onOutput = null, CancellationToken ct = default)
@@ -203,7 +208,7 @@ public sealed class SystemHealthService
         }
 
         onOutput?.Invoke("💾 Analyse de l'intégrité du système de fichiers NTFS avec CHKDSK /scan...");
-        return await RunProcessAsync("chkdsk.exe", "C: /scan", onOutput, ct);
+        return await RunProcessAsync("chkdsk.exe", "C: /scan", onOutput, ct).ConfigureAwait(false);
     }
 
     public async Task<DiagnosticResult> ResetNetworkStackAsync(Action<string>? onOutput = null, CancellationToken ct = default)
@@ -216,13 +221,13 @@ public sealed class SystemHealthService
         onOutput?.Invoke("🌐 Réinitialisation de la pile réseau et Winsock...");
         var sb = new StringBuilder();
 
-        DiagnosticResult r1 = await RunProcessAsync("netsh.exe", "winsock reset", onOutput, ct);
+        DiagnosticResult r1 = await RunProcessAsync("netsh.exe", "winsock reset", onOutput, ct).ConfigureAwait(false);
         _ = sb.AppendLine(r1.Summary);
 
-        DiagnosticResult r2 = await RunProcessAsync("netsh.exe", "int ip reset", onOutput, ct);
+        DiagnosticResult r2 = await RunProcessAsync("netsh.exe", "int ip reset", onOutput, ct).ConfigureAwait(false);
         _ = sb.AppendLine(r2.Summary);
 
-        DiagnosticResult r3 = await RunProcessAsync("ipconfig.exe", "/flushdns", onOutput, ct);
+        DiagnosticResult r3 = await RunProcessAsync("ipconfig.exe", "/flushdns", onOutput, ct).ConfigureAwait(false);
         _ = sb.AppendLine(r3.Summary);
 
         return new DiagnosticResult(r1.Success && r2.Success, "Pile réseau et DNS réinitialisés avec succès.", sb.ToString());
@@ -238,37 +243,67 @@ public sealed class SystemHealthService
         onOutput?.Invoke("🔄 Réinitialisation des composants Windows Update...");
         var sb = new StringBuilder();
 
-        DiagnosticResult stopWuau = await RunProcessAsync("net.exe", "stop wuauserv", onOutput, ct);
-        _ = sb.AppendLine($"stop wuauserv: {stopWuau.Summary}");
-        DiagnosticResult stopBits = await RunProcessAsync("net.exe", "stop bits", onOutput, ct);
-        _ = sb.AppendLine($"stop bits: {stopBits.Summary}");
-
+        bool wuauStopped = false;
+        bool bitsStopped = false;
+        DiagnosticResult startBits;
+        DiagnosticResult startWuau;
         try
         {
-            string winDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
-            string softDist = Path.Join(winDir, "SoftwareDistribution", "Download");
-            if (Directory.Exists(softDist))
-            {
-                int deleted = 0, locked = 0;
-                foreach (string f in Directory.EnumerateFiles(softDist))
-                {
-                    try { File.Delete(f); deleted++; }
-                    catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { locked++; }
-                }
-                onOutput?.Invoke($"🗑️ Cache de téléchargement Windows Update purgé ({deleted} fichiers supprimés, {locked} verrouillés).");
-                _ = sb.AppendLine($"Purge SoftwareDistribution\\Download : {deleted} supprimés, {locked} verrouillés.");
-            }
-        }
-        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
-        {
-            LoggingService.LogException(ex, "ResetWindowsUpdate.Purge");
-            _ = sb.AppendLine($"Purge échouée : {ex.Message}");
-        }
+            DiagnosticResult stopWuau = await RunProcessAsync("net.exe", "stop wuauserv", onOutput, ct).ConfigureAwait(false);
+            wuauStopped = stopWuau.Success;
+            _ = sb.AppendLine($"stop wuauserv: {stopWuau.Summary}");
+            DiagnosticResult stopBits = await RunProcessAsync("net.exe", "stop bits", onOutput, ct).ConfigureAwait(false);
+            bitsStopped = stopBits.Success;
+            _ = sb.AppendLine($"stop bits: {stopBits.Summary}");
 
-        DiagnosticResult startBits = await RunProcessAsync("net.exe", "start bits", onOutput, ct);
-        _ = sb.AppendLine($"start bits: {startBits.Summary}");
-        DiagnosticResult startWuau = await RunProcessAsync("net.exe", "start wuauserv", onOutput, ct);
-        _ = sb.AppendLine($"start wuau: {startWuau.Summary}");
+            try
+            {
+                string winDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+                string softDist = Path.Join(winDir, "SoftwareDistribution", "Download");
+                if (Directory.Exists(softDist))
+                {
+                    int deleted = 0, locked = 0;
+                    foreach (string f in Directory.EnumerateFiles(softDist))
+                    {
+                        try { File.Delete(f); deleted++; }
+                        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { locked++; }
+                    }
+                    onOutput?.Invoke($"🗑️ Cache de téléchargement Windows Update purgé ({deleted} fichiers supprimés, {locked} verrouillés).");
+                    _ = sb.AppendLine(System.Globalization.CultureInfo.InvariantCulture, $"Purge SoftwareDistribution\\Download : {deleted} supprimés, {locked} verrouillés.");
+                }
+            }
+            catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
+            {
+                LoggingService.LogException(ex, "ResetWindowsUpdate.Purge");
+                _ = sb.AppendLine($"Purge échouée : {ex.Message}");
+            }
+
+            startBits = await RunProcessAsync("net.exe", "start bits", onOutput, ct).ConfigureAwait(false);
+            if (startBits.Success)
+            {
+                bitsStopped = false;
+            }
+            _ = sb.AppendLine($"start bits: {startBits.Summary}");
+            startWuau = await RunProcessAsync("net.exe", "start wuauserv", onOutput, ct).ConfigureAwait(false);
+            if (startWuau.Success)
+            {
+                wuauStopped = false;
+            }
+            _ = sb.AppendLine($"start wuau: {startWuau.Summary}");
+        }
+        catch (OperationCanceledException)
+        {
+            _ = sb.AppendLine("Opération annulée : tentative de redémarrage des services arrêtés.");
+            if (bitsStopped)
+            {
+                _ = await RunProcessAsync("net.exe", "start bits", null, CancellationToken.None).ConfigureAwait(false);
+            }
+            if (wuauStopped)
+            {
+                _ = await RunProcessAsync("net.exe", "start wuauserv", null, CancellationToken.None).ConfigureAwait(false);
+            }
+            throw;
+        }
 
         bool success = startBits.Success && startWuau.Success;
         string summary = success
@@ -290,19 +325,19 @@ public sealed class SystemHealthService
         onOutput?.Invoke("=================================================");
 
         onStep?.Invoke(1, "Mise à jour des définitions de sécurité...");
-        DiagnosticResult defRes = await UpdateDefenderSignaturesAsync(onOutput, ct);
+        DiagnosticResult defRes = await UpdateDefenderSignaturesAsync(onOutput, ct).ConfigureAwait(false);
         _ = sb.AppendLine($"[1/4] Définitions Defender: {defRes.Summary}");
 
         onStep?.Invoke(2, "Réparation du magasin de composants DISM...");
-        DiagnosticResult dismRes = await RunDismRestoreHealthAsync(onOutput, ct);
+        DiagnosticResult dismRes = await RunDismRestoreHealthAsync(onOutput, ct).ConfigureAwait(false);
         _ = sb.AppendLine($"[2/4] DISM RestoreHealth: {dismRes.Summary}");
 
         onStep?.Invoke(3, "Vérification et réparation des fichiers système SFC...");
-        DiagnosticResult sfcRes = await RunSfcScanAsync(onOutput, ct);
+        DiagnosticResult sfcRes = await RunSfcScanAsync(onOutput, ct).ConfigureAwait(false);
         _ = sb.AppendLine($"[3/4] SFC Scannow: {sfcRes.Summary}");
 
         onStep?.Invoke(4, "Optimisation réseau et purge du cache DNS...");
-        DiagnosticResult netRes = await ResetNetworkStackAsync(onOutput, ct);
+        DiagnosticResult netRes = await ResetNetworkStackAsync(onOutput, ct).ConfigureAwait(false);
         _ = sb.AppendLine($"[4/4] Réseau/DNS: {netRes.Summary}");
 
         bool overallSuccess = defRes.Success && dismRes.Success && sfcRes.Success && netRes.Success;
@@ -337,21 +372,24 @@ public sealed class SystemHealthService
             {
                 var psi = new ProcessStartInfo
                 {
-                    FileName = "powershell.exe",
-                    Arguments = $"-NoProfile -NonInteractive -Command \"{script}\"",
+                    FileName = SystemToolResolver.Resolve("powershell.exe"),
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     StandardOutputEncoding = Encoding.UTF8
                 };
+                psi.ArgumentList.Add("-NoProfile");
+                psi.ArgumentList.Add("-NonInteractive");
+                psi.ArgumentList.Add("-Command");
+                psi.ArgumentList.Add(script);
 
                 using var proc = new Process { StartInfo = psi };
                 proc.OutputDataReceived += (_, e) =>
                 {
                     if (!string.IsNullOrWhiteSpace(e.Data))
                     {
-                        sb.AppendLine(e.Data);
+                        lock (sb) sb.AppendLine(e.Data);
                         onOutput?.Invoke(e.Data);
                     }
                 };
@@ -359,7 +397,7 @@ public sealed class SystemHealthService
                 {
                     if (!string.IsNullOrWhiteSpace(e.Data))
                     {
-                        sb.AppendLine($"[ERR] {e.Data}");
+                        lock (sb) sb.AppendLine($"[ERR] {e.Data}");
                         onOutput?.Invoke($"⚠️ {e.Data}");
                     }
                 };
@@ -374,7 +412,7 @@ public sealed class SystemHealthService
                 }
                 catch (OperationCanceledException)
                 {
-                    try { proc.Kill(entireProcessTree: true); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "SystemHealthService.ExecutePowerShellCommandAsync"); }
+                    try { proc.Kill(entireProcessTree: true); } catch (Exception ex) when (ex is not OutOfMemoryException) { LoggingService.LogException(ex, "SystemHealthService.ExecutePowerShellCommandAsync"); }
                     throw;
                 }
 
@@ -383,12 +421,12 @@ public sealed class SystemHealthService
                 return new DiagnosticResult(success, summary, sb.ToString());
             }
             catch (OperationCanceledException) { throw; }
-            catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)
+            catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException)
             {
                 LoggingService.LogException(ex, $"ExecutePowerShell({script})");
                 return new DiagnosticResult(false, ex.Message, ex.ToString());
             }
-        }, ct);
+        }, ct).ConfigureAwait(false);
     }
 
     private async Task<DiagnosticResult> RunProcessAsync(string exe, string args, Action<string>? onOutput, CancellationToken ct)
@@ -400,7 +438,7 @@ public sealed class SystemHealthService
             {
                 var psi = new ProcessStartInfo
                 {
-                    FileName = exe,
+                    FileName = SystemToolResolver.Resolve(exe),
                     Arguments = args,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
@@ -414,7 +452,7 @@ public sealed class SystemHealthService
                 {
                     if (!string.IsNullOrWhiteSpace(e.Data))
                     {
-                        sb.AppendLine(e.Data);
+                        lock (sb) sb.AppendLine(e.Data);
                         onOutput?.Invoke(e.Data);
                     }
                 };
@@ -422,7 +460,7 @@ public sealed class SystemHealthService
                 {
                     if (!string.IsNullOrWhiteSpace(e.Data))
                     {
-                        sb.AppendLine($"[ERR] {e.Data}");
+                        lock (sb) sb.AppendLine($"[ERR] {e.Data}");
                         onOutput?.Invoke($"⚠️ {e.Data}");
                     }
                 };
@@ -437,7 +475,7 @@ public sealed class SystemHealthService
                 }
                 catch (OperationCanceledException)
                 {
-                    try { proc.Kill(entireProcessTree: true); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "SystemHealthService.RunProcessAsync"); }
+                    try { proc.Kill(entireProcessTree: true); } catch (Exception ex) when (ex is not OutOfMemoryException) { LoggingService.LogException(ex, "SystemHealthService.RunProcessAsync"); }
                     throw;
                 }
 
@@ -446,11 +484,11 @@ public sealed class SystemHealthService
                 return new DiagnosticResult(success, summary, sb.ToString());
             }
             catch (OperationCanceledException) { throw; }
-            catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)
+            catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException)
             {
                 LoggingService.LogException(ex, $"RunProcess({exe} {args})");
                 return new DiagnosticResult(false, ex.Message, ex.ToString());
             }
-        }, ct);
+        }, ct).ConfigureAwait(false);
     }
 }

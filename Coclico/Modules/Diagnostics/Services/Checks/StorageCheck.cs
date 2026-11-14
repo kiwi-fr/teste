@@ -4,7 +4,7 @@ using System.IO;
 using Coclico.Modules.Diagnostics.Models;
 using Coclico.Modules.Diagnostics.Rules;
 
-public sealed class StorageCheck : IDiagnosticCheck
+internal sealed class StorageCheck : IDiagnosticCheck
 {
     private const string StorageScope = @"root\Microsoft\Windows\Storage";
     private const string PhysicalDiskQuery = "SELECT DeviceId, Model, MediaType, HealthStatus FROM MSFT_PhysicalDisk";

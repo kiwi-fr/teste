@@ -12,7 +12,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Coclico.ViewModels;
 
-public class ProgramDisplayInfo : INotifyPropertyChanged
+internal class ProgramDisplayInfo : INotifyPropertyChanged
 {
     public string Name
     {
@@ -33,7 +33,7 @@ public class ProgramDisplayInfo : INotifyPropertyChanged
     public bool IsGame { get; set; }
     public bool IsSystemTool { get; set; }
 
-    public bool CanUninstall => !string.IsNullOrWhiteSpace(UninstallString) || Source == "Microsoft Store";
+    public bool CanUninstall => !string.IsNullOrWhiteSpace(UninstallString) || string.Equals(Source, "Microsoft Store", StringComparison.Ordinal);
 
     public string Category
     {
@@ -82,7 +82,7 @@ public class ProgramDisplayInfo : INotifyPropertyChanged
     }
 }
 
-public partial class ProgramsViewModel : INotifyPropertyChanged
+internal partial class ProgramsViewModel : INotifyPropertyChanged
 {
     private readonly InstalledProgramsService _programsService = ServiceContainer.GetRequired<InstalledProgramsService>();
     private List<ProgramDisplayInfo> _allPrograms = [];
@@ -111,7 +111,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
         get;
         set
         {
-            if (field == value)
+            if (string.Equals(field, value, StringComparison.Ordinal))
             {
                 return;
             }
@@ -203,7 +203,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
         get;
         set
         {
-            if (field != value)
+            if (!string.Equals(field, value, StringComparison.Ordinal))
             {
                 field = value;
                 OnNotifyPropertyChanged();
@@ -216,10 +216,10 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
         }
     } = "All";
 
-    public bool IsTabAll => CurrentTab == "All";
-    public bool IsTabGames => CurrentTab == "Games";
-    public bool IsTabSoftware => CurrentTab == "Software";
-    public bool IsTabSystem => CurrentTab == "System";
+    public bool IsTabAll => string.Equals(CurrentTab, "All", StringComparison.Ordinal);
+    public bool IsTabGames => string.Equals(CurrentTab, "Games", StringComparison.Ordinal);
+    public bool IsTabSoftware => string.Equals(CurrentTab, "Software", StringComparison.Ordinal);
+    public bool IsTabSystem => string.Equals(CurrentTab, "System", StringComparison.Ordinal);
 
     public int CountAll => _allPrograms.Count;
     public int CountGames => _allPrograms.Count(p => p.IsGame);
@@ -240,7 +240,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
         get;
         set
         {
-            if (field != value)
+            if (!string.Equals(field, value, StringComparison.Ordinal))
             {
                 field = value;
                 OnNotifyPropertyChanged();
@@ -296,7 +296,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
             return all.Count == 0
                 ? "\u2014"
                 : string.Join("\n", all
-                .GroupBy(p => p.Source)
+                .GroupBy(p => p.Source, StringComparer.Ordinal)
                 .OrderByDescending(g => g.Count())
                 .Take(6)
                 .Select(g => $"{g.Key}: {g.Count()}"));
@@ -306,19 +306,11 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
     public string CategoryStats => _allPrograms.Count == 0
                 ? "\u2014"
                 : string.Join("\n", _allPrograms
-                .GroupBy(p => p.Category)
+                .GroupBy(p => p.Category, StringComparer.Ordinal)
                 .OrderByDescending(g => g.Count())
                 .Take(6)
                 .Select(g => $"{g.Key}: {g.Count()}"));
 
-    private static string L(string key)
-    {
-        try
-        {
-            return Application.Current?.TryFindResource(key) as string ?? ServiceContainer.GetOptional<LocalizationService>()?.Get(key) ?? key;
-        }
-        catch (Exception ex) when (ex is not System.OutOfMemoryException) { return key; }
-    }
 
     public ProgramsViewModel()
     {
@@ -408,11 +400,11 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
                           p.Name.Contains("Distributable", StringComparison.OrdinalIgnoreCase)));
 
         string category = p.Category;
-        if (isGame && (string.IsNullOrEmpty(category) || category == "Logiciel"))
+        if (isGame && (string.IsNullOrEmpty(category) || string.Equals(category, "Logiciel", StringComparison.Ordinal)))
         {
             category = "Jeux";
         }
-        else if (isSystem && (string.IsNullOrEmpty(category) || category == "Logiciel"))
+        else if (isSystem && (string.IsNullOrEmpty(category) || string.Equals(category, "Logiciel", StringComparison.Ordinal)))
         {
             category = "Outils Windows";
         }
@@ -447,7 +439,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
 
         try
         {
-            List<InstalledProgramsService.ProgramInfo> programs = await _programsService.GetAllInstalledProgramsAsync(forceRefresh: forceRefresh);
+            List<InstalledProgramsService.ProgramInfo> programs = await _programsService.GetAllInstalledProgramsAsync(forceRefresh: forceRefresh).ConfigureAwait(false);
 
             _allPrograms = programs
                 .Where(p => !string.IsNullOrEmpty(p.Name) && !p.Name.Contains("Coclico", StringComparison.OrdinalIgnoreCase))
@@ -459,7 +451,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
             IEnumerable<string> iconPaths = _allPrograms
                 .Where(p => p.HasIcon)
                 .Select(p => p.IconPath)
-                .Distinct();
+                .Distinct(StringComparer.Ordinal);
             _ = FileIconConverter.PreloadAllAsync(iconPaths);
 
             await Application.Current.Dispatcher.InvokeAsync(() =>
@@ -513,7 +505,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
             _ => _allPrograms
         };
 
-        if (!string.IsNullOrEmpty(SelectedCategory) && SelectedCategory != "Tout")
+        if (!string.IsNullOrEmpty(SelectedCategory) && !string.Equals(SelectedCategory, "Tout", StringComparison.Ordinal))
         {
             query = query.Where(p => string.Equals(p.Category, SelectedCategory, StringComparison.OrdinalIgnoreCase));
         }
@@ -526,9 +518,9 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
         query = SelectedSort switch
         {
             "Nom (Z → A)" => query.OrderByDescending(p => p.Name, StringComparer.OrdinalIgnoreCase),
-            "Taille (Décroissante)" => query.OrderByDescending(p => p.SizeBytes).ThenBy(p => p.Name),
-            "Taille (Croissante)" => query.OrderBy(p => p.SizeBytes > 0 ? p.SizeBytes : long.MaxValue).ThenBy(p => p.Name),
-            "Éditeur (A → Z)" => query.OrderBy(p => p.Publisher, StringComparer.OrdinalIgnoreCase).ThenBy(p => p.Name),
+            "Taille (Décroissante)" => query.OrderByDescending(p => p.SizeBytes).ThenBy(p => p.Name, StringComparer.Ordinal),
+            "Taille (Croissante)" => query.OrderBy(p => p.SizeBytes > 0 ? p.SizeBytes : long.MaxValue).ThenBy(p => p.Name, StringComparer.Ordinal),
+            "Éditeur (A → Z)" => query.OrderBy(p => p.Publisher, StringComparer.OrdinalIgnoreCase).ThenBy(p => p.Name, StringComparer.Ordinal),
             _ => query.OrderBy(p => p.Name, StringComparer.OrdinalIgnoreCase)
         };
 
@@ -587,18 +579,18 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
 
     private async Task LaunchAppAndForgetAsync(ProgramDisplayInfo app)
     {
-        try { await LaunchApp(app); }
+        try { await LaunchApp(app).ConfigureAwait(false); }
         catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "ProgramsViewModel.LaunchAppAndForget"); }
     }
 
     private async Task LaunchApp(ProgramDisplayInfo app)
     {
         bool exists = await Task.Run(() =>
-            !string.IsNullOrEmpty(app.ExePath) && File.Exists(app.ExePath));
+            !string.IsNullOrEmpty(app.ExePath) && File.Exists(app.ExePath)).ConfigureAwait(false);
 
         if (!exists)
         {
-            Notify?.Invoke(L("Programs_ExeNotFound"), L("Common_Error"));
+            Notify?.Invoke(Loc.Get("Programs_ExeNotFound"), Loc.Get("Common_Error"));
             return;
         }
 
@@ -608,7 +600,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
             string workDir = await Task.Run(() =>
                 !string.IsNullOrEmpty(app.InstallPath) && Directory.Exists(app.InstallPath)
                     ? app.InstallPath
-                    : Path.GetDirectoryName(app.ExePath) ?? string.Empty);
+                    : Path.GetDirectoryName(app.ExePath) ?? string.Empty).ConfigureAwait(false);
 
             _ = await Task.Run(() => Process.Start(
                 new ProcessStartInfo
@@ -616,9 +608,9 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
                     FileName = app.ExePath,
                     WorkingDirectory = workDir,
                     UseShellExecute = true
-                }));
+                })).ConfigureAwait(false);
 
-            ProgramDisplayInfo? existing = RecentPrograms.FirstOrDefault(p => p.ExePath == app.ExePath);
+            ProgramDisplayInfo? existing = RecentPrograms.FirstOrDefault(p => string.Equals(p.ExePath, app.ExePath, StringComparison.Ordinal));
             if (existing != null)
             {
                 _ = RecentPrograms.Remove(existing);
@@ -634,7 +626,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
         catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.ComponentModel.Win32Exception or System.InvalidOperationException)
         {
             LoggingService.LogException(ex, "ProgramsViewModel.LaunchApp");
-            Notify?.Invoke(TextFormatService.Format(L("Programs_LaunchError"), ex.Message), null);
+            Notify?.Invoke(Loc.Format("Programs_LaunchError", ex.Message), null);
         }
         finally
         {
@@ -691,7 +683,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
     {
         if (app != null && !string.IsNullOrEmpty(app.InstallPath))
         {
-            try { _ = Process.Start("explorer.exe", app.InstallPath); }
+            try { _ = Process.Start(Coclico.Services.SystemToolResolver.Resolve("explorer.exe"), app.InstallPath); }
             catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException) { LoggingService.LogException(ex, "ProgramsViewModel.OpenFolder"); }
         }
     }
@@ -710,7 +702,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
             try
             {
                 Clipboard.SetText(path);
-                Notify?.Invoke(TextFormatService.Format(L("Programs_PathCopied"), path), null);
+                Notify?.Invoke(Loc.Format("Programs_PathCopied", path), null);
             }
             catch (Exception ex) when (ex is not System.OutOfMemoryException)
             {
@@ -761,7 +753,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
 
         ShowGenericInput(
             "RACCOURCI CLAVIER",
-            L("Programs_ShortcutPrompt"),
+            Loc.Get("Programs_ShortcutPrompt"),
             SelectedProgram.Shortcut,
             input =>
             {
@@ -785,8 +777,8 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
         }
 
         bool confirm = Confirm?.Invoke(
-            TextFormatService.Format(L("Programs_ConfirmUninstall"), app.Name),
-            L("Programs_ConfirmUninstallTitle")) ?? false;
+            Loc.Format("Programs_ConfirmUninstall", app.Name),
+            Loc.Get("Programs_ConfirmUninstallTitle")) ?? false;
 
         if (!confirm)
         {
@@ -804,7 +796,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
             ParsedUninstallCommand? parsed = UninstallCommandParser.Parse(app.UninstallString);
             if (parsed == null)
             {
-                Notify?.Invoke("Commande de désinstallation invalide ou introuvable.", null);
+                Notify?.Invoke(Loc.Get("Programs_UninstallCmdInvalid"), null);
                 return;
             }
 
@@ -814,7 +806,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
                     $"[ProgramsViewModel] Désinstallation bloquée par la politique de sécurité : '{app.Name}' -> {app.UninstallString}");
                 Notify?.Invoke(
                     "La commande de désinstallation a été bloquée par la politique de sécurité de Coclico.",
-                    L("Common_Error"));
+                    Loc.Get("Common_Error"));
                 return;
             }
 
@@ -857,16 +849,21 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
         catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.ComponentModel.Win32Exception or System.InvalidOperationException)
         {
             LoggingService.LogException(ex, "ProgramsViewModel.Uninstall");
-            Notify?.Invoke(TextFormatService.Format(L("Programs_UninstallError"), ex.Message), L("Common_Error"));
+            Notify?.Invoke(Loc.Format("Programs_UninstallError", ex.Message), Loc.Get("Common_Error"));
         }
     }
 
     private static bool IsUninstallCommandAllowed(ParsedUninstallCommand parsed)
     {
-        ISecurityPolicy? policy = ServiceContainer.GetOptional<ISecurityPolicy>();
-        if (policy == null)
+        ISecurityPolicy policy;
+        try
         {
-            return true;
+            policy = ServiceContainer.GetRequired<ISecurityPolicy>();
+        }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
+        {
+            LoggingService.LogException(ex, "ProgramsViewModel.IsUninstallCommandAllowed");
+            return false;
         }
 
         if (policy.IsCommandBlocked(parsed.ExecutableOrUri.ToLowerInvariant()))
@@ -892,7 +889,7 @@ public partial class ProgramsViewModel : INotifyPropertyChanged
     {
         if (string.IsNullOrEmpty(NewAppPath) || !File.Exists(NewAppPath))
         {
-            Notify?.Invoke(L("Programs_SelectValidExe"), null);
+            Notify?.Invoke(Loc.Get("Programs_SelectValidExe"), null);
             return;
         }
 

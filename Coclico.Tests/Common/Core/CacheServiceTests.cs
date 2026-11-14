@@ -1,10 +1,9 @@
-using System.Text.Json;
 using Coclico.Services;
 using Xunit;
 
 namespace Coclico.Tests;
 
-public sealed class CacheServiceTests : IDisposable
+public sealed class CacheServiceTests : IAsyncLifetime
 {
     private readonly CacheService _cache = new();
     private readonly List<string> _keys = [];
@@ -16,85 +15,98 @@ public sealed class CacheServiceTests : IDisposable
         return key;
     }
 
-    public void Dispose()
+    public ValueTask InitializeAsync()
+    {
+        return ValueTask.CompletedTask;
+    }
+
+    public async ValueTask DisposeAsync()
     {
         foreach (string key in _keys)
         {
-            _cache.Invalidate(key);
+            await _cache.InvalidateAsync(key).ConfigureAwait(false);
         }
 
-        _cache.ClearSubdir("ut-subdir");
-        _cache.ClearSubdir("ut-clear-a");
-        _cache.ClearSubdir("ut-clear-b");
+        await _cache.ClearSubdirAsync("ut-subdir").ConfigureAwait(false);
+        await _cache.ClearSubdirAsync("ut-clear-a").ConfigureAwait(false);
+        await _cache.ClearSubdirAsync("ut-clear-b").ConfigureAwait(false);
     }
 
     private sealed record SamplePayload(string Name, int Count, bool Flag);
 
     [Fact]
-    public void SetThenGet_RoundTripsComplexObject()
+    public async Task SetThenGetAsyncRoundTripsComplexObject()
     {
         string key = Key("roundtrip");
         var payload = new SamplePayload("nettoyage", 42, true);
 
-        _cache.Set(key, payload);
-        SamplePayload? readBack = _cache.Get<SamplePayload>(key);
+        await _cache.SetAsync(key, payload);
+        SamplePayload? readBack = await _cache.GetAsync<SamplePayload>(key);
 
         Assert.NotNull(readBack);
         Assert.Equal(payload, readBack);
     }
 
     [Fact]
-    public void Get_MissingKey_ReturnsDefault()
+    public async Task GetAsyncMissingKeyReturnsDefault()
     {
         string key = Key("absent");
 
-        Assert.Null(_cache.Get<SamplePayload>(key));
-        Assert.False(_cache.Has(key));
+        Assert.Null(await _cache.GetAsync<SamplePayload>(key));
+        Assert.False(await _cache.HasAsync(key));
     }
 
     [Fact]
-    public void Has_TrueAfterSet_FalseAfterInvalidate()
+    public async Task HasAsyncTrueAfterSetFalseAfterInvalidate()
     {
         string key = Key("has");
 
-        _cache.Set(key, "valeur");
-        Assert.True(_cache.Has(key));
+        await _cache.SetAsync(key, "valeur");
+        Assert.True(await _cache.HasAsync(key));
 
-        _cache.Invalidate(key);
-        Assert.False(_cache.Has(key));
-        Assert.Null(_cache.Get<string>(key));
+        await _cache.InvalidateAsync(key);
+        Assert.False(await _cache.HasAsync(key));
+        Assert.Null(await _cache.GetAsync<string>(key));
     }
 
     [Fact]
-    public void TryGet_ReturnsFalseForExpiredEntry()
+    public async Task TryGetAsyncReturnsFalseForExpiredEntry()
     {
         string key = Key("ttl");
-        _cache.Set(key, "périmé", TimeSpan.FromMilliseconds(1));
+        await _cache.SetAsync(key, "périmé", TimeSpan.FromMilliseconds(1));
 
-        Thread.Sleep(100);
+        await Task.Delay(100, TestContext.Current.CancellationToken);
 
-        Assert.False(_cache.TryGet(key, out string? value));
+        (bool found, string? value) = await _cache.TryGetAsync<string>(key);
+        Assert.False(found);
         Assert.Null(value);
     }
 
     [Fact]
-    public void TryGet_ReturnsTrueForFreshEntry()
+    public async Task TryGetAsyncReturnsTrueForFreshEntry()
     {
         string key = Key("fresh");
-        _cache.Set(key, "frais", TimeSpan.FromMinutes(5));
+        await _cache.SetAsync(key, "frais", TimeSpan.FromMinutes(5));
 
-        Assert.True(_cache.TryGet(key, out string? value));
+        (bool found, string? value) = await _cache.TryGetAsync<string>(key);
+        Assert.True(found);
         Assert.Equal("frais", value);
     }
 
     [Fact]
-    public void GetOrSet_CallsFactoryOnceThenServesFromCache()
+    public async Task GetOrSetAsyncCallsFactoryOnceThenServesFromCache()
     {
         string key = Key("factory");
         int calls = 0;
 
-        string first = _cache.GetOrSet(key, () => { calls++; return "généré"; });
-        string second = _cache.GetOrSet(key, () => { calls++; return "généré-autre"; });
+        Task<string> Factory()
+        {
+            calls++;
+            return Task.FromResult(calls == 1 ? "généré" : "généré-autre");
+        }
+
+        string first = await _cache.GetOrSetAsync(key, Factory);
+        string second = await _cache.GetOrSetAsync(key, Factory);
 
         Assert.Equal("généré", first);
         Assert.Equal("généré", second);
@@ -102,51 +114,75 @@ public sealed class CacheServiceTests : IDisposable
     }
 
     [Fact]
-    public void SubdirVariant_RoundTripsIndependentlyFromRootKey()
+    public async Task GetOrSetAsyncConcurrentCallsExecuteFactoryOnlyOnce()
+    {
+        string key = Key("race");
+        int calls = 0;
+
+        async Task<string> Factory()
+        {
+            _ = Interlocked.Increment(ref calls);
+            await Task.Delay(50).ConfigureAwait(false);
+            return "valeur";
+        }
+
+        const int concurrency = 16;
+        Task<string>[] tasks = Enumerable.Range(0, concurrency)
+            .Select(_ => _cache.GetOrSetAsync(key, Factory))
+            .ToArray();
+
+        string[] results = await Task.WhenAll(tasks);
+
+        Assert.All(results, r => Assert.Equal("valeur", r));
+        Assert.Equal(1, calls);
+    }
+
+    [Fact]
+    public async Task SubdirVariantRoundTripsIndependentlyFromRootKey()
     {
         string key = Key("sub");
         string rootKey = Key("root");
         const string subdir = "ut-subdir";
 
-        _cache.Set(rootKey, "racine");
-        _cache.SetInSubdir(subdir, key, "sous-dossier");
+        await _cache.SetAsync(rootKey, "racine");
+        await _cache.SetInSubdirAsync(subdir, key, "sous-dossier");
 
-        Assert.Equal("sous-dossier", _cache.GetFromSubdir<string>(subdir, key));
-        Assert.Equal("racine", _cache.Get<string>(rootKey));
+        Assert.Equal("sous-dossier", await _cache.GetFromSubdirAsync<string>(subdir, key));
+        Assert.Equal("racine", await _cache.GetAsync<string>(rootKey));
 
-        _cache.InvalidateInSubdir(subdir, key);
-        Assert.Null(_cache.GetFromSubdir<string>(subdir, key));
-        Assert.Equal("racine", _cache.Get<string>(rootKey));
+        await _cache.InvalidateInSubdirAsync(subdir, key);
+        Assert.Null(await _cache.GetFromSubdirAsync<string>(subdir, key));
+        Assert.Equal("racine", await _cache.GetAsync<string>(rootKey));
     }
 
     [Fact]
-    public void TryGet_CorruptedEntryIsTreatedAsMissing()
+    public async Task TryGetAsyncCorruptedEntryIsTreatedAsMissing()
     {
         string key = Key("corrupt");
         string path = Path.Join(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "Coclico", "cache", key + ".cache.json");
-        _keys.Add(key);
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-        File.WriteAllText(path, "{ ceci n'est pas du json valide");
+        await File.WriteAllTextAsync(path, "{ ceci n'est pas du json valide", TestContext.Current.CancellationToken);
 
-        Assert.False(_cache.TryGet(key, out string? value));
+        (bool found, string? value) = await _cache.TryGetAsync<string>(key);
+        Assert.False(found);
         Assert.Null(value);
     }
 
     [Fact]
-    public void KeysWithInvalidFileNameCharacters_AreSanitizedConsistently()
+    public async Task KeysWithInvalidFileNameCharactersAreSanitizedConsistently()
     {
         string key = Key("invalid") + ":*?";
 
-        _cache.Set(key, "sanitisé");
+        await _cache.SetAsync(key, "sanitisé");
 
-        Assert.True(_cache.Has(key));
-        Assert.Equal("sanitisé", _cache.Get<string>(key));
+        Assert.True(await _cache.HasAsync(key));
+        Assert.Equal("sanitisé", await _cache.GetAsync<string>(key));
     }
 
     [Fact]
-    public async Task SetThenGetAsync_RoundTripsValue()
+    public async Task SetThenGetAsyncRoundTripsValue()
     {
         string key = Key("async");
 
@@ -160,55 +196,35 @@ public sealed class CacheServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task GetOrSetAsync_CallsFactoryOnce()
-    {
-        string key = Key("factory-async");
-        int calls = 0;
-
-        Task<int> Factory()
-        {
-            calls++;
-            return Task.FromResult(7);
-        }
-
-        int first = await _cache.GetOrSetAsync(key, Factory);
-        int second = await _cache.GetOrSetAsync(key, Factory);
-
-        Assert.Equal(7, first);
-        Assert.Equal(7, second);
-        Assert.Equal(1, calls);
-    }
-
-    [Fact]
-    public void ClearSubdir_RemovesOnlyTargetedEntries()
+    public async Task ClearSubdirAsyncRemovesOnlyTargetedEntries()
     {
         string subdirA = "ut-clear-a";
         string subdirB = "ut-clear-b";
         string keyA = Key("a");
         string keyB = Key("b");
 
-        _cache.SetInSubdir(subdirA, keyA, "A");
-        _cache.SetInSubdir(subdirB, keyB, "B");
+        await _cache.SetInSubdirAsync(subdirA, keyA, "A");
+        await _cache.SetInSubdirAsync(subdirB, keyB, "B");
 
-        _cache.ClearSubdir(subdirA);
+        await _cache.ClearSubdirAsync(subdirA);
 
-        Assert.Null(_cache.GetFromSubdir<string>(subdirA, keyA));
-        Assert.Equal("B", _cache.GetFromSubdir<string>(subdirB, keyB));
+        Assert.Null(await _cache.GetFromSubdirAsync<string>(subdirA, keyA));
+        Assert.Equal("B", await _cache.GetFromSubdirAsync<string>(subdirB, keyB));
     }
 
     [Fact]
-    public void JsonEntries_AreNotIndentedToKeepFilesSmall()
+    public async Task JsonEntriesAreNotIndentedToKeepFilesSmall()
     {
         string key = Key("indent");
-        _cache.Set(key, "compact");
+        await _cache.SetAsync(key, "compact");
 
         string path = Path.Join(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "Coclico", "cache", key + ".cache.json");
 
         Assert.True(File.Exists(path));
-        string json = File.ReadAllText(path);
-        Assert.DoesNotContain("\n  ", json);
-        Assert.Contains("ExpiresAt", json);
+        string json = await File.ReadAllTextAsync(path, TestContext.Current.CancellationToken);
+        Assert.DoesNotContain("\n  ", json, StringComparison.Ordinal);
+        Assert.Contains("ExpiresAt", json, StringComparison.Ordinal);
     }
 }

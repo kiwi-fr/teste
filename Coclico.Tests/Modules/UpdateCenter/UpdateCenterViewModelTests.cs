@@ -1,198 +1,122 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Coclico.Modules.UpdateCenter.Models;
-using Coclico.Modules.UpdateCenter.Services;
-using Coclico.Modules.UpdateCenter.ViewModels;
+using System.Text.Json;
+using Coclico.Modules.TelemetryBlocker.Services;
 using Xunit;
 
-namespace Coclico.Tests.Modules.UpdateCenter;
+namespace Coclico.Tests;
 
-public sealed class UpdateCenterViewModelTests
+public sealed class TelemetryBlockServiceTests
 {
-    private sealed class StubScanService : UpdateScanService
-    {
-        public IReadOnlyList<UpdateItem> Result { get; set; } = Array.Empty<UpdateItem>();
-
-        public StubScanService() : base(null!, null!, null!) { }
-
-        public override Task<UpdateScanResult> ScanAllAsync(CancellationToken ct)
-            => Task.FromResult(new UpdateScanResult
-            {
-                Items = Result,
-                ScannedAt = DateTimeOffset.UtcNow,
-                SourceErrors = new Dictionary<string, string>()
-            });
-    }
-
-    private sealed class StubWingetService : WingetUpdateService
-    {
-        public int UpgradeCalls { get; private set; }
-
-        public StubWingetService() : base(new SecureProcessRunner()) { }
-
-        public override Task<bool> UpgradeAsync(string packageId, CancellationToken ct)
-        {
-            UpgradeCalls++;
-            return Task.FromResult(true);
-        }
-    }
-
-    private sealed class StubDriverService : DriverUpdateService
-    {
-        public int InstallCalls { get; private set; }
-
-        public override Task<bool> InstallAsync(UpdateItem item, CancellationToken ct)
-        {
-            InstallCalls++;
-            return Task.FromResult(true);
-        }
-    }
-
-    private sealed class StubRestorePointService : RestorePointService
-    {
-        public int RestorePointCalls { get; private set; }
-
-        public override bool Create(string description)
-        {
-            RestorePointCalls++;
-            return true;
-        }
-    }
-
-    private static UpdateItem AppItem(string id, UpdateItemStatus status = UpdateItemStatus.Available) => new()
-    {
-        Id = id,
-        Name = id,
-        Kind = UpdateKind.Application,
-        Source = UpdateSource.Winget,
-        Status = status,
-        CurrentVersion = "1.0",
-        AvailableVersion = "2.0"
-    };
-
-    private static UpdateItem DriverItem(string id, string name) => new()
-    {
-        Id = id,
-        Name = name,
-        Kind = UpdateKind.Driver,
-        Source = UpdateSource.WindowsUpdate,
-        Status = UpdateItemStatus.Available
-    };
-
-    private static UpdateCenterViewModel CreateViewModel(
-        StubScanService scanService,
-        StubWingetService? winget = null,
-        StubDriverService? drivers = null,
-        StubRestorePointService? restore = null)
-        => new(scanService, winget ?? new StubWingetService(), drivers ?? new StubDriverService(), restore ?? new StubRestorePointService());
+    private static readonly string[] ExpectedCategories = ["Registry", "Services", "ScheduledTasks", "Hosts", "AdsHosts", "DnsLockdown"];
 
     [Fact]
-    public async Task CheckAll_FillsSections_AndBecomesReady()
+    public void BuildPlanRecommendedContainsCoreTelemetryActions()
     {
-        var scanService = new StubScanService
-        {
-            Result = new[] { AppItem("App1"), AppItem("App2", UpdateItemStatus.UnknownVersion) }
-        };
+        var plan = TelemetryBlockService.BuildPlan(TelemetryProfile.Recommended, null);
 
-        var viewModel = CreateViewModel(scanService);
-        viewModel.CheckAll();
-
-        await WaitUntilAsync(() => viewModel.State == UpdateCenterState.Ready);
-
-        Assert.Equal(UpdateCenterState.Ready, viewModel.State);
-        Assert.Equal(2, viewModel.Applications.Items.Count);
-        Assert.NotNull(viewModel.LastScan);
+        Assert.Contains(plan, a => a.Kind == "service" && a.Target == "DiagTrack");
+        Assert.Contains(plan, a => a.Kind == "registry" && a.Target.Contains("DataCollection", StringComparison.Ordinal) && a.Value == "0");
+        Assert.Contains(plan, a => a.Kind == "task" && a.Target.Contains("Customer Experience Improvement Program", StringComparison.Ordinal));
+        Assert.Contains(plan, a => a.Kind == "hosts");
+        Assert.Contains(plan, a => a.Target == "dmwappushservice");
     }
 
     [Fact]
-    public async Task Selection_OnlySelectableItemsCanBeChecked()
+    public void BuildPlanRecommendedBlocksEverythingSetsAllowTelemetryToZero()
     {
-        var scanService = new StubScanService
-        {
-            Result = new[]
-            {
-                AppItem("App1"),
-                UpdateItem.UpToDate("App2", "App2", UpdateKind.Application, UpdateSource.Winget)
-            }
-        };
 
-        var viewModel = CreateViewModel(scanService);
-        viewModel.CheckAll();
-        await WaitUntilAsync(() => viewModel.State == UpdateCenterState.Ready);
+        var plan = TelemetryBlockService.BuildPlan(TelemetryProfile.Recommended, null);
 
-        var upToDate = viewModel.Applications.Items.Single(i => i.Id == "App2");
-        upToDate.IsSelected = true;
-
-        Assert.False(upToDate.IsSelected);
-        Assert.Empty(viewModel.SelectedItems);
+        Assert.Contains(plan, a => a.Kind == "registry" && a.Target.Contains("DataCollection", StringComparison.Ordinal) && a.Value == "0");
+        Assert.Contains(plan, a => a.Kind == "service" && a.Target == "dmwappushservice");
+        Assert.Contains(plan, a => a.Kind == "task" && a.Target.Contains("DmClient", StringComparison.Ordinal));
     }
 
     [Fact]
-    public async Task UpdateSelected_InstallsDrivers_AndCreatesRestorePointFirst()
+    public void BuildPlanRespectsCategoryFilter()
     {
-        var scanService = new StubScanService
-        {
-            Result = new[]
-            {
-                DriverItem("d1", "NVIDIA GeForce Driver"),
-                DriverItem("d2", "Intel Audio Driver")
-            }
-        };
+        var plan = TelemetryBlockService.BuildPlan(TelemetryProfile.Recommended, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Hosts" });
 
-        var drivers = new StubDriverService();
-        var restore = new StubRestorePointService();
-        var viewModel = CreateViewModel(scanService, drivers: drivers, restore: restore);
-
-        viewModel.CheckAll();
-        await WaitUntilAsync(() => viewModel.State == UpdateCenterState.Ready);
-
-        foreach (var item in viewModel.Drivers.Items)
-            item.IsSelected = true;
-
-        await viewModel.UpdateSelectedAsync();
-
-        Assert.Equal(2, drivers.InstallCalls);
-        Assert.Equal(1, restore.RestorePointCalls);
-        Assert.Contains("2 élément(s) mis à jour", viewModel.LastScanSummary);
+        Assert.Single(plan);
+        Assert.Equal("hosts", plan[0].Kind);
     }
 
     [Fact]
-    public async Task UpdateSelected_UpdatesAppsAndDriversTogether()
+    public void BuildPlanIdsAreUnique()
     {
-        var scanService = new StubScanService
-        {
-            Result = new[]
-            {
-                AppItem("Mozilla.Firefox"),
-                DriverItem("d1", "AMD Graphics Driver")
-            }
-        };
-
-        var winget = new StubWingetService();
-        var drivers = new StubDriverService();
-        var viewModel = CreateViewModel(scanService, winget: winget, drivers: drivers);
-
-        viewModel.CheckAll();
-        await WaitUntilAsync(() => viewModel.State == UpdateCenterState.Ready);
-
-        foreach (var section in viewModel.Sections)
-            foreach (var item in section.Items)
-                item.IsSelected = true;
-
-        await viewModel.UpdateSelectedAsync();
-
-        Assert.Equal(1, winget.UpgradeCalls);
-        Assert.Equal(1, drivers.InstallCalls);
+        var plan = TelemetryBlockService.BuildPlan(TelemetryProfile.Recommended, null);
+        var ids = plan.Select(a => a.Id).ToList();
+        Assert.Equal(ids.Count, ids.Distinct(StringComparer.Ordinal).Count());
     }
 
-    private static async Task WaitUntilAsync(Func<bool> condition)
+    [Fact]
+    public void BackupSerializationRoundTrips()
     {
-        for (var i = 0; i < 50 && !condition(); i++)
-            await Task.Delay(20);
+        var backup = new TelemetryBackup
+        {
+            CreatedUtc = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+            HostsPath = @"C:\Windows\System32\drivers\etc\hosts",
+            HostsContent = "127.0.0.1 localhost\n",
+            Registry = { new RegistrySnapshot { Path = @"HKLM\SOFTWARE\X", ValueName = "V", Existed = true, KindCode = 4, Value = "1" } },
+            Services = { new ServiceSnapshot { Name = "DiagTrack", Existed = true, StartMode = "Auto", State = "Running" } },
+            Tasks = { new TaskSnapshot { Path = @"\Microsoft\Windows\X", Existed = true, Enabled = true } }
+        };
 
-        Assert.True(condition());
+        string json = JsonSerializer.Serialize(backup);
+        var loaded = JsonSerializer.Deserialize<TelemetryBackup>(json);
+
+        Assert.NotNull(loaded);
+        Assert.Single(loaded!.Registry);
+        Assert.Equal("DiagTrack", loaded.Services[0].Name);
+        Assert.True(loaded.Tasks[0].Enabled);
+        Assert.Equal(backup.HostsContent, loaded.HostsContent);
+    }
+
+    [Fact]
+    public void CategoriesContainsExpectedSix()
+    {
+        Assert.Equal(
+            ExpectedCategories,
+            TelemetryBlockService.Categories);
+    }
+
+    [Fact]
+    public void BuildPlanDnsLockdownCategoryAddsFirewallLockdownAction()
+    {
+        var plan = TelemetryBlockService.BuildPlan(TelemetryProfile.Recommended,
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "DnsLockdown" });
+
+        Assert.Single(plan);
+        Assert.Equal("dns-lockdown", plan[0].Kind);
+    }
+
+    [Fact]
+    public void GetAdHostsIncludesEmbeddedAndDohDomains()
+    {
+        var hosts = TelemetryBlockService.GetAdHosts();
+
+        Assert.Contains("doubleclick.net", hosts);
+        Assert.Contains("dns.google", hosts);
+        Assert.Contains("cloudflare-dns.com", hosts);
+    }
+
+    [Fact]
+    public void BuildPlanAdsHostsCategoryAddsSystemWideHostsAction()
+    {
+        var plan = TelemetryBlockService.BuildPlan(TelemetryProfile.Recommended,
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "AdsHosts" });
+
+        Assert.Single(plan);
+        Assert.Equal("hosts-ads", plan[0].Kind);
+        Assert.Equal("hosts:ads", plan[0].Id);
+        Assert.Equal(TelemetryBlockService.HostsPath, plan[0].Target);
+    }
+
+    [Fact]
+    public void BuildPlanDefaultCategoriesIncludesAdsHostsBlock()
+    {
+        var plan = TelemetryBlockService.BuildPlan(TelemetryProfile.Recommended, null);
+
+        Assert.Contains(plan, a => a.Kind == "hosts");
+        Assert.Contains(plan, a => a.Kind == "hosts-ads");
     }
 }

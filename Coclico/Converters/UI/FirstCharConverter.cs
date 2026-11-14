@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -9,7 +8,7 @@ using System.Windows.Media.Imaging;
 
 namespace Coclico.Converters;
 
-public class FileIconConverter : IValueConverter
+internal class FileIconConverter : IValueConverter
 {
     private const int MaxCacheSize = 500;
 
@@ -96,7 +95,7 @@ public class FileIconConverter : IValueConverter
                 _cache.Add(path, bitmap);
             }
         }
-        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             Services.LoggingService.LogException(ex, "FileIconConverter.LoadIconAsync");
         }
@@ -141,8 +140,8 @@ public class FileIconConverter : IValueConverter
     private sealed class LruIconCache(int capacity)
     {
         private readonly LinkedList<string> _lru = [];
-        private readonly Dictionary<string, (LinkedListNode<string> Node, BitmapSource Value)> _map = new();
-        private readonly object _lock = new();
+        private readonly Dictionary<string, (LinkedListNode<string> Node, BitmapSource Value)> _map = new(StringComparer.Ordinal);
+        private readonly Lock _lock = new();
 
         public bool TryGet(string key, out BitmapSource? value)
         {

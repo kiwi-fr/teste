@@ -9,7 +9,7 @@ public sealed class DiagnosticRuleEngineTests
     private const long GiB = 1024L * 1024 * 1024;
 
     [Fact]
-    public void Storage_FreeSpaceAboveThresholds_ProducesNoFinding()
+    public void StorageFreeSpaceAboveThresholdsProducesNoFinding()
     {
         StorageFacts facts = new(
             Volumes: [new VolumeFacts("C:", 100 * GiB, 50 * GiB, "NTFS", "Fixed")],
@@ -24,7 +24,7 @@ public sealed class DiagnosticRuleEngineTests
     [InlineData(50, 4.9, DiagnosticSeverity.Warning)]
     [InlineData(1.9, 20, DiagnosticSeverity.Error)]
     [InlineData(50, 1.9, DiagnosticSeverity.Error)]
-    public void Storage_LowSpace_BelowThresholds_ProducesFinding(
+    public void StorageLowSpaceBelowThresholdsProducesFinding(
         double freeGiB, double freePercent, DiagnosticSeverity expectedSeverity)
     {
         long total = 100 * GiB;
@@ -49,7 +49,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Storage_ZeroTotalVolume_IsIgnored()
+    public void StorageZeroTotalVolumeIsIgnored()
     {
         StorageFacts facts = new(
             Volumes: [new VolumeFacts("Z:", 0, 0, "NTFS", "Unknown")],
@@ -60,7 +60,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Storage_DiskWithoutReliabilityCounters_ProducesNoFinding()
+    public void StorageDiskWithoutReliabilityCountersProducesNoFinding()
     {
         StorageFacts facts = new(
             Volumes: [],
@@ -71,7 +71,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Storage_UncorrectedReadErrors_ProduceErrorFinding()
+    public void StorageUncorrectedReadErrorsProduceErrorFinding()
     {
         StorageFacts facts = new(
             Volumes: [],
@@ -84,7 +84,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Storage_WearAbove80_ProducesWarningFinding()
+    public void StorageWearAbove80ProducesWarningFinding()
     {
         StorageFacts facts = new(
             Volumes: [],
@@ -97,7 +97,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Storage_WearAtExactThreshold80_ProducesNoFinding()
+    public void StorageWearAtExactThreshold80ProducesNoFinding()
     {
         StorageFacts facts = new(
             Volumes: [],
@@ -108,7 +108,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Memory_HighAvailableRam_ProducesNoFinding()
+    public void MemoryHighAvailableRamProducesNoFinding()
     {
         MemoryFacts facts = new(
             TotalPhysicalBytes: 16 * GiB,
@@ -123,7 +123,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Memory_LowAvailableRam_ProducesLowConfidenceWarning()
+    public void MemoryLowAvailableRamProducesLowConfidenceWarning()
     {
         MemoryFacts facts = new(
             TotalPhysicalBytes: 8 * GiB,
@@ -142,7 +142,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Memory_TopConsumerAt25Percent_IsOnlyInformational()
+    public void MemoryTopConsumerAt25PercentIsOnlyInformational()
     {
         MemoryFacts facts = new(
             TotalPhysicalBytes: 8 * GiB,
@@ -160,14 +160,14 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Cpu_LoadBelowThreshold_ProducesNoFinding()
+    public void CpuLoadBelowThresholdProducesNoFinding()
     {
         CpuFacts facts = new("Intel i7", 16, 10, 40, null, false, null, null);
         Assert.Empty(DiagnosticRuleEngine.EvaluateCpu(facts));
     }
 
     [Fact]
-    public void Cpu_HighLoad_IsOnlyInformational()
+    public void CpuHighLoadIsOnlyInformational()
     {
         CpuFacts facts = new("Intel i7", 16, 90, 100, null, false, null, null);
         DiagnosticFinding finding = Assert.Single(DiagnosticRuleEngine.EvaluateCpu(facts));
@@ -176,7 +176,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Cpu_MissingTemperature_ProducesNoThermalFinding()
+    public void CpuMissingTemperatureProducesNoThermalFinding()
     {
         CpuFacts facts = new("AMD Ryzen", 16, 5, 20, null, false, null, null);
         Assert.Empty(DiagnosticRuleEngine.EvaluateCpu(facts));
@@ -187,7 +187,7 @@ public sealed class DiagnosticRuleEngineTests
     [InlineData(85.0, 1)]
     [InlineData(95.0, 1)]
     [InlineData(99.0, 1)]
-    public void Cpu_TemperatureThresholds(double temperatureC, int expectedFindings)
+    public void CpuTemperatureThresholds(double temperatureC, int expectedFindings)
     {
         CpuFacts facts = new("Intel i7", 16, 5, 20, temperatureC, true, null, null);
         IReadOnlyList<DiagnosticFinding> findings = DiagnosticRuleEngine.EvaluateCpu(facts);
@@ -208,7 +208,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Network_NoAdapterUp_DnsFailureIsNotReportedAsError()
+    public void NetworkNoAdapterUpDnsFailureIsNotReportedAsError()
     {
         NetworkFacts facts = new(
             UpAdapters: [],
@@ -223,7 +223,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Network_GatewayLostWithSeveralProbes_ProducesError()
+    public void NetworkGatewayLostWithSeveralProbesProducesError()
     {
         NetworkFacts facts = new(
             UpAdapters: ["Ethernet"],
@@ -240,7 +240,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Network_GatewayWithTooFewProbes_ProducesNoFinding()
+    public void NetworkGatewayWithTooFewProbesProducesNoFinding()
     {
         NetworkFacts facts = new(
             UpAdapters: ["Ethernet"],
@@ -258,7 +258,7 @@ public sealed class DiagnosticRuleEngineTests
     [InlineData(4, 1)]
     [InlineData(10, 0)]
     [InlineData(4, 4)]
-    public void Network_PacketLossThresholds(int sent, int received)
+    public void NetworkPacketLossThresholds(int sent, int received)
     {
         NetworkFacts facts = new(
             UpAdapters: ["Ethernet"],
@@ -283,7 +283,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Network_IcmpBlockedHost_IsHighLatencyInfoAtMost()
+    public void NetworkIcmpBlockedHostIsHighLatencyInfoAtMost()
     {
         NetworkFacts facts = new(
             UpAdapters: ["Ethernet"],
@@ -301,14 +301,14 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Windows_NoUnexpectedShutdowns_ProducesNoFinding()
+    public void WindowsNoUnexpectedShutdownsProducesNoFinding()
     {
         WindowsFacts facts = new("Windows 11", "26100", TimeSpan.FromDays(3), 0, [], true);
         Assert.Empty(DiagnosticRuleEngine.EvaluateWindows(facts));
     }
 
     [Fact]
-    public void Windows_UnexpectedShutdown_ProducesWarning()
+    public void WindowsUnexpectedShutdownProducesWarning()
     {
         WindowsFacts facts = new("Windows 11", "26100", TimeSpan.FromDays(3), 1, [], true);
         DiagnosticFinding finding = Assert.Single(DiagnosticRuleEngine.EvaluateWindows(facts));
@@ -317,7 +317,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Windows_IsolatedCriticalEvent_IsNotAProblem()
+    public void WindowsIsolatedCriticalEventIsNotAProblem()
     {
         WindowsFacts facts = new(
             "Windows 11", "26100", TimeSpan.FromDays(3), 0,
@@ -328,7 +328,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Windows_RecurringCriticalEvents_ProduceOneFindingPerGroup()
+    public void WindowsRecurringCriticalEventsProduceOneFindingPerGroup()
     {
         WindowsFacts facts = new(
             "Windows 11", "26100", TimeSpan.FromDays(3), 0,
@@ -342,7 +342,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Devices_ProblemDevice_ProducesFindingWithWindowsCode()
+    public void DevicesProblemDeviceProducesFindingWithWindowsCode()
     {
         IReadOnlyList<DiagnosticFinding> findings = DiagnosticRuleEngine.EvaluateDevices(
             [new DeviceProblemFacts("Unknown USB Device", "USB", 28)]);
@@ -354,14 +354,14 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Security_UnreadableStatus_ProducesNoFinding()
+    public void SecurityUnreadableStatusProducesNoFinding()
     {
         DefenderFacts facts = new(false, false, false, false, null);
         Assert.Empty(DiagnosticRuleEngine.EvaluateSecurity(facts));
     }
 
     [Fact]
-    public void Security_RealTimeProtectionDisabled_ProducesWarning()
+    public void SecurityRealTimeProtectionDisabledProducesWarning()
     {
         DefenderFacts facts = new(true, false, true, true, "1");
         DiagnosticFinding finding = Assert.Single(DiagnosticRuleEngine.EvaluateSecurity(facts));
@@ -370,7 +370,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Security_AllProtectionsOff_ProducesError()
+    public void SecurityAllProtectionsOffProducesError()
     {
         DefenderFacts facts = new(true, false, false, false, "30");
         DiagnosticFinding finding = Assert.Single(DiagnosticRuleEngine.EvaluateSecurity(facts));
@@ -379,7 +379,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Power_NoBatteryOnDesktop_ProducesNoFinding()
+    public void PowerNoBatteryOnDesktopProducesNoFinding()
     {
         BatteryFacts battery = new(false, true, null, null, null, DataAvailable: false);
         ThermalFacts thermal = new(null, false);
@@ -387,7 +387,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Power_WornBattery_ProducesLowConfidenceWarning()
+    public void PowerWornBatteryProducesLowConfidenceWarning()
     {
         BatteryFacts battery = new(true, false, 40, 60, 0.4, DataAvailable: true);
         ThermalFacts thermal = new(null, false);
@@ -399,7 +399,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Power_HealthyBattery_ProducesNoFinding()
+    public void PowerHealthyBatteryProducesNoFinding()
     {
         BatteryFacts battery = new(true, false, 80, 240, 0.9, DataAvailable: true);
         ThermalFacts thermal = new(null, false);
@@ -407,7 +407,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Processes_UnhealthyStartup_ProducesWarning()
+    public void ProcessesUnhealthyStartupProducesWarning()
     {
         ProcessFacts facts = new(150, "app", 5, "app", 3, true, false, "démarrage lent");
         DiagnosticFinding finding = Assert.Single(DiagnosticRuleEngine.EvaluateProcesses(facts));
@@ -415,14 +415,14 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Processes_HealthyStartup_ProducesNoFinding()
+    public void ProcessesHealthyStartupProducesNoFinding()
     {
         ProcessFacts facts = new(150, "app", 5, "app", 3, true, true, null);
         Assert.Empty(DiagnosticRuleEngine.EvaluateProcesses(facts));
     }
 
     [Fact]
-    public void SortFindings_OrdersBySeverityThenConfidenceThenDate()
+    public void SortFindingsOrdersBySeverityThenConfidenceThenDate()
     {
         DateTime baseTime = new(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         DiagnosticFinding info = MakeFinding("A", DiagnosticSeverity.Info, DiagnosticConfidence.High, baseTime);
@@ -436,7 +436,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void Deduplicate_KeepsMostSeverePerRuleAndEntity()
+    public void DeduplicateKeepsMostSeverePerRuleAndEntity()
     {
         DiagnosticFinding low = MakeFinding("R1", DiagnosticSeverity.Warning, DiagnosticConfidence.High, DateTime.UtcNow, entity: "C:");
         DiagnosticFinding severe = MakeFinding("R1", DiagnosticSeverity.Error, DiagnosticConfidence.Low, DateTime.UtcNow, entity: "C:");
@@ -450,7 +450,7 @@ public sealed class DiagnosticRuleEngineTests
     }
 
     [Fact]
-    public void AllRuleFindings_NeverCarryFreeCommandStrings()
+    public void AllRuleFindingsNeverCarryFreeCommandStrings()
     {
         StorageFacts storage = new(
             [new VolumeFacts("C:", 100 * GiB, 1 * GiB, "NTFS", "Fixed")],

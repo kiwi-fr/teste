@@ -3,7 +3,7 @@ namespace Coclico.Modules.Diagnostics.Services.Checks;
 using Coclico.Modules.Diagnostics.Models;
 using Coclico.Modules.Diagnostics.Rules;
 
-public sealed class DeviceCheck : IDiagnosticCheck
+internal sealed class DeviceCheck : IDiagnosticCheck
 {
     private const int MaxReportedDevices = 20;
     private const string Query = "SELECT Name, Description, PNPClass, ConfigManagerErrorCode FROM Win32_PnPEntity WHERE ConfigManagerErrorCode <> 0";

@@ -1,15 +1,13 @@
 namespace Coclico.Modules.Diagnostics.Rules;
 
-using Coclico.Modules.Diagnostics.Models;
-
-public sealed record VolumeFacts(
+internal sealed record VolumeFacts(
     string VolumeName,
     long TotalBytes,
     long FreeBytes,
     string FileSystem,
     string DriveType);
 
-public sealed record DiskReliabilityFacts(
+internal sealed record DiskReliabilityFacts(
     string DiskName,
     long? TemperatureC,
     long? WearPercent,
@@ -18,12 +16,12 @@ public sealed record DiskReliabilityFacts(
     long? PowerOnHours,
     string? HealthStatus);
 
-public sealed record StorageFacts(
+internal sealed record StorageFacts(
     IReadOnlyList<VolumeFacts> Volumes,
     IReadOnlyList<DiskReliabilityFacts> Disks,
     bool DisksEnumerated);
 
-public sealed record MemoryFacts(
+internal sealed record MemoryFacts(
     long TotalPhysicalBytes,
     long AvailablePhysicalBytes,
     long CommitTotalBytes,
@@ -32,7 +30,7 @@ public sealed record MemoryFacts(
     string? TopProcessName,
     long? TopProcessWorkingSetBytes);
 
-public sealed record CpuFacts(
+internal sealed record CpuFacts(
     string ProcessorName,
     int LogicalCoreCount,
     double LoadPercentMin,
@@ -42,32 +40,32 @@ public sealed record CpuFacts(
     string? TopProcessName,
     double? TopProcessCpuPercent);
 
-public sealed record GpuAdapterFacts(
+internal sealed record GpuAdapterFacts(
     string Name,
     string? DriverVersion,
     long? AdapterRamBytes,
     string? Status);
 
-public sealed record GatewayProbeFacts(
+internal sealed record GatewayProbeFacts(
     string? GatewayAddress,
     int ProbesSent,
     int ProbesReceived,
     double? MedianMs,
     double? P95Ms);
 
-public sealed record DnsProbeFacts(
+internal sealed record DnsProbeFacts(
     string HostName,
     bool Resolved,
     double? ResolveMs);
 
-public sealed record ExternalProbeFacts(
+internal sealed record ExternalProbeFacts(
     string Destination,
     int ProbesSent,
     int ProbesReceived,
     double? MedianMs,
     double? P95Ms);
 
-public sealed record NetworkFacts(
+internal sealed record NetworkFacts(
     IReadOnlyList<string> UpAdapters,
     bool AnyAdapterUp,
     string? ActiveAdapterName,
@@ -76,14 +74,14 @@ public sealed record NetworkFacts(
     DnsProbeFacts Dns,
     IReadOnlyList<ExternalProbeFacts> ExternalProbes);
 
-public sealed record EventGroupFacts(
+internal sealed record EventGroupFacts(
     string Provider,
     long EventId,
     int Count,
     DateTime? LastSeenUtc,
     string? Level);
 
-public sealed record WindowsFacts(
+internal sealed record WindowsFacts(
     string OsVersion,
     string OsBuild,
     TimeSpan Uptime,
@@ -91,19 +89,19 @@ public sealed record WindowsFacts(
     IReadOnlyList<EventGroupFacts> CriticalGroups7d,
     bool EventLogAccessible);
 
-public sealed record DefenderFacts(
+internal sealed record DefenderFacts(
     bool StatusReadable,
     bool RealTimeProtectionEnabled,
     bool AntivirusEnabled,
     bool AntispywareEnabled,
     string? SignatureAgeDays);
 
-public sealed record DeviceProblemFacts(
+internal sealed record DeviceProblemFacts(
     string DeviceName,
     string? DeviceClass,
     int ConfigManagerErrorCode);
 
-public sealed record BatteryFacts(
+internal sealed record BatteryFacts(
     bool BatteryPresent,
     bool OnAcPower,
     int? ChargePercent,
@@ -111,11 +109,11 @@ public sealed record BatteryFacts(
     double? FullLifeRatio,
     bool DataAvailable);
 
-public sealed record ThermalFacts(
+internal sealed record ThermalFacts(
     double? ThermalZoneC,
     bool ThermalZoneAvailable);
 
-public sealed record ProcessFacts(
+internal sealed record ProcessFacts(
     int ProcessCount,
     string? TopCpuProcessName,
     double? TopCpuPercent,

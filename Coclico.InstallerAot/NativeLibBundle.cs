@@ -10,7 +10,8 @@ internal static class NativeLibBundle
         string dir = Path.Join(Path.GetTempPath(), "CoclicoInstaller");
         Directory.CreateDirectory(dir);
 
-        string[] dlls = { "libSkiaSharp.dll", "libHarfBuzzSharp.dll", "av_libglesv2.dll" };
+        // av_libglesv2.dll (ANGLE) retiré : aucun rendu GPU/ANGLE dans l'installeur
+        string[] dlls = { "libSkiaSharp.dll", "libHarfBuzzSharp.dll" };
 
         foreach (string name in dlls)
         {

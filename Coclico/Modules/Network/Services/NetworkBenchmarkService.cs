@@ -5,14 +5,14 @@ using Coclico.Models.Network;
 
 namespace Coclico.Services.Network;
 
-public sealed class NetworkBenchmarkService : INetworkBenchmarkService
+internal sealed class NetworkBenchmarkService : INetworkBenchmarkService
 {
     private const string DownloadEndpoint = "https://speed.cloudflare.com/__down?bytes=";
     private const string UploadEndpoint = "https://speed.cloudflare.com/__up";
     private const int DownloadBytes = 100_000_000;
     private const int UploadBytes = 25_000_000;
 
-    private static readonly HttpClient HttpClient = new()
+    private static readonly HttpClient HttpClient = new(new Coclico.Security.Infrastructure.OutboundDomainGuardHandler())
     {
         Timeout = TimeSpan.FromSeconds(90)
     };
@@ -168,8 +168,10 @@ public sealed class NetworkBenchmarkService : INetworkBenchmarkService
 
             long totalBytes = 0;
             var buffer = new byte[1 << 20];
-            await using System.IO.Stream stream = await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
-            int read;
+            System.IO.Stream stream = await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
+            await using (stream.ConfigureAwait(false))
+            {
+                int read;
             while ((read = await stream.ReadAsync(buffer, ct).ConfigureAwait(false)) > 0)
             {
                 totalBytes += read;
@@ -178,6 +180,7 @@ public sealed class NetworkBenchmarkService : INetworkBenchmarkService
             sw.Stop();
             double seconds = Math.Max(0.05, sw.Elapsed.TotalSeconds);
             return Math.Round(totalBytes * 8.0 / seconds / 1_000_000.0, 1);
+            }
         }
         catch (Exception ex) when (ex is System.Net.Http.HttpRequestException or System.Net.Sockets.SocketException)
         {

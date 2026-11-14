@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace Coclico.Converters;
 
-public class EqualityToBoolConverter : IMultiValueConverter, IValueConverter
+internal class EqualityToBoolConverter : IMultiValueConverter, IValueConverter
 {
     public object Convert(object?[]? values, Type targetType, object parameter, CultureInfo culture)
     {

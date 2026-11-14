@@ -9,7 +9,7 @@ namespace Coclico.Tests.Modules.UpdateCenter;
 public sealed class DriverUpdateServiceTests
 {
     [Fact]
-    public void DriverInfo_AgeMonths_NeverNegative()
+    public void DriverInfoAgeMonthsNeverNegative()
     {
         var driver = new DriverInfo
         {
@@ -22,7 +22,7 @@ public sealed class DriverUpdateServiceTests
     }
 
     [Fact]
-    public void DriverInfo_AgeMonths_ComputedFromDriverDate()
+    public void DriverInfoAgeMonthsComputedFromDriverDate()
     {
         var driver = new DriverInfo
         {
@@ -35,7 +35,7 @@ public sealed class DriverUpdateServiceTests
     }
 
     [Fact]
-    public void Inventory_Filtering_RemovesInvalidEntries()
+    public void InventoryFilteringRemovesInvalidEntries()
     {
         var inventory = new List<DriverInfo>
         {

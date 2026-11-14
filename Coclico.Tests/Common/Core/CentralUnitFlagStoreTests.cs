@@ -17,29 +17,29 @@ public sealed class CentralUnitFlagStoreTests : IDisposable
     {
         _store.Set(CentralFlags.NetworkStatsDue);
 
-        Assert.True(await _store.WaitAsync(CentralFlags.NetworkStatsDue));
+        Assert.True(await _store.WaitAsync(CentralFlags.NetworkStatsDue, TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
     [Fact]
     public async Task WaitAsyncCompletesWhenFlagIsSetLater()
     {
-        Task<bool> wait = _store.WaitAsync(CentralFlags.GuardTickDue);
+        Task<bool> wait = _store.WaitAsync(CentralFlags.GuardTickDue, TestContext.Current.CancellationToken);
 
         Assert.False(wait.IsCompleted);
 
         _store.Set(CentralFlags.GuardTickDue);
 
-        Assert.True(await wait);
+        Assert.True(await wait.ConfigureAwait(true));
     }
 
     [Fact]
     public async Task WaitAsyncReturnsFalseWhenFlagIsClearedWhileWaiting()
     {
-        Task<bool> wait = _store.WaitAsync(CentralFlags.GuardTickDue);
+        Task<bool> wait = _store.WaitAsync(CentralFlags.GuardTickDue, TestContext.Current.CancellationToken);
 
         _store.Clear(CentralFlags.GuardTickDue);
 
-        Assert.False(await wait);
+        Assert.False(await wait.ConfigureAwait(true));
     }
 
     [Fact]
@@ -49,16 +49,16 @@ public sealed class CentralUnitFlagStoreTests : IDisposable
 
         Task<bool> wait = _store.WaitAsync(CentralFlags.StartupCompleted, cts.Token);
 
-        cts.Cancel();
+        await cts.CancelAsync().ConfigureAwait(true);
 
-        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => wait);
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => wait).ConfigureAwait(true);
     }
 
     [Fact]
     public async Task PendingFlagIsConsumedByASingleWaiter()
     {
         _store.Set(CentralFlags.RamDaemonCycleDue);
-        Assert.True(await _store.WaitAsync(CentralFlags.RamDaemonCycleDue));
+        Assert.True(await _store.WaitAsync(CentralFlags.RamDaemonCycleDue, TestContext.Current.CancellationToken)).ConfigureAwait(true);
 
         using var timeoutCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
 
@@ -69,13 +69,13 @@ public sealed class CentralUnitFlagStoreTests : IDisposable
     [Fact]
     public async Task SetWakesEveryWaiterOfTheSameFlag()
     {
-        Task<bool> first = _store.WaitAsync(CentralFlags.DashboardRefreshDue);
-        Task<bool> second = _store.WaitAsync(CentralFlags.DashboardRefreshDue);
+        Task<bool> first = _store.WaitAsync(CentralFlags.DashboardRefreshDue, TestContext.Current.CancellationToken);
+        Task<bool> second = _store.WaitAsync(CentralFlags.DashboardRefreshDue, TestContext.Current.CancellationToken);
 
         _store.Set(CentralFlags.DashboardRefreshDue);
 
-        Assert.True(await first);
-        Assert.True(await second);
+        Assert.True(await first.ConfigureAwait(true));
+        Assert.True(await second.ConfigureAwait(true));
     }
 
     [Fact]
@@ -121,7 +121,7 @@ public sealed class CentralUnitFlagStoreTests : IDisposable
 
         using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
-        Assert.True(await _store.WaitAsync(CentralFlags.PressureSample, timeoutCts.Token));
+        Assert.True(await _store.WaitAsync(CentralFlags.PressureSample, timeoutCts.Token)).ConfigureAwait(true);
         Assert.Equal(0, _store.ScheduledCount);
     }
 
@@ -135,7 +135,7 @@ public sealed class CentralUnitFlagStoreTests : IDisposable
         _store.PostponeNonCritical(TimeSpan.FromMinutes(30));
 
         using var criticalCts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-        Assert.True(await _store.WaitAsync(CentralFlags.StartupCompleted, criticalCts.Token));
+        Assert.True(await _store.WaitAsync(CentralFlags.StartupCompleted, criticalCts.Token)).ConfigureAwait(true);
 
         using var postponedCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
         await Assert.ThrowsAnyAsync<OperationCanceledException>(
@@ -150,7 +150,7 @@ public sealed class CentralUnitFlagStoreTests : IDisposable
         _store.Schedule(CentralFlags.GuardTickDue, DateTime.UtcNow.AddMilliseconds(100));
 
         using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-        bool fired = await _store.WaitAsync(CentralFlags.GuardTickDue, timeoutCts.Token);
+        bool fired = await _store.WaitAsync(CentralFlags.GuardTickDue, timeoutCts.Token).ConfigureAwait(true);
 
         Assert.True(fired);
         Assert.Equal(1, _store.ScheduledCount);

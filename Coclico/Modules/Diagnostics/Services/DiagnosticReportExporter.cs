@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Coclico.Modules.Diagnostics.Models;
 
-public static class DiagnosticReportExporter
+internal static class DiagnosticReportExporter
 {
     public const int CurrentSchemaVersion = 1;
 
@@ -28,12 +28,12 @@ public static class DiagnosticReportExporter
 
         StringBuilder sb = new();
         sb.AppendLine("Coclico Diagnostic - Report");
-        sb.AppendLine($"Schema: {run.SchemaVersion} | Rules: {run.RulesVersion} | App: {run.ApplicationVersion}");
+        sb.AppendLine(System.Globalization.CultureInfo.InvariantCulture, $"Schema: {run.SchemaVersion} | Rules: {run.RulesVersion} | App: {run.ApplicationVersion}");
         sb.AppendLine($"Run: {run.Id}");
-        sb.AppendLine($"Started (UTC): {run.StartedAtUtc:yyyy-MM-dd HH:mm:ss}");
+        sb.AppendLine(System.Globalization.CultureInfo.InvariantCulture, $"Started (UTC): {run.StartedAtUtc:yyyy-MM-dd HH:mm:ss}");
         if (run.CompletedAtUtc is DateTime completed)
         {
-            sb.AppendLine($"Completed (UTC): {completed:yyyy-MM-dd HH:mm:ss}");
+            sb.AppendLine(System.Globalization.CultureInfo.InvariantCulture, $"Completed (UTC): {completed:yyyy-MM-dd HH:mm:ss}");
         }
 
         sb.AppendLine($"Mode: {run.Mode} | Status: {run.Status}");
@@ -41,7 +41,7 @@ public static class DiagnosticReportExporter
         if (run.SystemSnapshot is DiagnosticSystemSnapshot snapshot)
         {
             sb.AppendLine(
-                $"OS: {snapshot.OsVersion} ({snapshot.OsArchitecture}) | Cores: {snapshot.ProcessorCount} | RAM: {snapshot.TotalPhysicalMemoryBytes / (1024.0 * 1024 * 1024):F1} GiB | Elevated: {snapshot.IsElevated}");
+System.Globalization.CultureInfo.InvariantCulture, $"OS: {snapshot.OsVersion} ({snapshot.OsArchitecture}) | Cores: {snapshot.ProcessorCount} | RAM: {snapshot.TotalPhysicalMemoryBytes / (1024.0 * 1024 * 1024):F1} GiB | Elevated: {snapshot.IsElevated}");
         }
 
         sb.AppendLine();
@@ -52,9 +52,9 @@ public static class DiagnosticReportExporter
         if (run.Summary is DiagnosticSummary summary)
         {
             sb.AppendLine(
-                $"Checks: {summary.ChecksCompleted}/{summary.ChecksTotal} completed, {summary.ChecksSkipped} skipped, {summary.ChecksFailed} failed");
+System.Globalization.CultureInfo.InvariantCulture, $"Checks: {summary.ChecksCompleted}/{summary.ChecksTotal} completed, {summary.ChecksSkipped} skipped, {summary.ChecksFailed} failed");
             sb.AppendLine(
-                $"Findings: {summary.FindingsCritical} critical, {summary.FindingsError} error, {summary.FindingsWarning} warning, {summary.FindingsInfo} info");
+System.Globalization.CultureInfo.InvariantCulture, $"Findings: {summary.FindingsCritical} critical, {summary.FindingsError} error, {summary.FindingsWarning} warning, {summary.FindingsInfo} info");
             sb.AppendLine();
         }
 
@@ -69,7 +69,7 @@ public static class DiagnosticReportExporter
             sb.AppendLine();
             sb.AppendLine($"[{finding.Severity}] ({finding.Confidence} confidence) {finding.Id}"
                 + (finding.Entity is null ? "" : $" - {finding.Entity}"));
-            sb.AppendLine($"  Observed (UTC): {finding.ObservedAtUtc:yyyy-MM-dd HH:mm:ss}");
+            sb.AppendLine(System.Globalization.CultureInfo.InvariantCulture, $"  Observed (UTC): {finding.ObservedAtUtc:yyyy-MM-dd HH:mm:ss}");
 
             foreach (DiagnosticEvidence evidence in finding.Evidence)
             {

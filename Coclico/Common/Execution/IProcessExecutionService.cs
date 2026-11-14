@@ -1,6 +1,6 @@
 namespace Coclico.Services;
 
-public sealed record ProcessExecutionResult(
+internal sealed record ProcessExecutionResult(
     bool Success,
     int ExitCode,
     string StandardOutput,
@@ -9,7 +9,7 @@ public sealed record ProcessExecutionResult(
     bool TimedOut = false,
     bool Cancelled = false);
 
-public interface IProcessExecutionService
+internal interface IProcessExecutionService
 {
     Task<ProcessExecutionResult> ExecuteAsync(
         string executable,

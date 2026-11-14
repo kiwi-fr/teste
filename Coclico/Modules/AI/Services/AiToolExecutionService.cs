@@ -10,15 +10,15 @@ using Coclico.Services.Network;
 
 namespace Coclico.Services.AI;
 
-public sealed record AiActionRequest(string ActionType, string? Parameter, string OriginalTag, bool Confirmed = false);
+internal sealed record AiActionRequest(string ActionType, string? Parameter, string OriginalTag, bool Confirmed = false);
 
-public sealed record AiActionResult(bool Success, string Message, string? Details = null);
+internal sealed record AiActionResult(bool Success, string Message, string? Details = null);
 
-public sealed class AiToolExecutionService
+internal sealed class AiToolExecutionService
 {
     private static readonly Regex ActionRegex = new(
         @"\[\s*ACTION\s*[:=]\s*([A-Za-z0-9_\-]+)(?:\s+([^\s\]][^\]]*?))?\s*\]",
-        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
 
     private static readonly Regex NonWordRegex = new(@"[^\w\s]", RegexOptions.Compiled);
     private static readonly Regex MultiSpaceRegex = new(@"\s+", RegexOptions.Compiled);
@@ -26,8 +26,8 @@ public sealed class AiToolExecutionService
     private static readonly Regex FakeDoneStreamingRegex = new(@"\b(?:nettoyage\s+terminé|action\s+terminée|opération\s+terminée|terminé\s*!)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     private static readonly Regex FakeDoneRegex = new(@"\b(?:nettoyage\s+terminé|action\s+terminée|opération\s+terminée|terminé\s*!|terminée\s*!)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     private static readonly Regex SimulatedProcessListRegex = new(@"(?:processus\s*\d+|chrome\s*-\s*\d+|spotify\s*-\s*\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-    private static readonly Regex InterrogativeIntentRegex = new(@"\b(pourquoi|comment|qu\s*est\s*ce|c\s*est\s*quoi|explique|dis\s*moi|quel|quelle|quels|quelles|est\s*ce\s*que)\b", RegexOptions.Compiled);
-    private static readonly Regex OpenAppIntentRegex = new(@"(?:ouvre|lance|démarre|demarre)\s+(?:l'application|le logiciel|le programme)?\s*([a-zA-Z0-9_\-\.]+)(?:\.exe)?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    private static readonly Regex InterrogativeIntentRegex = new(@"\b(pourquoi|comment|qu\s*est\s*ce|c\s*est\s*quoi|explique|dis\s*moi|quel|quelle|quels|quelles|est\s*ce\s*que)\b", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+    private static readonly Regex OpenAppIntentRegex = new(@"(?:ouvre|lance|démarre|demarre)\s+(?:l'application|le logiciel|le programme)?\s*([a-zA-Z0-9_\-\.]+)(?:\.exe)?", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
 
     private static readonly HashSet<string> ConfirmationRequiredActions =
     [
@@ -136,8 +136,8 @@ public sealed class AiToolExecutionService
 
         bool demandeRam = upper.Contains("RAM") || upper.Contains("MEMOIRE") || upper.Contains("MÉMOIRE");
         bool demandeNettoyageRam = upper.Contains("CLEAN") || upper.Contains("NETTOY") || upper.Contains("PURGE") ||
-            upper.Contains("VIDER") || upper.Contains("LIBERER") || upper == "RAM" || upper == "RAM_CLEAN" ||
-            upper == "CLEAN_MEMOIRE";
+            upper.Contains("VIDER") || upper.Contains("LIBERER") || string.Equals(upper, "RAM", StringComparison.Ordinal) || string.Equals(upper, "RAM_CLEAN", StringComparison.Ordinal) ||
+string.Equals(upper, "CLEAN_MEMOIRE", StringComparison.Ordinal);
 
         if (demandeRam && demandeNettoyageRam)
         {
@@ -146,7 +146,7 @@ public sealed class AiToolExecutionService
 
         bool demandeTemp = upper.Contains("TEMP") || upper.Contains("CACHE") || upper.Contains("CORBEILLE");
         bool demandeNettoyageTemp = upper.Contains("CLEAN") || upper.Contains("NETTOYAGE") || upper.Contains("NETTOYER") ||
-            upper.Contains("VIDER") || upper.Contains("PURGE") || upper == "TEMP" || upper == "CACHE" ||
+            upper.Contains("VIDER") || upper.Contains("PURGE") || string.Equals(upper, "TEMP", StringComparison.Ordinal) || string.Equals(upper, "CACHE", StringComparison.Ordinal) ||
             upper.Contains("TEMP_CACHE") || upper.Contains("CORBEILLE");
 
         if (demandeTemp && demandeNettoyageTemp)
@@ -215,7 +215,7 @@ public sealed class AiToolExecutionService
                 ? m.Groups[2].Value.Trim()
                 : null;
 
-            if (!list.Any(a => a.ActionType == action && a.Parameter == param))
+            if (!list.Any(a => string.Equals(a.ActionType, action, StringComparison.Ordinal) && string.Equals(a.Parameter, param, StringComparison.Ordinal)))
             {
                 list.Add(new AiActionRequest(action, param, m.Value));
             }
@@ -431,7 +431,7 @@ public sealed class AiToolExecutionService
         {
             string app = appMatch.Groups[1].Value.Trim();
             if (!string.IsNullOrWhiteSpace(app) && app.Length >= 3 &&
-                app != "copilot" && app != "coclico" && app != "l'application" && app != "le logiciel")
+!string.Equals(app, "copilot", StringComparison.Ordinal) && !string.Equals(app, "coclico", StringComparison.Ordinal) && !string.Equals(app, "l'application", StringComparison.Ordinal) && !string.Equals(app, "le logiciel", StringComparison.Ordinal))
             {
                 list.Add(new AiActionRequest("OPEN_APP", app, $"[ACTION:OPEN_APP {app}]"));
                 return list;
@@ -573,12 +573,12 @@ public sealed class AiToolExecutionService
 
         foreach (string line in lines)
         {
-            if (line.StartsWith("#") || line.StartsWith("*") || line.StartsWith("-") || line.StartsWith("["))
+            if (line.StartsWith("#", StringComparison.Ordinal) || line.StartsWith("*", StringComparison.Ordinal) || line.StartsWith("-", StringComparison.Ordinal) || line.StartsWith("[", StringComparison.Ordinal))
             {
                 continue;
             }
 
-            if ((line.StartsWith("**") && line.EndsWith("**")) || (line.StartsWith("**") && line.EndsWith(":**")))
+            if ((line.StartsWith("**", StringComparison.Ordinal) && line.EndsWith("**", StringComparison.Ordinal)) || (line.StartsWith("**", StringComparison.Ordinal) && line.EndsWith(":**", StringComparison.Ordinal)))
             {
                 continue;
             }
@@ -676,34 +676,34 @@ public sealed class AiToolExecutionService
 
         string clean = NormalizeWords(text);
 
-        if (clean == "b" || clean == "bjr" || clean == "slt" || clean == "cc" || clean == "yo" || clean == "hi" || clean == "hey" ||
+        if (string.Equals(clean, "b", StringComparison.Ordinal) || string.Equals(clean, "bjr", StringComparison.Ordinal) || string.Equals(clean, "slt", StringComparison.Ordinal) || string.Equals(clean, "cc", StringComparison.Ordinal) || string.Equals(clean, "yo", StringComparison.Ordinal) || string.Equals(clean, "hi", StringComparison.Ordinal) || string.Equals(clean, "hey", StringComparison.Ordinal) ||
             (clean.Length <= 2 && !clean.Any(char.IsDigit)))
         {
             response = "Bonjour ! Comment puis-je vous aider aujourd'hui sur votre PC ? Vous pouvez me demander de libérer la RAM, nettoyer les fichiers temporaires ou analyser la santé de votre système.";
             return true;
         }
 
-        if (clean == "commetn vas tyu" || clean == "coment vas tu" || clean == "comment va tu" || clean == "commet vas tu" ||
-            clean == "comment vas tu" || clean == "comment tu vas" || clean == "comment ca va" || clean == "ca va" || clean == "ça va" ||
-            clean == "cv" || clean == "tu vas bien" || clean == "tu va bien" || clean == "tout va bien" ||
+        if (string.Equals(clean, "commetn vas tyu", StringComparison.Ordinal) || string.Equals(clean, "coment vas tu", StringComparison.Ordinal) || string.Equals(clean, "comment va tu", StringComparison.Ordinal) || string.Equals(clean, "commet vas tu", StringComparison.Ordinal) ||
+string.Equals(clean, "comment vas tu", StringComparison.Ordinal) || string.Equals(clean, "comment tu vas", StringComparison.Ordinal) || string.Equals(clean, "comment ca va", StringComparison.Ordinal) || string.Equals(clean, "ca va", StringComparison.Ordinal) || string.Equals(clean, "ça va", StringComparison.Ordinal) ||
+string.Equals(clean, "cv", StringComparison.Ordinal) || string.Equals(clean, "tu vas bien", StringComparison.Ordinal) || string.Equals(clean, "tu va bien", StringComparison.Ordinal) || string.Equals(clean, "tout va bien", StringComparison.Ordinal) ||
             Regex.IsMatch(clean, @"^(bonjour|salut|hello|coucou|yo|bjr|slt|cc)?\s*comm?e[nt]{1,2}\s*(va|vas|tu|tyu|allez)\b") ||
             Regex.IsMatch(clean, @"^(bonjour|salut|hello|coucou|yo|bjr|slt|cc)?\s*(ca|ça)\s*va\b") ||
             Regex.IsMatch(clean, @"^(bonjour|salut|hello|coucou|yo|bjr|slt|cc)?\s*tu\s*va[s]?\s*bien\b") ||
-            clean == "quoi de neuf" || clean == "ca roule" || clean == "la forme" || clean == "bien ou quoi" || clean == "bien ou bien")
+string.Equals(clean, "quoi de neuf", StringComparison.Ordinal) || string.Equals(clean, "ca roule", StringComparison.Ordinal) || string.Equals(clean, "la forme", StringComparison.Ordinal) || string.Equals(clean, "bien ou quoi", StringComparison.Ordinal) || string.Equals(clean, "bien ou bien", StringComparison.Ordinal))
         {
             response = "Bonjour ! Je vais très bien, merci. Mon système est pleinement opérationnel et prêt à vous aider. Que souhaitez-vous faire aujourd'hui ?";
             return true;
         }
 
-        if (clean == "bonjour" || clean == "salut" || clean == "hello" || clean == "bonsoir" || clean == "coucou" ||
+        if (string.Equals(clean, "bonjour", StringComparison.Ordinal) || string.Equals(clean, "salut", StringComparison.Ordinal) || string.Equals(clean, "hello", StringComparison.Ordinal) || string.Equals(clean, "bonsoir", StringComparison.Ordinal) || string.Equals(clean, "coucou", StringComparison.Ordinal) ||
             Regex.IsMatch(clean, @"^(bonjour|salut|hello|bonsoir|coucou)\s*(coclico|copilot|a\s*toi|l\s*ami)?$"))
         {
             response = "Bonjour ! Je suis ravi de vous retrouver. Que puis-je faire pour vous aujourd'hui sur votre PC ?";
             return true;
         }
 
-        if (clean == "qui es tu" || clean == "qui est tu" || clean == "tu es qui" || clean == "tu sers a quoi" || clean == "t es qui" || clean == "tes qui" ||
-            clean == "c est quoi coclico" || clean == "c est quoi cette application" || clean == "qui t a cree" ||
+        if (string.Equals(clean, "qui es tu", StringComparison.Ordinal) || string.Equals(clean, "qui est tu", StringComparison.Ordinal) || string.Equals(clean, "tu es qui", StringComparison.Ordinal) || string.Equals(clean, "tu sers a quoi", StringComparison.Ordinal) || string.Equals(clean, "t es qui", StringComparison.Ordinal) || string.Equals(clean, "tes qui", StringComparison.Ordinal) ||
+string.Equals(clean, "c est quoi coclico", StringComparison.Ordinal) || string.Equals(clean, "c est quoi cette application", StringComparison.Ordinal) || string.Equals(clean, "qui t a cree", StringComparison.Ordinal) ||
             Regex.IsMatch(clean, @"^qui\s*(es|est)\s*tu") || Regex.IsMatch(clean, @"^tu\s*(es|est)\s*qui") ||
             Regex.IsMatch(clean, @"^c\s*est\s*quoi\s*(coclico|cette\s*application)"))
         {
@@ -711,21 +711,21 @@ public sealed class AiToolExecutionService
             return true;
         }
 
-        if (clean == "merci" || clean == "merci beaucoup" || clean == "thanks" || clean == "thx" ||
+        if (string.Equals(clean, "merci", StringComparison.Ordinal) || string.Equals(clean, "merci beaucoup", StringComparison.Ordinal) || string.Equals(clean, "thanks", StringComparison.Ordinal) || string.Equals(clean, "thx", StringComparison.Ordinal) ||
             Regex.IsMatch(clean, @"^merci\b"))
         {
             response = "Avec grand plaisir ! N'hésitez pas si vous avez d'autres demandes d'optimisation ou des questions sur votre PC.";
             return true;
         }
 
-        if (clean == "au revoir" || clean == "bye" || clean == "a plus" || clean == "bonne journee" || clean == "bonne soiree" || clean == "a bientot" ||
+        if (string.Equals(clean, "au revoir", StringComparison.Ordinal) || string.Equals(clean, "bye", StringComparison.Ordinal) || string.Equals(clean, "a plus", StringComparison.Ordinal) || string.Equals(clean, "bonne journee", StringComparison.Ordinal) || string.Equals(clean, "bonne soiree", StringComparison.Ordinal) || string.Equals(clean, "a bientot", StringComparison.Ordinal) ||
             Regex.IsMatch(clean, @"^(au\s*revoir|bonne\s*journee|bonne\s*soiree|a\s*plus)\b"))
         {
             response = "Au revoir et excellente journée ! Coclico reste à votre entière disposition en tâche de fond si besoin.";
             return true;
         }
 
-        if (clean == "aide" || clean == "aide moi" || clean == "help" || clean == "que peux tu faire" ||
+        if (string.Equals(clean, "aide", StringComparison.Ordinal) || string.Equals(clean, "aide moi", StringComparison.Ordinal) || string.Equals(clean, "help", StringComparison.Ordinal) || string.Equals(clean, "que peux tu faire", StringComparison.Ordinal) ||
             Regex.IsMatch(clean, @"^(aide|help|aide\s*moi|peux\s*tu\s*m\s*aider|comment\s*m\s*aider)\b"))
         {
             response = "Voici quelques exemples de ce que je peux accomplir pour vous :\n• ⚡ Nettoyer la RAM : 'Nettoie la RAM'\n• 🧹 Nettoyage système : 'Vide les fichiers temporaires'\n• 🔍 Vérification d'intégrité : 'Lance un scan SFC'\n• 🛠️ Réparation Windows : 'Répare avec DISM'\n• 🛡️ Antivirus : 'Analyse avec Defender'\n• 📊 Diagnostic : 'Fais un diagnostic du PC'\n\nQue désirez-vous exécuter ?";
@@ -773,28 +773,28 @@ public sealed class AiToolExecutionService
                 ? new AiActionResult(false, "Confirmation utilisateur requise avant cette action.")
                 : norm switch
                 {
-                    "CLEAN_RAM" => await ExecuteRamCleanAsync(ct),
-                    "CONFIGURE_RAM_DAEMON" => await ExecuteConfigureRamDaemonAsync(safeParameter),
-                    "SET_RAM_PROFILE" => await ExecuteSetRamProfileAsync(safeParameter),
-                    "OPTIMIZE_NETWORK" => await ExecuteOptimizeNetworkAsync(safeParameter, ct),
-                    "BENCHMARK_NETWORK" => await ExecuteBenchmarkNetworkAsync(ct),
-                    "RESET_NETWORK_DEFAULTS" => await ExecuteResetNetworkDefaultsAsync(ct),
-                    "ANALYZE_CRASHES" => await ExecuteAnalyzeCrashesAsync(ct),
-                    "CLEAN_TEMP" => await ExecuteTempCleanAsync(ct),
-                    "SCAN_HEALTH" => await ExecuteHealthScanAsync(ct),
-                    "SCAN_SFC" => await ExecuteSfcScanAsync(ct),
-                    "SCAN_DISM" => await ExecuteDismScanAsync(ct),
-                    "DEFENDER_SCAN" => await ExecuteDefenderScanAsync(ct),
-                    "FULL_REPAIR" => await ExecuteFullRepairAsync(ct),
-                    "RESET_NETWORK" => await ExecuteResetNetworkAsync(ct),
-                    "RESET_UPDATE" => await ExecuteResetUpdateAsync(ct),
-                    "DIAGNOSE_SYSTEM" => await GetSystemDiagnosticsResultAsync(),
-                    "SNAPSHOT_NETWORK" => await ExecuteNetworkSnapshotAsync(ct),
-                    "RESTORE_NETWORK_SNAPSHOT" => await ExecuteRestoreNetworkSnapshotAsync(ct),
-                    "UPDATE_APPS" => await ExecuteUpdateAllAppsAsync(ct),
+                    "CLEAN_RAM" => await ExecuteRamCleanAsync(ct).ConfigureAwait(false),
+                    "CONFIGURE_RAM_DAEMON" => await ExecuteConfigureRamDaemonAsync(safeParameter).ConfigureAwait(false),
+                    "SET_RAM_PROFILE" => await ExecuteSetRamProfileAsync(safeParameter).ConfigureAwait(false),
+                    "OPTIMIZE_NETWORK" => await ExecuteOptimizeNetworkAsync(safeParameter, ct).ConfigureAwait(false),
+                    "BENCHMARK_NETWORK" => await ExecuteBenchmarkNetworkAsync(ct).ConfigureAwait(false),
+                    "RESET_NETWORK_DEFAULTS" => await ExecuteResetNetworkDefaultsAsync(ct).ConfigureAwait(false),
+                    "ANALYZE_CRASHES" => await ExecuteAnalyzeCrashesAsync(ct).ConfigureAwait(false),
+                    "CLEAN_TEMP" => await ExecuteTempCleanAsync(ct).ConfigureAwait(false),
+                    "SCAN_HEALTH" => await ExecuteHealthScanAsync(ct).ConfigureAwait(false),
+                    "SCAN_SFC" => await ExecuteSfcScanAsync(ct).ConfigureAwait(false),
+                    "SCAN_DISM" => await ExecuteDismScanAsync(ct).ConfigureAwait(false),
+                    "DEFENDER_SCAN" => await ExecuteDefenderScanAsync(ct).ConfigureAwait(false),
+                    "FULL_REPAIR" => await ExecuteFullRepairAsync(ct).ConfigureAwait(false),
+                    "RESET_NETWORK" => await ExecuteResetNetworkAsync(ct).ConfigureAwait(false),
+                    "RESET_UPDATE" => await ExecuteResetUpdateAsync(ct).ConfigureAwait(false),
+                    "DIAGNOSE_SYSTEM" => await GetSystemDiagnosticsResultAsync().ConfigureAwait(false),
+                    "SNAPSHOT_NETWORK" => await ExecuteNetworkSnapshotAsync(ct).ConfigureAwait(false),
+                    "RESTORE_NETWORK_SNAPSHOT" => await ExecuteRestoreNetworkSnapshotAsync(ct).ConfigureAwait(false),
+                    "UPDATE_APPS" => await ExecuteUpdateAllAppsAsync(ct).ConfigureAwait(false),
                     "NAVIGATE" => ExecuteNavigate(safeParameter),
-                    "OPEN_APP" => await ExecuteOpenAppAsync(safeParameter),
-                    "INSTALL_WINGET" => await ExecuteInstallWingetAsync(safeParameter, ct),
+                    "OPEN_APP" => await ExecuteOpenAppAsync(safeParameter).ConfigureAwait(false),
+                    "INSTALL_WINGET" => await ExecuteInstallWingetAsync(safeParameter, ct).ConfigureAwait(false),
                     _ => new AiActionResult(false, $"Action inconnue : {action.ActionType}")
                 };
         }
@@ -837,7 +837,7 @@ public sealed class AiToolExecutionService
             {
                 mode = AutoCleanMode.ThresholdPercent;
                 Match matchPct = Regex.Match(lower, @"(\d+)\s*%");
-                value = matchPct.Success && int.TryParse(matchPct.Groups[1].Value, out int pctVal)
+                value = matchPct.Success && int.TryParse(matchPct.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture, out int pctVal)
                     ? Math.Clamp(pctVal, 10, 99)
                     : 80;
             }
@@ -850,14 +850,14 @@ public sealed class AiToolExecutionService
             {
                 mode = AutoCleanMode.Interval;
                 Match matchMin = Regex.Match(lower, @"(\d+)\s*(?:min|minute|m\b)");
-                if (matchMin.Success && int.TryParse(matchMin.Groups[1].Value, out int minVal) && minVal > 0)
+                if (matchMin.Success && int.TryParse(matchMin.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture, out int minVal) && minVal > 0)
                 {
                     value = minVal;
                 }
                 else
                 {
                     Match matchH = Regex.Match(lower, @"(\d+)\s*(?:h|heure)");
-                    if (matchH.Success && int.TryParse(matchH.Groups[1].Value, out int hVal) && hVal > 0)
+                    if (matchH.Success && int.TryParse(matchH.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture, out int hVal) && hVal > 0)
                     {
                         value = hVal * 60;
                     }
@@ -1083,7 +1083,7 @@ public sealed class AiToolExecutionService
                         "Dossier Windows/Minidump vierge. Zéro événement critique d'arrêt inopiné (Kernel-Power 41) dans les 7 derniers jours.");
                 }
 
-                _ = sb.AppendLine($"🔍 {dumpCount} fichier(s) minidump trouvé(s) dans Windows/Minidump.");
+                _ = sb.AppendLine(System.Globalization.CultureInfo.InvariantCulture, $"🔍 {dumpCount} fichier(s) minidump trouvé(s) dans Windows/Minidump.");
                 if (lastDumpDate.HasValue)
                 {
                     _ = sb.AppendLine($"Dernier crash mémoire enregistré : {lastDumpDate:g}");
@@ -1244,6 +1244,31 @@ public sealed class AiToolExecutionService
         return new AiActionResult(true, $"Navigation vers '{target}' effectuée.");
     }
 
+    private static void LogAiAction(string action, string parameter, string target, bool allowed)
+    {
+        try
+        {
+            IAuditLog? audit = ServiceContainer.GetOptional<IAuditLog>();
+            if (audit is null)
+            {
+                return;
+            }
+
+            var entry = new AuditEntry(
+                Timestamp: DateTimeOffset.UtcNow,
+                Actor: "AI",
+                Action: action,
+                Target: target,
+                Success: allowed,
+                Details: allowed ? null : $"Paramètre demandé : {parameter}");
+            _ = audit.LogAsync(entry);
+        }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
+        {
+            LoggingService.LogException(ex, "AiToolExecution.LogAiAction");
+        }
+    }
+
     private static async Task<AiActionResult> ExecuteOpenAppAsync(string? appName)
     {
         if (string.IsNullOrWhiteSpace(appName))
@@ -1253,22 +1278,44 @@ public sealed class AiToolExecutionService
 
         return await Task.Run(async () =>
         {
-            ISecurityPolicy? security = ServiceContainer.GetOptional<ISecurityPolicy>();
+            ISecurityPolicy security;
+            try
+            {
+                security = ServiceContainer.GetRequired<ISecurityPolicy>();
+            }
+            catch (Exception ex) when (ex is not OutOfMemoryException)
+            {
+                LoggingService.LogException(ex, "AiToolExecution.ExecuteOpenApp.PolicyMissing");
+                return new AiActionResult(false, $"L'application '{appName}' est bloquée : politique de sécurité indisponible.");
+            }
+
             IProcessExecutionService? procExec = ServiceContainer.GetOptional<IProcessExecutionService>();
 
-            if (security != null && security.IsApplicationAllowed(appName, out string? policyResolved) && !string.IsNullOrWhiteSpace(policyResolved))
+            if (security.IsApplicationAllowed(appName, out string? policyResolved) && !string.IsNullOrWhiteSpace(policyResolved))
             {
+                if (!security.IsAiLaunchAllowed(policyResolved))
+                {
+                    return new AiActionResult(false, $"L'application '{appName}' est bloquée par la politique de sécurité IA.");
+                }
+
                 if (procExec != null && procExec.LaunchApplication(policyResolved))
                 {
+                    LogAiAction("OPEN_APP", appName, policyResolved, allowed: true);
                     return new AiActionResult(true, $"Application '{appName}' lancée.");
                 }
 
                 try
                 {
+                    if (!File.Exists(policyResolved))
+                    {
+                        return new AiActionResult(false, $"Chemin introuvable : '{policyResolved}'");
+                    }
+
                     _ = Process.Start(new ProcessStartInfo(policyResolved) { UseShellExecute = true });
+                    LogAiAction("OPEN_APP", appName, policyResolved, allowed: true);
                     return new AiActionResult(true, $"Application '{appName}' lancée.");
                 }
-                catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)
+                catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException)
                 {
                     return new AiActionResult(false, $"Impossible de lancer '{appName}' : {ex.Message}");
                 }
@@ -1301,29 +1348,32 @@ public sealed class AiToolExecutionService
 
             if (targetExe != null)
             {
-                if (security != null && !security.IsApplicationAllowed(targetExe, out _))
+                if (!security.IsApplicationAllowed(targetExe, out _) || !security.IsAiLaunchAllowed(targetExe))
                 {
+                    LogAiAction("OPEN_APP", appName, targetExe, allowed: false);
                     return new AiActionResult(false, $"L'application '{appName}' est bloquée par la politique de sécurité.");
                 }
 
                 if (procExec != null && procExec.LaunchApplication(targetExe))
                 {
+                    LogAiAction("OPEN_APP", appName, targetExe, allowed: true);
                     return new AiActionResult(true, $"Application '{Path.GetFileNameWithoutExtension(targetExe)}' lancée.");
                 }
 
                 try
                 {
                     _ = Process.Start(new ProcessStartInfo(targetExe) { UseShellExecute = true });
+                    LogAiAction("OPEN_APP", appName, targetExe, allowed: true);
                     return new AiActionResult(true, $"Application '{Path.GetFileNameWithoutExtension(targetExe)}' lancée.");
                 }
-                catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.ComponentModel.Win32Exception or System.InvalidOperationException)
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.ComponentModel.Win32Exception or InvalidOperationException)
                 {
                     return new AiActionResult(false, $"Échec du lancement de '{targetExe}' : {ex.Message}");
                 }
             }
 
             return new AiActionResult(false, $"L'application '{appName}' n'est pas reconnue ou n'est pas autorisée par la politique de sécurité.");
-        });
+        }).ConfigureAwait(false);
     }
 
     private static async Task<AiActionResult> ExecuteInstallWingetAsync(string? packageId, CancellationToken ct)
@@ -1360,8 +1410,8 @@ public sealed class AiToolExecutionService
             double ramTotalGb = ram.TotalPhysBytes / (1024.0 * 1024.0 * 1024.0);
 
             _ = sb.AppendLine("=== DIAGNOSTIC SYSTÈME EN DIRECT ===");
-            _ = sb.AppendLine($"• CPU : {cpu:F1}% d'utilisation");
-            _ = sb.AppendLine($"• RAM : {ramUsedGb:F1} Go / {ramTotalGb:F1} Go ({ram.PhysUsedPercent:F1}% utilisé)");
+            _ = sb.AppendLine(System.Globalization.CultureInfo.InvariantCulture, $"• CPU : {cpu:F1}% d'utilisation");
+            _ = sb.AppendLine(System.Globalization.CultureInfo.InvariantCulture, $"• RAM : {ramUsedGb:F1} Go / {ramTotalGb:F1} Go ({ram.PhysUsedPercent:F1}% utilisé)");
 
             try
             {
@@ -1369,27 +1419,24 @@ public sealed class AiToolExecutionService
                 {
                     double freeGb = drive.AvailableFreeSpace / (1024.0 * 1024.0 * 1024.0);
                     double totalGb = drive.TotalSize / (1024.0 * 1024.0 * 1024.0);
-                    _ = sb.AppendLine($"• Disque {drive.Name.TrimEnd('\\')} : {freeGb:F1} Go libres sur {totalGb:F1} Go");
+                    _ = sb.AppendLine(System.Globalization.CultureInfo.InvariantCulture, $"• Disque {drive.Name.TrimEnd('\\')} : {freeGb:F1} Go libres sur {totalGb:F1} Go");
                 }
             }
-            catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
                 LoggingService.LogException(ex, "AiToolExecution.Diagnostics.Drives");
             }
 
             List<(string Name, long WorkingSet)> procEntries = new();
-            foreach (Process p in Process.GetProcesses())
+            foreach (Process p in ProcessSnapshotProvider.Capture())
             {
-                using (p)
+                try
                 {
-                    try
-                    {
-                        procEntries.Add((p.ProcessName, p.WorkingSet64));
-                    }
-                    catch (Exception ex) when (ex is not System.OutOfMemoryException)
-                    {
-                        procEntries.Add((p.ProcessName, 0));
-                    }
+                    procEntries.Add((p.ProcessName, p.WorkingSet64));
+                }
+                catch (Exception ex) when (ex is not OutOfMemoryException)
+                {
+                    procEntries.Add((p.ProcessName, 0));
                 }
             }
             try
@@ -1400,13 +1447,13 @@ public sealed class AiToolExecutionService
                     .Select(e => $"{e.Name} ({e.WorkingSet / (1024 * 1024)} Mo)");
                 _ = sb.AppendLine($"• Top 5 processus RAM : {string.Join(", ", topProcs)}");
             }
-            catch (Exception ex) when (ex is not System.OutOfMemoryException)
+            catch (Exception ex) when (ex is not OutOfMemoryException)
             {
                 LoggingService.LogException(ex, "AiToolExecution.Diagnostics.TopProcesses");
             }
 
             return sb.ToString();
-        });
+        }).ConfigureAwait(false);
     }
 
     private async Task<AiActionResult> GetSystemDiagnosticsResultAsync()

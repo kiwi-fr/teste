@@ -4,7 +4,7 @@ using Coclico.Modules.Diagnostics.Models;
 using Coclico.Modules.Diagnostics.Rules;
 using Coclico.Services;
 
-public sealed class SecurityCheck : IDiagnosticCheck
+internal sealed class SecurityCheck : IDiagnosticCheck
 {
     private readonly SystemHealthService _systemHealth;
 

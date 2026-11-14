@@ -1,19 +1,23 @@
 namespace Coclico.Services;
 
-public enum CentralCircuitState
+internal enum CentralCircuitState
 {
     Closed,
     Open,
     HalfOpen
 }
 
-public sealed class CentralCircuitBreaker
+internal sealed class CentralCircuitBreaker
 {
     public static readonly TimeSpan DefaultOpenCooldown = TimeSpan.FromSeconds(30);
 
     public static CentralCircuitBreaker Current { get; } = new();
 
-    private readonly object _stateLock = new();
+    private const int MaxCooldownDoublings = 6;
+    private const int MaxCooldownSeconds = 300;
+    private const double JitterRatio = 0.2;
+
+    private readonly Lock _stateLock = new();
     private readonly Dictionary<string, BreakerEntry> _entries = new(StringComparer.Ordinal);
     private readonly int _failureThreshold;
     private readonly TimeSpan _openCooldown;
@@ -44,7 +48,7 @@ public sealed class CentralCircuitBreaker
             }
 
             if (entry.State == CentralCircuitState.Open &&
-                DateTime.UtcNow - entry.OpenedUtc >= _openCooldown)
+                DateTime.UtcNow - entry.OpenedUtc >= entry.Cooldown)
             {
                 entry.State = CentralCircuitState.HalfOpen;
                 NotifyAndLog(subsystem, entry.State);
@@ -70,6 +74,9 @@ public sealed class CentralCircuitBreaker
                 entry.State = CentralCircuitState.Closed;
                 transition = CentralCircuitState.Closed;
             }
+
+            entry.ConsecutiveOpens = 0;
+            entry.Cooldown = _openCooldown;
         }
 
         if (transition.HasValue)
@@ -92,14 +99,12 @@ public sealed class CentralCircuitBreaker
             entry.FailureStreak++;
             if (entry.State == CentralCircuitState.HalfOpen)
             {
-                entry.State = CentralCircuitState.Open;
-                entry.OpenedUtc = DateTime.UtcNow;
+                OpenEntry(entry);
                 transition = CentralCircuitState.Open;
             }
             else if (entry.State == CentralCircuitState.Closed && entry.FailureStreak >= _failureThreshold)
             {
-                entry.State = CentralCircuitState.Open;
-                entry.OpenedUtc = DateTime.UtcNow;
+                OpenEntry(entry);
                 transition = CentralCircuitState.Open;
             }
         }
@@ -120,12 +125,29 @@ public sealed class CentralCircuitBreaker
         }
     }
 
+    private void OpenEntry(BreakerEntry entry)
+    {
+        entry.State = CentralCircuitState.Open;
+        entry.OpenedUtc = DateTime.UtcNow;
+        entry.ConsecutiveOpens++;
+        entry.Cooldown = ComputeOpenCooldown(entry);
+    }
+
+    private TimeSpan ComputeOpenCooldown(BreakerEntry entry)
+    {
+        int doublings = Math.Min(entry.ConsecutiveOpens - 1, MaxCooldownDoublings);
+        double baseSeconds = Math.Min(MaxCooldownSeconds, _openCooldown.TotalSeconds * Math.Pow(2, doublings));
+        double jitterSeconds = baseSeconds * JitterRatio * Random.Shared.NextDouble();
+        return TimeSpan.FromSeconds(baseSeconds + jitterSeconds);
+    }
+
     private void NotifyAndLog(string subsystem, CentralCircuitState state)
     {
         StateChanged?.Invoke(subsystem, state);
         if (state == CentralCircuitState.Open)
         {
-            LoggingService.LogWarning($"CentralUnit : circuit breaker ouvert pour '{subsystem}' quarantaine de {Math.Max(1, (int)_openCooldown.TotalSeconds)} s.");
+            int seconds = Math.Max(1, (int)(_entries.TryGetValue(subsystem, out BreakerEntry? entry) ? entry.Cooldown : _openCooldown).TotalSeconds);
+            LoggingService.LogWarning($"CentralUnit : circuit breaker ouvert pour '{subsystem}' quarantaine de {seconds} s.");
         }
         else if (state == CentralCircuitState.HalfOpen)
         {
@@ -142,6 +164,10 @@ public sealed class CentralCircuitBreaker
         public CentralCircuitState State { get; set; }
 
         public int FailureStreak { get; set; }
+
+        public int ConsecutiveOpens { get; set; }
+
+        public TimeSpan Cooldown { get; set; }
 
         public DateTime OpenedUtc { get; set; }
     }

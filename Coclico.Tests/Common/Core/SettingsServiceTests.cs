@@ -41,9 +41,9 @@ public sealed class SettingsServiceTests
     {
         string json = JsonSerializer.Serialize(new AppSettings());
 
-        Assert.DoesNotContain("autoPatcherAuditOnly", json);
-        Assert.Contains("\"language\"", json);
-        Assert.Contains("\"startMaximized\"", json);
+        Assert.DoesNotContain("autoPatcherAuditOnly", json, StringComparison.Ordinal);
+        Assert.Contains("\"language\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"startMaximized\"", json, StringComparison.Ordinal);
     }
 
     [Fact]

@@ -1,6 +1,6 @@
 namespace Coclico.Modules.Diagnostics.Models;
 
-public sealed class DiagnosticRun
+internal sealed class DiagnosticRun
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -27,14 +27,14 @@ public sealed class DiagnosticRun
     public int SchemaVersion { get; set; } = 1;
 }
 
-public sealed record DiagnosticSystemSnapshot(
+internal sealed record DiagnosticSystemSnapshot(
     string OsVersion,
     string OsArchitecture,
     int ProcessorCount,
     long TotalPhysicalMemoryBytes,
     bool IsElevated);
 
-public sealed record DiagnosticSummary(
+internal sealed record DiagnosticSummary(
     int ChecksTotal,
     int ChecksCompleted,
     int ChecksSkipped,
@@ -45,7 +45,7 @@ public sealed record DiagnosticSummary(
     int FindingsInfo,
     int FindingsSuccess);
 
-public sealed record DiagnosticRunSummary(
+internal sealed record DiagnosticRunSummary(
     Guid Id,
     DateTime StartedAtUtc,
     DiagnosticMode Mode,

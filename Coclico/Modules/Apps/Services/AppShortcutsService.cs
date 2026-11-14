@@ -3,7 +3,7 @@ using Coclico.Services;
 
 namespace Coclico.Modules.Apps.Services;
 
-public sealed class AppShortcutsService
+internal sealed class AppShortcutsService
 {
     public static string GetShortcutDir()
     {

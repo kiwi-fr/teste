@@ -46,7 +46,7 @@ public sealed class UpdateScanServiceTests
     }
 
     [Fact]
-    public async Task ScanAllAsync_PartialFailure_StillReturnsOtherSources()
+    public async Task ScanAllAsyncPartialFailureStillReturnsOtherSources()
     {
         var service = new UpdateScanService(
             new StubWingetService { Fail = true },
@@ -55,14 +55,14 @@ public sealed class UpdateScanServiceTests
 
         var result = await service.ScanAllAsync(CancellationToken.None);
 
-        Assert.Contains(result.Items, i => i.Kind == UpdateKind.Driver);
-        Assert.Contains(result.Items, i => i.Kind == UpdateKind.Windows);
+        Assert.Contains(result.Items, i => i.Kind == UpdateKind.Driver, StringComparison.Ordinal);
+        Assert.Contains(result.Items, i => i.Kind == UpdateKind.Windows, StringComparison.Ordinal);
         Assert.True(result.HasFailures);
-        Assert.Contains("winget unavailable", result.SourceErrors["Application"]);
+        Assert.Contains("winget unavailable", result.SourceErrors["Application"], StringComparison.Ordinal);
     }
 
     [Fact]
-    public async Task ScanAllAsync_AllSources_ReturnsSortedItems()
+    public async Task ScanAllAsyncAllSourcesReturnsSortedItems()
     {
         var service = new UpdateScanService(
             new StubWingetService(),

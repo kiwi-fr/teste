@@ -6,7 +6,7 @@ namespace Coclico.Tests;
 public sealed class UninstallCommandParserTests
 {
     [Fact]
-    public void Parse_NullOrEmpty_ReturnsNull()
+    public void ParseNullOrEmptyReturnsNull()
     {
         Assert.Null(UninstallCommandParser.Parse(null));
         Assert.Null(UninstallCommandParser.Parse("   "));
@@ -16,8 +16,9 @@ public sealed class UninstallCommandParserTests
     [InlineData("steam://run/123")]
     [InlineData("com.epicgames.launcher://apps/xyz?action=uninstall")]
     [InlineData("ms-settings:appsfeatures")]
-    public void Parse_KnownUriSchemes_IsUri(string command)
+    public void ParseKnownUriSchemesIsUri(string command)
     {
+        ArgumentNullException.ThrowIfNull(command);
         ParsedUninstallCommand? parsed = UninstallCommandParser.Parse(command);
 
         Assert.NotNull(parsed);
@@ -29,7 +30,7 @@ public sealed class UninstallCommandParserTests
     [Theory]
     [InlineData("ms-settings:appsfeatures;rm -rf /")]
     [InlineData("ms-settings:")]
-    public void Parse_MalformedSettingsUri_ReturnsNull(string command)
+    public void ParseMalformedSettingsUriReturnsNull(string command)
     {
         Assert.Null(UninstallCommandParser.Parse(command));
     }
@@ -38,7 +39,7 @@ public sealed class UninstallCommandParserTests
     [InlineData("msiexec.exe /x {11111111-2222-3333-4444-555555555555}", "/x {11111111-2222-3333-4444-555555555555}")]
     [InlineData("MsiExec /I{11111111-2222-3333-4444-555555555555}", "/I{11111111-2222-3333-4444-555555555555}")]
     [InlineData("msiexec /uninstall {11111111-2222-3333-4444-555555555555}", "/uninstall {11111111-2222-3333-4444-555555555555}")]
-    public void Parse_MsiUninstall_IsMsiWithArgs(string command, string expectedArgs)
+    public void ParseMsiUninstallIsMsiWithArgs(string command, string expectedArgs)
     {
         ParsedUninstallCommand? parsed = UninstallCommandParser.Parse(command);
 
@@ -51,13 +52,13 @@ public sealed class UninstallCommandParserTests
     [Theory]
     [InlineData("msiexec /y somedll.dll")]
     [InlineData("msiexec /a package.msi")]
-    public void Parse_MsiNonUninstallMode_ReturnsNull(string command)
+    public void ParseMsiNonUninstallModeReturnsNull(string command)
     {
         Assert.Null(UninstallCommandParser.Parse(command));
     }
 
     [Fact]
-    public void Parse_QuotedPath_SplitsExeAndArgs()
+    public void ParseQuotedPathSplitsExeAndArgs()
     {
         string exe = Path.Join(Path.GetTempPath(), "unins_test.exe");
         File.WriteAllText(exe, "stub");
@@ -77,7 +78,7 @@ public sealed class UninstallCommandParserTests
     }
 
     [Fact]
-    public void Parse_UnquotedWithArgs_FindsExePath()
+    public void ParseUnquotedWithArgsFindsExePath()
     {
         string exe = Path.Join(Path.GetTempPath(), "unins_quoted_test.exe");
         File.WriteAllText(exe, "stub");
@@ -97,7 +98,7 @@ public sealed class UninstallCommandParserTests
     }
 
     [Fact]
-    public void Parse_NoArguments_SingleToken()
+    public void ParseNoArgumentsSingleToken()
     {
         ParsedUninstallCommand? parsed = UninstallCommandParser.Parse("SomeAppUninstaller");
 

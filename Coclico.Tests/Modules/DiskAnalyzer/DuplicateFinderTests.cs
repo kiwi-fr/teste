@@ -20,7 +20,7 @@ public sealed class DuplicateFinderTests
     }
 
     [Fact]
-    public async Task FindDuplicatesAsync_GroupsOnlyRealDuplicates()
+    public async Task FindDuplicatesAsyncGroupsOnlyRealDuplicates()
     {
         string dir = CreateTempDir();
         string sub = Path.Join(dir, "Sub");
@@ -35,14 +35,13 @@ public sealed class DuplicateFinderTests
         string a2 = Path.Join(sub, "a2-copy.bin");
         string b1 = Path.Join(dir, "b1.bin");
 
-        await File.WriteAllBytesAsync(a1, contentA);
-        await File.WriteAllBytesAsync(a2, contentA);
-        await File.WriteAllBytesAsync(b1, contentB);
+        await File.WriteAllBytesAsync(a1, contentA, TestContext.Current.CancellationToken);
+        await File.WriteAllBytesAsync(a2, contentA, TestContext.Current.CancellationToken);
+        await File.WriteAllBytesAsync(b1, contentB, TestContext.Current.CancellationToken);
 
         try
         {
-            IReadOnlyList<DuplicateGroup> groups = await DuplicateFinderService.FindDuplicatesAsync(
-                new DuplicateScanOptions(dir, MinSizeBytes: 1024));
+            IReadOnlyList<DuplicateGroup> groups = await DuplicateFinderService.FindDuplicatesAsync(new DuplicateScanOptions(dir, MinSizeBytes: 1024), ct: TestContext.Current.CancellationToken);
 
             Assert.Single(groups);
             DuplicateGroup group = groups[0];
@@ -59,7 +58,7 @@ public sealed class DuplicateFinderTests
     }
 
     [Fact]
-    public async Task FindDuplicatesAsync_IgnoresFilesBelowMinSize()
+    public async Task FindDuplicatesAsyncIgnoresFilesBelowMinSize()
     {
         string dir = CreateTempDir();
         _ = Directory.CreateDirectory(dir);
@@ -67,13 +66,12 @@ public sealed class DuplicateFinderTests
         string tiny1 = Path.Join(dir, "tiny1.bin");
         string tiny2 = Path.Join(dir, "tiny2.bin");
 
-        await File.WriteAllBytesAsync(tiny1, new byte[100]);
-        await File.WriteAllBytesAsync(tiny2, new byte[100]);
+        await File.WriteAllBytesAsync(tiny1, new byte[100], TestContext.Current.CancellationToken);
+        await File.WriteAllBytesAsync(tiny2, new byte[100], TestContext.Current.CancellationToken);
 
         try
         {
-            IReadOnlyList<DuplicateGroup> groups = await DuplicateFinderService.FindDuplicatesAsync(
-                new DuplicateScanOptions(dir, MinSizeBytes: 1024));
+            IReadOnlyList<DuplicateGroup> groups = await DuplicateFinderService.FindDuplicatesAsync(new DuplicateScanOptions(dir, MinSizeBytes: 1024), ct: TestContext.Current.CancellationToken);
 
             Assert.Empty(groups);
         }
@@ -84,7 +82,7 @@ public sealed class DuplicateFinderTests
     }
 
     [Fact]
-    public async Task FindLargestFilesAsync_ReturnsTopFilesSortedBySize()
+    public async Task FindLargestFilesAsyncReturnsTopFilesSortedBySize()
     {
         string dir = CreateTempDir();
         _ = Directory.CreateDirectory(dir);
@@ -92,12 +90,12 @@ public sealed class DuplicateFinderTests
         long[] sizes = [4096, 1024, 16384, 2048, 8192];
         for (int i = 0; i < sizes.Length; i++)
         {
-            await File.WriteAllBytesAsync(Path.Join(dir, $"f{i}.bin"), new byte[sizes[i]]);
+            await File.WriteAllBytesAsync(Path.Join(dir, $"f{i}.bin"), new byte[sizes[i]], TestContext.Current.CancellationToken);
         }
 
         try
         {
-            IReadOnlyList<LargeFileEntry> top = await DuplicateFinderService.FindLargestFilesAsync(dir, 3);
+            IReadOnlyList<LargeFileEntry> top = await DuplicateFinderService.FindLargestFilesAsync(dir, 3, ct: TestContext.Current.CancellationToken);
 
             Assert.Equal(3, top.Count);
             Assert.Equal("f2.bin", top[0].FileName);
@@ -112,7 +110,7 @@ public sealed class DuplicateFinderTests
     }
 
     [Fact]
-    public void IndexBySize_And_CandidateGroups_KeepOnlySharedSizes()
+    public void IndexBySizeAndCandidateGroupsKeepOnlySharedSizes()
     {
         var files = new List<FileMeta>
         {
@@ -133,7 +131,7 @@ public sealed class DuplicateFinderTests
     }
 
     [Fact]
-    public void ToDuplicateGroups_SortsByWastedBytesAndCapsResults()
+    public void ToDuplicateGroupsSortsByWastedBytesAndCapsResults()
     {
         List<List<FileMeta>> groups =
         [

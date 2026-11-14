@@ -9,7 +9,7 @@ public sealed class WingetUpdateServiceTests
     [Theory]
     [InlineData("Firefox    Mozilla.Firefox    128.0    129.0.1    winget", "Mozilla.Firefox", "128.0", "129.0.1", UpdateItemStatus.Available)]
     [InlineData("Obsidian   Obsidian.Obsidian   Unknown  1.7.4       winget", "Obsidian.Obsidian", "Unknown", "1.7.4", UpdateItemStatus.UnknownVersion)]
-    public void Parse_ExtractsExpectedItems(string row, string id, string current, string available, UpdateItemStatus status)
+    public void ParseExtractsExpectedItems(string row, string id, string current, string available, UpdateItemStatus status)
     {
         var items = WingetUpdateService.Parse(row);
 
@@ -23,7 +23,7 @@ public sealed class WingetUpdateServiceTests
     }
 
     [Fact]
-    public void Parse_SkipsHeadersAndEmptyLines()
+    public void ParseSkipsHeadersAndEmptyLines()
     {
         var output = """
             Name      Id      Version  Available  Source
@@ -35,7 +35,7 @@ public sealed class WingetUpdateServiceTests
     }
 
     [Fact]
-    public void Parse_DeduplicatesById()
+    public void ParseDeduplicatesById()
     {
         var output = """
             Firefox    Mozilla.Firefox    128.0    129.0.1    winget
@@ -49,7 +49,7 @@ public sealed class WingetUpdateServiceTests
     [InlineData("Mozilla.Firefox")]
     [InlineData("Git.Git")]
     [InlineData("VideoLAN.VLC")]
-    public void PackageIds_Accepted(string packageId)
+    public void PackageIdsAccepted(string packageId)
     {
         Assert.True(WingetPackageIdValidator.IsValid(packageId));
     }
@@ -59,7 +59,7 @@ public sealed class WingetUpdateServiceTests
     [InlineData("bad id")]
     [InlineData("../escape")]
     [InlineData("")]
-    public void PackageIds_Rejected(string packageId)
+    public void PackageIdsRejected(string packageId)
     {
         Assert.False(WingetPackageIdValidator.IsValid(packageId));
     }

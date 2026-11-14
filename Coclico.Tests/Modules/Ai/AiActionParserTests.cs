@@ -9,21 +9,21 @@ public sealed class AiActionParserTests
     private const string Close = "</" + "think" + ">";
 
     [Fact]
-    public void Clean_RemovesThinkBlock()
+    public void CleanRemovesThinkBlock()
     {
         string raw = Open + "raisonnement privé" + Close + "Réponse finale";
         Assert.Equal("Réponse finale", AiActionParser.Clean(raw));
     }
 
     [Fact]
-    public void Clean_RemovesMultilineThinkBlock()
+    public void CleanRemovesMultilineThinkBlock()
     {
         string raw = Open + "ligne 1\nligne 2\nligne 3" + Close + "\nRéponse utile";
         Assert.Equal("Réponse utile", AiActionParser.Clean(raw));
     }
 
     [Fact]
-    public void Clean_RemovesMultipleThinkBlocks()
+    public void CleanRemovesMultipleThinkBlocks()
     {
         string raw = Open + "premier raisonnement" + Close + "Réponse A"
                    + Open + "second raisonnement" + Close + " et suite";
@@ -31,33 +31,33 @@ public sealed class AiActionParserTests
     }
 
     [Fact]
-    public void Clean_IsCaseInsensitiveOnTags()
+    public void CleanIsCaseInsensitiveOnTags()
     {
         string raw = Open.ToUpperInvariant() + "raisonnement" + Close.ToUpperInvariant() + "Réponse publique";
         Assert.Equal("Réponse publique", AiActionParser.Clean(raw));
     }
 
     [Fact]
-    public void Clean_TrimsSurroundingWhitespace()
+    public void CleanTrimsSurroundingWhitespace()
     {
         Assert.Equal("Bonjour", AiActionParser.Clean("   Bonjour   "));
     }
 
     [Fact]
-    public void Clean_WithoutThinkBlock_ReturnsTrimmedInput()
+    public void CleanWithoutThinkBlockReturnsTrimmedInput()
     {
         Assert.Equal("Texte normal", AiActionParser.Clean("Texte normal"));
     }
 
     [Fact]
-    public void Clean_EmptyInput_ReturnsEmpty()
+    public void CleanEmptyInputReturnsEmpty()
     {
         Assert.Equal(string.Empty, AiActionParser.Clean(""));
         Assert.Equal(string.Empty, AiActionParser.Clean("   "));
     }
 
     [Fact]
-    public void Clean_NullInput_ThrowsArgumentNullException()
+    public void CleanNullInputThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() => AiActionParser.Clean(null!));
     }

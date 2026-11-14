@@ -4,7 +4,7 @@ using Coclico.Security.Infrastructure;
 
 namespace Coclico.SigningTool;
 
-public static class Program
+internal static class Program
 {
     public static int Main(string[] args)
     {
@@ -68,7 +68,7 @@ public static class Program
         string payloadDir = RequireOption(args, "--dir");
         string keyfilePath = RequireOption(args, "--keyfile");
         string version = RequireOption(args, "--version");
-        int generation = int.Parse(RequireOption(args, "--generation"));
+        int generation = int.Parse(RequireOption(args, "--generation"), System.Globalization.CultureInfo.InvariantCulture);
         string outputPath = RequireOption(args, "--out");
         string password = ResolvePassword(args);
         List<string> exclusions = CollectOptions(args, "--exclude");
@@ -208,7 +208,7 @@ public static class Program
                 relative.StartsWith(dir + "/", StringComparison.OrdinalIgnoreCase);
         }
 
-        if (exclusion.StartsWith("*."))
+        if (exclusion.StartsWith("*.", StringComparison.Ordinal))
         {
             return relative.EndsWith(exclusion[2..], StringComparison.OrdinalIgnoreCase);
         }

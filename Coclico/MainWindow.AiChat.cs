@@ -33,27 +33,15 @@ public partial class MainWindow
 
             UIElement? target = targetTag == null ? null : GetOrCreateView(targetTag);
 
-            ServiceContainer.GetRequired<IAiService>().CurrentStatusContext = action switch
+            IAiService aiService = ServiceContainer.GetRequired<IAiService>();
+            if (targetTag != null)
             {
-                "open_dashboard" => "L'utilisateur est sur le Tableau de Bord (stats CPU/RAM/Disque).",
-                "open_programs" => "L'utilisateur consulte la liste des Applications installées.",
-                "open_disk" => "L'utilisateur est sur l'analyse de l'espace disque (carte radiale des zones du disque dur).",
-                "open_health" or "open_defense" => "L'utilisateur est sur le module Santé, Défense & Réparation Windows.",
-                "open_network" => "L'utilisateur consulte le module Réseau & Latence.",
-                "open_power" => "L'utilisateur est dans le module CPU & Alimentation (plans Coclico économie/optimal/performance, mode adaptatif).",
-                "open_installer" => "L'utilisateur est dans l'Installeur Winget.",
-                "open_cleaning" => "L'utilisateur est dans le Nettoyage système.",
-                "open_ramcleaner" => "L'utilisateur est dans le RAM Cleaner.",
-                "open_settings" => "L'utilisateur est dans les Paramètres.",
-                "open_help" => "L'utilisateur consulte l'Aide et le support.",
-                _ => ServiceContainer.GetRequired<IAiService>().CurrentStatusContext
-            };
-
-            FindNavButton(targetTag)?.IsChecked = true;
+                aiService.CurrentStatusContext = AiContextForTag(targetTag);
+            }
 
             if (target != null)
             {
-                await NavigateWithTransition(target);
+                await NavigateWithTransition(target).ConfigureAwait(false);
                 PreloadPredictedViews(targetTag!);
             }
         }

@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Coclico.Installer.Services;
 
-public static class ShortcutHelper
+internal static class ShortcutHelper
 {
     public static void CreateShortcut(string targetExePath, string shortcutPath, string description, string? iconPath = null)
     {

@@ -4,14 +4,13 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.Versioning;
 using System.Text.Json;
-using System.Windows;
 using Coclico.Models.Network;
 using Microsoft.Win32;
 
 namespace Coclico.Services.Network;
 
 [SupportedOSPlatform("windows")]
-public sealed class NetworkOptimizerService : INetworkOptimizerService
+internal sealed class NetworkOptimizerService : INetworkOptimizerService
 {
     public const int QuickCheckPingSamples = 10;
     public const int CompleteTestPingSamples = 40;
@@ -166,7 +165,7 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
 
             foreach (NetworkTuningParameter p in status)
             {
-                backup.Values[p.Id] = p.CurrentValue == "--" ? null : p.CurrentValue;
+                backup.Values[p.Id] = string.Equals(p.CurrentValue, "--", StringComparison.Ordinal) ? null : p.CurrentValue;
             }
 
             string? dir = Path.GetDirectoryName(BackupFilePath);
@@ -223,13 +222,13 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
             log($"Carte ciblée : {target.Name} ({target.DriverDescription}).");
 
             IReadOnlyList<NetworkTuningParameter> status = await GetTuningStatusAsync(target.Id, ct).ConfigureAwait(false);
-            List<NetworkTuningParameter> unavailable = [.. status.Where(p => p.CurrentValue == "--")];
-            List<NetworkTuningParameter> toApply = [.. status.Where(p => !p.IsOptimal && p.CurrentValue != "--")];
+            List<NetworkTuningParameter> unavailable = [.. status.Where(p => string.Equals(p.CurrentValue, "--", StringComparison.Ordinal))];
+            List<NetworkTuningParameter> toApply = [.. status.Where(p => !p.IsOptimal && !string.Equals(p.CurrentValue, "--", StringComparison.Ordinal))];
             report.AlreadyOptimalCount = status.Count - toApply.Count - unavailable.Count;
 
             foreach (NetworkTuningParameter unavailableParameter in unavailable)
             {
-                log($"· {L(unavailableParameter.NameKey)} : non disponible sur cette carte, ignoré.");
+                log($"· {Loc.Get(unavailableParameter.NameKey)} : non disponible sur cette carte, ignoré.");
             }
 
             log("Mesure initiale (débit descendant + montant, 40 pings)...");
@@ -258,12 +257,12 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
                 if (ok)
                 {
                     report.AppliedCount++;
-                    log($"✓ {L(p.NameKey)} : {p.CurrentValue} → {p.TargetValue}");
+                    log($"✓ {Loc.Get(p.NameKey)} : {p.CurrentValue} → {p.TargetValue}");
                 }
                 else
                 {
                     report.FailedCount++;
-                    log($"✗ {L(p.NameKey)} : application impossible");
+                    log($"✗ {Loc.Get(p.NameKey)} : application impossible");
                 }
 
                 done += perParameterSlice;
@@ -340,7 +339,7 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
             int restored = 0;
             foreach (KeyValuePair<string, string?> entry in backup.Values)
             {
-                if (entry.Value is null || entry.Value == "--")
+                if (entry.Value is null || string.Equals(entry.Value, "--", StringComparison.Ordinal))
                 {
                     continue;
                 }
@@ -439,11 +438,6 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
         return (median, jitter, loss);
     }
 
-    private static string L(string key)
-    {
-        return Application.Current?.TryFindResource(key) as string ?? key;
-    }
-
     internal async Task<TcpGlobalSettings> GetTcpSettingsAsync(CancellationToken ct = default)
     {
         var settings = new TcpGlobalSettings();
@@ -461,6 +455,7 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
 
         return settings;
     }
+
 
     internal static void ApplyTcpLines(TcpGlobalSettings settings, string netshOutput)
     {
@@ -553,9 +548,9 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
         return props;
     }
 
-    private static string BuildPowerShellArguments(string script)
+    private static string[] BuildPowerShellArguments(string script)
     {
-        return "-NoProfile -NonInteractive -ExecutionPolicy Bypass -Command \"" + script + "\"";
+        return ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-Command", script];
     }
 
     private async Task<bool> ApplyAdvancedPropertyAsync(NetworkAdapterInfo target, string keyword, string value, CancellationToken ct = default)
@@ -748,7 +743,7 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
     {
         return string.IsNullOrEmpty(targetAdapterId)
             ? adapters.FirstOrDefault(a => a.IsActive) ?? adapters.FirstOrDefault()
-            : adapters.FirstOrDefault(a => a.Id == targetAdapterId || a.Name == targetAdapterId);
+            : adapters.FirstOrDefault(a => string.Equals(a.Id, targetAdapterId, StringComparison.Ordinal) || string.Equals(a.Name, targetAdapterId, StringComparison.Ordinal));
     }
 
     private static Dictionary<string, (string DriverDesc, string DriverVersion, string PnpId)> GetPhysicalAdapterGuids()
@@ -764,7 +759,7 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
 
             foreach (string subName in classKey.GetSubKeyNames())
             {
-                if (!int.TryParse(subName, out _))
+                if (!int.TryParse(subName, System.Globalization.CultureInfo.InvariantCulture, out _))
                 {
                     continue;
                 }
@@ -823,7 +818,7 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
         {
             var psi = new ProcessStartInfo
             {
-                FileName = exe,
+                FileName = SystemToolResolver.Resolve(exe),
                 Arguments = args,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
@@ -841,7 +836,15 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
             Task<string> stderrTask = proc.StandardError.ReadToEndAsync(ct);
             Task exitTask = proc.WaitForExitAsync(ct);
 
-            await Task.WhenAll(stdoutTask, stderrTask, exitTask).ConfigureAwait(false);
+            try
+            {
+                await Task.WhenAll(stdoutTask, stderrTask, exitTask).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                try { proc.Kill(entireProcessTree: true); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "NetworkOptimizerService.CancelledProcessKill"); }
+                throw;
+            }
 
             string output = await stdoutTask.ConfigureAwait(false);
             string error = await stderrTask.ConfigureAwait(false);
@@ -866,7 +869,7 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
         {
             var psi = new ProcessStartInfo
             {
-                FileName = exe,
+                FileName = SystemToolResolver.Resolve(exe),
                 Arguments = args,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
@@ -884,7 +887,15 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
             Task<string> stderrTask = proc.StandardError.ReadToEndAsync(ct);
             Task exitTask = proc.WaitForExitAsync(ct);
 
-            await Task.WhenAll(stdoutTask, stderrTask, exitTask).ConfigureAwait(false);
+            try
+            {
+                await Task.WhenAll(stdoutTask, stderrTask, exitTask).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                try { proc.Kill(entireProcessTree: true); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "NetworkOptimizerService.CancelledProcessKill"); }
+                throw;
+            }
             return await stdoutTask.ConfigureAwait(false);
         }
         catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)
@@ -893,19 +904,22 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
         }
     }
 
-    private static async Task<(int ExitCode, string Output)> RunProcessWithExitAsync(string exe, string args, CancellationToken ct)
+    private static async Task<(int ExitCode, string Output)> RunProcessWithExitAsync(string exe, string[] args, CancellationToken ct)
     {
         try
         {
             var psi = new ProcessStartInfo
             {
-                FileName = exe,
-                Arguments = args,
+                FileName = SystemToolResolver.Resolve(exe),
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 CreateNoWindow = true
             };
+            foreach (string arg in args)
+            {
+                psi.ArgumentList.Add(arg);
+            }
 
             using var proc = Process.Start(psi);
             if (proc == null)
@@ -917,7 +931,15 @@ public sealed class NetworkOptimizerService : INetworkOptimizerService
             Task<string> stderrTask = proc.StandardError.ReadToEndAsync(ct);
             Task exitTask = proc.WaitForExitAsync(ct);
 
-            await Task.WhenAll(stdoutTask, stderrTask, exitTask).ConfigureAwait(false);
+            try
+            {
+                await Task.WhenAll(stdoutTask, stderrTask, exitTask).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                try { proc.Kill(entireProcessTree: true); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "NetworkOptimizerService.CancelledProcessKill"); }
+                throw;
+            }
             string output = await stdoutTask.ConfigureAwait(false);
             string error = await stderrTask.ConfigureAwait(false);
             return (proc.ExitCode, !string.IsNullOrWhiteSpace(output) ? output : error);

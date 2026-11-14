@@ -7,13 +7,13 @@ using System.Windows.Media.Imaging;
 
 namespace Coclico.Services.AI;
 
-public sealed record AttachedImage(
+internal sealed record AttachedImage(
     string Base64Data,
     string MimeType,
     BitmapSource PreviewSource,
     string FileName);
 
-public static class AiVisionService
+internal static class AiVisionService
 {
     private const int MaxDimension = 1600;
 

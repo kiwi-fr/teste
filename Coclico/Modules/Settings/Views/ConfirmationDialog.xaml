@@ -26,13 +26,13 @@
                   VerticalAlignment="Center" Margin="0,0,0,16"/>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="BtnCancel" Content="Annuler"
+            <Button Content="{DynamicResource Common_Cancel}"
                     Style="{StaticResource SecondaryButton}"
                     Width="100" Height="35"
                     Margin="0,0,12,0"
                     Click="BtnCancel_Click"/>
 
-            <Button x:Name="BtnConfirm" Content="Confirmer"
+            <Button Content="{DynamicResource Common_Confirm}"
                     Style="{StaticResource PrimaryButton}"
                     Width="100" Height="35"
                     Click="BtnConfirm_Click"

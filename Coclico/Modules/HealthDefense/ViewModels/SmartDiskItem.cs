@@ -2,7 +2,7 @@ using Coclico.Services;
 
 namespace Coclico.ViewModels;
 
-public sealed class SmartDiskItem
+internal sealed class SmartDiskItem
 {
     public SmartDiskItem(SmartDiskStatus status)
     {

@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 
 namespace Coclico.Services;
 
-public static class CentralVariables
+internal static class CentralVariables
 {
     public const string ActivityLevel = "Central.Variables.ActivityLevel";
     public const string CpuPercent = "Central.Variables.CpuPercent";
@@ -13,11 +13,11 @@ public static class CentralVariables
     public const string DiskUsage = "Central.Variables.DiskUsage";
 }
 
-public sealed class CentralUnitVariables
+internal sealed class CentralUnitVariables
 {
     private readonly ConcurrentDictionary<string, object?> _values = new(StringComparer.Ordinal);
     private readonly ConcurrentDictionary<string, Action<string, object?>[]> _handlers = new(StringComparer.Ordinal);
-    private readonly object _handlerLock = new();
+    private readonly Lock _handlerLock = new();
     private long _publishedCount;
 
     public long PublishedCount => Interlocked.Read(ref _publishedCount);

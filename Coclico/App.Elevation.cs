@@ -56,7 +56,8 @@ public partial class App
                 }
                 else
                 {
-                    string? entryLoc = System.Reflection.Assembly.GetEntryAssembly()?.Location;
+                    // AppContext.BaseDirectory : fiable aussi en single-file (Assembly.Location y est vide)
+                    string? entryLoc = AppContext.BaseDirectory;
                     if (!string.IsNullOrWhiteSpace(entryLoc))
                     {
                         string? dir = Path.GetDirectoryName(entryLoc);
@@ -80,7 +81,7 @@ public partial class App
                     }
                     else
                     {
-                        string? entryLoc = System.Reflection.Assembly.GetEntryAssembly()?.Location;
+                        string? entryLoc = Path.Join(AppContext.BaseDirectory, "Coclico.dll");
                         if (!string.IsNullOrWhiteSpace(entryLoc) && File.Exists(entryLoc))
                         {
                             dllPath = entryLoc;
@@ -134,7 +135,7 @@ public partial class App
             {
                 var process = Process.Start(psi);
                 string pidStr;
-                try { pidStr = process?.Id.ToString() ?? "détaché"; } catch (Exception ex) when (ex is not System.OutOfMemoryException) { pidStr = "détaché"; }
+                try { pidStr = process?.Id.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "détaché"; } catch (Exception ex) when (ex is not System.OutOfMemoryException) { pidStr = "détaché"; }
                 LoggingService.LogInfo($"[App.TryRestartAsAdmin] Processus lancé avec succès (PID: {pidStr}).");
                 return true;
             }

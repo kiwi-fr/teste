@@ -74,7 +74,7 @@ public partial class DashboardView : UserControl
             string name = Environment.UserName;
             if (!string.IsNullOrWhiteSpace(name))
             {
-                name = char.ToUpper(name[0]) + (name.Length > 1 ? name[1..] : "");
+                name = char.ToUpperInvariant(name[0]) + (name.Length > 1 ? name[1..] : "");
                 WelcomeText.Text = $"{greeting}, {name}";
             }
             else
@@ -171,7 +171,7 @@ public partial class DashboardView : UserControl
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "DashboardView.BtnCustomizeHome_Click");
-            ToastService.Show($"Erreur lors de l'ouverture de la personnalisation : {ex.Message}");
+            ToastService.Show(Loc.Format("Dash_CustomizeError", ex.Message));
         }
     }
 
@@ -243,7 +243,7 @@ public partial class DashboardView : UserControl
         if (sender is FrameworkElement { DataContext: CustomShortcut shortcut } && CurrentViewModel is { } vm)
         {
             vm.NavigationRequested ??= NavigateTo;
-            await vm.ExecuteShortcutCommand.ExecuteAsync(shortcut);
+            await vm.ExecuteShortcutCommand.ExecuteAsync(shortcut).ConfigureAwait(false);
         }
     }
 
@@ -251,11 +251,11 @@ public partial class DashboardView : UserControl
     {
         if (sender is FrameworkElement { Tag: string id } && CurrentViewModel is { } vm)
         {
-            CustomShortcut? item = vm.CustomShortcuts.FirstOrDefault(s => s.Id == id);
+            CustomShortcut? item = vm.CustomShortcuts.FirstOrDefault(s => string.Equals(s.Id, id, StringComparison.Ordinal));
             if (item != null)
             {
                 vm.RemoveShortcutCommand.Execute(item);
-                ToastService.Show($"Raccourci '{item.Title}' supprimé.");
+                ToastService.Show(Loc.Format("Dash_ShortcutDeleted", item.Title));
             }
         }
     }
@@ -316,7 +316,7 @@ public partial class DashboardView : UserControl
                 AccentColor = color,
                 BgTint = bg
             });
-            ToastService.Show($"Raccourci '{title}' ajouté avec succès !");
+            ToastService.Show(Loc.Format("Dash_ShortcutAdded", title));
         }
     }
 
@@ -341,7 +341,7 @@ public partial class DashboardView : UserControl
                 AccentColor = "#6366F1",
                 BgTint = "#13182E"
             });
-            ToastService.Show($"Application '{exeName}' ajoutée à vos raccourcis !");
+            ToastService.Show(Loc.Format("Dash_AppAdded", exeName));
         }
     }
 }

@@ -7,16 +7,16 @@ using Microsoft.Win32.SafeHandles;
 
 namespace Coclico.Modules.DiskAnalyzer.Services;
 
-public sealed record FileMeta(string Path, long Size);
+internal sealed record FileMeta(string Path, long Size);
 
-public sealed record DuplicateScanOptions(
+internal sealed record DuplicateScanOptions(
     string Root,
     long MinSizeBytes = 1024 * 1024,
     int MaxGroups = 500);
 
-public sealed record DuplicateScanProgress(int Phase, int FilesExamined, long BytesExamined, string CurrentPath);
+internal sealed record DuplicateScanProgress(int Phase, int FilesExamined, long BytesExamined, string CurrentPath);
 
-public sealed class DuplicateGroup
+internal sealed class DuplicateGroup
 {
     public required string FileName { get; init; }
     public required string Hash { get; init; }
@@ -26,14 +26,14 @@ public sealed class DuplicateGroup
     public long WastedBytes => SizeBytes * (Paths.Count - 1);
 }
 
-public sealed class LargeFileEntry
+internal sealed class LargeFileEntry
 {
     public required string Path { get; init; }
     public required string FileName { get; init; }
     public required long SizeBytes { get; init; }
 }
 
-public static class DuplicateFinderService
+internal static class DuplicateFinderService
 {
     private const int QuickHashBytes = 64 * 1024;
 
@@ -157,7 +157,7 @@ public static class DuplicateFinderService
 
     internal static List<List<FileMeta>> RefineByHash(List<List<FileMeta>> groups, int hashPrefixBytes, CancellationToken ct)
     {
-        ConcurrentDictionary<string, ConcurrentBag<FileMeta>> byHash = new();
+        ConcurrentDictionary<string, ConcurrentBag<FileMeta>> byHash = new(StringComparer.Ordinal);
         int prefix = hashPrefixBytes;
 
         Parallel.ForEach(groups, new ParallelOptions { CancellationToken = ct }, group =>

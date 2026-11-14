@@ -4,7 +4,7 @@ using Coclico.Services;
 
 namespace Coclico.ViewModels;
 
-public sealed class StartupEntryItem : INotifyPropertyChanged
+internal sealed class StartupEntryItem : INotifyPropertyChanged
 {
     private readonly Func<StartupEntryItem, bool, bool> _toggle;
     private bool _isEnabled;

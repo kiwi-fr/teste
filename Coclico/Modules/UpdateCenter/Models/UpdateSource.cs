@@ -1,6 +1,6 @@
 namespace Coclico.Modules.UpdateCenter.Models;
 
-public enum UpdateSource
+internal enum UpdateSource
 {
     Winget,
     WindowsUpdate,

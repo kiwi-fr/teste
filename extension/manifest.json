@@ -1,0 +1,81 @@
+{
+  "manifest_version": 3,
+  "name": "Coclico AdBlock",
+  "version": "2.0.19",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "coclico-adblock@coclico.local",
+      "strict_min_version": "128.0"
+    }
+  },
+  "description": "Version bêta. Bloque une partie des pubs, traqueurs et requêtes de surveillance des sites. Conçue pour fonctionner avec l'app Coclico, qui bloque aussi au niveau de la carte réseau.",
+  "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
+    "storage",
+    "cookies",
+    "alarms",
+    "scripting",
+    "webNavigation"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js",
+    "scripts": ["filters.js", "background.js"]
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Coclico AdBlock",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["cosmetic.css"],
+      "run_at": "document_start"
+    }
+  ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "core",
+        "enabled": true,
+        "path": "rules/core.json"
+      },
+      {
+        "id": "trackers",
+        "enabled": true,
+        "path": "rules/trackers.json"
+      },
+      {
+        "id": "aggressive",
+        "enabled": false,
+        "path": "rules/aggressive.json"
+      }
+    ]
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/neutered.js",
+        "assets/pixel.gif",
+        "assets/empty.css",
+        "assets/empty.txt"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

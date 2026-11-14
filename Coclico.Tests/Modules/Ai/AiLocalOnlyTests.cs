@@ -52,7 +52,7 @@ public sealed class AiLocalOnlyTests
         var client = new AiToolExecutionService();
         var action = new AiActionRequest("CLEAN_TEMP", null, "[ACTION:CLEAN_TEMP]");
 
-        AiActionResult result = await client.ExecuteActionAsync(action);
+        AiActionResult result = await client.ExecuteActionAsync(action, TestContext.Current.CancellationToken);
 
         Assert.False(result.Success);
         Assert.Contains("Confirmation", result.Message, StringComparison.OrdinalIgnoreCase);

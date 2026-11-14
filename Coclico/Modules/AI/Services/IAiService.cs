@@ -2,7 +2,7 @@ using Coclico.Services.AI;
 
 namespace Coclico.Services;
 
-public interface IAiService
+internal interface IAiService
 {
     bool IsInitialized { get; }
     bool IsEnabled { get; }

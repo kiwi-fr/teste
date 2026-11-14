@@ -4,7 +4,7 @@ using Wpf.Ui.Controls;
 
 namespace Coclico.Services;
 
-public static class ToastService
+internal static class ToastService
 {
     private static ISnackbarService? _svc;
 

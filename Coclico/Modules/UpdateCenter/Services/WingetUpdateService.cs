@@ -3,7 +3,7 @@ using Coclico.Modules.UpdateCenter.Models;
 
 namespace Coclico.Modules.UpdateCenter.Services;
 
-public partial class WingetUpdateService(SecureProcessRunner runner)
+internal partial class WingetUpdateService(SecureProcessRunner runner)
 {
     private static readonly TimeSpan DefaultTimeout = TimeSpan.FromMinutes(3);
 

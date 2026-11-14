@@ -84,7 +84,7 @@ public sealed class DiagnosticOrchestratorTests
         => new(checks, history, new DiagnosticPrivacySanitizer());
 
     [Fact]
-    public async Task QuickMode_RunsOnlyQuickChecks()
+    public async Task QuickModeRunsOnlyQuickChecks()
     {
         FakeCheck quick = new("windows.health", DiagnosticCategory.Windows, IsQuick: true);
         FakeCheck slow = new("motherboard.info", DiagnosticCategory.Motherboard, IsQuick: false);
@@ -100,7 +100,7 @@ public sealed class DiagnosticOrchestratorTests
     }
 
     [Fact]
-    public async Task FullMode_RunsAllSupportedChecks()
+    public async Task FullModeRunsAllSupportedChecks()
     {
         FakeCheck a = new("cpu.info", DiagnosticCategory.Cpu, IsQuick: true);
         FakeCheck b = new("gpu.info", DiagnosticCategory.Gpu, IsQuick: true);
@@ -117,7 +117,7 @@ public sealed class DiagnosticOrchestratorTests
     }
 
     [Fact]
-    public async Task TargetedMode_RunsOnlySelectedCategories()
+    public async Task TargetedModeRunsOnlySelectedCategories()
     {
         FakeCheck cpu = new("cpu.info", DiagnosticCategory.Cpu, IsQuick: true);
         FakeCheck network = new("network.probe", DiagnosticCategory.Network, IsQuick: true);
@@ -138,7 +138,7 @@ public sealed class DiagnosticOrchestratorTests
     }
 
     [Fact]
-    public async Task OneFailingCheck_DoesNotFailTheRun()
+    public async Task OneFailingCheckDoesNotFailTheRun()
     {
         FakeCheck ok = new("cpu.info", DiagnosticCategory.Cpu, IsQuick: true);
         FakeCheck broken = new("gpu.info", DiagnosticCategory.Gpu, IsQuick: true,
@@ -155,7 +155,7 @@ public sealed class DiagnosticOrchestratorTests
     }
 
     [Fact]
-    public async Task Timeout_ProducesTimedOutAndOthersContinue()
+    public async Task TimeoutProducesTimedOutAndOthersContinue()
     {
         FakeCheck slow = new("network.probe", DiagnosticCategory.Network, IsQuick: true,
             Latency: TimeSpan.FromSeconds(30));
@@ -179,7 +179,7 @@ public sealed class DiagnosticOrchestratorTests
     }
 
     [Fact]
-    public async Task UserCancellation_StopsAndReportsCancelled()
+    public async Task UserCancellationStopsAndReportsCancelled()
     {
         FakeCheck slow = new("network.probe", DiagnosticCategory.Network, IsQuick: true,
             Latency: TimeSpan.FromSeconds(30));
@@ -191,16 +191,16 @@ public sealed class DiagnosticOrchestratorTests
 
         Task<DiagnosticRun> runTask = CreateOrchestrator(history, slow, fast)
             .RunAsync(request, null, cts.Token);
-        await Task.Delay(300, CancellationToken.None);
-        cts.Cancel();
+        await Task.Delay(300, CancellationToken.None).ConfigureAwait(true);
+        await cts.CancelAsync().ConfigureAwait(true);
 
-        DiagnosticRun run = await runTask;
+        DiagnosticRun run = await runTask.ConfigureAwait(true);
 
         Assert.Equal(DiagnosticRunStatus.Cancelled, run.Status);
     }
 
     [Fact]
-    public async Task Progress_ReportsEveryCompletedCheck()
+    public async Task ProgressReportsEveryCompletedCheck()
     {
         FakeCheck a = new("a.check", DiagnosticCategory.Cpu, IsQuick: true);
         FakeCheck b = new("b.check", DiagnosticCategory.Memory, IsQuick: true);
@@ -220,7 +220,7 @@ public sealed class DiagnosticOrchestratorTests
     }
 
     [Fact]
-    public async Task Run_SanitizesDeduplicatesAndSortsFindings()
+    public async Task RunSanitizesDeduplicatesAndSortsFindings()
     {
         DiagnosticFinding MakeFinding(string id, string? entity, DiagnosticSeverity severity) => new()
         {
@@ -252,7 +252,7 @@ public sealed class DiagnosticOrchestratorTests
     }
 
     [Fact]
-    public async Task Run_SavesToHistoryEvenWhenPartial()
+    public async Task RunSavesToHistoryEvenWhenPartial()
     {
         FakeCheck broken = new("gpu.info", DiagnosticCategory.Gpu, IsQuick: true,
             Throw: new InvalidOperationException("boom"));
@@ -267,7 +267,7 @@ public sealed class DiagnosticOrchestratorTests
     }
 
     [Fact]
-    public async Task Run_WithNoSelectedChecks_SavesNothing()
+    public async Task RunWithNoSelectedChecksSavesNothing()
     {
         FakeHistory history = new();
         IDiagnosticCheck check = new FakeCheck("cpu.info", DiagnosticCategory.Cpu, IsQuick: false);

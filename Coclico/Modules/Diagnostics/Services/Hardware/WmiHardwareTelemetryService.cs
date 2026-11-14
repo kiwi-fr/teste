@@ -4,7 +4,7 @@ using System.Management;
 using Coclico.Modules.Diagnostics.Models;
 using Coclico.Services;
 
-public sealed class WmiHardwareTelemetryService : IHardwareTelemetryService
+internal sealed class WmiHardwareTelemetryService : IHardwareTelemetryService
 {
     private const string Subsystem = "WmiHardwareTelemetry";
     private const string ThermalZoneQuery = "SELECT CurrentTemperature FROM MSAcpi_ThermalZoneTemperature";

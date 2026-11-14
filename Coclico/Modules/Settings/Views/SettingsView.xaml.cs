@@ -8,7 +8,6 @@ namespace Coclico.Views;
 
 public partial class SettingsView : UserControl
 {
-    private static string L(string key) => Application.Current?.TryFindResource(key) as string ?? ServiceContainer.GetOptional<LocalizationService>()?.Get(key) ?? key;
     private readonly SettingsViewModel _vm;
 
     public SettingsView()
@@ -87,9 +86,9 @@ public partial class SettingsView : UserControl
     private (bool Proceed, bool DontAskAgain) ShowUninstallConfirmation()
     {
         var confirmationDialog = new ConfirmationDialog(
-            L("Settings_UninstallConfirm_Title"),
-            L("Settings_UninstallConfirm_Message"),
-            L("Settings_DontAskAgain"));
+            Loc.Get("Settings_UninstallConfirm_Title"),
+            Loc.Get("Settings_UninstallConfirm_Message"),
+            Loc.Get("Settings_DontAskAgain"));
 
         bool? result = confirmationDialog.ShowDialog();
         return (result == true, confirmationDialog.DontAskAgain);
@@ -109,14 +108,14 @@ public partial class SettingsView : UserControl
             return;
         }
 
-        bool ok = await ServiceContainer.GetRequired<SettingsService>().ExportToAsync(dialog.FileName);
+        bool ok = await ServiceContainer.GetRequired<SettingsService>().ExportToAsync(dialog.FileName).ConfigureAwait(false);
         if (ok)
         {
-            ToastService.ShowInfo("Réglages exportés avec succès.");
+            ToastService.ShowInfo(Loc.Get("Settings_Exported"));
         }
         else
         {
-            ToastService.ShowWarning("L'export a échoué — consultez les journaux de Coclico.");
+            ToastService.ShowWarning(Loc.Get("Settings_ExportFailed"));
         }
     }
 
@@ -133,14 +132,14 @@ public partial class SettingsView : UserControl
             return;
         }
 
-        bool ok = await ServiceContainer.GetRequired<SettingsService>().ImportFromAsync(dialog.FileName);
+        bool ok = await ServiceContainer.GetRequired<SettingsService>().ImportFromAsync(dialog.FileName).ConfigureAwait(false);
         if (ok)
         {
-            ToastService.ShowInfo("Réglages importés. Redémarrez Coclico pour que tout s'applique pleinement.");
+            ToastService.ShowInfo(Loc.Get("Settings_Imported"));
         }
         else
         {
-            ToastService.ShowWarning("Import impossible : fichier introuvable ou invalide (consultez les journaux).");
+            ToastService.ShowWarning(Loc.Get("Settings_ImportFailed"));
         }
     }
 }

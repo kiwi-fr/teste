@@ -5,7 +5,7 @@ using Coclico.Modules.Diagnostics.Rules;
 using Coclico.Modules.Diagnostics.Services.Hardware;
 using Coclico.Services;
 
-public sealed class CpuCheck : IDiagnosticCheck
+internal sealed class CpuCheck : IDiagnosticCheck
 {
     private const int QuickSamples = 1;
     private const int FullSamples = 3;
@@ -101,7 +101,7 @@ public sealed class CpuCheck : IDiagnosticCheck
             {
                 if (item["Name"] is string name
                     && item["PercentProcessorTime"] is string raw
-                    && double.TryParse(raw, out double percent)
+                    && double.TryParse(raw, System.Globalization.CultureInfo.InvariantCulture, out double percent)
                     && percent > topPercent)
                 {
                     topPercent = percent;

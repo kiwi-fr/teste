@@ -9,7 +9,7 @@ public sealed class RestorePointServiceTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public void Create_EmptyDescription_Throws(string? description)
+    public void CreateEmptyDescriptionThrows(string? description)
     {
         var service = new RestorePointService();
 
@@ -17,7 +17,7 @@ public sealed class RestorePointServiceTests
     }
 
     [Fact]
-    public void Create_DescriptionLongerThan64Chars_Throws()
+    public void CreateDescriptionLongerThan64CharsThrows()
     {
         var service = new RestorePointService();
         string tooLong = new string('a', 65);

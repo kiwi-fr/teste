@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace Coclico.Services;
 
-public sealed class AppErrorManager : IAppErrorManager, IDisposable
+internal sealed class AppErrorManager : IAppErrorManager, IDisposable
 {
     private const int MaxFailuresBeforeDegraded = 3;
     private const int MaxFailuresBeforeFailed = 10;
@@ -77,7 +77,7 @@ public sealed class AppErrorManager : IAppErrorManager, IDisposable
             state.Status = BlockStatus.Degraded;
         }
 
-        await WriteErrorLogAsync(error, state.Status);
+        await WriteErrorLogAsync(error, state.Status).ConfigureAwait(false);
 
         if (state.Status == BlockStatus.Failed)
         {
@@ -136,7 +136,7 @@ public sealed class AppErrorManager : IAppErrorManager, IDisposable
     {
         try
         {
-            await _writeLock.WaitAsync();
+            await _writeLock.WaitAsync().ConfigureAwait(false);
             string logFile = Path.Join(_errorLogDir, $"errors-{DateTime.UtcNow:yyyy-MM-dd}.ndjson");
             string entry = JsonSerializer.Serialize(new
             {
@@ -150,7 +150,7 @@ public sealed class AppErrorManager : IAppErrorManager, IDisposable
                 failureCount = error.FailureCount,
                 status = status.ToString()
             });
-            await File.AppendAllTextAsync(logFile, entry + Environment.NewLine);
+            await File.AppendAllTextAsync(logFile, entry + Environment.NewLine).ConfigureAwait(false);
         }
         catch (Exception exSwallow) when (exSwallow is System.IO.IOException or System.UnauthorizedAccessException or System.Text.Json.JsonException or System.FormatException)
         {

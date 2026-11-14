@@ -10,7 +10,7 @@ public sealed class MemoryCleanerServiceTests
     [InlineData(-5000)]
     [InlineData(-1)]
     [InlineData(0)]
-    public void FormatBytes_NegativeOrNull_ReturnsZeroBytes(long bytes)
+    public void FormatBytesNegativeOrNullReturnsZeroBytes(long bytes)
     {
         Assert.Equal("0 B", MemoryCleanerService.FormatBytes(bytes));
     }
@@ -19,13 +19,13 @@ public sealed class MemoryCleanerServiceTests
     [InlineData(1)]
     [InlineData(512)]
     [InlineData(1023)]
-    public void FormatBytes_BelowOneKilobyte_ReturnsRawBytes(long bytes)
+    public void FormatBytesBelowOneKilobyteReturnsRawBytes(long bytes)
     {
         Assert.Equal($"{bytes} B", MemoryCleanerService.FormatBytes(bytes));
     }
 
     [Fact]
-    public void FormatBytes_KilobyteTier_UsesKbUnit()
+    public void FormatBytesKilobyteTierUsesKbUnit()
     {
         using var _ = CulturePin.Invariant();
 
@@ -35,7 +35,7 @@ public sealed class MemoryCleanerServiceTests
     }
 
     [Fact]
-    public void FormatBytes_MegabyteTier_UsesMbUnit()
+    public void FormatBytesMegabyteTierUsesMbUnit()
     {
         using var _ = CulturePin.Invariant();
 
@@ -44,7 +44,7 @@ public sealed class MemoryCleanerServiceTests
     }
 
     [Fact]
-    public void FormatBytes_GigabyteTier_UsesGbUnitWithTwoDecimals()
+    public void FormatBytesGigabyteTierUsesGbUnitWithTwoDecimals()
     {
         using var _ = CulturePin.Invariant();
 
@@ -53,7 +53,7 @@ public sealed class MemoryCleanerServiceTests
     }
 
     [Fact]
-    public void GetRamInfo_ReportsConsistentPhysicalMemory()
+    public void GetRamInfoReportsConsistentPhysicalMemory()
     {
         MemoryCleanerService.RamInfo info = MemoryCleanerService.GetRamInfo();
 
@@ -67,7 +67,7 @@ public sealed class MemoryCleanerServiceTests
     }
 
     [Fact]
-    public void GetTopProcessesByMemory_RespectsCountAndSortsDescending()
+    public void GetTopProcessesByMemoryRespectsCountAndSortsDescending()
     {
         List<MemoryCleanerService.ProcessMemInfo> top = MemoryCleanerService.GetTopProcessesByMemory(8);
 
@@ -86,7 +86,7 @@ public sealed class MemoryCleanerServiceTests
     }
 
     [Fact]
-    public void GetTopProcessesByMemory_WithCountOne_ReturnsSingleProcess()
+    public void GetTopProcessesByMemoryWithCountOneReturnsSingleProcess()
     {
         List<MemoryCleanerService.ProcessMemInfo> top = MemoryCleanerService.GetTopProcessesByMemory(1);
 

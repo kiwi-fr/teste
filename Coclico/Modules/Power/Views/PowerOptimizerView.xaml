@@ -18,25 +18,24 @@
 
             <StackPanel Grid.Column="0" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,6" VerticalAlignment="Center">
-                    <Border Width="3" Height="3" CornerRadius="1.5" Background="{DynamicResource TextHintBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                    <TextBlock Text="PLANS D'ALIMENTATION &amp; OPTIMISATION CPU" FontSize="10.5" FontWeight="Bold"
-                               Foreground="{DynamicResource TextHintBrush}" VerticalAlignment="Center"/>
+                    <Border Style="{StaticResource PageEyebrowDot}"/>
+                    <TextBlock Text="{DynamicResource Power_Eyebrow}" Style="{StaticResource PageEyebrow}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Border Width="4" Height="30" Background="{DynamicResource ArchitecturalYellowBrush}" CornerRadius="2" Margin="0,0,12,0"/>
-                    <TextBlock Text="CPU &amp; Alimentation" FontSize="24" FontWeight="Bold"
-                               Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                    <Border Style="{StaticResource PageHeaderAccentBar}" Height="30"/>
+                    <TextBlock Text="{DynamicResource Power_Title}" Style="{StaticResource CoclicoPageTitle}"
+                               VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="16,4,0,0">
-                    <TextBlock x:Name="HeaderSubTitle" Text="Plans d'alimentation Coclico, mode adaptatif et test CPU"
-                               FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{DynamicResource Power_Subtitle}"
+                               Style="{StaticResource PageHeaderSubtitle}" VerticalAlignment="Center"/>
                 </StackPanel>
             </StackPanel>
 
             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <Border x:Name="AdminChip" CornerRadius="{StaticResource CornerSmall}" Padding="10,5" Background="{DynamicResource BgElevatedBrush}"
+                <Border CornerRadius="{StaticResource CornerSmall}" Padding="10,5" Background="{DynamicResource BgElevatedBrush}"
                         BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
                         <ui:SymbolIcon x:Name="AdminChipIcon" Symbol="Shield24" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
@@ -48,7 +47,7 @@
                         BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
                         <ui:SymbolIcon Symbol="BatteryCharge24" FontSize="12" Foreground="{DynamicResource PrimaryBrush}"/>
-                        <TextBlock x:Name="ActivePlanText" Text="Plan : ..." FontSize="10.5" FontWeight="SemiBold"
+                        <TextBlock x:Name="ActivePlanText" Text="{DynamicResource Power_PlanLabel}" FontSize="10.5" FontWeight="SemiBold"
                                    Foreground="{DynamicResource TextPrimaryBrush}" Margin="6,0,0,0" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Border>
@@ -67,9 +66,9 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel>
-                                <TextBlock Text="PLANS D'ALIMENTATION COCLICO" FontSize="11" FontWeight="Bold"
+                                <TextBlock Text="{DynamicResource Power_PlansTitle}" FontSize="11" FontWeight="Bold"
                                            Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock Text="Trois plans créés et configurés automatiquement via powercfg, adaptés aux capacités réelles de ce PC. Les paramètres non supportés par le matériel sont ignorés."
+                                <TextBlock Text="{DynamicResource Power_PlansDesc}"
                                            FontSize="11" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,5,0,0"/>
                             </StackPanel>
                             <Button x:Name="BtnCreatePlans" Grid.Column="1" Click="BtnCreatePlans_Click" Cursor="Hand"
@@ -99,15 +98,15 @@
                                     <Grid>
                                         <StackPanel Orientation="Horizontal">
                                             <ui:SymbolIcon Symbol="BatterySaver24" FontSize="16" Foreground="{DynamicResource SuccessBrush}" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Coclico économie" FontSize="13" FontWeight="Bold"
+                                            <TextBlock Text="{DynamicResource Power_PlanEconomy}" FontSize="13" FontWeight="Bold"
                                                        Foreground="{DynamicResource TextPrimaryBrush}" Margin="8,0,0,0" VerticalAlignment="Center"/>
                                         </StackPanel>
-                                        <TextBlock x:Name="StatusEconomy" Text="Absent" FontSize="9.5" FontWeight="Bold"
+                                        <TextBlock x:Name="StatusEconomy" Text="{DynamicResource Power_StatusAbsent}" FontSize="9.5" FontWeight="Bold"
                                                    Foreground="{DynamicResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                                     </Grid>
-                                    <TextBlock Text="Autonomie maximale : boost économe, composants en économie d'énergie."
+                                    <TextBlock Text="{DynamicResource Power_PlanEconomyDesc}"
                                                FontSize="10.5" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,7,0,10"/>
-                                    <Button x:Name="BtnActivateEconomy" Click="BtnActivateEconomy_Click" Cursor="Hand"
+                                    <Button Click="BtnActivateEconomy_Click" Cursor="Hand"
                                             Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}"
                                             BorderThickness="1" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Padding="12,6"
                                             HorizontalAlignment="Left">
@@ -127,15 +126,15 @@
                                     <Grid>
                                         <StackPanel Orientation="Horizontal">
                                             <ui:SymbolIcon Symbol="Gauge24" FontSize="16" Foreground="{DynamicResource PrimaryBrush}" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Coclico optimal" FontSize="13" FontWeight="Bold"
+                                            <TextBlock Text="{DynamicResource Power_PlanOptimal}" FontSize="13" FontWeight="Bold"
                                                        Foreground="{DynamicResource TextPrimaryBrush}" Margin="8,0,0,0" VerticalAlignment="Center"/>
                                         </StackPanel>
-                                        <TextBlock x:Name="StatusOptimal" Text="Absent" FontSize="9.5" FontWeight="Bold"
+                                        <TextBlock x:Name="StatusOptimal" Text="{DynamicResource Power_StatusAbsent}" FontSize="9.5" FontWeight="Bold"
                                                    Foreground="{DynamicResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                                     </Grid>
-                                    <TextBlock Text="Équilibre intelligent : réactif sur secteur, économe sur batterie. Compatible avec le mode adaptatif."
+                                    <TextBlock Text="{DynamicResource Power_PlanOptimalDesc}"
                                                FontSize="10.5" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,7,0,10"/>
-                                    <Button x:Name="BtnActivateOptimal" Click="BtnActivateOptimal_Click" Cursor="Hand"
+                                    <Button Click="BtnActivateOptimal_Click" Cursor="Hand"
                                             Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}"
                                             BorderThickness="1" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Padding="12,6"
                                             HorizontalAlignment="Left">
@@ -155,15 +154,15 @@
                                     <Grid>
                                         <StackPanel Orientation="Horizontal">
                                             <ui:SymbolIcon Symbol="Flash24" FontSize="16" Foreground="{DynamicResource ArchitecturalYellowBrush}" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Coclico performance" FontSize="13" FontWeight="Bold"
+                                            <TextBlock Text="{DynamicResource Power_PlanPerformance}" FontSize="13" FontWeight="Bold"
                                                        Foreground="{DynamicResource TextPrimaryBrush}" Margin="8,0,0,0" VerticalAlignment="Center"/>
                                         </StackPanel>
-                                        <TextBlock x:Name="StatusPerformance" Text="Absent" FontSize="9.5" FontWeight="Bold"
+                                        <TextBlock x:Name="StatusPerformance" Text="{DynamicResource Power_StatusAbsent}" FontSize="9.5" FontWeight="Bold"
                                                    Foreground="{DynamicResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                                     </Grid>
-                                    <TextBlock Text="Réactivité maximale : boost agressif, cœurs actifs, aucune mise en veille des composants."
+                                    <TextBlock Text="{DynamicResource Power_PlanPerformanceDesc}"
                                                FontSize="10.5" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,7,0,10"/>
-                                    <Button x:Name="BtnActivatePerformance" Click="BtnActivatePerformance_Click" Cursor="Hand"
+                                    <Button Click="BtnActivatePerformance_Click" Cursor="Hand"
                                             Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}"
                                             BorderThickness="1" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Padding="12,6"
                                             HorizontalAlignment="Left">
@@ -185,7 +184,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock x:Name="PlansReportText" Text="" FontSize="10.5" Foreground="{DynamicResource TextMutedBrush}"
                                        TextWrapping="Wrap" VerticalAlignment="Center"/>
-                            <Button x:Name="BtnDeletePlans" Grid.Column="1" Click="BtnDeletePlans_Click" Cursor="Hand"
+                            <Button Grid.Column="1" Click="BtnDeletePlans_Click" Cursor="Hand"
                                     Background="Transparent" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                                     Foreground="{DynamicResource DangerBrush}" FontSize="10.5" Padding="10,5" VerticalAlignment="Center">
                                 <Button.Resources>
@@ -210,10 +209,10 @@
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <ui:SymbolIcon Symbol="DesktopPulse24" FontSize="15" Foreground="{DynamicResource PrimaryBrush}" VerticalAlignment="Center"/>
-                                    <TextBlock Text="MODE OPTIMAL ADAPTATIF" FontSize="11" FontWeight="Bold"
+                                    <TextBlock Text="{DynamicResource Power_AdaptiveTitle}" FontSize="11" FontWeight="Bold"
                                                Foreground="{DynamicResource TextSecondaryBrush}" Margin="8,0,0,0" VerticalAlignment="Center"/>
                                 </StackPanel>
-                                <TextBlock Text="Surveillance continue de la charge CPU : bascule automatiquement vers « Coclico performance » dès que la charge est soutenue, et vers « Coclico économie » quand le PC redevient tranquille."
+                                <TextBlock Text="{DynamicResource Power_AdaptiveDesc}"
                                            FontSize="11" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,5,0,0"/>
                             </StackPanel>
                             <Button x:Name="BtnToggleAdaptive" Grid.Column="1" Click="BtnToggleAdaptive_Click" Cursor="Hand"
@@ -246,7 +245,7 @@
                                            Foreground="{DynamicResource TextPrimaryBrush}" Margin="10,0,0,0" VerticalAlignment="Center" Width="44"/>
                             </Grid>
                         </Grid>
-                        <TextBlock x:Name="AdaptiveStatusText" Text="Mode adaptatif inactif." FontSize="10.5"
+                        <TextBlock x:Name="AdaptiveStatusText" Text="{DynamicResource Power_AdaptiveIdle}" FontSize="10.5"
                                    Foreground="{DynamicResource TextMutedBrush}" Margin="0,8,0,0" TextWrapping="Wrap"/>
                     </StackPanel>
                 </Border>
@@ -262,10 +261,10 @@
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <ui:SymbolIcon Symbol="FlashSettings24" FontSize="15" Foreground="{DynamicResource ArchitecturalYellowBrush}" VerticalAlignment="Center"/>
-                                    <TextBlock Text="TEST COMPARATIF DES PLANS" FontSize="11" FontWeight="Bold"
+                                    <TextBlock Text="{DynamicResource Power_TestTitle}" FontSize="11" FontWeight="Bold"
                                                Foreground="{DynamicResource TextSecondaryBrush}" Margin="8,0,0,0" VerticalAlignment="Center"/>
                                 </StackPanel>
-                                <TextBlock Text="Auto-test : active chaque plan Coclico, mesure le débit de calcul du CPU, puis restaure votre plan de départ. Durée totale environ 15 secondes."
+                                <TextBlock Text="{DynamicResource Power_TestDesc}"
                                            FontSize="11" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,5,0,0"/>
                             </StackPanel>
                             <Button x:Name="BtnRunBenchmark" Grid.Column="1" Click="BtnRunBenchmark_Click" Cursor="Hand"
@@ -298,17 +297,17 @@
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <ui:SymbolIcon Symbol="BatteryCharge24" FontSize="15" Foreground="{DynamicResource ArchitecturalYellowBrush}" VerticalAlignment="Center"/>
-                                <TextBlock Text="RAPPORT BATTERIE WINDOWS" FontSize="11" FontWeight="Bold"
+                                <TextBlock Text="{DynamicResource Power_BatteryTitle}" FontSize="11" FontWeight="Bold"
                                            Foreground="{DynamicResource TextSecondaryBrush}" Margin="8,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
-                            <TextBlock Text="Génère le rapport officiel de Windows (powercfg /batteryreport) : capacité réelle restante, usure et historique de charge de votre batterie. Lecture seule — le rapport s'ouvre ensuite dans votre navigateur par défaut. Sur un PC fixe sans batterie, Windows ne produit pas de rapport."
+                            <TextBlock Text="{DynamicResource Power_BatteryDesc}"
                                        FontSize="11" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,5,0,0"/>
                         </StackPanel>
-                        <Button x:Name="BtnBatteryReport" Grid.Column="1" Click="BtnBatteryReport_Click" Cursor="Hand"
+                        <Button Grid.Column="1" Click="BtnBatteryReport_Click" Cursor="Hand"
                                 Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1"
                                 Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="SemiBold" FontSize="11.5"
                                 Padding="16,8" Margin="16,0,0,0" VerticalAlignment="Center"
-                                AutomationProperties.Name="Générer le rapport batterie de Windows">
+                                AutomationProperties.Name="{DynamicResource Power_A11y_BatteryReport}">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="{StaticResource CornerBtn}"/>

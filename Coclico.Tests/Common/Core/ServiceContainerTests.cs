@@ -10,7 +10,7 @@ public sealed class ServiceContainerTests
     private sealed class Marker;
 
     [Fact]
-    public void Build_ThenGetRequired_ReturnsRegisteredSingleton()
+    public void BuildThenGetRequiredReturnsRegisteredSingleton()
     {
         try
         {
@@ -29,7 +29,7 @@ public sealed class ServiceContainerTests
     }
 
     [Fact]
-    public void Build_ThenGetRequired_ReturnsNewInstancesForTransients()
+    public void BuildThenGetRequiredReturnsNewInstancesForTransients()
     {
         try
         {
@@ -47,7 +47,7 @@ public sealed class ServiceContainerTests
     }
 
     [Fact]
-    public void GetOptional_ReturnsNullForUnregisteredService()
+    public void GetOptionalReturnsNullForUnregisteredService()
     {
         try
         {
@@ -62,7 +62,7 @@ public sealed class ServiceContainerTests
     }
 
     [Fact]
-    public void Shutdown_ReleasesContainerAndGetOptionalFallsBackToNull()
+    public void ShutdownReleasesContainerAndGetOptionalFallsBackToNull()
     {
         ServiceContainer.Build(services => services.AddSingleton<Marker>());
         _ = ServiceContainer.GetRequired<Marker>();
@@ -72,7 +72,7 @@ public sealed class ServiceContainerTests
     }
 
     [Fact]
-    public void Provider_AfterShutdownWithoutRebuild_Throws()
+    public void ProviderAfterShutdownWithoutRebuildThrows()
     {
         ServiceContainer.Build(services => services.AddSingleton<Marker>());
         ServiceContainer.Shutdown();

@@ -21,7 +21,7 @@ public static class KeyfileProtector
         byte[] privateBytes = rsa.ExportPkcs8PrivateKey();
         byte[] salt = RandomNumberGenerator.GetBytes(SaltSize);
         byte[] nonce = RandomNumberGenerator.GetBytes(NonceSize);
-        byte[] key = DeriveKey(password, salt);
+        byte[] key = DeriveKey(password, salt, SecurityLimits.KeyFileIterations);
         byte[] sealedBytes = AesGcmEncrypt(key, nonce, privateBytes);
 
         using var stream = new FileStream(keyfilePath, FileMode.Create, FileAccess.Write, FileShare.None);
@@ -64,7 +64,7 @@ public static class KeyfileProtector
             throw new CryptographicException("key file payload is truncated");
         }
 
-        byte[] key = DeriveKey(password, salt);
+        byte[] key = DeriveKey(password, salt, iterations);
         byte[] privateBytes = AesGcmDecrypt(key, nonce, file.AsSpan(cipherOffset, cipherLength).ToArray());
         var rsa = RSA.Create();
         rsa.ImportPkcs8PrivateKey(privateBytes, out _);
@@ -82,40 +82,14 @@ public static class KeyfileProtector
         return "coclico-release-" + Convert.ToHexString(hash)[..16].ToLowerInvariant();
     }
 
-    private static byte[] DeriveKey(string password, byte[] salt)
+    private static byte[] DeriveKey(string password, byte[] salt, int iterations)
     {
-        byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
-        byte[] pseudorandomKey = HKdfExtract(salt, passwordBytes);
-        return HkdfExpand(pseudorandomKey, System.Text.Encoding.UTF8.GetBytes("coclico-signing-v3-aes-gcm"), KeySize);
-    }
-
-    private static byte[] HKdfExtract(byte[] salt, byte[] inputKeyMaterial)
-    {
-        using var hmac = new HMACSHA256(salt);
-        return hmac.ComputeHash(inputKeyMaterial);
-    }
-
-    private static byte[] HkdfExpand(byte[] pseudorandomKey, byte[] info, int outputLength)
-    {
-        byte[] result = new byte[outputLength];
-        byte[] block = [];
-        int offset = 0;
-        byte counter = 1;
-        while (offset < outputLength)
-        {
-            using var hmac = new HMACSHA256(pseudorandomKey);
-            byte[] input = new byte[block.Length + info.Length + 1];
-            Array.Copy(block, 0, input, 0, block.Length);
-            Array.Copy(info, 0, input, block.Length, info.Length);
-            input[^1] = counter;
-            block = hmac.ComputeHash(input);
-            int copy = Math.Min(block.Length, outputLength - offset);
-            Array.Copy(block, 0, result, offset, copy);
-            offset += copy;
-            counter++;
-        }
-
-        return result;
+        return Rfc2898DeriveBytes.Pbkdf2(
+            System.Text.Encoding.UTF8.GetBytes(password),
+            salt,
+            iterations,
+            HashAlgorithmName.SHA256,
+            KeySize);
     }
 
     private static byte[] AesGcmEncrypt(byte[] key, byte[] nonce, byte[] plaintext)

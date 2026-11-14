@@ -63,7 +63,7 @@ public sealed class CentralCircuitBreakerTests
         breaker.RecordFailure("Installer");
         Assert.False(breaker.IsAllowed("Installer"));
 
-        await Task.Delay(150);
+        await Task.Delay(150, TestContext.Current.CancellationToken);
 
         Assert.True(breaker.IsAllowed("Installer"));
         Assert.Equal(CentralCircuitState.HalfOpen, breaker.GetState("Installer"));
@@ -75,7 +75,7 @@ public sealed class CentralCircuitBreakerTests
         var breaker = new CentralCircuitBreaker(failureThreshold: 1, openCooldown: TimeSpan.FromMilliseconds(50));
 
         breaker.RecordFailure("Installer");
-        await Task.Delay(100);
+        await Task.Delay(100, TestContext.Current.CancellationToken);
 
         Assert.True(breaker.IsAllowed("Installer"));
 
@@ -85,6 +85,40 @@ public sealed class CentralCircuitBreakerTests
         breaker.RecordSuccess("Installer");
         Assert.Equal(CentralCircuitState.Closed, breaker.GetState("Installer"));
         Assert.True(breaker.IsAllowed("Installer"));
+    }
+
+    [Fact]
+    public async Task ReopenedCircuitsBackOffProgressively()
+    {
+        var breaker = new CentralCircuitBreaker(failureThreshold: 1, openCooldown: TimeSpan.FromMilliseconds(50));
+
+        breaker.RecordFailure("Backoff");
+        await Task.Delay(90, TestContext.Current.CancellationToken);
+        Assert.True(breaker.IsAllowed("Backoff"));
+
+        breaker.RecordFailure("Backoff", new TimeoutException("probe"));
+
+        await Task.Delay(60, TestContext.Current.CancellationToken);
+        Assert.False(breaker.IsAllowed("Backoff"));
+
+        await Task.Delay(140, TestContext.Current.CancellationToken);
+        Assert.True(breaker.IsAllowed("Backoff"));
+        Assert.Equal(CentralCircuitState.HalfOpen, breaker.GetState("Backoff"));
+    }
+
+    [Fact]
+    public void SuccessResetsTheBackoffStreak()
+    {
+        var breaker = new CentralCircuitBreaker(failureThreshold: 1, openCooldown: TimeSpan.FromMilliseconds(50));
+
+        breaker.RecordFailure("BackoffReset");
+        breaker.RecordSuccess("BackoffReset");
+
+        breaker.RecordFailure("BackoffReset");
+        Assert.Equal(CentralCircuitState.Open, breaker.GetState("BackoffReset"));
+
+        var snapshot = breaker.GetSnapshot();
+        Assert.Contains(snapshot, entry => entry.Subsystem == "BackoffReset" && entry.FailureStreak == 1);
     }
 
     [Fact]

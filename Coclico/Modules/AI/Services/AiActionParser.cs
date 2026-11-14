@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 
 namespace Coclico.Services;
 
-public static partial class AiActionParser
+internal static partial class AiActionParser
 {
     [GeneratedRegex(@"<think>.*?</think>", RegexOptions.IgnoreCase | RegexOptions.Singleline)]
     private static partial Regex ThinkBlockRegex();

@@ -10,7 +10,7 @@ using LLama.Sampling;
 
 namespace Coclico.Services;
 
-public sealed class AiChatService : IAiService, IDisposable
+internal sealed class AiChatService : IAiService, IDisposable
 {
     private static readonly string DocsPath = Path.Join(
         AppDomain.CurrentDomain.BaseDirectory, "resource", "docs");
@@ -22,7 +22,7 @@ public sealed class AiChatService : IAiService, IDisposable
         return r;
     }, LazyThreadSafetyMode.ExecutionAndPublication);
 
-    private static readonly object _cudaConfigLock = new();
+    private static readonly Lock _cudaConfigLock = new();
     private static bool _nativeCudaConfigured;
     private static bool _nativeConfigLocked;
     private static bool _nativeEngineBroken;
@@ -65,7 +65,7 @@ public sealed class AiChatService : IAiService, IDisposable
 
     private static readonly Regex AppIdentityQuestionRegex = new(
         @"\b(a\s*quoi\s*(sert|sers|servent)|pr[eé]sente(?:\s*(?:toi|l\s*application))?|pr[eé]sentation|parle\s*moi\s*de|que\s*fais\s*tu|tes\s*fonctions|tes\s*capacit[eé]s|tes\s*features|fonctionnalit[eé]s|qu\s*est\s*ce\s*que\s*coclico|c\s*est\s*quoi\s*(?:coclico|cette\s*application|ce\s*logiciel|ce\s*programme))\b",
-        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
 
     private const int MaxMemoryTurns = 4;
     private const int AutoResetAfterTurns = 8;
@@ -73,7 +73,7 @@ public sealed class AiChatService : IAiService, IDisposable
 
     private readonly SettingsService _settings;
     private readonly MultiProviderClient _multiClient;
-    private readonly object _memLock = new();
+    private readonly Lock _memLock = new();
     private readonly List<(string User, string Ai)> _shortTermMemory = [];
     private readonly SemaphoreSlim _chatSem = new(1, 1);
     private readonly SemaphoreSlim _initLock = new(1, 1);
@@ -145,7 +145,7 @@ public sealed class AiChatService : IAiService, IDisposable
     {
         string id = modelId ?? CurrentModel;
         string path = GetLocalModelFullPath(id);
-        return File.Exists(path) || (id == "IA-support-chat.gguf" && File.Exists(ModelPath));
+        return File.Exists(path) || (string.Equals(id, "IA-support-chat.gguf", StringComparison.Ordinal) && File.Exists(ModelPath));
     }
 
     public string GetLocalModelFullPath(string modelFileName)
@@ -239,7 +239,7 @@ public sealed class AiChatService : IAiService, IDisposable
         }
     }
 
-    public async Task SetHardwareModeAsync(bool useGpu, int layers = 99)
+    public async Task SetHardwareModeAsync(bool useGpu, int layers = 32)
     {
         _settings.Settings.AiUseGpu = useGpu;
         _settings.Settings.AiGpuLayers = Math.Clamp(layers, 0, 128);
@@ -463,8 +463,7 @@ public sealed class AiChatService : IAiService, IDisposable
         [
             Path.Join(nativeDir, fileName),
             Path.Join(nativeDir, "avx2", fileName),
-            Path.Join(nativeDir, "avx", fileName),
-            Path.Join(nativeDir, "avx512", fileName),
+            Path.Join(nativeDir, "noavx", fileName),
             Path.Join(baseDir, fileName),
             Path.Join(baseDir, "runtimes", "win-x64", "native", fileName)
         ];
@@ -707,7 +706,7 @@ public sealed class AiChatService : IAiService, IDisposable
             return targetPath;
         }
 
-        if (CurrentModel == "IA-support-chat.gguf" && File.Exists(ModelPath))
+        if (string.Equals(CurrentModel, "IA-support-chat.gguf", StringComparison.Ordinal) && File.Exists(ModelPath))
         {
             return ModelPath;
         }
@@ -1040,7 +1039,7 @@ public sealed class AiChatService : IAiService, IDisposable
 
     public void ResetContextOnly()
     {
-        if (!_chatSem.Wait(TimeSpan.FromSeconds(5)))
+        if (!_chatSem.Wait(TimeSpan.Zero))
         {
             LoggingService.LogWarning("[AiChatService] ResetContextOnly ignoré : verrou de contexte occupé.");
             return;
@@ -1168,7 +1167,23 @@ public sealed class AiChatService : IAiService, IDisposable
     public void Dispose()
     {
         _idleTimer?.Dispose();
-        DisposeModelInternal();
+
+        if (_chatSem.Wait(TimeSpan.FromSeconds(10)))
+        {
+            try
+            {
+                DisposeModelInternal();
+            }
+            finally
+            {
+                _ = _chatSem.Release();
+            }
+        }
+        else
+        {
+            DisposeModelInternal();
+        }
+
         _initLock.Dispose();
         _chatSem.Dispose();
         GC.SuppressFinalize(this);

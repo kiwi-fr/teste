@@ -112,17 +112,17 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <Button x:Name="BtnUnloadModel" Click="BtnUnloadModel_Click"
+                            <Button Click="BtnUnloadModel_Click"
                                     Background="Transparent" BorderThickness="0" Padding="5" Margin="0,0,3,0" Cursor="Hand"
                                     ToolTip="{DynamicResource Ai_Unload_Tip}">
                                 <ui:SymbolIcon Symbol="Memory16" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </Button>
-                            <Button x:Name="BtnReset" Click="BtnReset_Click"
+                            <Button Click="BtnReset_Click"
                                     Background="Transparent" BorderThickness="0" Padding="5" Margin="0,0,3,0" Cursor="Hand"
                                     ToolTip="{DynamicResource Ai_Reset_Tip}">
                                 <ui:SymbolIcon Symbol="ArrowReset24" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </Button>
-                            <Button x:Name="BtnClose" Click="BtnClose_Click"
+                            <Button Click="BtnClose_Click"
                                     Background="Transparent" BorderThickness="0" Padding="5" Cursor="Hand"
                                     ToolTip="{DynamicResource Ai_Close_Tip}">
                                 <ui:SymbolIcon Symbol="Dismiss24" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
@@ -140,7 +140,7 @@
                         <Border Grid.Column="0" CornerRadius="{StaticResource CornerPill}" Background="{DynamicResource BgElevatedBrush}"
                                 BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                                 Padding="2" Margin="0,0,8,0">
-                            <Button x:Name="BtnMasterToggle" Click="BtnMasterToggle_Click"
+                            <Button Click="BtnMasterToggle_Click"
                                     Background="Transparent" BorderThickness="0" Padding="8,3" Cursor="Hand"
                                     ToolTip="{DynamicResource Ai_MasterToggle_Tip}">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -155,7 +155,7 @@
                         <Border x:Name="HardwarePill" Grid.Column="1" CornerRadius="{StaticResource CornerPill}" Background="{DynamicResource BgElevatedBrush}"
                                 BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                                 Padding="2">
-                            <Button x:Name="BtnHardwareToggle" Click="BtnHardwareToggle_Click"
+                            <Button Click="BtnHardwareToggle_Click"
                                     Background="Transparent" BorderThickness="0" Padding="8,3" Cursor="Hand"
                                     ToolTip="{DynamicResource Ai_HardwareToggle_Tip}">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -170,7 +170,7 @@
                                 Background="{DynamicResource BgElevatedBrush}"
                                 BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                                 Padding="2">
-                            <Button x:Name="BtnAutoExecToggle" Click="BtnAutoExecToggle_Click"
+                            <Button Click="BtnAutoExecToggle_Click"
                                     Background="Transparent" BorderThickness="0" Padding="8,3" Cursor="Hand"
                                     ToolTip="{DynamicResource Ai_AutoExecToggle_Tip}">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -282,7 +282,7 @@
                     <Border x:Name="TypingBubble" Style="{StaticResource AiBubble}"
                             Visibility="Collapsed" Padding="12,8">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock x:Name="TxtReflecting"
+                            <TextBlock
                                        Text="{DynamicResource Ai_Reflecting}"
                                        FontSize="11.5" FontStyle="Italic"
                                        Foreground="{DynamicResource TextMutedBrush}"/>

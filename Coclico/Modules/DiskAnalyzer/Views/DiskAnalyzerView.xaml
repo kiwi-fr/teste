@@ -78,7 +78,7 @@
                     </StackPanel>
 
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                        <ItemsControl x:Name="DrivesList" ItemsSource="{Binding Drives}">
+                        <ItemsControl ItemsSource="{Binding Drives}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Button Command="{Binding DataContext.SelectDriveCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
@@ -87,7 +87,7 @@
                                             HorizontalContentAlignment="Stretch">
                                         <Border Background="{DynamicResource BgCardBrush}"
                                                 BorderBrush="{Binding CardBrush}"
-                                                BorderThickness="1.5" CornerRadius="10" Padding="12,10">
+                                                BorderThickness="1.5" CornerRadius="14" Padding="12,10">
                                             <StackPanel>
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
@@ -123,17 +123,17 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock x:Name="ScanStatus" Grid.Column="0" Text="{Binding ScanStatusText}"
+                            <TextBlock Grid.Column="0" Text="{Binding ScanStatusText}"
                                        FontSize="10.5" Foreground="{DynamicResource TextMutedBrush}"
                                        TextWrapping="Wrap" VerticalAlignment="Center"/>
-                            <Button x:Name="BtnCancelScan" Grid.Column="1" Content="{DynamicResource Disk_BtnCancel}"
+                            <Button Grid.Column="1" Content="{DynamicResource Disk_BtnCancel}"
                                     Command="{Binding CancelScanCommand}" Margin="8,0,0,0" FontSize="11" Padding="10,5"
                                     Cursor="Hand" Visibility="{Binding IsScanning, Converter={StaticResource BoolToVis}}"/>
-                            <Button x:Name="BtnScan" Grid.Column="2" Content="{DynamicResource Disk_BtnScan}"
+                            <Button Grid.Column="2" Content="{DynamicResource Disk_BtnScan}"
                                     Command="{Binding ScanCommand}" Background="{DynamicResource PrimaryBrush}" Foreground="White"
                                     FontWeight="SemiBold" FontSize="12" Padding="14,7" Cursor="Hand"/>
                         </Grid>
-                        <ProgressBar x:Name="ScanProgress" Height="5" IsIndeterminate="True"
+                        <ProgressBar Height="5" IsIndeterminate="True"
                                      Background="{DynamicResource BgElevatedBrush}"
                                      Foreground="{DynamicResource PrimaryBrush}"
                                      BorderThickness="0" Margin="0,8,0,0"
@@ -149,7 +149,7 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,8">
-                    <Button x:Name="BtnGoHome" Command="{Binding GoHomeCommand}" Cursor="Hand" Background="Transparent"
+                    <Button Command="{Binding GoHomeCommand}" Cursor="Hand" Background="Transparent"
                             BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                             Padding="10,4" Margin="0,0,6,0" FontSize="11"
                             Foreground="{DynamicResource TextSecondaryBrush}" Content="{DynamicResource Disk_LblBase}">
@@ -159,7 +159,7 @@
                             </Style>
                         </Button.Resources>
                     </Button>
-                    <Button x:Name="BtnGoUp" Command="{Binding GoUpCommand}" Cursor="Hand" Background="Transparent"
+                    <Button Command="{Binding GoUpCommand}" Cursor="Hand" Background="Transparent"
                             BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                             Padding="10,4" Margin="0,0,10,0" FontSize="11"
                             Foreground="{DynamicResource TextSecondaryBrush}" Content="{DynamicResource Disk_BtnBack}">
@@ -169,7 +169,7 @@
                             </Style>
                         </Button.Resources>
                     </Button>
-                    <ItemsControl x:Name="Breadcrumb" ItemsSource="{Binding BreadcrumbItems}">
+                    <ItemsControl ItemsSource="{Binding BreadcrumbItems}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Horizontal"/>
@@ -198,7 +198,7 @@
                         </TransformGroup>
                     </Grid.RenderTransform>
                     <Canvas x:Name="SunburstCanvas"/>
-                    <Grid x:Name="CenterOverlay" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Button x:Name="CenterButton" Command="{Binding GoUpCommand}" Cursor="Hand"
                                 Background="Transparent" BorderThickness="0" Padding="0" MinWidth="10" MinHeight="10">
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -226,14 +226,14 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Grid.Row="0" Margin="0,0,0,10">
-                        <TextBlock x:Name="ZonesTitle" Text="{Binding ZonesTitleText}" FontSize="11" FontWeight="Bold"
+                        <TextBlock Text="{Binding ZonesTitleText}" FontSize="11" FontWeight="Bold"
                                    Foreground="{DynamicResource TextSecondaryBrush}"/>
-                        <TextBlock x:Name="ZonesSubTitle" Text="{Binding ZonesSubTitleText}" FontSize="10.5" TextWrapping="Wrap"
+                        <TextBlock Text="{Binding ZonesSubTitleText}" FontSize="10.5" TextWrapping="Wrap"
                                    Foreground="{DynamicResource TextMutedBrush}" Margin="0,3,0,0"/>
                     </StackPanel>
 
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                        <ItemsControl x:Name="ZonesList" ItemsSource="{Binding Zones}">
+                        <ItemsControl ItemsSource="{Binding Zones}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Button Command="{Binding DataContext.NavigateToZoneCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
@@ -242,7 +242,7 @@
                                             HorizontalContentAlignment="Stretch">
                                         <Border Background="{DynamicResource BgCardBrush}"
                                                 BorderBrush="{DynamicResource BorderSubtleBrush}"
-                                                BorderThickness="1" CornerRadius="8" Padding="10,7">
+                                                BorderThickness="1" CornerRadius="12" Padding="10,7">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto"/>
@@ -276,18 +276,18 @@
                         </ItemsControl>
                     </ScrollViewer>
 
-                    <Border Grid.Row="2" Background="{DynamicResource BgCardBrush}" CornerRadius="8"
+                    <Border Grid.Row="2" Background="{DynamicResource BgCardBrush}" CornerRadius="12"
                             BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                             Padding="10,8" Margin="0,10,0,0">
                         <StackPanel>
                             <TextBlock Text="{DynamicResource Disk_ZoneSelected}" FontSize="9.5" FontWeight="Bold"
                                        Foreground="{DynamicResource TextSecondaryBrush}"/>
-                            <TextBlock x:Name="SelectedName" Text="{Binding SelectedNameText}" FontSize="12" FontWeight="SemiBold"
+                            <TextBlock Text="{Binding SelectedNameText}" FontSize="12" FontWeight="SemiBold"
                                        Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,4,0,0"
                                        TextTrimming="CharacterEllipsis"/>
-                            <TextBlock x:Name="SelectedDetails" Text="{Binding SelectedDetailsText}" FontSize="10.5"
+                            <TextBlock Text="{Binding SelectedDetailsText}" FontSize="10.5"
                                        Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,2,0,0"/>
-                            <Button x:Name="BtnOpenExplorer" Content="{DynamicResource Disk_BtnOpenExplorer}"
+                            <Button Content="{DynamicResource Disk_BtnOpenExplorer}"
                                     Command="{Binding OpenExplorerCommand}" FontSize="10.5" Padding="8,4" Margin="0,8,0,0"
                                     Cursor="Hand" HorizontalAlignment="Left"
                                     Visibility="{Binding CanOpenExplorer, Converter={StaticResource BoolToVis}}"/>
@@ -312,10 +312,10 @@
                 <TextBlock Text="{DynamicResource Disk_DuplicatesDesc}"
                            FontSize="11" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,4,0,10"/>
                 <StackPanel Orientation="Horizontal">
-                    <TextBox x:Name="DuplicatesRootBox" Width="340" FontSize="11.5" Padding="8,6"
+                    <TextBox Width="340" FontSize="11.5" Padding="8,6"
                              VerticalContentAlignment="Center"
                              Text="{Binding DuplicatesRoot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button x:Name="BtnDuplicatesBrowse" Content="{DynamicResource Disk_BtnBrowse}"
+                    <Button Content="{DynamicResource Disk_BtnBrowse}"
                             Command="{Binding BrowseDuplicatesRootCommand}" Margin="8,0,0,0" FontSize="11" Padding="12,6" Cursor="Hand">
                         <Button.Resources>
                             <Style TargetType="Border">
@@ -323,14 +323,14 @@
                             </Style>
                         </Button.Resources>
                     </Button>
-                    <ComboBox x:Name="DuplicatesMinSize" Width="100" Margin="10,0,0,0" FontSize="11"
+                    <ComboBox Width="100" Margin="10,0,0,0" FontSize="11"
                               SelectedIndex="{Binding DuplicatesMinSizeIndex, Mode=TwoWay}">
                         <ComboBoxItem Content="≥ 1 Mo"/>
                         <ComboBoxItem Content="≥ 10 Mo"/>
                         <ComboBoxItem Content="≥ 50 Mo"/>
                         <ComboBoxItem Content="≥ 100 Mo"/>
                     </ComboBox>
-                    <Button x:Name="BtnDuplicatesScan" Content="{DynamicResource Disk_BtnScan}"
+                    <Button Content="{DynamicResource Disk_BtnScan}"
                             Command="{Binding DuplicatesScanCommand}" Background="{DynamicResource PrimaryBrush}"
                             Foreground="White" FontWeight="SemiBold" Margin="10,0,0,0" FontSize="11.5"
                             Padding="16,7" Cursor="Hand"
@@ -341,27 +341,27 @@
                             </Style>
                         </Button.Resources>
                     </Button>
-                    <Button x:Name="BtnDuplicatesCancel" Content="{DynamicResource Disk_BtnCancel}"
+                    <Button Content="{DynamicResource Disk_BtnCancel}"
                             Command="{Binding DuplicatesCancelCommand}"
                             Visibility="{Binding IsDuplicatesScanning, Converter={StaticResource BoolToVis}}" Margin="8,0,0,0"
                             FontSize="11" Padding="10,6" Cursor="Hand"/>
                 </StackPanel>
-                <ProgressBar x:Name="DuplicatesProgress" Height="5" IsIndeterminate="True" BorderThickness="0"
+                <ProgressBar Height="5" IsIndeterminate="True" BorderThickness="0"
                              Margin="0,10,0,0"
                              Visibility="{Binding IsDuplicatesScanning, Converter={StaticResource BoolToVis}}"
                              Background="{DynamicResource BgElevatedBrush}" Foreground="{DynamicResource PrimaryBrush}"/>
             </StackPanel>
 
-            <TextBlock x:Name="DuplicatesSummary" Grid.Row="1" Text="{Binding DuplicatesSummaryText}" FontSize="11"
+            <TextBlock Grid.Row="1" Text="{Binding DuplicatesSummaryText}" FontSize="11"
                        Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,8"/>
 
             <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-                <ItemsControl x:Name="DuplicatesList" ItemsSource="{Binding DuplicatesGroups}">
+                <ItemsControl ItemsSource="{Binding DuplicatesGroups}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Background="{DynamicResource BgCardBrush}"
                                     BorderBrush="{DynamicResource BorderSubtleBrush}"
-                                    BorderThickness="1" CornerRadius="10" Padding="12,10" Margin="0,0,0,8">
+                                    BorderThickness="1" CornerRadius="14" Padding="12,10" Margin="0,0,0,8">
                                 <StackPanel>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
@@ -426,7 +426,7 @@
             </ScrollViewer>
 
             <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,10,0,0">
-                <Button x:Name="BtnDuplicatesSelectCopies" Content="{DynamicResource Disk_BtnCheckCopies}"
+                <Button Content="{DynamicResource Disk_BtnCheckCopies}"
                         Command="{Binding DuplicatesSelectCopiesCommand}" FontSize="11" Padding="12,6" Cursor="Hand">
                     <Button.Resources>
                         <Style TargetType="Border">
@@ -434,7 +434,7 @@
                         </Style>
                     </Button.Resources>
                 </Button>
-                <Button x:Name="BtnDuplicatesDelete" Content="{DynamicResource Disk_BtnDeleteSelection}"
+                <Button Content="{DynamicResource Disk_BtnDeleteSelection}"
                         Command="{Binding DuplicatesDeleteCommand}" Background="{DynamicResource DangerBrush}"
                         Foreground="White" FontWeight="SemiBold" FontSize="11" Padding="12,6"
                         Margin="10,0,0,0" Cursor="Hand">
@@ -444,7 +444,7 @@
                         </Style>
                     </Button.Resources>
                 </Button>
-                <TextBlock x:Name="DuplicatesStatus" Text="{Binding DuplicatesStatusText}" FontSize="10.5"
+                <TextBlock Text="{Binding DuplicatesStatusText}" FontSize="10.5"
                            Foreground="{DynamicResource TextMutedBrush}" Margin="14,0,0,0" VerticalAlignment="Center"/>
             </StackPanel>
         </Grid>
@@ -462,10 +462,10 @@
                 <TextBlock Text="{DynamicResource Disk_LargeFilesDesc}"
                            FontSize="11" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,4,0,10"/>
                 <StackPanel Orientation="Horizontal">
-                    <TextBox x:Name="LargeRootBox" Width="340" FontSize="11.5" Padding="8,6"
+                    <TextBox Width="340" FontSize="11.5" Padding="8,6"
                              VerticalContentAlignment="Center"
                              Text="{Binding LargeRoot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button x:Name="BtnLargeBrowse" Content="{DynamicResource Disk_BtnBrowse}"
+                    <Button Content="{DynamicResource Disk_BtnBrowse}"
                             Command="{Binding BrowseLargeRootCommand}" Margin="8,0,0,0" FontSize="11" Padding="12,6" Cursor="Hand">
                         <Button.Resources>
                             <Style TargetType="Border">
@@ -473,13 +473,13 @@
                             </Style>
                         </Button.Resources>
                     </Button>
-                    <ComboBox x:Name="LargeTopCount" Width="100" Margin="10,0,0,0" FontSize="11"
+                    <ComboBox Width="100" Margin="10,0,0,0" FontSize="11"
                               SelectedIndex="{Binding LargeTopCountIndex, Mode=TwoWay}">
-                        <ComboBoxItem Content="Top 50"/>
-                        <ComboBoxItem Content="Top 100"/>
-                        <ComboBoxItem Content="Top 200"/>
+                        <ComboBoxItem Content="{DynamicResource Disk_Top50}"/>
+                        <ComboBoxItem Content="{DynamicResource Disk_Top100}"/>
+                        <ComboBoxItem Content="{DynamicResource Disk_Top200}"/>
                     </ComboBox>
-                    <Button x:Name="BtnLargeScan" Content="{DynamicResource Disk_BtnScan}" Command="{Binding LargeScanCommand}"
+                    <Button Content="{DynamicResource Disk_BtnScan}" Command="{Binding LargeScanCommand}"
                             Background="{DynamicResource PrimaryBrush}" Foreground="White" FontWeight="SemiBold"
                             Margin="10,0,0,0" FontSize="11.5" Padding="16,7" Cursor="Hand"
                             IsEnabled="{Binding IsNotLargeScanning}">
@@ -489,26 +489,26 @@
                             </Style>
                         </Button.Resources>
                     </Button>
-                    <Button x:Name="BtnLargeCancel" Content="{DynamicResource Disk_BtnCancel}"
+                    <Button Content="{DynamicResource Disk_BtnCancel}"
                             Command="{Binding LargeCancelCommand}"
                             Visibility="{Binding IsLargeScanning, Converter={StaticResource BoolToVis}}" Margin="8,0,0,0"
                             FontSize="11" Padding="10,6" Cursor="Hand"/>
                 </StackPanel>
-                <ProgressBar x:Name="LargeProgress" Height="5" IsIndeterminate="True" BorderThickness="0"
+                <ProgressBar Height="5" IsIndeterminate="True" BorderThickness="0"
                              Margin="0,10,0,0"
                              Visibility="{Binding IsLargeScanning, Converter={StaticResource BoolToVis}}"
                              Background="{DynamicResource BgElevatedBrush}" Foreground="{DynamicResource PrimaryBrush}"/>
-                <TextBlock x:Name="LargeStatus" Text="{Binding LargeStatusText}" FontSize="10.5"
+                <TextBlock Text="{Binding LargeStatusText}" FontSize="10.5"
                            Foreground="{DynamicResource TextMutedBrush}" Margin="0,8,0,0"/>
             </StackPanel>
 
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                <ItemsControl x:Name="LargeFilesList" ItemsSource="{Binding LargeFiles}">
+                <ItemsControl ItemsSource="{Binding LargeFiles}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Background="{DynamicResource BgCardBrush}"
                                     BorderBrush="{DynamicResource BorderSubtleBrush}"
-                                    BorderThickness="1" CornerRadius="10" Padding="12,9" Margin="0,0,0,6">
+                                    BorderThickness="1" CornerRadius="14" Padding="12,9" Margin="0,0,0,6">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>

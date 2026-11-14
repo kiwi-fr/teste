@@ -9,7 +9,7 @@ namespace Coclico.Views;
 
 public partial class ProgramsView : UserControl
 {
-    public ProgramsViewModel ViewModel { get; }
+    internal ProgramsViewModel ViewModel { get; }
 
     public ProgramsView()
     {

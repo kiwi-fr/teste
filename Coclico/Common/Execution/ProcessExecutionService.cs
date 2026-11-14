@@ -1,10 +1,11 @@
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace Coclico.Services;
 
-public sealed class ProcessExecutionService : IProcessExecutionService
+internal sealed class ProcessExecutionService : IProcessExecutionService
 {
     private readonly ISecurityPolicy _securityPolicy;
 
@@ -183,6 +184,12 @@ public sealed class ProcessExecutionService : IProcessExecutionService
     {
         if (string.IsNullOrWhiteSpace(appPath))
         {
+            return false;
+        }
+
+        if (!appPath.Contains("://", StringComparison.Ordinal) && !File.Exists(appPath))
+        {
+            LoggingService.LogWarning($"[ProcessExecutionService] Launch refused, file not found: '{appPath}'");
             return false;
         }
 

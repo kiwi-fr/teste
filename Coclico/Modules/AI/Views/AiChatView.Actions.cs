@@ -43,7 +43,7 @@ public partial class AiChatView : UserControl
             TxtAutoExecMode.Foreground = (Brush)FindResource("PrimaryBrush");
             AutoExecPill.BorderBrush = (Brush)FindResource("PrimaryBrush");
             AutoExecPill.ToolTip = _loc?.Get("Ai_AutoExec_Direct_Tip") ?? "Mode direct actif : les actions système sont exécutées immédiatement sans confirmation.";
-            ToastService.ShowInfo("Mode sans demande activé : l'IA exécutera les actions directement.");
+            ToastService.ShowInfo(_loc?.Get("Ai_AutoExecDirectToast") ?? "Mode sans demande activé.");
         }
         else
         {
@@ -52,7 +52,7 @@ public partial class AiChatView : UserControl
             TxtAutoExecMode.Foreground = (Brush)FindResource("TextSecondaryBrush");
             AutoExecPill.BorderBrush = (Brush)FindResource("BorderSubtleBrush");
             AutoExecPill.ToolTip = _loc?.Get("Ai_AutoExec_Confirm_Tip") ?? "Mode avec confirmation actif : l'IA demande confirmation dans le chat avant chaque action.";
-            ToastService.ShowInfo("Mode avec confirmation réactivé.");
+            ToastService.ShowInfo(_loc?.Get("Ai_AutoExecConfirmToast") ?? "Mode avec confirmation réactivé.");
         }
     }
 
@@ -217,11 +217,11 @@ public partial class AiChatView : UserControl
         btnConfirm.Click += (s, e) =>
         {
             btnPanel.Visibility = Visibility.Collapsed;
-            tbBadge.Text = "En cours…";
+            tbBadge.Text = _loc?.Get("Ai_ActionRunning") ?? "En cours…";
             tbBadge.Foreground = new SolidColorBrush(Color.FromRgb(245, 158, 11));
             badgeBorder.Background = new SolidColorBrush(Color.FromArgb(40, 245, 158, 11));
             badgeBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(245, 158, 11));
-            tbDetails.Text = "Exécution de la commande système en arrière-plan…";
+            tbDetails.Text = _loc?.Get("Ai_ActionRunningDetails") ?? "Exécution de la commande système en arrière-plan…";
             tbDetails.Foreground = new SolidColorBrush(Color.FromRgb(0x94, 0xA3, 0xB8));
             _ = tcs.TrySetResult(true);
         };
@@ -229,11 +229,11 @@ public partial class AiChatView : UserControl
         btnCancel.Click += (s, e) =>
         {
             btnPanel.Visibility = Visibility.Collapsed;
-            tbBadge.Text = "Refusée";
+            tbBadge.Text = _loc?.Get("Ai_ActionDenied") ?? "Refusée";
             tbBadge.Foreground = new SolidColorBrush(Color.FromRgb(0x94, 0xA3, 0xB8));
             badgeBorder.Background = new SolidColorBrush(Color.FromArgb(40, 148, 163, 184));
             badgeBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(148, 163, 184));
-            tbDetails.Text = "Action refusée par l'utilisateur.";
+            tbDetails.Text = _loc?.Get("Ai_ActionDeniedDetails") ?? "Action refusée par l'utilisateur.";
             tbDetails.Foreground = new SolidColorBrush(Color.FromRgb(0x94, 0xA3, 0xB8));
             _ = tcs.TrySetResult(false);
         };
@@ -279,14 +279,14 @@ public partial class AiChatView : UserControl
         {
             if (result.Success)
             {
-                ctrl.StatusBadge.Text = "✅ Succès";
+                ctrl.StatusBadge.Text = _loc?.Get("Ai_ActionSuccess") ?? "✅ Succès";
                 ctrl.StatusBadge.Foreground = new SolidColorBrush(Color.FromRgb(0x4A, 0xDE, 0x80));
                 ctrl.BadgeBorder.Background = new SolidColorBrush(Color.FromArgb(40, 74, 222, 128));
                 ctrl.BadgeBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(0x4A, 0xDE, 0x80));
             }
             else
             {
-                ctrl.StatusBadge.Text = "❌ Échec";
+                ctrl.StatusBadge.Text = _loc?.Get("Ai_ActionFailed") ?? "❌ Échec";
                 ctrl.StatusBadge.Foreground = new SolidColorBrush(Color.FromRgb(0xF8, 0x71, 0x71));
                 ctrl.BadgeBorder.Background = new SolidColorBrush(Color.FromArgb(40, 248, 113, 113));
                 ctrl.BadgeBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(0xF8, 0x71, 0x71));

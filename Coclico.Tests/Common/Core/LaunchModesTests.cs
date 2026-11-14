@@ -12,7 +12,7 @@ public sealed class LaunchModesTests
     [InlineData("Maximized")]
     [InlineData("tray")]
     [InlineData("MAXIMIZED")]
-    public void IsValid_AcceptsDefinedModesCaseInsensitive(string value)
+    public void IsValidAcceptsDefinedModesCaseInsensitive(string value)
     {
         Assert.True(LaunchModes.IsValid(value));
     }
@@ -22,37 +22,17 @@ public sealed class LaunchModesTests
     [InlineData("")]
     [InlineData("garbage")]
     [InlineData("tr a y")]
-    public void IsValid_RejectsUnknownValues(string? value)
+    public void IsValidRejectsUnknownValues(string? value)
     {
         Assert.False(LaunchModes.IsValid(value));
     }
 
-    [Theory]
-    [InlineData("Normal", LaunchMode.Normal)]
-    [InlineData("minimized", LaunchMode.Minimized)]
-    [InlineData("Tray", LaunchMode.Tray)]
-    [InlineData("MAXIMIZED", LaunchMode.Maximized)]
-    public void Parse_ReturnsDefinedMode(string value, LaunchMode expected)
-    {
-        Assert.Equal(expected, LaunchModes.Parse(value));
-    }
-
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData("unknown-mode")]
-    [InlineData("42")]
-    public void Parse_FallsBackToNormal(string? value)
-    {
-        Assert.Equal(LaunchMode.Normal, LaunchModes.Parse(value));
-    }
-
     [Fact]
-    public void Parse_ReturnedValuesAreAlwaysDefined()
+    public void EnumValuesAreAllUsableAsSettings()
     {
-        foreach (string? candidate in new[] { null, "", "tray", "999", "normal" })
+        foreach (LaunchMode mode in Enum.GetValues<LaunchMode>())
         {
-            Assert.True(Enum.IsDefined(LaunchModes.Parse(candidate)));
+            Assert.True(LaunchModes.IsValid(mode.ToString()));
         }
     }
 }

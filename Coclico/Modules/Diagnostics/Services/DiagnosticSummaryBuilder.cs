@@ -2,7 +2,7 @@ namespace Coclico.Modules.Diagnostics.Services;
 
 using Coclico.Modules.Diagnostics.Models;
 
-public static class DiagnosticSummaryBuilder
+internal static class DiagnosticSummaryBuilder
 {
     public static DiagnosticSummary Build(DiagnosticRun run)
     {

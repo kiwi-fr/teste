@@ -4,7 +4,7 @@ using Avalonia.Interactivity;
 
 namespace Coclico.Installer.Views;
 
-public partial class MessageDialog : Window
+internal partial class MessageDialog : Window
 {
     public MessageDialog()
     {
@@ -23,7 +23,7 @@ public partial class MessageDialog : Window
             DlgTitle = { Text = title },
             DlgMessage = { Text = message }
         };
-        await dialog.ShowDialog(owner);
+        await dialog.ShowDialog(owner).ConfigureAwait(false);
     }
 
     public static async Task ShowWarningAsync(Window owner, string title, string message)
@@ -33,6 +33,6 @@ public partial class MessageDialog : Window
             DlgTitle = { Text = title },
             DlgMessage = { Text = message }
         };
-        await dialog.ShowDialog(owner);
+        await dialog.ShowDialog(owner).ConfigureAwait(false);
     }
 }

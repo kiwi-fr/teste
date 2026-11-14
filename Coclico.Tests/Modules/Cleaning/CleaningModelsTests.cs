@@ -6,7 +6,7 @@ namespace Coclico.Tests;
 public sealed class CleaningModelsTests
 {
     [Fact]
-    public void CleaningCategory_HasSensibleDefaults()
+    public void CleaningCategoryHasSensibleDefaults()
     {
         var category = new CleaningCategory();
 
@@ -23,7 +23,7 @@ public sealed class CleaningModelsTests
     }
 
     [Fact]
-    public void CleaningResult_StartsEmpty()
+    public void CleaningResultStartsEmpty()
     {
         var result = new CleaningResult();
 
@@ -37,7 +37,7 @@ public sealed class CleaningModelsTests
     }
 
     [Fact]
-    public void CleaningCategory_PropertiesAreWritable()
+    public void CleaningCategoryPropertiesAreWritable()
     {
         var category = new CleaningCategory
         {
@@ -66,7 +66,7 @@ public sealed class CleaningModelsTests
     }
 
     [Fact]
-    public void CleaningResult_AggregatesCategories()
+    public void CleaningResultAggregatesCategories()
     {
         var result = new CleaningResult
         {

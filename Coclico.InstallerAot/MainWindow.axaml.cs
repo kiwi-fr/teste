@@ -15,7 +15,7 @@ using Coclico.Installer.Services;
 
 namespace Coclico.Installer;
 
-public partial class MainWindow : Window
+internal partial class MainWindow : Window
 {
     private readonly InstallConfig _config = new();
     private readonly DispatcherTimer _tipsTimer;
@@ -504,7 +504,7 @@ public partial class MainWindow : Window
             {
                 Title = "Dossier d'installation de Coclico",
                 AllowMultiple = false
-            });
+            }).ConfigureAwait(false);
 
             if (folders.Count > 0)
             {
@@ -549,7 +549,7 @@ public partial class MainWindow : Window
 
         try
         {
-            await InstallService.InstallAsync(_config, progress);
+            await InstallService.InstallAsync(_config, progress).ConfigureAwait(false);
             _tipsTimer.Stop();
 
             if (_config.AutoLaunchOnFinish)
@@ -567,7 +567,7 @@ public partial class MainWindow : Window
             NavBar.IsVisible = true;
             await Views.MessageDialog.ShowErrorAsync(this,
                 "Installation Coclico",
-                $"Erreur d'installation : {ex.Message}");
+                $"Erreur d'installation : {ex.Message}").ConfigureAwait(false);
 
             GoToStep(5);
         }
@@ -632,7 +632,7 @@ public partial class MainWindow : Window
 
         try
         {
-            await InstallService.UninstallAsync(progress);
+            await InstallService.UninstallAsync(progress).ConfigureAwait(false);
             UninstallProgress.IsVisible = false;
             TxtUninstallTitle.Text = InstallerLocalization.Get("UninstallFinished");
             TxtUninstallDesc.Text = "Tous les fichiers et raccourcis ont été supprimés.";
@@ -654,7 +654,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            await handler();
+            await handler().ConfigureAwait(false);
         }
         catch (OperationCanceledException ex) { _ = ex; }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)

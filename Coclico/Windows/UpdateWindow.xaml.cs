@@ -8,7 +8,7 @@ namespace Coclico.Windows;
 
 public partial class UpdateWindow : FluentWindow
 {
-    private static readonly Regex MarkdownLinkPattern = new(@"\[([^\]]+)\]\([^)]*\)", RegexOptions.Compiled);
+    private static readonly Regex MarkdownLinkPattern = new(@"\[([^\]]+)\]\([^)]*\)", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
     private static readonly Regex MarkdownHeadingPattern = new(@"^#{1,6}\s*", RegexOptions.Compiled);
 
     private readonly GitHubRelease _release;
@@ -16,7 +16,7 @@ public partial class UpdateWindow : FluentWindow
     private readonly SettingsService _settings;
     private bool _downloading;
 
-    public UpdateWindow(GitHubRelease release, string currentVersion)
+    internal UpdateWindow(GitHubRelease release, string currentVersion)
     {
         InitializeComponent();
         _release = release ?? throw new ArgumentNullException(nameof(release));
@@ -49,7 +49,7 @@ public partial class UpdateWindow : FluentWindow
                 continue;
             }
 
-            if (line.StartsWith('<') || line.StartsWith("!["))
+            if (line.StartsWith('<') || line.StartsWith("![", StringComparison.Ordinal))
             {
                 continue;
             }
@@ -86,7 +86,7 @@ public partial class UpdateWindow : FluentWindow
         GitHubAsset? asset = UpdateManager.PickSetupAsset(_release);
         if (asset == null)
         {
-            StatusText.Text = "Installeur introuvable dans cette release. Télécharge la mise à jour depuis la page GitHub.";
+            StatusText.Text = Loc.Get("Update_NoInstaller");
             return;
         }
 
@@ -97,21 +97,21 @@ public partial class UpdateWindow : FluentWindow
         DownloadProgress.Visibility = Visibility.Visible;
         DownloadProgress.Maximum = Math.Max(asset.Size, 1);
         DownloadProgress.Value = 0;
-        StatusText.Text = "Téléchargement de la mise à jour...";
+        StatusText.Text = Loc.Get("Update_Downloading");
 
         string savePath = Path.Join(Path.GetTempPath(), asset.Name);
         var progress = new Progress<long>(bytes =>
         {
             DownloadProgress.Value = bytes;
-            StatusText.Text = $"Téléchargement : {bytes / 1048576.0:0.0} / {asset.Size / 1048576.0:0.0} Mo";
+            StatusText.Text = Loc.Format("Update_ProgressMb", bytes / 1048576.0, asset.Size / 1048576.0);
         });
 
         try
         {
-            bool downloaded = await _updateManager.DownloadReleaseAsync(_release, asset.Name, savePath, progress);
+            bool downloaded = await _updateManager.DownloadReleaseAsync(_release, asset.Name, savePath, progress).ConfigureAwait(false);
             if (!downloaded)
             {
-                StatusText.Text = "Échec du téléchargement ou de la vérification SHA-256. Réessayez plus tard.";
+                StatusText.Text = Loc.Get("Update_DownloadFailed");
                 ResetUi();
                 return;
             }
@@ -119,19 +119,19 @@ public partial class UpdateWindow : FluentWindow
             bool launched = _updateManager.LaunchInstaller(savePath, _release.TagName);
             if (!launched)
             {
-                StatusText.Text = "L'installeur n'a pas pu être lancé. Lance-le manuellement depuis ton dossier Temp.";
+                StatusText.Text = Loc.Get("Update_LaunchFailed");
                 ResetUi();
                 return;
             }
 
-            StatusText.Text = "Installeur vérifié (SHA-256 + version) et démarré - Coclico va se fermer pour terminer la mise à jour.";
-            await Task.Delay(1200);
+            StatusText.Text = Loc.Get("Update_Launched");
+            await Task.Delay(1200).ConfigureAwait(false);
             ExitForUpdate();
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "UpdateWindow.Install");
-            StatusText.Text = "Erreur pendant la mise à jour. Réessayez plus tard.";
+            StatusText.Text = Loc.Get("Update_Error");
             ResetUi();
         }
     }
@@ -176,4 +176,5 @@ public partial class UpdateWindow : FluentWindow
         Application.Current.Shutdown();
         Environment.Exit(0);
     }
+
 }

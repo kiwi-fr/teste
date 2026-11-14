@@ -3,7 +3,7 @@ using Coclico.Models.Network;
 
 namespace Coclico.Services.Network;
 
-public static class NetworkSettingsGuard
+internal static class NetworkSettingsGuard
 {
     private static readonly FrozenSet<string> AutoTuningLevels = new[]
     {

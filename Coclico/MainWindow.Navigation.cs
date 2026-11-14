@@ -8,6 +8,7 @@ using Coclico.Modules.Power.Views;
 using Coclico.Modules.UpdateCenter.ViewModels;
 using Coclico.Modules.UpdateCenter.Views;
 using Coclico.Services;
+using Coclico.Modules.RamCleaner.Views;
 using Coclico.Views;
 namespace Coclico;
 
@@ -25,6 +26,7 @@ public partial class MainWindow
         ("UpdateCenter", static () => ServiceContainer.GetOptional<UpdateCenterView>() ?? new UpdateCenterView(ServiceContainer.GetRequired<UpdateCenterViewModel>())),
         ("Cleaning", static () => new CleaningView()),
         ("RamCleaner", static () => new RamCleanerView()),
+        ("TelemetryBlocker", static () => new Coclico.Modules.TelemetryBlocker.Views.TelemetryBlockerView()),
         ("PowerOptimizer", static () => ServiceContainer.GetOptional<PowerOptimizerView>() ?? new PowerOptimizerView()),
         ("Settings", static () => new SettingsView()),
         ("Help", static () => new HelpView()),
@@ -32,24 +34,14 @@ public partial class MainWindow
 
     private static readonly string[] MenuGroupIds = ["Maintenance", "Performance", "Applications"];
 
-    private void NavItem_Click(object sender, RoutedEventArgs e)
-        => AsyncEventSafe.Run(() => NavItem_ClickAsync(sender, e), "MainWindow.NavItem_Click");
-
-    private async Task NavItem_ClickAsync(object sender, RoutedEventArgs e)
-    {
-        if (sender is not FrameworkElement el || el.Tag?.ToString() is not string tag)
-        {
-            return;
-        }
-
-        await NavigateToTagAsync(tag);
-    }
+    private const int MaxCachedViews = 8;
 
     private UIElement GetOrCreateView(string? tag)
     {
         tag = string.IsNullOrEmpty(tag) ? "Home" : tag;
         if (_viewCache.TryGetValue(tag, out UIElement? cached))
         {
+            TouchViewCache(tag);
             return cached;
         }
 
@@ -62,8 +54,50 @@ public partial class MainWindow
 
         UIElement view = module.Factory();
         _viewCache[module.Tag] = view;
+        TouchViewCache(module.Tag);
+        TrimViewCache();
         return view;
     }
+
+    private void TouchViewCache(string tag)
+    {
+        _ = _viewCacheOrder.Remove(tag);
+        _viewCacheOrder.Add(tag);
+    }
+
+    private void TrimViewCache()
+    {
+        int guard = 0;
+        while (_viewCacheOrder.Count > MaxCachedViews && guard++ < MaxCachedViews + 1)
+        {
+            string oldest = _viewCacheOrder[0];
+            if (_viewCache.TryGetValue(oldest, out UIElement? view) && ReferenceEquals(view, MainContentFrame.Content))
+            {
+                TouchViewCache(oldest);
+                continue;
+            }
+
+            _ = _viewCacheOrder.Remove(oldest);
+            _ = _viewCache.Remove(oldest);
+        }
+    }
+
+    private static string AiContextForTag(string tag) => tag switch
+    {
+        "Home" => Loc.Get("AiCtx_Home"),
+        "Programs" => Loc.Get("AiCtx_Programs"),
+        "DiskAnalyzer" => Loc.Get("AiCtx_DiskAnalyzer"),
+        "HealthDefense" => Loc.Get("AiCtx_HealthDefense"),
+        "Network" => Loc.Get("AiCtx_Network"),
+        "Installer" => Loc.Get("AiCtx_Installer"),
+        "UpdateCenter" => Loc.Get("AiCtx_UpdateCenter"),
+        "Cleaning" => Loc.Get("AiCtx_Cleaning"),
+        "RamCleaner" => Loc.Get("AiCtx_RamCleaner"),
+        "PowerOptimizer" => Loc.Get("AiCtx_PowerOptimizer"),
+        "Settings" => Loc.Get("AiCtx_Settings"),
+        "Help" => Loc.Get("AiCtx_Help"),
+        _ => Loc.Get("AiCtx_Home")
+    };
 
     private static string? TagForAiAction(string action)
     {
@@ -92,8 +126,39 @@ public partial class MainWindow
         {
             CentralUnitStigmergy stigmergy = CentralUnitStigmergy.Current;
             stigmergy.RecordTransition(stigmergy.LastModule, tag);
+            stigmergy.RecordModuleUsage(tag);
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.RecordStigmergyTransition"); }
+    }
+
+    private void PreloadHourlyLikelyViews()
+    {
+        try
+        {
+            int hour = DateTime.Now.Hour;
+            if (hour == _lastHourlyPreloadHour)
+            {
+                return;
+            }
+
+            _lastHourlyPreloadHour = hour;
+
+            CentralActivityLevel level = CentralUnitService.Current.Activity.Level;
+            if (level != CentralActivityLevel.Active)
+            {
+                return;
+            }
+
+            List<(string Module, double Score)> likely = CentralUnitStigmergy.Current.GetLikelyModulesAtHour(hour, 1);
+            if (likely.Count == 0 || likely[0].Score < 2.0 || _viewCache.ContainsKey(likely[0].Module))
+            {
+                return;
+            }
+
+            string module = likely[0].Module;
+            _ = Dispatcher.InvokeAsync(() => _ = GetOrCreateView(module), System.Windows.Threading.DispatcherPriority.Background);
+        }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.PreloadHourlyLikelyViews"); }
     }
 
     private void PreloadPredictedViews(string currentTag)
@@ -137,31 +202,19 @@ public partial class MainWindow
             UIElement newContent = GetOrCreateView(tag);
 
             IAiService? ai = ServiceContainer.GetOptional<IAiService>();
-            ai?.CurrentStatusContext = tag switch
+            if (ai != null)
             {
-                "Home" => "L'utilisateur est sur le Tableau de Bord (stats CPU/RAM/Disque).",
-                "Programs" => "L'utilisateur consulte la liste des Applications installées.",
-                "DiskAnalyzer" => "L'utilisateur est sur l'analyse de l'espace disque (carte radiale des zones du disque dur, doublons et gros fichiers).",
-                "HealthDefense" => "L'utilisateur est sur le module Santé, Défense & Réparation Windows.",
-                "Network" => "L'utilisateur est sur le module Réseau & Latence (optimisation TCP, cartes Ethernet/Wi-Fi, DNS, MTU).",
-                "Installer" => "L'utilisateur est dans l'Installeur Winget.",
-                "UpdateCenter" => "L'utilisateur est dans le Centre de Mises à jour (applications via Winget, pilotes via Windows Update, statut Windows et Coclico).",
-                "Cleaning" => "L'utilisateur est dans le Nettoyage système.",
-                "RamCleaner" => "L'utilisateur est dans le RAM Cleaner (nettoyage et surveillance mémoire).",
-                "PowerOptimizer" => "L'utilisateur est dans le module CPU & Alimentation (plans Coclico économie/optimal/performance, mode adaptatif, test CPU).",
-                "Settings" => "L'utilisateur est dans les Paramètres.",
-                "Help" => "L'utilisateur est sur la page d'Aide.",
-                _ => "L'utilisateur est sur le Tableau de Bord."
-            };
+                ai.CurrentStatusContext = AiContextForTag(tag);
+            }
 
-            await NavigateWithTransition(newContent);
-            UpdateTopNavActiveIndicator(tag);
+            await NavigateWithTransition(newContent).ConfigureAwait(false);
             PreloadPredictedViews(tag);
+            PreloadHourlyLikelyViews();
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "MainWindow.NavigateToTagAsync");
-            MainContentFrame.Content = CreateErrorFallback(L("MainWindow_PageLoadError"));
+            MainContentFrame.Content = CreateErrorFallback(Loc.Get("MainWindow_PageLoadError"));
         }
     }
 
@@ -177,7 +230,7 @@ public partial class MainWindow
         var easeOut = new CubicEase { EasingMode = EasingMode.EaseOut };
         var fadeOut = new DoubleAnimation(0, Motion.NavFadeOut) { EasingFunction = easeOut };
         MainContentFrame.BeginAnimation(UIElement.OpacityProperty, fadeOut);
-        await Task.Delay(Motion.NavFadeOut);
+        await Task.Delay(Motion.NavFadeOut).ConfigureAwait(false);
 
         MainContentFrame.Content = newContent;
 
@@ -237,7 +290,7 @@ public partial class MainWindow
 
         _ = stack.Children.Add(new Button
         {
-            Content = "Réessayer",
+            Content = Loc.Get("Common_Retry"),
             Width = 140,
             Margin = new Thickness(0, 14, 0, 0),
             Background = TryFindResource("BgElevatedBrush") as Brush,
@@ -253,42 +306,7 @@ public partial class MainWindow
 
     public void NavigateTo(string tag)
     {
-        RadioButton? rb = FindNavButton(tag);
-        if (rb != null)
-        {
-            rb.IsChecked = true;
-        }
-
         _ = NavigateToTagAsync(tag);
-    }
-
-    private void TopNavItem_Click(object sender, RoutedEventArgs e)
-    {
-        if (sender is FrameworkElement el && el.Tag is string tag)
-        {
-            NavigateTo(tag);
-        }
-    }
-
-    public void UpdateTopNavActiveIndicator(string activeTag)
-    {
-        try
-        {
-            if (TopUnderlineHome == null)
-            {
-                return;
-            }
-
-            TopUnderlineHome.Visibility = activeTag == "Home" ? Visibility.Visible : Visibility.Collapsed;
-            TopUnderlineNetwork.Visibility = activeTag == "Network" ? Visibility.Visible : Visibility.Collapsed;
-            TopUnderlineCleaning.Visibility = activeTag == "Cleaning" ? Visibility.Visible : Visibility.Collapsed;
-            TopUnderlineRam.Visibility = activeTag == "RamCleaner" ? Visibility.Visible : Visibility.Collapsed;
-            TopUnderlineHealth.Visibility = activeTag == "HealthDefense" ? Visibility.Visible : Visibility.Collapsed;
-            TopUnderlinePrograms.Visibility = activeTag == "Programs" ? Visibility.Visible : Visibility.Collapsed;
-            TopUnderlineDisk.Visibility = activeTag == "DiskAnalyzer" ? Visibility.Visible : Visibility.Collapsed;
-            TopUnderlineInstaller.Visibility = activeTag == "Installer" ? Visibility.Visible : Visibility.Collapsed;
-        }
-        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.UpdateTopNavActiveIndicator"); }
     }
 
     private void MenuGroupToggle_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

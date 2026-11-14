@@ -5,7 +5,7 @@ using System.Globalization;
 using Coclico.Modules.Diagnostics.Models;
 using Coclico.Modules.Diagnostics.Rules;
 
-public sealed class WindowsHealthCheck : IDiagnosticCheck
+internal sealed class WindowsHealthCheck : IDiagnosticCheck
 {
     private const int QuickMaxEventGroups = 8;
     private const int FullMaxEventGroups = 25;

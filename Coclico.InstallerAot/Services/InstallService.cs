@@ -14,9 +14,9 @@ using Microsoft.Win32;
 
 namespace Coclico.Installer.Services;
 
-public record InstallProgressReport(double Percent, string Status, string SubStatus);
+internal record InstallProgressReport(double Percent, string Status, string SubStatus);
 
-public static class InstallService
+internal static class InstallService
 {
     private const string AppName = "Coclico";
     public static readonly string AppVersion =
@@ -101,7 +101,7 @@ public static class InstallService
                 {
                     progress.Report(new InstallProgressReport(10 + (runtimeReport.Percent * 0.04), runtimeReport.Status, runtimeReport.SubStatus));
                 });
-                await DotnetRuntimeService.EnsureRuntimeAsync(runtimeProgress, ct);
+                await DotnetRuntimeService.EnsureRuntimeAsync(runtimeProgress, ct).ConfigureAwait(false);
             }
 
             string installFullPath = Path.GetFullPath(config.InstallPath);
@@ -153,7 +153,7 @@ public static class InstallService
 
                 if (!verification.HasManifest)
                 {
-                    progress.Report(new InstallProgressReport(70, "Aucun manifeste d'intégrité dans le payload.", verification.Reason));
+                    throw new InvalidOperationException("Payload rejeté : manifeste d'intégrité absent.");
                 }
 
                 progress.Report(new InstallProgressReport(71, "Bascule contrôlée de l'installation...", "L'ancienne version est conservée jusqu'à validation"));
@@ -178,7 +178,13 @@ public static class InstallService
 
                 progress.Report(new InstallProgressReport(74, "Contrôle final des fichiers installés...", verification.Reason));
                 PayloadVerification finalCheck = PayloadGuard.VerifyStaging(installFullPath);
-                if (finalCheck.HasManifest && !finalCheck.IsVerified)
+                if (!finalCheck.HasManifest)
+                {
+                    RollbackSwitch(installFullPath, backupDir);
+                    throw new InvalidOperationException("Payload rejeté : manifeste d'intégrité absent après bascule.");
+                }
+
+                if (!finalCheck.IsVerified)
                 {
                     RollbackSwitch(installFullPath, backupDir);
                     throw new InvalidOperationException("Contrôle final échoué, retour à la version précédente : " + finalCheck.Reason);
@@ -214,10 +220,10 @@ public static class InstallService
                     {
                         progress.Report(new InstallProgressReport(76 + (cudaReport.Percent * 0.05), cudaReport.Status, cudaReport.SubStatus));
                     });
-                    await CudaRuntimeDownloader.DownloadAsync(config.InstallPath, cudaProgress, ct);
+                    await CudaRuntimeDownloader.DownloadAsync(config.InstallPath, cudaProgress, ct).ConfigureAwait(false);
                     progress.Report(new InstallProgressReport(81, "Runtime NVIDIA CUDA 12 installé avec succès.", ""));
                 }
-                catch (Exception cudaEx) when (cudaEx is not System.OutOfMemoryException)
+                catch (Exception cudaEx) when (cudaEx is not OutOfMemoryException)
                 {
                     progress.Report(new InstallProgressReport(81, "Téléchargement CUDA ignoré : " + cudaEx.Message, "L'IA locale fonctionnera en mode CPU."));
                 }
@@ -233,9 +239,9 @@ public static class InstallService
                         double globalPercent = 82 + (aiReport.Percent * 0.13);
                         progress.Report(new InstallProgressReport(globalPercent, aiReport.Status, aiReport.SubStatus));
                     });
-                    await AiModelDownloader.DownloadModelAsync(config.InstallPath, config.SelectedAiModel, aiProgress, ct);
+                    await AiModelDownloader.DownloadModelAsync(config.InstallPath, config.SelectedAiModel, aiProgress, ct).ConfigureAwait(false);
                 }
-                catch (Exception ex) when (ex is not System.OutOfMemoryException)
+                catch (Exception ex) when (ex is not OutOfMemoryException)
                 {
                     progress.Report(new InstallProgressReport(85, "Téléchargement IA ignoré : " + ex.Message, ""));
                 }
@@ -275,7 +281,7 @@ public static class InstallService
                     File.Copy(currentExe, uninstallerPath, overwrite: true);
                 }
             }
-            catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
                 Debug.WriteLine($"Erreur préparation désinstallation: {ex.Message}");
                 uninstallerPath = currentExe;
@@ -285,7 +291,7 @@ public static class InstallService
             RegisterUninstall(config.InstallPath, uninstallerPath, exePath);
 
             progress.Report(new InstallProgressReport(100, "Installation terminée avec succès !", "Coclico est prêt à être utilisé."));
-        }, ct);
+        }, ct).ConfigureAwait(false);
     }
 
     public static void ConfigureCoclicoSettings(InstallConfig config)
@@ -353,7 +359,7 @@ public static class InstallService
             string startMenuDir = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), "Programs", "Coclico");
             if (Directory.Exists(startMenuDir))
             {
-                try { Directory.Delete(startMenuDir, recursive: true); } catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { Debug.WriteLine($"[InstallService] Suppression du dossier du menu Démarrer échouée : {ex.Message}"); }
+                try { Directory.Delete(startMenuDir, recursive: true); } catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { Debug.WriteLine($"[InstallService] Suppression du dossier du menu Démarrer échouée : {ex.Message}"); }
             }
 
             progress.Report(new InstallProgressReport(55, "Nettoyage du Registre Windows...", ""));
@@ -361,7 +367,7 @@ public static class InstallService
             {
                 Registry.CurrentUser.DeleteSubKeyTree(RegistryKeyPath, throwOnMissingSubKey: false);
             }
-            catch (Exception ex) when (ex is System.Security.SecurityException or System.IO.IOException or System.UnauthorizedAccessException)
+            catch (Exception ex) when (ex is System.Security.SecurityException or IOException or UnauthorizedAccessException)
             {
                 Debug.WriteLine($"[InstallService] Nettoyage de la clé de registre échoué : {ex.Message}");
             }
@@ -376,7 +382,7 @@ public static class InstallService
             ScheduleSelfDelete(installPath);
 
             progress.Report(new InstallProgressReport(100, "Coclico a été désinstallé.", "Merci d'avoir utilisé Coclico !"));
-        }, ct);
+        }, ct).ConfigureAwait(false);
     }
 
     public static async Task FullUninstallAsync(IProgress<InstallProgressReport> progress, string? installPath = null, bool keepUserData = false, CancellationToken ct = default)
@@ -399,7 +405,7 @@ public static class InstallService
             string startMenuDir = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), "Programs", "Coclico");
             if (Directory.Exists(startMenuDir))
             {
-                try { Directory.Delete(startMenuDir, recursive: true); } catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { Debug.WriteLine($"[InstallService] Suppression du dossier du menu Démarrer échouée : {ex.Message}"); }
+                try { Directory.Delete(startMenuDir, recursive: true); } catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { Debug.WriteLine($"[InstallService] Suppression du dossier du menu Démarrer échouée : {ex.Message}"); }
             }
 
             progress.Report(new InstallProgressReport(25,
@@ -410,13 +416,13 @@ public static class InstallService
                 string appDataPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Coclico");
                 if (Directory.Exists(appDataPath))
                 {
-                    try { Directory.Delete(appDataPath, recursive: true); } catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { Debug.WriteLine($"[InstallService] Suppression du dossier AppData échouée : {ex.Message}"); }
+                    try { Directory.Delete(appDataPath, recursive: true); } catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { Debug.WriteLine($"[InstallService] Suppression du dossier AppData échouée : {ex.Message}"); }
                 }
 
                 string localAppDataPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Coclico");
                 if (Directory.Exists(localAppDataPath))
                 {
-                    try { Directory.Delete(localAppDataPath, recursive: true); } catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { Debug.WriteLine($"[InstallService] Suppression du dossier LocalAppData échouée : {ex.Message}"); }
+                    try { Directory.Delete(localAppDataPath, recursive: true); } catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { Debug.WriteLine($"[InstallService] Suppression du dossier LocalAppData échouée : {ex.Message}"); }
                 }
             }
 
@@ -424,7 +430,7 @@ public static class InstallService
             string tempPath = Path.Join(Path.GetTempPath(), "Coclico");
             if (Directory.Exists(tempPath))
             {
-                try { Directory.Delete(tempPath, recursive: true); } catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { Debug.WriteLine($"[InstallService] Suppression du dossier temporaire échouée : {ex.Message}"); }
+                try { Directory.Delete(tempPath, recursive: true); } catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { Debug.WriteLine($"[InstallService] Suppression du dossier temporaire échouée : {ex.Message}"); }
             }
 
             progress.Report(new InstallProgressReport(55, "Nettoyage du Registre Windows...", ""));
@@ -432,7 +438,7 @@ public static class InstallService
             {
                 Registry.CurrentUser.DeleteSubKeyTree(RegistryKeyPath, throwOnMissingSubKey: false);
             }
-            catch (Exception ex) when (ex is System.Security.SecurityException or System.IO.IOException or System.UnauthorizedAccessException)
+            catch (Exception ex) when (ex is System.Security.SecurityException or IOException or UnauthorizedAccessException)
             {
                 Debug.WriteLine($"[InstallService] Nettoyage de la clé de registre échoué : {ex.Message}");
             }
@@ -444,11 +450,11 @@ public static class InstallService
                 {
                     Directory.Delete(resolvedPath, recursive: true);
                 }
-                catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
                 {
                     Debug.WriteLine($"[InstallService] Suppression du dossier d'installation échouée : {ex.Message}");
                     TryDeleteDirectoryContents(resolvedPath);
-                    try { Directory.Delete(resolvedPath, recursive: true); } catch (Exception ex2) when (ex2 is System.IO.IOException or System.UnauthorizedAccessException) { Debug.WriteLine($"[InstallService] Nouvelle tentative de suppression échouée : {ex2.Message}"); }
+                    try { Directory.Delete(resolvedPath, recursive: true); } catch (Exception ex2) when (ex2 is IOException or UnauthorizedAccessException) { Debug.WriteLine($"[InstallService] Nouvelle tentative de suppression échouée : {ex2.Message}"); }
                 }
             }
 
@@ -462,7 +468,7 @@ public static class InstallService
             Thread.Sleep(500);
 
             progress.Report(new InstallProgressReport(100, "Désinstallation complète !", "Tous les fichiers, données et entrées de registre ont été supprimés."));
-        }, ct);
+        }, ct).ConfigureAwait(false);
     }
 
     private static bool IsDesktopRuntime10Installed()
@@ -501,7 +507,7 @@ public static class InstallService
     {
         foreach (string file in Directory.GetFiles(path, "*", SearchOption.AllDirectories))
         {
-            if (Path.GetFileName(file).Equals("Uninstall.exe", StringComparison.OrdinalIgnoreCase))
+            if (Path.GetFileName(file).Equals("Coclico.Installer.exe", StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }
@@ -653,18 +659,32 @@ public static class InstallService
     private static void ScheduleSelfDelete(string installPath)
     {
         TryScheduleDeleteOnReboot(Environment.ProcessPath ?? string.Empty);
-        TryScheduleDeleteOnReboot(Path.Join(installPath, "CoclicoUninstaller.exe"));
+        TryScheduleDeleteOnReboot(Path.Join(installPath, "Coclico.Installer.exe"));
 
         try
         {
+            string batchPath = Path.Join(Path.GetTempPath(), $"coclico-cleanup-{Guid.NewGuid():N}.cmd");
+            string escapedInstallPath = installPath.Replace("%", "%%");
+            string exePath = Path.Join(escapedInstallPath, "Coclico.exe");
+            string content =
+                "@echo off\r\n" +
+                "timeout /t 12 /nobreak > NUL\r\n" +
+                $"if not exist \"{exePath}\" rmdir /s /q \"{escapedInstallPath}\"\r\n" +
+                "timeout /t 8 /nobreak > NUL\r\n" +
+                $"if not exist \"{exePath}\" rmdir /s /q \"{escapedInstallPath}\"\r\n" +
+                "(goto) 2>nul & del \"%~f0\"\r\n";
+            File.WriteAllText(batchPath, content);
+
             var psi = new ProcessStartInfo
             {
                 FileName = "cmd.exe",
-                Arguments = $"/c timeout /t 12 /nobreak > NUL & if not exist \"{installPath}\\Coclico.exe\" rmdir /s /q \"{installPath}\" & timeout /t 8 /nobreak > NUL & if not exist \"{installPath}\\Coclico.exe\" rmdir /s /q \"{installPath}\"",
                 CreateNoWindow = true,
                 UseShellExecute = false,
                 WindowStyle = ProcessWindowStyle.Hidden
             };
+            psi.ArgumentList.Add("/d");
+            psi.ArgumentList.Add("/c");
+            psi.ArgumentList.Add(batchPath);
             Process.Start(psi);
         }
         catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)

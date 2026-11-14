@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Coclico;
 
-public static class TextFormatService
+internal static class TextFormatService
 {
     public static string Format(string? pattern, params object?[] args)
         => Format(null, pattern, args);
@@ -36,7 +36,7 @@ public static class TextFormatService
                     int colon = token.IndexOf(':');
                     string indexText = colon < 0 ? token : token[..colon];
                     string spec = colon < 0 ? string.Empty : token[(colon + 1)..];
-                    if (int.TryParse(indexText, out int index) && index >= 0 && index < args.Length)
+                    if (int.TryParse(indexText, System.Globalization.CultureInfo.InvariantCulture, out int index) && index >= 0 && index < args.Length)
                     {
                         object? arg = args[index];
                         builder.Append(arg is IFormattable formattable

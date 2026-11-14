@@ -1,13 +1,13 @@
 using System.IO;
 namespace Coclico.Services.AI;
 
-public enum AiProviderType
+internal enum AiProviderType
 {
     LocalGGUF,
     Ollama
 }
 
-public sealed record AiModelInfo(
+internal sealed record AiModelInfo(
     string Id,
     string DisplayName,
     AiProviderType Provider,
@@ -15,9 +15,10 @@ public sealed record AiModelInfo(
     bool SupportsVision = false,
     long SizeEstimateMb = 0,
     string? DownloadUrl = null,
+    string? Sha256 = null,
     bool IsRecommended = false);
 
-public static class AiModelCatalog
+internal static class AiModelCatalog
 {
     private static readonly IReadOnlyList<AiModelInfo> DefaultModels =
     [
@@ -106,7 +107,22 @@ public static class AiModelCatalog
             var merged = new List<AiModelInfo>(DefaultModels);
             foreach (AiModelInfo m in extra)
             {
-                int index = merged.FindIndex(x => x.Id == m.Id);
+                if (!string.IsNullOrWhiteSpace(m.DownloadUrl))
+                {
+                    if (!m.DownloadUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                    {
+                        LoggingService.LogWarning($"[AiModelCatalog] Modèle '{m.Id}' ignoré : URL de téléchargement non HTTPS.");
+                        continue;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(m.Sha256))
+                    {
+                        LoggingService.LogWarning($"[AiModelCatalog] Modèle '{m.Id}' ignoré : somme SHA-256 absente.");
+                        continue;
+                    }
+                }
+
+                int index = merged.FindIndex(x => string.Equals(x.Id, m.Id, StringComparison.Ordinal));
                 if (index >= 0)
                 {
                     merged[index] = m;

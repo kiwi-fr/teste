@@ -24,6 +24,14 @@
 
     <Window.Resources>
         <Duration x:Key="NavDuration">0:0:0.15</Duration>
+        <Storyboard x:Key="AmbientStoryboard" Timeline.DesiredFrameRate="30">
+            <DoubleAnimation Storyboard.TargetName="AmbientBlueTransform" Storyboard.TargetProperty="X"
+                             From="-60" To="80" Duration="0:0:12" AutoReverse="True" RepeatBehavior="Forever"/>
+            <DoubleAnimation Storyboard.TargetName="AmbientVioletTransform" Storyboard.TargetProperty="Y"
+                             From="40" To="-80" Duration="0:0:15" AutoReverse="True" RepeatBehavior="Forever"/>
+            <DoubleAnimation Storyboard.TargetName="AmbientRoseTransform" Storyboard.TargetProperty="X"
+                             From="70" To="-70" Duration="0:0:18" AutoReverse="True" RepeatBehavior="Forever"/>
+        </Storyboard>
         <Storyboard x:Key="PageInStoryboard">
             <DoubleAnimation Storyboard.TargetName="PageContentTransform"
                              Storyboard.TargetProperty="Y"
@@ -38,20 +46,6 @@
         </Storyboard>
     </Window.Resources>
 
-    <Window.Triggers>
-        <EventTrigger RoutedEvent="Window.Loaded">
-            <BeginStoryboard>
-                <Storyboard>
-                    <DoubleAnimation Storyboard.TargetName="AmbientBlueTransform" Storyboard.TargetProperty="X"
-                                     From="-60" To="80" Duration="0:0:12" AutoReverse="True" RepeatBehavior="Forever"/>
-                    <DoubleAnimation Storyboard.TargetName="AmbientVioletTransform" Storyboard.TargetProperty="Y"
-                                     From="40" To="-80" Duration="0:0:15" AutoReverse="True" RepeatBehavior="Forever"/>
-                    <DoubleAnimation Storyboard.TargetName="AmbientRoseTransform" Storyboard.TargetProperty="X"
-                                     From="70" To="-70" Duration="0:0:18" AutoReverse="True" RepeatBehavior="Forever"/>
-                </Storyboard>
-            </BeginStoryboard>
-        </EventTrigger>
-    </Window.Triggers>
 
     <Border Background="{DynamicResource BgBaseBrush}">
         <Grid>
@@ -63,7 +57,7 @@
                 <RowDefinition Height="28"/>
             </Grid.RowDefinitions>
 
-            <Canvas Grid.RowSpan="5" IsHitTestVisible="False" ClipToBounds="True" Opacity="0.26">
+            <Canvas Grid.RowSpan="5" IsHitTestVisible="False" ClipToBounds="True" Opacity="0.42">
                 <Ellipse Width="620" Height="400" Canvas.Left="-160" Canvas.Top="-200">
                     <Ellipse.Fill>
                         <RadialGradientBrush>
@@ -107,9 +101,6 @@
                          ShowMaximize="True" ShowMinimize="True">
                 <ui:TitleBar.Header>
                     <StackPanel Orientation="Horizontal" Margin="0,0,10,0" VerticalAlignment="Center">
-                        <TextBlock x:Name="UserNameText" VerticalAlignment="Center"
-                                   FontSize="11.5" FontWeight="SemiBold"
-                                   Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,12,0"/>
                         <ui:Button x:Name="BtnElevateAdmin" Appearance="Transparent"
                                    ToolTip="{DynamicResource Main_AdminStandardTip}"
                                    Click="BtnElevateAdmin_Click" Padding="8,4" Margin="0,0,6,0"
@@ -132,7 +123,7 @@
                 </ui:TitleBar.Header>
             </ui:TitleBar>
 
-            <Border x:Name="TopNavigationBar" Grid.Row="1" Background="{DynamicResource BgPanelBrush}" Padding="18,8,18,8"
+            <Border Grid.Row="1" Background="{DynamicResource BgPanelBrush}" Padding="18,8,18,8"
                     MouseDown="TopNavigationBar_MouseDown">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -142,12 +133,12 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Button x:Name="BtnArchitecturalMenu" Click="BtnArchitecturalMenu_Click"
+                        <Button Click="BtnArchitecturalMenu_Click"
                                 Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                                 Padding="10,6" Cursor="Hand" Margin="0,0,14,0" ToolTip="{DynamicResource Main_OpenMenuTip}">
                             <Button.Resources>
                                 <Style TargetType="Border">
-                                    <Setter Property="CornerRadius" Value="6"/>
+                                    <Setter Property="CornerRadius" Value="10"/>
                                 </Style>
                             </Button.Resources>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -161,90 +152,24 @@
                             </StackPanel>
                         </Button>
 
-                        <TextBlock Text="Coclico" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                        <TextBlock Text="Coclico" FontSize="17" FontWeight="Bold" FontFamily="Georgia" FontStyle="Italic" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                         <Border Width="4" Height="4" CornerRadius="2" Background="{DynamicResource ArchitecturalYellowBrush}" Margin="6,0,8,0" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="TxtStudioSubtitle" FontSize="9.5" FontWeight="SemiBold" Foreground="{DynamicResource TextHintBrush}" VerticalAlignment="Center"/>
                     </StackPanel>
 
-                    <StackPanel x:Name="TopModuleLinks" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
-                        <Button x:Name="TopNavHome" Tag="Home" Click="TopNavItem_Click"
-                                Background="Transparent" BorderThickness="0" Padding="12,6" Cursor="Hand">
-                            <StackPanel HorizontalAlignment="Center">
-                                <TextBlock Text="{DynamicResource Nav_Top_Dashboard}" FontSize="11" FontWeight="Bold" Foreground="#FFFFFF"/>
-                                <Border x:Name="TopUnderlineHome" Height="2" Background="{DynamicResource ArchitecturalYellowBrush}" Margin="0,3,0,0" Visibility="Visible"/>
-                            </StackPanel>
-                        </Button>
-
-                        <Button x:Name="TopNavNetwork" Tag="Network" Click="TopNavItem_Click"
-                                Background="Transparent" BorderThickness="0" Padding="12,6" Cursor="Hand">
-                            <StackPanel HorizontalAlignment="Center">
-                                <TextBlock Text="{DynamicResource Nav_Top_Network}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <Border x:Name="TopUnderlineNetwork" Height="2" Background="{DynamicResource ArchitecturalYellowBrush}" Margin="0,3,0,0" Visibility="Collapsed"/>
-                            </StackPanel>
-                        </Button>
-
-                        <Button x:Name="TopNavCleaning" Tag="Cleaning" Click="TopNavItem_Click"
-                                Background="Transparent" BorderThickness="0" Padding="12,6" Cursor="Hand">
-                            <StackPanel HorizontalAlignment="Center">
-                                <TextBlock Text="{DynamicResource Nav_Top_Cleaning}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <Border x:Name="TopUnderlineCleaning" Height="2" Background="{DynamicResource ArchitecturalYellowBrush}" Margin="0,3,0,0" Visibility="Collapsed"/>
-                            </StackPanel>
-                        </Button>
-
-                        <Button x:Name="TopNavRam" Tag="RamCleaner" Click="TopNavItem_Click"
-                                Background="Transparent" BorderThickness="0" Padding="12,6" Cursor="Hand">
-                            <StackPanel HorizontalAlignment="Center">
-                                <TextBlock Text="{DynamicResource Nav_Top_RamTurbo}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <Border x:Name="TopUnderlineRam" Height="2" Background="{DynamicResource ArchitecturalYellowBrush}" Margin="0,3,0,0" Visibility="Collapsed"/>
-                            </StackPanel>
-                        </Button>
-
-                        <Button x:Name="TopNavHealth" Tag="HealthDefense" Click="TopNavItem_Click"
-                                Background="Transparent" BorderThickness="0" Padding="12,6" Cursor="Hand">
-                            <StackPanel HorizontalAlignment="Center">
-                                <TextBlock Text="{DynamicResource Nav_Top_HealthDefense}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <Border x:Name="TopUnderlineHealth" Height="2" Background="{DynamicResource ArchitecturalYellowBrush}" Margin="0,3,0,0" Visibility="Collapsed"/>
-                            </StackPanel>
-                        </Button>
-
-                        <Button x:Name="TopNavPrograms" Tag="Programs" Click="TopNavItem_Click"
-                                Background="Transparent" BorderThickness="0" Padding="12,6" Cursor="Hand">
-                            <StackPanel HorizontalAlignment="Center">
-                                <TextBlock Text="{DynamicResource Nav_Top_Programs}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <Border x:Name="TopUnderlinePrograms" Height="2" Background="{DynamicResource ArchitecturalYellowBrush}" Margin="0,3,0,0" Visibility="Collapsed"/>
-                            </StackPanel>
-                        </Button>
-
-                        <Button x:Name="TopNavDisk" Tag="DiskAnalyzer" Click="TopNavItem_Click"
-                                Background="Transparent" BorderThickness="0" Padding="12,6" Cursor="Hand">
-                            <StackPanel HorizontalAlignment="Center">
-                                <TextBlock Text="{DynamicResource Nav_Top_DiskAnalyzer}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <Border x:Name="TopUnderlineDisk" Height="2" Background="{DynamicResource ArchitecturalYellowBrush}" Margin="0,3,0,0" Visibility="Collapsed"/>
-                            </StackPanel>
-                        </Button>
-
-                        <Button x:Name="TopNavInstaller" Tag="Installer" Click="TopNavItem_Click"
-                                Background="Transparent" BorderThickness="0" Padding="12,6" Cursor="Hand">
-                            <StackPanel HorizontalAlignment="Center">
-                                <TextBlock Text="{DynamicResource Nav_Top_Installer}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <Border x:Name="TopUnderlineInstaller" Height="2" Background="{DynamicResource ArchitecturalYellowBrush}" Margin="0,3,0,0" Visibility="Collapsed"/>
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
 
                     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Button x:Name="BtnNotifications" Click="BtnNotifications_Click"
+                        <Button Click="BtnNotifications_Click"
                                 Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                                 Padding="9,5" Cursor="Hand" Margin="0,0,8,0" ToolTip="{DynamicResource Notifications_Tooltip}">
                             <Button.Resources>
                                 <Style TargetType="Border">
-                                    <Setter Property="CornerRadius" Value="6"/>
+                                    <Setter Property="CornerRadius" Value="10"/>
                                 </Style>
                             </Button.Resources>
                             <Grid>
                                 <ui:SymbolIcon Symbol="Alert24" FontSize="13" Foreground="{DynamicResource ArchitecturalYellowBrush}"/>
                                 <Border x:Name="NotificationsBadgeBorder" HorizontalAlignment="Right" VerticalAlignment="Top"
-                                        Width="16" Height="16" CornerRadius="8" Background="{DynamicResource DangerBrush}"
+                                        Width="16" Height="16" CornerRadius="12" Background="{DynamicResource DangerBrush}"
                                         BorderBrush="{DynamicResource BgElevatedBrush}" BorderThickness="1" Margin="0,-6,-6,0" Visibility="Collapsed">
                                     <TextBlock x:Name="NotificationsBadgeText" Text="" FontSize="9" FontWeight="Bold"
                                                Foreground="#FFFFFF" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -257,7 +182,7 @@
                                 Padding="10,5" Cursor="Hand" Margin="0,0,8,0" ToolTip="{DynamicResource Main_ToggleFullscreenTip}">
                             <Button.Resources>
                                 <Style TargetType="Border">
-                                    <Setter Property="CornerRadius" Value="6"/>
+                                    <Setter Property="CornerRadius" Value="10"/>
                                 </Style>
                             </Button.Resources>
                             <StackPanel Orientation="Horizontal">
@@ -271,7 +196,7 @@
                                 Padding="10,5" Cursor="Hand" ToolTip="{DynamicResource Main_CopilotTip}">
                             <Button.Resources>
                                 <Style TargetType="Border">
-                                    <Setter Property="CornerRadius" Value="6"/>
+                                    <Setter Property="CornerRadius" Value="10"/>
                                 </Style>
                             </Button.Resources>
                             <StackPanel Orientation="Horizontal">
@@ -287,313 +212,12 @@
 
             <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition x:Name="SidebarColumn" Width="0"/>
+                    
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Border x:Name="NavBorder" Grid.Column="0" Tag="False" Visibility="Collapsed"
-                        Background="{DynamicResource BgSidebarBrush}"
-                        BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="0,0,1,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
 
-                        <Border x:Name="SidebarHeaderBorder" Grid.Row="0" Padding="14,14,14,12"
-                                BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="0,0,0,1">
-                            <Grid x:Name="HeaderGrid">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Image x:Name="SidebarLogoImage" Source="Resources\icone\plage.png" Grid.Row="0" Grid.Column="0"
-                                       Width="26" Height="26"
-                                       VerticalAlignment="Center"
-                                       RenderOptions.BitmapScalingMode="HighQuality"/>
-                                <TextBlock x:Name="BrandLabel" Grid.Row="0" Grid.Column="1"
-                                           Text="Coclico" FontSize="15" FontWeight="Bold"
-                                           Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"
-                                           Margin="10,0,0,0"
-                                           TextOptions.TextFormattingMode="Display"/>
-                            </Grid>
-                        </Border>
-
-                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,8,0,0">
-                            <StackPanel x:Name="NavMainStack">
-
-                                <TextBlock x:Name="NavSectionLbl"
-                                           Text="{DynamicResource Nav_SectionOverview}" FontSize="9" FontWeight="Bold"
-                                           Foreground="{DynamicResource TextHintBrush}" Margin="14,8,0,6"
-                                           TextOptions.TextFormattingMode="Display"/>
-
-                                <RadioButton x:Name="NavHome" Tag="Home" GroupName="NavGroup"
-                                             Style="{StaticResource NavItemStyle}" IsChecked="True"
-                                             Click="NavItem_Click"
-                                             ToolTip="{DynamicResource Menu_Dashboard}"
-                                             AutomationProperties.Name="Navigation - Tableau de bord">
-                                    <RadioButton.Content>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="24"/>
-                                                <ColumnDefinition x:Name="LabelCol0" Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <ui:SymbolIcon Symbol="Home24" FontSize="17" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="NavHome_Lbl" Grid.Column="1"
-                                                       Text="{DynamicResource Menu_Dashboard}"
-                                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </RadioButton.Content>
-                                </RadioButton>
-
-                                <TextBlock x:Name="NavSectionTools_Lbl"
-                                           Text="{DynamicResource Menu_GroupApplications}" FontSize="9" FontWeight="Bold"
-                                           Foreground="{DynamicResource TextHintBrush}" Margin="14,16,0,6"
-                                           TextOptions.TextFormattingMode="Display"/>
-
-                                <RadioButton x:Name="NavPrograms" Tag="Programs" GroupName="NavGroup"
-                                             Style="{StaticResource NavItemStyle}"
-                                             Click="NavItem_Click"
-                                             ToolTip="{DynamicResource Menu_Programs}"
-                                             AutomationProperties.Name="Navigation - Applications">
-                                    <RadioButton.Content>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="24"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <ui:SymbolIcon Symbol="Apps24" FontSize="17" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="NavPrograms_Lbl" Grid.Column="1"
-                                                       Text="{DynamicResource Menu_Programs}"
-                                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </RadioButton.Content>
-                                </RadioButton>
-
-                                <RadioButton x:Name="NavInstaller" Tag="Installer" GroupName="NavGroup"
-                                             Style="{StaticResource NavItemStyle}"
-                                             Click="NavItem_Click"
-                                             ToolTip="{DynamicResource Menu_Installer}"
-                                             AutomationProperties.Name="Navigation - Installeur">
-                                    <RadioButton.Content>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="24"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <ui:SymbolIcon Symbol="ArrowDownload24" FontSize="17" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="NavInstaller_Lbl" Grid.Column="1"
-                                                       Text="{DynamicResource Menu_Installer}"
-                                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </RadioButton.Content>
-                                </RadioButton>
-
-                                <TextBlock x:Name="NavSectionMaintenance_Lbl"
-                                           Text="{DynamicResource Menu_GroupMaintenance}" FontSize="9" FontWeight="Bold"
-                                           Foreground="{DynamicResource TextHintBrush}" Margin="14,16,0,6"
-                                           TextOptions.TextFormattingMode="Display"/>
-
-                                <RadioButton x:Name="NavCleaning" Tag="Cleaning" GroupName="NavGroup"
-                                             Style="{StaticResource NavItemStyle}"
-                                             Click="NavItem_Click"
-                                             ToolTip="{DynamicResource Menu_Cleaning}"
-                                             AutomationProperties.Name="Navigation - Nettoyage">
-                                    <RadioButton.Content>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="24"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <ui:SymbolIcon Symbol="Delete24" FontSize="17" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="NavCleaning_Lbl" Grid.Column="1"
-                                                       Text="{DynamicResource Menu_Cleaning}"
-                                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </RadioButton.Content>
-                                </RadioButton>
-
-                                <RadioButton x:Name="NavHealthDefense" Tag="HealthDefense" GroupName="NavGroup"
-                                             Style="{StaticResource NavItemStyle}"
-                                             Click="NavItem_Click"
-                                             ToolTip="{DynamicResource Menu_HealthDefense}"
-                                             AutomationProperties.Name="Navigation - Santé &amp; Défense">
-                                    <RadioButton.Content>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="24"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <ui:SymbolIcon Symbol="ShieldCheckmark24" FontSize="17" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="NavHealthDefense_Lbl" Grid.Column="1"
-                                                       Text="{DynamicResource Menu_HealthDefense}"
-                                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </RadioButton.Content>
-                                </RadioButton>
-
-                                <RadioButton x:Name="NavDiagnostics" Tag="Diagnostics" GroupName="NavGroup"
-                                             Style="{StaticResource NavItemStyle}"
-                                             Click="NavItem_Click"
-                                             ToolTip="{DynamicResource Menu_Diagnostics}"
-                                             AutomationProperties.Name="Navigation - Diagnostic du PC">
-                                    <RadioButton.Content>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="24"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <ui:SymbolIcon Symbol="DesktopPulse24" FontSize="17" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="NavDiagnostics_Lbl" Grid.Column="1"
-                                                       Text="{DynamicResource Menu_Diagnostics}"
-                                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </RadioButton.Content>
-                                </RadioButton>
-
-                                <RadioButton x:Name="NavDisk" Tag="DiskAnalyzer" GroupName="NavGroup"
-                                             Style="{StaticResource NavItemStyle}"
-                                             Click="NavItem_Click"
-                                             ToolTip="{DynamicResource Menu_DiskAnalyzer}"
-                                             AutomationProperties.Name="Navigation - Espace disque">
-                                    <RadioButton.Content>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="24"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <ui:SymbolIcon Symbol="DataUsage24" FontSize="17" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="NavDisk_Lbl" Grid.Column="1"
-                                                       Text="{DynamicResource Menu_DiskAnalyzer}"
-                                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </RadioButton.Content>
-                                </RadioButton>
-
-                                <TextBlock x:Name="NavSectionReglages_Lbl"
-                                           Text="{DynamicResource Menu_GroupPerformance}" FontSize="9" FontWeight="Bold"
-                                           Foreground="{DynamicResource TextHintBrush}" Margin="14,16,0,6"
-                                           TextOptions.TextFormattingMode="Display"/>
-
-                                <RadioButton x:Name="NavRamCleaner" Tag="RamCleaner" GroupName="NavGroup"
-                                             Style="{StaticResource NavItemStyle}"
-                                             Click="NavItem_Click"
-                                             ToolTip="{DynamicResource Menu_RamCleaner}"
-                                             AutomationProperties.Name="Navigation - RAM Cleaner">
-                                    <RadioButton.Content>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="24"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <ui:SymbolIcon Symbol="Flash24" FontSize="17" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="NavRamCleaner_Lbl" Grid.Column="1"
-                                                       Text="{DynamicResource Menu_RamCleaner}"
-                                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </RadioButton.Content>
-                                </RadioButton>
-
-                                <RadioButton x:Name="NavNetwork" Tag="Network" GroupName="NavGroup"
-                                             Style="{StaticResource NavItemStyle}"
-                                             Click="NavItem_Click"
-                                             ToolTip="{DynamicResource Menu_Network}"
-                                             AutomationProperties.Name="Navigation - Réseau &amp; Latence">
-                                    <RadioButton.Content>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="24"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <ui:SymbolIcon Symbol="Globe24" FontSize="17" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="NavNetwork_Lbl" Grid.Column="1"
-                                                       Text="{DynamicResource Menu_Network}"
-                                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </RadioButton.Content>
-                                </RadioButton>
-
-                                <TextBlock x:Name="NavSectionSys_Lbl"
-                                           Text="{DynamicResource Nav_SectionSys}" FontSize="9" FontWeight="Bold"
-                                           Foreground="{DynamicResource TextHintBrush}" Margin="14,16,0,6"
-                                           TextOptions.TextFormattingMode="Display"/>
-
-                                <RadioButton x:Name="NavSettings" Tag="Settings" GroupName="NavGroup"
-                                             Style="{StaticResource NavItemStyle}"
-                                             Click="NavItem_Click"
-                                             ToolTip="{DynamicResource Menu_Settings}">
-                                    <RadioButton.Content>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="24"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <ui:SymbolIcon Symbol="Settings24" FontSize="17" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="NavSettings_Lbl" Grid.Column="1"
-                                                       Text="{DynamicResource Menu_Settings}"
-                                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </RadioButton.Content>
-                                </RadioButton>
-
-                                <RadioButton x:Name="NavHelp" Tag="Help" GroupName="NavGroup"
-                                             Style="{StaticResource NavItemStyle}"
-                                             Click="NavItem_Click"
-                                             ToolTip="{DynamicResource Menu_Help}">
-                                    <RadioButton.Content>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="24"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <ui:SymbolIcon Symbol="QuestionCircle24" FontSize="17" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="NavHelp_Lbl" Grid.Column="1"
-                                                       Text="{DynamicResource Menu_Help}"
-                                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </RadioButton.Content>
-                                </RadioButton>
-                            </StackPanel>
-                        </ScrollViewer>
-
-                        <Border Grid.Row="2" Padding="8,10" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="0,1,0,0">
-                            <Button x:Name="BtnAiChat"
-                                    Click="BtnAiChat_Click"
-                                    Background="{DynamicResource BgElevatedBrush}"
-                                    BorderBrush="{DynamicResource BorderDefaultBrush}"
-                                    BorderThickness="1"
-                                    Padding="10,8"
-                                    HorizontalContentAlignment="Left"
-                                    Cursor="Hand" ToolTip="{DynamicResource Main_CopilotFloatingTip}">
-                                <Button.Resources>
-                                    <Style TargetType="Border">
-                                        <Setter Property="CornerRadius" Value="{DynamicResource CornerSmall}"/>
-                                    </Style>
-                                </Button.Resources>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="24"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <ui:SymbolIcon Symbol="Bot24" FontSize="16" Foreground="{DynamicResource ArchitecturalYellowBrush}"
-                                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="NavAi_Lbl" Grid.Column="1"
-                                               Text="Coclico AI" FontSize="12" FontWeight="SemiBold"
-                                               Foreground="{DynamicResource TextPrimaryBrush}"
-                                               Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                </Grid>
-                            </Button>
-                        </Border>
-                    </Grid>
-                </Border>
-
-                <Grid Grid.Column="1">
+                <Grid>
                     <Border Background="{DynamicResource BgBaseBrush}">
                         <Border.RenderTransform>
                             <TranslateTransform x:Name="PageContentTransform"/>
@@ -647,7 +271,7 @@
                         <Border.RenderTransform>
                             <TranslateTransform X="540"/>
                         </Border.RenderTransform>
-                        <views:AiChatView x:Name="AiChatPanel"
+                        <views:AiChatView
                                           CloseRequested="AiChatPanel_CloseRequested"
                                           ActionRequested="AiChatPanel_ActionRequested"/>
                     </Border>
@@ -655,9 +279,9 @@
             </Grid>
 
             <Grid x:Name="ArchitecturalDropdownOverlay" Grid.Row="3" Grid.RowSpan="2" Panel.ZIndex="800" Visibility="Collapsed" Opacity="0">
-                <Border Background="#C008090C" MouseDown="DropdownBackdrop_MouseDown"/>
+                <Border Background="#E008090C" MouseDown="DropdownBackdrop_MouseDown"/>
 
-                <Border x:Name="ArchitecturalDropdownContainer" VerticalAlignment="Top" HorizontalAlignment="Left" Width="380"
+                <Border VerticalAlignment="Top" HorizontalAlignment="Left" Width="380"
                     Background="{DynamicResource BgPanelBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}"
                         BorderThickness="1" CornerRadius="0,0,14,14" Padding="18,18,18,20">
                     <Border.Effect>
@@ -694,7 +318,7 @@
                                     Padding="12,5" Cursor="Hand">
                                 <Button.Resources>
                                     <Style TargetType="Border">
-                                        <Setter Property="CornerRadius" Value="6"/>
+                                        <Setter Property="CornerRadius" Value="10"/>
                                     </Style>
                                 </Button.Resources>
                                 <StackPanel Orientation="Horizontal">
@@ -710,16 +334,16 @@
                         <StackPanel Margin="0,0,2,0">
 
                             <Border Tag="Home" MouseDown="DropdownItem_MouseDown" Cursor="Hand" Margin="6,0,6,4" Padding="12,10"
-                                    Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
+                                    Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
                                 <StackPanel Orientation="Horizontal">
                                     <ui:SymbolIcon Symbol="Home24" FontSize="13" Foreground="{DynamicResource ArchitecturalYellowBrush}" Margin="0,0,9,0" VerticalAlignment="Center"/>
                                     <TextBlock Text="{DynamicResource Menu_Dashboard}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
 
-                            <Border x:Name="MenuGroupApplications" Tag="Applications" MouseDown="MenuGroupToggle_MouseDown" Cursor="Hand"
+                            <Border Tag="Applications" MouseDown="MenuGroupToggle_MouseDown" Cursor="Hand"
                                     Margin="6,10,6,0" Padding="12,9"
-                                    Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1" CornerRadius="8">
+                                    Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1" CornerRadius="12">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
@@ -739,21 +363,21 @@
                             </Border>
                             <StackPanel x:Name="MenuPanelApplications" Margin="14,6,6,2">
                                 <Border Tag="Programs" MouseDown="DropdownItem_MouseDown" Cursor="Hand" Margin="0,0,0,4" Padding="12,10"
-                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
+                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="Apps24" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,9,0" VerticalAlignment="Center"/>
                                         <TextBlock Text="{DynamicResource Menu_Applications}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
                                 <Border Tag="Installer" MouseDown="DropdownItem_MouseDown" Cursor="Hand" Margin="0,0,0,4" Padding="12,10"
-                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
+                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="ArrowDownload24" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,9,0" VerticalAlignment="Center"/>
                                         <TextBlock Text="{DynamicResource Menu_WingetInstaller}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
                                 <Border Tag="UpdateCenter" MouseDown="DropdownItem_MouseDown" Cursor="Hand" Margin="0,0,0,4" Padding="12,10"
-                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
+                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="ArrowSync24" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,9,0" VerticalAlignment="Center"/>
                                         <TextBlock Text="{DynamicResource Menu_UpdateCenter}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
@@ -761,9 +385,9 @@
                                 </Border>
                             </StackPanel>
 
-                            <Border x:Name="MenuGroupMaintenance" Tag="Maintenance" MouseDown="MenuGroupToggle_MouseDown" Cursor="Hand"
+                            <Border Tag="Maintenance" MouseDown="MenuGroupToggle_MouseDown" Cursor="Hand"
                                     Margin="6,8,6,0" Padding="12,9"
-                                    Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1" CornerRadius="8">
+                                    Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1" CornerRadius="12">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
@@ -783,21 +407,28 @@
                             </Border>
                             <StackPanel x:Name="MenuPanelMaintenance" Margin="14,6,6,2">
                                 <Border Tag="Cleaning" MouseDown="DropdownItem_MouseDown" Cursor="Hand" Margin="0,0,0,4" Padding="12,10"
-                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
+                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="Delete24" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,9,0" VerticalAlignment="Center"/>
                                         <TextBlock Text="{DynamicResource Menu_SystemCleaning}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
+                                <Border Tag="TelemetryBlocker" MouseDown="DropdownItem_MouseDown" Cursor="Hand" Margin="0,0,0,4" Padding="12,10"
+                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Symbol="Shield24" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,9,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource Menu_TelemetryBlocker}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
                                 <Border Tag="HealthDefense" MouseDown="DropdownItem_MouseDown" Cursor="Hand" Margin="0,0,0,4" Padding="12,10"
-                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
+                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="ShieldCheckmark24" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,9,0" VerticalAlignment="Center"/>
                                         <TextBlock Text="{DynamicResource Menu_HealthAndDefense}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
                                 <Border Tag="DiskAnalyzer" MouseDown="DropdownItem_MouseDown" Cursor="Hand" Margin="0" Padding="12,10"
-                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
+                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="DataUsage24" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,9,0" VerticalAlignment="Center"/>
                                         <TextBlock Text="{DynamicResource Menu_DiskAnalyzer}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
@@ -805,9 +436,9 @@
                                 </Border>
                             </StackPanel>
 
-<Border x:Name="MenuGroupPerformance" Tag="Performance" MouseDown="MenuGroupToggle_MouseDown" Cursor="Hand"
+<Border Tag="Performance" MouseDown="MenuGroupToggle_MouseDown" Cursor="Hand"
                                     Margin="6,10,6,0" Padding="12,9"
-                                    Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1" CornerRadius="8">
+                                    Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1" CornerRadius="12">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
@@ -827,21 +458,21 @@
                             </Border>
                             <StackPanel x:Name="MenuPanelPerformance" Margin="14,6,6,2">
                                 <Border Tag="RamCleaner" MouseDown="DropdownItem_MouseDown" Cursor="Hand" Margin="0,0,0,4" Padding="12,10"
-                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
+                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="Flash24" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,9,0" VerticalAlignment="Center"/>
                                         <TextBlock Text="{DynamicResource Menu_RamTurboCleaner}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
                                 <Border Tag="Network" MouseDown="DropdownItem_MouseDown" Cursor="Hand" Margin="0,0,0,4" Padding="12,10"
-                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
+                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="Globe24" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,9,0" VerticalAlignment="Center"/>
                                         <TextBlock Text="{DynamicResource Menu_NetworkOptimizer}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
                                 <Border Tag="PowerOptimizer" MouseDown="DropdownItem_MouseDown" Cursor="Hand" Margin="0" Padding="12,10"
-                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
+                                        Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="Gauge24" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,9,0" VerticalAlignment="Center"/>
                                         <TextBlock Text="{DynamicResource Menu_PowerOptimizer}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
@@ -852,14 +483,14 @@
 <Border Height="1" Background="{DynamicResource BorderSubtleBrush}" Margin="6,12,6,6"/>
 
                             <Border Tag="Settings" MouseDown="DropdownItem_MouseDown" Cursor="Hand" Margin="6,0,6,4" Padding="12,10"
-                                    Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
+                                    Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
                                 <StackPanel Orientation="Horizontal">
                                     <ui:SymbolIcon Symbol="Settings24" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,9,0" VerticalAlignment="Center"/>
                                     <TextBlock Text="{DynamicResource Menu_Settings}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
                             <Border Tag="Help" MouseDown="DropdownItem_MouseDown" Cursor="Hand" Margin="6,0,6,0" Padding="12,10"
-                                    Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
+                                    Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
                                 <StackPanel Orientation="Horizontal">
                                     <ui:SymbolIcon Symbol="QuestionCircle24" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,9,0" VerticalAlignment="Center"/>
                                     <TextBlock Text="{DynamicResource Menu_HelpAndAi}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
@@ -904,7 +535,7 @@
                                   Margin="0,0,0,24"/>
 
             <Grid x:Name="NotificationsOverlay" Grid.Row="2" Grid.RowSpan="3" Panel.ZIndex="850" Visibility="Collapsed" Opacity="0">
-                <Border Background="#C008090C" MouseDown="NotificationsBackdrop_MouseDown"/>
+                <Border Background="#E008090C" MouseDown="NotificationsBackdrop_MouseDown"/>
 
                 <Border VerticalAlignment="Top" HorizontalAlignment="Right" Width="360" Margin="0,14,18,0"
                         Background="{DynamicResource BgPanelBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}"
@@ -944,7 +575,7 @@
                                     Padding="12,5" Cursor="Hand">
                                 <Button.Resources>
                                     <Style TargetType="Border">
-                                        <Setter Property="CornerRadius" Value="6"/>
+                                        <Setter Property="CornerRadius" Value="10"/>
                                     </Style>
                                 </Button.Resources>
                                 <StackPanel Orientation="Horizontal">
@@ -967,7 +598,7 @@
                                     <DataTemplate>
                                         <Border Margin="0,0,0,6" Padding="12,10"
                                                 Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}"
-                                                BorderThickness="1" CornerRadius="8">
+                                                BorderThickness="1" CornerRadius="12">
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto"/>
@@ -992,12 +623,12 @@
                             </ItemsControl>
                         </ScrollViewer>
 
-                        <Button x:Name="BtnNotificationsClear" Grid.Row="3" Click="NotificationsClear_Click"
+                        <Button Grid.Row="3" Click="NotificationsClear_Click"
                                 Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1"
                                 Padding="12,6" Cursor="Hand" Margin="0,4,0,0" HorizontalAlignment="Right">
                             <Button.Resources>
                                 <Style TargetType="Border">
-                                    <Setter Property="CornerRadius" Value="6"/>
+                                    <Setter Property="CornerRadius" Value="10"/>
                                 </Style>
                             </Button.Resources>
                             <StackPanel Orientation="Horizontal">
@@ -1011,7 +642,7 @@
 
             <Grid x:Name="WelcomeOverlay" Grid.Row="0" Grid.RowSpan="5" Panel.ZIndex="10000" Visibility="Collapsed" Opacity="0">
                 <Border Background="{DynamicResource OverlayDark}" MouseDown="WelcomeBackdrop_MouseDown"/>
-                <Border x:Name="WelcomeCard" VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="690" Margin="24"
+                <Border VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="690" Margin="24"
                         Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}"
                         BorderThickness="1" CornerRadius="16" Padding="32,28">
                     <Border.RenderTransform>
@@ -1044,7 +675,7 @@
 
                         <UniformGrid Columns="2" Rows="2" Margin="0,0,0,20">
                             <Border Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1"
-                                    CornerRadius="10" Padding="14,12" Margin="0,0,6,6">
+                                    CornerRadius="14" Padding="14,12" Margin="0,0,6,6">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -1062,7 +693,7 @@
                             </Border>
 
                             <Border Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1"
-                                    CornerRadius="10" Padding="14,12" Margin="6,0,0,6">
+                                    CornerRadius="14" Padding="14,12" Margin="6,0,0,6">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -1080,7 +711,7 @@
                             </Border>
 
                             <Border Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1"
-                                    CornerRadius="10" Padding="14,12" Margin="0,6,6,0">
+                                    CornerRadius="14" Padding="14,12" Margin="0,6,6,0">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -1098,7 +729,7 @@
                             </Border>
 
                             <Border Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1"
-                                    CornerRadius="10" Padding="14,12" Margin="6,6,0,0">
+                                    CornerRadius="14" Padding="14,12" Margin="6,6,0,0">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -1132,7 +763,7 @@
                             </StackPanel>
 
                             <ui:Button x:Name="BtnDismissWelcome" Grid.Column="1" Click="BtnDismissWelcome_Click"
-                                       Appearance="Primary" CornerRadius="8" Padding="22,10"
+                                       Appearance="Primary" CornerRadius="12" Padding="22,10"
                                        Cursor="Hand" FontWeight="SemiBold" IsDefault="True">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="{DynamicResource Welcome_Action}" FontSize="13" VerticalAlignment="Center"/>

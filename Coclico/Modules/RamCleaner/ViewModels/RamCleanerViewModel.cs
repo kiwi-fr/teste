@@ -7,16 +7,16 @@ using System.Windows.Threading;
 using Coclico.Services;
 using CommunityToolkit.Mvvm.Input;
 
-namespace Coclico.ViewModels;
+namespace Coclico.Modules.RamCleaner.ViewModels;
 
-public sealed class ProcessItemVm
+internal sealed class ProcessItemVm
 {
     public string Name { get; init; } = string.Empty;
     public string RamText { get; init; } = string.Empty;
     public double WorkingSetPercent { get; init; }
 }
 
-public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
+internal partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
 {
     private const int HistorySize = 90;
     private const string Subsystem = "RamCleaner";
@@ -56,52 +56,52 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
     public bool IsCleaning { get; private set { if (field == value) return; field = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsNotCleaning)); } }
     public bool IsNotCleaning => !IsCleaning;
     public bool HasResult { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } }
-    public string CleaningStatus { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
-    public string LastCleanedText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string CleaningStatus { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string LastCleanedText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
     public bool NotifEnabled
     {
         get => _notifEnabled;
         private set { if (_notifEnabled == value) return; _notifEnabled = value; OnPropertyChanged(); OnPropertyChanged(nameof(NotifButtonLabel)); }
     }
-    public string NotifButtonLabel => NotifEnabled ? L("RamCleaner_NotifOn") : L("RamCleaner_NotifOff");
-    public string ResultWorkingSets { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string ResultStandby { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string ResultLowPriorityStandby { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string ResultModifiedPages { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string ResultCombinedPages { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string ResultModifiedFileCache { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string ResultSystemFileCache { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string ResultRegistryCache { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string ResultDnsCache { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string ResultTotal { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string PhysUsedText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string PhysAvailText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string PhysTotalText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string PhysPercent { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
+    public string NotifButtonLabel => NotifEnabled ? Loc.Get("RamCleaner_NotifOn") : Loc.Get("RamCleaner_NotifOff");
+    public string ResultWorkingSets { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string ResultStandby { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string ResultLowPriorityStandby { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string ResultModifiedPages { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string ResultCombinedPages { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string ResultModifiedFileCache { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string ResultSystemFileCache { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string ResultRegistryCache { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string ResultDnsCache { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string ResultTotal { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string PhysUsedText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string PhysAvailText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string PhysTotalText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string PhysPercent { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
     public double PhysUsedPercent { get; private set { if (field.Equals(value)) return; field = value; OnPropertyChanged(); } }
-    public string VirtUsedText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string VirtAvailText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string VirtTotalText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string VirtPercent { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
+    public string VirtUsedText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string VirtAvailText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string VirtTotalText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string VirtPercent { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
     public double VirtUsedPercent { get; private set { if (field.Equals(value)) return; field = value; OnPropertyChanged(); } }
-    public string PageUsedText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string PageAvailText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string PageTotalText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
+    public string PageUsedText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string PageAvailText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string PageTotalText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
     public double SysCpuPercent { get; private set { if (field.Equals(value)) return; field = value; OnPropertyChanged(); } }
-    public string SysCpuText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
+    public string SysCpuText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
     public Brush SysCpuColor { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = _brushGreen;
-    public string GpuNameShort { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
-    public string GpuVramText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string GpuTypeText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
-    public string AppRamText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
+    public string GpuNameShort { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string GpuVramText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string GpuTypeText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
+    public string AppRamText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
     public double AppRamPercent { get; private set { if (field.Equals(value)) return; field = value; OnPropertyChanged(); } }
-    public string AppCpuText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "-";
+    public string AppCpuText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "-";
     public double AppCpuPercent { get; private set { if (field.Equals(value)) return; field = value; OnPropertyChanged(); } }
-    public string PressureText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string PressureText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
     public Brush PressureColor { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = _brushGreen;
     public Brush PressureBorderColor { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = _brushBorderNormal;
-    public string CumulativeFreedText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "0 B";
-    public string GuardStatusText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string CumulativeFreedText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "0 B";
+    public string GuardStatusText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
     public bool AutoCleanEnabled
     {
         get;
@@ -162,7 +162,7 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
     public bool ShowIntervalCombo { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = true;
     public bool ShowThresholdCombo { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } }
     public bool ShowHybridBadge { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } }
-    public string AutoCleanStatusText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string AutoCleanStatusText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
     public bool AutoCleanValueEnabled => AutoCleanEnabled && (AutoCleanMode)AutoModeIndex != AutoCleanMode.Hybrid;
 
     public int AutoCleanValue
@@ -207,15 +207,15 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
         2 => 2000,
         3 => 5000,
         4 => 10000,
-        _ => 1000
+        _ => 1500
     };
 
     public RamCleanerViewModel()
     {
-        LastCleanedText = L("RamCleaner_NotCleaned");
-        PressureText = L("RamCleaner_Pressure_Normal");
-        GuardStatusText = L("RamCleaner_GuardActive");
-        GpuNameShort = L("RamCleaner_GpuDetecting");
+        LastCleanedText = Loc.Get("RamCleaner_NotCleaned");
+        PressureText = Loc.Get("RamCleaner_Pressure_Normal");
+        GuardStatusText = Loc.Get("RamCleaner_GuardActive");
+        GpuNameShort = Loc.Get("RamCleaner_GpuDetecting");
 
         _suppressConfigPush = true;
         try
@@ -267,7 +267,7 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
             }
             else
             {
-                AutoCleanStatusText = L("RamCleaner_AutoDisabled");
+                AutoCleanStatusText = Loc.Get("RamCleaner_AutoDisabled");
             }
         }
         finally
@@ -342,12 +342,12 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
     {
         try
         {
-            long freed = await Task.Run(MemoryCleanerService.ClearDirectXShaderCaches);
+            long freed = await Task.Run(MemoryCleanerService.ClearDirectXShaderCaches).ConfigureAwait(false);
             string freedText = MemoryCleanerService.FormatBytes(freed);
-            GuardStatusText = TextFormatService.Format(L("RamCleaner_ShaderCleared"), freedText) + " - " + DateTime.Now.ToString("HH:mm:ss");
+            GuardStatusText = Loc.Format("RamCleaner_ShaderCleared", freedText) + " - " + DateTime.Now.ToString("HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
             if (NotifEnabled)
             {
-                ToastService.Show(TextFormatService.Format(L("RamCleaner_ShaderCleared"), freedText));
+                ToastService.Show(Loc.Format("RamCleaner_ShaderCleared", freedText));
             }
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
@@ -367,10 +367,10 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
             }
 
             MemoryCleanerService.RestartGraphicsDriverPipeline();
-            GuardStatusText = L("RamCleaner_GpuPipelineReset") + " - " + DateTime.Now.ToString("HH:mm:ss");
+            GuardStatusText = Loc.Get("RamCleaner_GpuPipelineReset") + " - " + DateTime.Now.ToString("HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
             if (NotifEnabled)
             {
-                ToastService.Show(L("RamCleaner_GpuPipelineToast"));
+                ToastService.Show(Loc.Get("RamCleaner_GpuPipelineToast"));
             }
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
@@ -419,8 +419,8 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
                           : _brushGreen;
 
             ResourceGuardService guard = ServiceContainer.GetRequired<ResourceGuardService>();
-            AppRamText = TextFormatService.Format(L("RamCleaner_AppRam"), guard.AppWorkingSetMb);
-            AppCpuText = TextFormatService.Format(L("RamCleaner_AppCpu"), $"{guard.AppCpuPercent:F1}");
+            AppRamText = Loc.Format("RamCleaner_AppRam", guard.AppWorkingSetMb);
+            AppCpuText = Loc.Format("RamCleaner_AppCpu", $"{guard.AppCpuPercent:F1}");
             double totalRamMb = info.TotalPhysBytes / (1024.0 * 1024.0);
             AppRamPercent = totalRamMb > 0 ? Math.Min(100.0, guard.AppWorkingSetMb / totalRamMb * 100.0) : 0;
             AppCpuPercent = Math.Min(100.0, Math.Max(0.0, guard.AppCpuPercent));
@@ -434,12 +434,12 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
     {
         try
         {
-            MemoryCleanerService.GpuInfo gpu = await Task.Run(MemoryCleanerService.GetGpuInfo);
+            MemoryCleanerService.GpuInfo gpu = await Task.Run(MemoryCleanerService.GetGpuInfo).ConfigureAwait(false);
             string name = gpu.Name.Length > 22 ? gpu.Name[..22] + "…" : gpu.Name;
             string vram = gpu.AdapterRamMb > 0
-                ? TextFormatService.Format(L("RamCleaner_GpuVram"), gpu.AdapterRamMb)
-                : gpu.SharedUsedMb > 0 ? TextFormatService.Format(L("RamCleaner_GpuShared"), gpu.SharedUsedMb) : L("RamCleaner_GpuVramNA");
-            string type = gpu.IsIntegrated ? L("RamCleaner_GpuIntegrated") : L("RamCleaner_GpuDedicated");
+                ? Loc.Format("RamCleaner_GpuVram", gpu.AdapterRamMb)
+                : gpu.SharedUsedMb > 0 ? Loc.Format("RamCleaner_GpuShared", gpu.SharedUsedMb) : Loc.Get("RamCleaner_GpuVramNA");
+            string type = gpu.IsIntegrated ? Loc.Get("RamCleaner_GpuIntegrated") : Loc.Get("RamCleaner_GpuDedicated");
 
             RunOnUi(() =>
             {
@@ -506,7 +506,7 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
 
         IsCleaning = true;
         HasResult = false;
-        CleaningStatus = L("RamCleaner_Status_Starting");
+        CleaningStatus = Loc.Get("RamCleaner_Status_Starting");
 
         try
         {
@@ -525,8 +525,8 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
 
             CancellationToken ct = _cleanCts!.Token;
 
-            CleaningStatus = L("RamCleaner_Status_ReadingMem");
-            MemoryCleanerService.RamInfo before = await Task.Run(MemoryCleanerService.GetRamInfo);
+            CleaningStatus = Loc.Get("RamCleaner_Status_ReadingMem");
+            MemoryCleanerService.RamInfo before = await Task.Run(MemoryCleanerService.GetRamInfo).ConfigureAwait(false);
 
             long ws = 0, mfc = 0, sfc = 0, rc = 0, sb = 0, lp = 0, cp = 0, mp = 0;
             long dns = 0, gc = 0, sbf = 0, kt = 0, hc = 0, cb = 0, arp = 0, nb = 0, sess = 0, sf = 0;
@@ -534,11 +534,11 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
 
             if (profile == MemoryCleanerService.CleanProfile.Smart)
             {
-                CleaningStatus = L("RamCleaner_Status_SmartClean");
+                CleaningStatus = Loc.Get("RamCleaner_Status_SmartClean");
                 MemoryCleanerService.CleanResult smartRes = await MemoryCleanerService.SmartCleanAsync(
                     protectForeground: ProtectForeground,
                     purgeStandbyOnly: false,
-                    ct: ct);
+                    ct: ct).ConfigureAwait(false);
 
                 ws = smartRes.WorkingSetsFreed;
                 sb = smartRes.StandbyFreed;
@@ -553,8 +553,8 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
                 if (profile is MemoryCleanerService.CleanProfile.Deep or MemoryCleanerService.CleanProfile.Quick
                     or MemoryCleanerService.CleanProfile.Normal)
                 {
-                    CleaningStatus = L("RamCleaner_Status_WorkingSets");
-                    ws = await Task.Run(() => MemoryCleanerService.EmptyWorkingSets(protectForeground: ProtectForeground), ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_WorkingSets");
+                    ws = await Task.Run(() => MemoryCleanerService.EmptyWorkingSets(protectForeground: ProtectForeground), ct).ConfigureAwait(false);
                 }
 
                 if (profile is MemoryCleanerService.CleanProfile.Quick
@@ -562,87 +562,89 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
                     or MemoryCleanerService.CleanProfile.Deep)
                 {
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_StandbyFast");
-                    sbf = await Task.Run(MemoryCleanerService.FlushStandbyListFast, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_StandbyFast");
+                    sbf = await Task.Run(MemoryCleanerService.FlushStandbyListFast, ct).ConfigureAwait(false);
 
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_StandbyList");
-                    sb = await Task.Run(MemoryCleanerService.FlushStandbyList, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_StandbyList");
+                    sb = await Task.Run(MemoryCleanerService.FlushStandbyList, ct).ConfigureAwait(false);
 
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_Dns");
-                    dns = await Task.Run(MemoryCleanerService.FlushDnsCache, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_Dns");
+                    dns = await Task.Run(MemoryCleanerService.FlushDnsCache, ct).ConfigureAwait(false);
 
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_Gc");
-                    gc = await Task.Run(MemoryCleanerService.ForceGcCollect, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_Gc");
+                    gc = await Task.Run(MemoryCleanerService.ForceGcCollect, ct).ConfigureAwait(false);
                 }
 
                 if (profile is MemoryCleanerService.CleanProfile.Normal
                     or MemoryCleanerService.CleanProfile.Deep)
                 {
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_ModFiles");
-                    mfc = await Task.Run(MemoryCleanerService.FlushModifiedFileCache, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_ModFiles");
+                    mfc = await Task.Run(MemoryCleanerService.FlushModifiedFileCache, ct).ConfigureAwait(false);
 
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_SysFiles");
-                    sfc = await Task.Run(MemoryCleanerService.ClearSystemFileCache, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_SysFiles");
+                    sfc = await Task.Run(MemoryCleanerService.ClearSystemFileCache, ct).ConfigureAwait(false);
 
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_RegCache");
-                    rc = await Task.Run(MemoryCleanerService.FlushRegistryCache, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_RegCache");
+                    rc = await Task.Run(MemoryCleanerService.FlushRegistryCache, ct).ConfigureAwait(false);
 
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_LowPriStandby");
-                    lp = await Task.Run(MemoryCleanerService.FlushLowPriorityStandbyList, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_LowPriStandby");
+                    lp = await Task.Run(MemoryCleanerService.FlushLowPriorityStandbyList, ct).ConfigureAwait(false);
 
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_CombPages");
-                    cp = await Task.Run(MemoryCleanerService.FlushCombinedPageList, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_CombPages");
+                    cp = await Task.Run(MemoryCleanerService.FlushCombinedPageList, ct).ConfigureAwait(false);
 
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_ModPages");
-                    mp = await Task.Run(MemoryCleanerService.FlushModifiedPageList, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_ModPages");
+                    mp = await Task.Run(MemoryCleanerService.FlushModifiedPageList, ct).ConfigureAwait(false);
 
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_CompactHeaps");
-                    hc = await Task.Run(MemoryCleanerService.CompactAllHeaps, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_CompactHeaps");
+                    hc = await Task.Run(MemoryCleanerService.CompactAllHeaps, ct).ConfigureAwait(false);
 
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_TrimSessions");
-                    sess = await Task.Run(MemoryCleanerService.TrimAllSessionsWorkingSets, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_TrimSessions");
+                    sess = await Task.Run(MemoryCleanerService.TrimAllSessionsWorkingSets, ct).ConfigureAwait(false);
                 }
 
                 if (profile == MemoryCleanerService.CleanProfile.Deep)
                 {
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_KernelWS");
-                    kt = await Task.Run(MemoryCleanerService.TrimKernelWorkingSet, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_KernelWS");
+                    kt = await Task.Run(MemoryCleanerService.TrimKernelWorkingSet, ct).ConfigureAwait(false);
 
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_Clipboard");
-                    cb = await Task.Run(MemoryCleanerService.ClearClipboard, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_Clipboard");
+                    cb = await Task.Run(MemoryCleanerService.ClearClipboard, ct).ConfigureAwait(false);
 
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_ArpCache");
-                    arp = await Task.Run(MemoryCleanerService.FlushArpCache, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_ArpCache");
+                    arp = await Task.Run(MemoryCleanerService.FlushArpCache, ct).ConfigureAwait(false);
 
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_NetBiosCache");
-                    nb = await Task.Run(MemoryCleanerService.FlushNetBiosCache, ct);
+                    CleaningStatus = Loc.Get("RamCleaner_Status_NetBiosCache");
+                    nb = await Task.Run(MemoryCleanerService.FlushNetBiosCache, ct).ConfigureAwait(false);
 
                     ct.ThrowIfCancellationRequested();
-                    CleaningStatus = L("RamCleaner_Status_SysMain");
-                    try { sf = await MemoryCleanerService.FlushSuperFetchAsync(ct); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, $"{Subsystem}.SafeCleanAsync.FlushSuperFetch"); }
+                    CleaningStatus = Loc.Get("RamCleaner_Status_SysMain");
+                    try { sf = await MemoryCleanerService.FlushSuperFetchAsync(ct).ConfigureAwait(false); }
+                    catch (OperationCanceledException) { throw; }
+                    catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, $"{Subsystem}.SafeCleanAsync.FlushSuperFetch"); }
                 }
 
                 long sumParts = ws + mfc + sfc + rc + sb + lp + cp + mp
                     + dns + gc + sbf + kt + hc + cb + arp + nb + sess + sf;
 
-                CleaningStatus = L("RamCleaner_Status_Measuring");
-                await Task.Delay(500, CancellationToken.None);
-                MemoryCleanerService.RamInfo after = await Task.Run(MemoryCleanerService.GetRamInfo);
+                CleaningStatus = Loc.Get("RamCleaner_Status_Measuring");
+                await Task.Delay(500, CancellationToken.None).ConfigureAwait(false);
+                MemoryCleanerService.RamInfo after = await Task.Run(MemoryCleanerService.GetRamInfo).ConfigureAwait(false);
                 long globalDelta = Math.Max(0, after.AvailPhysBytes - before.AvailPhysBytes);
                 total = Math.Max(sumParts, globalDelta);
             }
@@ -657,16 +659,16 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
             ResultRegistryCache = MemoryCleanerService.FormatBytes(rc);
             ResultDnsCache = MemoryCleanerService.FormatBytes(dns + arp + nb);
             ResultTotal = MemoryCleanerService.FormatBytes(total);
-            LastCleanedText = L("RamCleaner_LastCleaned") + DateTime.Now.ToString("HH:mm:ss");
+            LastCleanedText = Loc.Get("RamCleaner_LastCleaned") + DateTime.Now.ToString("HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
             HasResult = true;
-            CleaningStatus = L("RamCleaner_Done");
+            CleaningStatus = Loc.Get("RamCleaner_Done");
 
             _cumulativeFreedBytes += total;
             CumulativeFreedText = MemoryCleanerService.FormatBytes(_cumulativeFreedBytes);
 
             if (NotifEnabled)
             {
-                ToastService.Show(L("RamCleaner_Freed") + MemoryCleanerService.FormatBytes(total));
+                ToastService.Show(Loc.Get("RamCleaner_Freed") + MemoryCleanerService.FormatBytes(total));
             }
 
             RefreshStats();
@@ -738,13 +740,13 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
             (PressureText, PressureColor, PressureBorderColor) = level switch
             {
                 ResourceGuardService.PressureLevel.Critical =>
-                    (L("RamCleaner_Pressure_Critical"), _brushRed, _brushBorderCritical),
+                    (Loc.Get("RamCleaner_Pressure_Critical"), _brushRed, _brushBorderCritical),
                 ResourceGuardService.PressureLevel.High =>
-                    (L("RamCleaner_Pressure_High"), _brushOrange, _brushBorderHigh),
+                    (Loc.Get("RamCleaner_Pressure_High"), _brushOrange, _brushBorderHigh),
                 ResourceGuardService.PressureLevel.Elevated =>
-                    (L("RamCleaner_Pressure_Elevated"), _brushYellow, _brushBorderElevated),
+                    (Loc.Get("RamCleaner_Pressure_Elevated"), _brushYellow, _brushBorderElevated),
                 _ =>
-                    (L("RamCleaner_Pressure_Normal"), _brushGreen, _brushBorderNormal),
+                    (Loc.Get("RamCleaner_Pressure_Normal"), _brushGreen, _brushBorderNormal),
             };
         });
     }
@@ -754,14 +756,6 @@ public partial class RamCleanerViewModel : INotifyPropertyChanged, IDisposable
         RunOnUi(() => GuardStatusText = msg);
     }
 
-    private static string L(string key)
-    {
-        try
-        {
-            return Application.Current?.TryFindResource(key) as string ?? key;
-        }
-        catch (Exception ex) when (ex is not System.OutOfMemoryException) { return key; }
-    }
 
     private static void RunOnUi(Action action)
     {

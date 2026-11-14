@@ -4,7 +4,7 @@ using System.Reactive.Subjects;
 
 namespace Coclico.Services;
 
-public record NetworkStats(
+internal record NetworkStats(
     DateTime Timestamp,
     long TotalBytesSent,
     long TotalBytesReceived,
@@ -13,7 +13,7 @@ public record NetworkStats(
     int ActiveTcpConnections,
     double PingMs);
 
-public class NetworkMonitorService : IDisposable
+internal class NetworkMonitorService : IDisposable
 {
     private static readonly TimeSpan BaseInterval = TimeSpan.FromSeconds(10);
     private static readonly TimeSpan ActiveInterval = TimeSpan.FromSeconds(5);

@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Coclico.Services;
 
-public static class NativeLibraryGuard
+internal static class NativeLibraryGuard
 {
     private const uint LoadLibrarySearchDefaultDirs = 0x00001000;
 
@@ -53,6 +53,13 @@ public static class NativeLibraryGuard
 
         string normalizedBase = baseDir.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
         if (fullPath.StartsWith(normalizedBase, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        // Répertoire d'extraction du bundle single-file (%TEMP%\.net\...) : contenu embarqué et couvert par integrity.json
+        string bundleExtractRoot = Path.Combine(Path.GetTempPath(), ".net");
+        if (fullPath.StartsWith(bundleExtractRoot.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
         {
             return true;
         }

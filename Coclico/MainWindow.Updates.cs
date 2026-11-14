@@ -19,10 +19,10 @@ public partial class MainWindow
 
         try
         {
-            ToastService.ShowInfo("Vérification des mises à jour en cours...");
+            ToastService.ShowInfo(Loc.Get("Update_Checking"));
             var updateCheckService = ServiceContainer.GetRequired<UpdateCheckService>();
 
-            GitHubRelease? update = await updateCheckService.CheckForUpdatesAsync();
+            GitHubRelease? update = await updateCheckService.CheckForUpdatesAsync().ConfigureAwait(false);
 
             if (update != null)
             {
@@ -32,13 +32,13 @@ public partial class MainWindow
             }
             else
             {
-                ToastService.ShowInfo(L("MainWindow_LatestVersion"));
+                ToastService.ShowInfo(Loc.Get("MainWindow_LatestVersion"));
             }
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "MainWindow.UpdateCheck");
-            ToastService.ShowError(L("MainWindow_UpdateCheckError"));
+            ToastService.ShowError(Loc.Get("MainWindow_UpdateCheckError"));
         }
     }
 
@@ -60,7 +60,7 @@ public partial class MainWindow
 
             _pendingUpdate = e.Release;
             MarkUpdateButton(e.Release.TagName);
-            ToastService.Show($"Mise à jour disponible : {e.Release.TagName} clique sur l'icône de synchronisation pour l'installer.");
+            ToastService.Show(Loc.Format("MainWindow_UpdateAvailableToast", e.Release.TagName));
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
@@ -72,7 +72,7 @@ public partial class MainWindow
     {
         try
         {
-            UpdateCheckButton.ToolTip = $"{L("Main_CheckUpdatesTip")} {tagName}";
+            UpdateCheckButton.ToolTip = $"{Loc.Get("Main_CheckUpdatesTip")} {tagName}";
             if (UpdateCheckButton.Content is Wpf.Ui.Controls.SymbolIcon icon)
             {
                 icon.Foreground = FindResource("ArchitecturalYellowBrush") as Brush ?? icon.Foreground;
@@ -91,7 +91,7 @@ public partial class MainWindow
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "MainWindow.OpenUpdateWindow");
-            ToastService.ShowError("Impossible d'ouvrir le dialogue de mise à jour.");
+            ToastService.ShowError(Loc.Get("Update_DialogError"));
         }
     }
 }

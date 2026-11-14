@@ -6,7 +6,7 @@ using Microsoft.Win32;
 
 namespace Coclico.Services.AI;
 
-public enum AiGpuVendor
+internal enum AiGpuVendor
 {
     Unknown,
     None,
@@ -15,9 +15,22 @@ public enum AiGpuVendor
     Intel
 }
 
-public sealed record AiCudaProgress(int Percent, string Message);
+internal sealed record AiCudaProgress(int Percent, string Message);
 
-public static class AiHardwareService
+internal enum AiHardwareRecommendation
+{
+    None,
+    DisableGpuForAmd,
+    OfferCudaInstall
+}
+
+internal sealed record AiHardwareEnvironment(
+    AiGpuVendor Vendor,
+    bool CudaReady,
+    AiHardwareRecommendation Recommendation,
+    string GpuName);
+
+internal static class AiHardwareService
 {
     private const string DisplayClassGuid = "{4d36e968-e325-11ce-bfc1-08002be10318}";
     private const string NugetFlatContainer = "https://api.nuget.org/v3-flatcontainer/";
@@ -25,6 +38,21 @@ public static class AiHardwareService
     private const string ExpectedCublasLtSha256 = "B199D1FF892A81B7FD3D57BA1781549609B41500B36008FEF326038393AD46C7";
     private const long RequiredDiskBytes = 1536L * 1024 * 1024;
     private const int TotalRuntimeSteps = 8;
+
+    private static readonly Dictionary<string, (long Bytes, string Sha256)> PinnedDllHashes =
+        new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["cudart64_12.dll"] = (573952L, "C2C9A9C22A9BCBA90E261825968836787B331038047A26770CFFB7A583C28344"),
+            ["cublas64_12.dll"] = (113716224L, "9513540E4EC4C51EE9E7304138C2CC255C29A8C181F9E80C38EFA25738BECD99"),
+            ["cufft64_11.dll"] = (276121600L, "F4FEA9227B14843894AD5436725F9638B172171142C95291FC6AE7A493248221"),
+            ["nvrtc64_120_0.dll"] = (86728192L, "02D2D7EF4690BF1A55DDA1D3AC94C86CE8D16920071C87BCD3E70E94EF346E93"),
+            ["nvrtc64_120_0.alt.dll"] = (86794240L, "5464EA01B079D78042374DC7819684910C8E9D5C63000E2D2D5AA02298ECF2AE"),
+            ["ggml-base.dll"] = (541184L, "7BCF256FAC58E129F49F36C9D790F35E46EB10F70F9ECF798AC99BCC8431B12E"),
+            ["ggml.dll"] = (68096L, "96C1034540F7A7FC80D250AD3058057530C9DFFBEF7F844B9825316BC2133894"),
+            ["llama.dll"] = (2038784L, "A46BBF360A74913380C76155C11EDEA8F8FF0E4034A6F0B1C45950AD75A505E2"),
+            ["mtmd.dll"] = (667648L, "C81BFACA457EF82258CF6B208EB203D773CA1DD1A42B3E4B54EDABE13FB5AD15"),
+            ["ggml-cuda.dll"] = (444673536L, "1F0A9DD29D4287BE9FF3FE5D238808283A85786AC740F21BEBA7242C7A478FB4")
+        };
 
     private static readonly (string PackageId, string Label)[] NvidiaRuntimePackages =
     [
@@ -67,6 +95,21 @@ public static class AiHardwareService
     {
         _ = DetectVendor();
         return string.IsNullOrWhiteSpace(_cachedGpuName) ? "carte graphique" : _cachedGpuName;
+    }
+
+    public static async Task<AiHardwareEnvironment> EvaluateEnvironmentAsync(bool useGpu)
+    {
+        AiGpuVendor vendor = await Task.Run(DetectVendor).ConfigureAwait(false);
+        bool cudaReady = await Task.Run(IsCudaRuntimeAvailable).ConfigureAwait(false);
+
+        AiHardwareRecommendation recommendation = vendor switch
+        {
+            AiGpuVendor.Amd when useGpu => AiHardwareRecommendation.DisableGpuForAmd,
+            AiGpuVendor.Nvidia when useGpu && !cudaReady => AiHardwareRecommendation.OfferCudaInstall,
+            _ => AiHardwareRecommendation.None
+        };
+
+        return new AiHardwareEnvironment(vendor, cudaReady, recommendation, GetGpuDisplayName());
     }
 
     public static bool IsCudaRuntimeAvailable()
@@ -167,6 +210,24 @@ public static class AiHardwareService
             Path.Join(baseDir, "native"),
             baseDir
         };
+
+        // Publish single-file self-contained : les DLL natives sont extraites sous %TEMP%\.net\<app>\<hash>\
+        try
+        {
+            string bundleRoot = Path.Combine(Path.GetTempPath(), ".net");
+            if (Directory.Exists(bundleRoot))
+            {
+                foreach (string appDir in Directory.GetDirectories(bundleRoot))
+                {
+                    foreach (string hashDir in Directory.GetDirectories(appDir))
+                    {
+                        candidates.Add(Path.Join(hashDir, "runtimes", "win-x64", "native"));
+                        candidates.Add(hashDir);
+                    }
+                }
+            }
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
 
         try
         {
@@ -355,7 +416,9 @@ public static class AiHardwareService
                     continue;
                 }
 
-                File.Copy(file, Path.Join(targetDir, Path.GetFileName(file)), overwrite: true);
+                string destination = Path.Join(targetDir, Path.GetFileName(file));
+                File.Copy(file, destination, overwrite: true);
+                await VerifyPinnedDllAsync(destination, label, ct).ConfigureAwait(false);
             }
         }
         finally
@@ -369,6 +432,28 @@ public static class AiHardwareService
                 }
             }
             catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
+        }
+    }
+
+    private static async Task VerifyPinnedDllAsync(string filePath, string label, CancellationToken ct)
+    {
+        string fileName = Path.GetFileName(filePath);
+        if (!PinnedDllHashes.TryGetValue(fileName, out (long Bytes, string Sha256) pinned))
+        {
+            throw new InvalidDataException($"Fichier natif inattendu '{fileName}' ({label}).");
+        }
+
+        var info = new FileInfo(filePath);
+        if (info.Length != pinned.Bytes)
+        {
+            throw new InvalidDataException(
+                $"'{fileName}' invalide : {info.Length} octets au lieu de {pinned.Bytes}.");
+        }
+
+        string hash = await ComputeSha256Async(filePath, ct).ConfigureAwait(false);
+        if (!string.Equals(hash, pinned.Sha256, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidDataException($"'{fileName}' invalide : empreinte SHA-256 incorrecte.");
         }
     }
 
@@ -457,11 +542,11 @@ public static class AiHardwareService
         string url, string targetFile, string label, int stepIndex,
         IProgress<AiCudaProgress> progress, CancellationToken ct)
     {
-        using var client = new HttpClient(new SocketsHttpHandler
+        using var client = new HttpClient(new Coclico.Security.Infrastructure.OutboundDomainGuardHandler(new SocketsHttpHandler
         {
             PooledConnectionLifetime = TimeSpan.FromMinutes(10),
             AutomaticDecompression = System.Net.DecompressionMethods.All
-        });
+        }));
         client.Timeout = TimeSpan.FromHours(2);
 
         int stepBase = stepIndex * 100 / TotalRuntimeSteps;
@@ -510,8 +595,11 @@ public static class AiHardwareService
 
     private static async Task<string> ComputeSha256Async(string filePath, CancellationToken ct)
     {
-        await using var stream = File.OpenRead(filePath);
-        byte[] hash = await SHA256.HashDataAsync(stream, ct).ConfigureAwait(false);
+        var stream = File.OpenRead(filePath);
+        await using (stream.ConfigureAwait(false))
+        {
+            byte[] hash = await SHA256.HashDataAsync(stream, ct).ConfigureAwait(false);
         return Convert.ToHexString(hash);
+        }
     }
 }

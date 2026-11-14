@@ -2,21 +2,21 @@ using System.Globalization;
 
 namespace Coclico.Modules.Power.Services;
 
-public enum CoclicoPowerMode
+internal enum CoclicoPowerMode
 {
     Economy,
     Optimal,
     Performance
 }
 
-public sealed record PowerSettingOverride(
+internal sealed record PowerSettingOverride(
     string SubGroupGuid,
     string SettingGuid,
     string Alias,
     uint AcValue,
     uint DcValue);
 
-public static class PowerPlanCatalog
+internal static class PowerPlanCatalog
 {
     public const string BasePowerSaverGuid = "a1841308-3541-4fab-bc81-f71556f20b4a";
     public const string BaseBalancedGuid = "381b4222-f694-41f0-9685-ff5bb260df2e";
@@ -153,7 +153,7 @@ public static class PowerPlanCatalog
 
     private static void Set(List<PowerSettingOverride> settings, string settingGuid, uint acValue, uint dcValue)
     {
-        int index = settings.FindIndex(s => s.SettingGuid == settingGuid);
+        int index = settings.FindIndex(s => string.Equals(s.SettingGuid, settingGuid, StringComparison.Ordinal));
         if (index < 0)
         {
             throw new InvalidOperationException($"Parametre inconnu dans le catalogue : {settingGuid}");

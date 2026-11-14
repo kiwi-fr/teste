@@ -3,7 +3,7 @@ using Coclico.Services;
 
 namespace Coclico.Modules.DiskAnalyzer.Services;
 
-public static class RecycleBinHelper
+internal static class RecycleBinHelper
 {
     private const uint FO_DELETE = 3;
     private const uint FOF_ALLOWUNDO = 0x40;
@@ -70,7 +70,7 @@ public static class RecycleBinHelper
         return result == 0 && !operation.fAnyOperationsAborted;
     }
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     private struct SHFILEOPSTRUCTW
     {
         public nint hwnd;

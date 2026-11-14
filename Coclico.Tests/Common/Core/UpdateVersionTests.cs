@@ -15,7 +15,7 @@ public sealed class UpdateVersionTests
     [InlineData("2.0.0", "2.0.0", false)]
     [InlineData("2.0.0", "2.0.0-beta", true)]
     [InlineData("2.0.0-beta", "2.0.0", false)]
-    public void IsNewerVersion_ComparesNumericallyAndHandlesPrereleases(string latestTag, string currentVersion, bool expected)
+    public void IsNewerVersionComparesNumericallyAndHandlesPrereleases(string latestTag, string currentVersion, bool expected)
     {
         Assert.Equal(expected, UpdateManager.IsNewerVersion(latestTag, currentVersion));
     }
@@ -29,13 +29,13 @@ public sealed class UpdateVersionTests
     [InlineData(null, "v2.0.1", false)]
     [InlineData("", "v2.0.1", false)]
     [InlineData("2.0.1", "", false)]
-    public void InstallerVersionMatches_NormalizesPrefixesAndBuildSuffixes(string? fileVersion, string expectedVersion, bool expected)
+    public void InstallerVersionMatchesNormalizesPrefixesAndBuildSuffixes(string? fileVersion, string expectedVersion, bool expected)
     {
         Assert.Equal(expected, UpdateManager.InstallerVersionMatches(fileVersion, expectedVersion));
     }
 
     [Fact]
-    public void ReadInstallerVersion_ReadsAssemblyVersionWithoutRunningIt()
+    public void ReadInstallerVersionReadsAssemblyVersionWithoutRunningIt()
     {
         string ownAssembly = typeof(UpdateVersionTests).Assembly.Location;
 
@@ -46,7 +46,7 @@ public sealed class UpdateVersionTests
     }
 
     [Fact]
-    public void ReadInstallerVersion_MissingFile_ReturnsNull()
+    public void ReadInstallerVersionMissingFileReturnsNull()
     {
         Assert.Null(UpdateManager.ReadInstallerVersion(Path.Join(Path.GetTempPath(), "coclico-absent-" + Guid.NewGuid().ToString("N") + ".exe")));
     }
@@ -59,13 +59,13 @@ public sealed class UpdateVersionTests
     [InlineData("v2.0.1", "", false)]
     [InlineData("v2.0.1", null, false)]
     [InlineData(null, "v2.0.1", false)]
-    public void IsSkipped_MatchesOnlyTheExactIgnoredVersion(string? tagName, string? skippedVersion, bool expected)
+    public void IsSkippedMatchesOnlyTheExactIgnoredVersion(string? tagName, string? skippedVersion, bool expected)
     {
         Assert.Equal(expected, UpdateManager.IsSkipped(tagName, skippedVersion));
     }
 
     [Fact]
-    public void PickSetupAsset_PrefersStandardSetupOverCuda()
+    public void PickSetupAssetPrefersStandardSetupOverCuda()
     {
         GitHubRelease release = new()
         {
@@ -86,7 +86,7 @@ public sealed class UpdateVersionTests
     }
 
     [Fact]
-    public void PickSetupAsset_ReturnsNullWhenNoSetup()
+    public void PickSetupAssetReturnsNullWhenNoSetup()
     {
         GitHubRelease release = new()
         {
@@ -98,7 +98,7 @@ public sealed class UpdateVersionTests
     }
 
     [Fact]
-    public void PickSetupAsset_IgnoresCudaOnlyRelease()
+    public void PickSetupAssetIgnoresCudaOnlyRelease()
     {
         GitHubRelease release = new()
         {

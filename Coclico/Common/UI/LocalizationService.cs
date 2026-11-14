@@ -2,7 +2,7 @@ using System.Windows;
 
 namespace Coclico.Services;
 
-public class LocalizationService
+internal class LocalizationService
 {
     private ResourceDictionary? _currentDict;
     private ResourceDictionary? _fallbackDict;
@@ -28,7 +28,7 @@ public class LocalizationService
     {
         try
         {
-            string targetCode = langCode?.ToLowerInvariant() == "en" ? "en" : "fr";
+            string targetCode = string.Equals(langCode?.ToLowerInvariant(), "en", StringComparison.Ordinal) ? "en" : "fr";
             ResourceDictionary? dict = SwapOrLoad(BuildUri(targetCode));
 
             _currentDict = dict;
@@ -47,7 +47,7 @@ public class LocalizationService
         {
             LoggingService.LogException(ex, "LocalizationService.SetLanguage");
 
-            if (langCode != "fr" && CurrentLanguage != "fr")
+            if (!string.Equals(langCode, "fr", StringComparison.Ordinal) && !string.Equals(CurrentLanguage, "fr", StringComparison.Ordinal))
             {
                 try { SetLanguage("fr"); }
                 catch (Exception exSwallow) when (exSwallow is not System.OutOfMemoryException) { LoggingService.LogException(exSwallow, "LocalizationService.SetLanguageFallback"); }
@@ -137,7 +137,7 @@ public class LocalizationService
             }
         }
 
-        if (CurrentLanguage != "fr")
+        if (!string.Equals(CurrentLanguage, "fr", StringComparison.Ordinal))
         {
             try
             {

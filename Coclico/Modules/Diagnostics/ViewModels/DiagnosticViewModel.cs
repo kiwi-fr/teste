@@ -12,7 +12,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Coclico.ViewModels;
 
-public sealed class DiagnosticEvidenceRow
+internal sealed class DiagnosticEvidenceRow
 {
     public required string Name { get; init; }
     public required string Value { get; init; }
@@ -20,7 +20,7 @@ public sealed class DiagnosticEvidenceRow
     public required bool IsUnavailable { get; init; }
 }
 
-public sealed class DiagnosticFindingRow
+internal sealed class DiagnosticFindingRow
 {
     public required string Id { get; init; }
     public required string Title { get; init; }
@@ -38,7 +38,7 @@ public sealed class DiagnosticFindingRow
     public bool HasAction => ActionNavigationTag is not null;
 }
 
-public sealed class DiagnosticCategoryCard
+internal sealed class DiagnosticCategoryCard
 {
     public required DiagnosticCategory Category { get; init; }
     public required string Title { get; init; }
@@ -47,7 +47,7 @@ public sealed class DiagnosticCategoryCard
     public required string FindingsText { get; init; }
 }
 
-public sealed class DiagnosticHistoryRow
+internal sealed class DiagnosticHistoryRow
 {
     public required Guid Id { get; init; }
     public required string DateText { get; init; }
@@ -56,7 +56,7 @@ public sealed class DiagnosticHistoryRow
     public required string FindingsText { get; init; }
 }
 
-public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
+internal partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
 {
     private const string Subsystem = "DiagnosticViewModel";
     private static readonly TimeSpan MaxRunDuration = TimeSpan.FromMinutes(3);
@@ -89,13 +89,13 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
 
     public bool IsNotRunning => !IsRunning;
 
-    public string StatusText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = L("Diag_State_None");
+    public string StatusText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = Loc.Get("Diag_State_None");
 
-    public string ProgressText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string ProgressText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
 
-    public string LastRunText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string LastRunText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
 
-    public string SummaryText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string SummaryText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
 
     public bool HasResult { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } }
 
@@ -149,7 +149,7 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
 
         if (selected.Count == 0)
         {
-            StatusText = L("Diag_State_NoCategory");
+            StatusText = Loc.Get("Diag_State_NoCategory");
             return Task.CompletedTask;
         }
 
@@ -195,7 +195,7 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
 
             History.Clear();
             OnPropertyChanged(nameof(HasHistory));
-            StatusText = L("Diag_State_HistoryCleared");
+            StatusText = Loc.Get("Diag_State_HistoryCleared");
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
@@ -213,7 +213,7 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
         _runCts = new CancellationTokenSource(MaxRunDuration);
         CancellationTokenSource cts = _runCts;
         IsRunning = true;
-        StatusText = L("Diag_State_Running");
+        StatusText = Loc.Get("Diag_State_Running");
         ProgressText = string.Empty;
 
         Progress<DiagnosticProgress> progress = new(OnProgressReported);
@@ -228,33 +228,33 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
             PopulateResults(run);
             StatusText = run.Status switch
             {
-                DiagnosticRunStatus.Cancelled => L("Diag_State_Interrupted"),
-                DiagnosticRunStatus.Partial => L("Diag_State_Partial"),
-                _ => L("Diag_State_Results")
+                DiagnosticRunStatus.Cancelled => Loc.Get("Diag_State_Interrupted"),
+                DiagnosticRunStatus.Partial => Loc.Get("Diag_State_Partial"),
+                _ => Loc.Get("Diag_State_Results")
             };
         }
         catch (OperationCanceledException)
         {
-            StatusText = L("Diag_State_Interrupted");
+            StatusText = Loc.Get("Diag_State_Interrupted");
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, $"{Subsystem}.Run");
-            StatusText = L("Diag_State_GlobalError");
+            StatusText = Loc.Get("Diag_State_GlobalError");
         }
         finally
         {
             IsRunning = false;
             _runCts = null;
-            await LoadHistoryAsync();
+            await LoadHistoryAsync().ConfigureAwait(false);
         }
     }
 
     private void OnProgressReported(DiagnosticProgress value)
-        => RunOnUi(() => ProgressText = L("Diag_ProgressFormat")
+        => RunOnUi(() => ProgressText = Loc.Get("Diag_ProgressFormat")
             .Replace("{done}", value.CompletedChecks.ToString(System.Globalization.CultureInfo.CurrentCulture), StringComparison.Ordinal)
             .Replace("{total}", value.TotalChecks.ToString(System.Globalization.CultureInfo.CurrentCulture), StringComparison.Ordinal)
-            .Replace("{check}", L($"Diag_Check_{value.CurrentCheckId.Replace('.', '_')}"), StringComparison.Ordinal));
+            .Replace("{check}", Loc.Get($"Diag_Check_{value.CurrentCheckId.Replace('.', '_')}"), StringComparison.Ordinal));
 
     private void PopulateResults(DiagnosticRun run)
     {
@@ -267,14 +267,14 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
         RebuildCategoryCards(run);
 
         SummaryText = run.Summary is DiagnosticSummary summary
-            ? L("Diag_SummaryFormat")
+            ? Loc.Get("Diag_SummaryFormat")
                 .Replace("{completed}", summary.ChecksCompleted.ToString(System.Globalization.CultureInfo.CurrentCulture), StringComparison.Ordinal)
                 .Replace("{total}", summary.ChecksTotal.ToString(System.Globalization.CultureInfo.CurrentCulture), StringComparison.Ordinal)
                 .Replace("{failed}", summary.ChecksFailed.ToString(System.Globalization.CultureInfo.CurrentCulture), StringComparison.Ordinal)
                 .Replace("{warning}", summary.FindingsWarning.ToString(System.Globalization.CultureInfo.CurrentCulture), StringComparison.Ordinal)
                 .Replace("{error}", summary.FindingsError.ToString(System.Globalization.CultureInfo.CurrentCulture), StringComparison.Ordinal)
                 .Replace("{critical}", summary.FindingsCritical.ToString(System.Globalization.CultureInfo.CurrentCulture), StringComparison.Ordinal)
-                + (run.Findings.Count == 0 ? " " + L("Diag_SummaryNoFinding") : string.Empty)
+                + (run.Findings.Count == 0 ? " " + Loc.Get("Diag_SummaryNoFinding") : string.Empty)
             : string.Empty;
 
         LastRunText = run.StartedAtUtc.ToLocalTime().ToString("g", System.Globalization.CultureInfo.CurrentCulture);
@@ -297,23 +297,23 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
         return new DiagnosticFindingRow
         {
             Id = finding.Id,
-            Title = L(finding.TitleKey),
-            CategoryText = L($"Diag_Category_{finding.Category}"),
-            SeverityText = L($"Diag_Severity_{finding.Severity}"),
+            Title = Loc.Get(finding.TitleKey),
+            CategoryText = Loc.Get($"Diag_Category_{finding.Category}"),
+            SeverityText = Loc.Get($"Diag_Severity_{finding.Severity}"),
             SeverityBrush = BrushFor(finding.Severity),
-            ConfidenceText = L($"Diag_Confidence_{finding.Confidence}"),
-            Summary = string.IsNullOrEmpty(finding.SummaryKey) ? string.Empty : L(finding.SummaryKey),
-            Explanation = string.IsNullOrEmpty(finding.ExplanationKey) ? string.Empty : L(finding.ExplanationKey),
-            Causes = string.Join(" · ", finding.PossibleCauseKeys.Select(L)),
-            NextSteps = string.Join(" · ", finding.RecommendedNextStepKeys.Select(L)),
+            ConfidenceText = Loc.Get($"Diag_Confidence_{finding.Confidence}"),
+            Summary = string.IsNullOrEmpty(finding.SummaryKey) ? string.Empty : Loc.Get(finding.SummaryKey),
+            Explanation = string.IsNullOrEmpty(finding.ExplanationKey) ? string.Empty : Loc.Get(finding.ExplanationKey),
+            Causes = string.Join(" · ", finding.PossibleCauseKeys.Select(Loc.Get)),
+            NextSteps = string.Join(" · ", finding.RecommendedNextStepKeys.Select(Loc.Get)),
             Evidence = [.. finding.Evidence.Select(e => new DiagnosticEvidenceRow
             {
-                Name = L(e.DisplayNameKey),
+                Name = Loc.Get(e.DisplayNameKey),
                 Value = FormatEvidence(e),
                 Source = e.Source,
                 IsUnavailable = e.State != DiagnosticValueState.Measured
             })],
-            ActionText = action is null ? string.Empty : L(action.TitleKey),
+            ActionText = action is null ? string.Empty : Loc.Get(action.TitleKey),
             ActionNavigationTag = action?.NavigationTag
         };
     }
@@ -322,11 +322,11 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
     {
         if (evidence.State != DiagnosticValueState.Measured)
         {
-            return L($"Diag_ValueState_{evidence.State}");
+            return Loc.Get($"Diag_ValueState_{evidence.State}");
         }
 
         string value = evidence.Value ?? "-";
-        if (evidence.Unit == "bytes" && long.TryParse(value, out long bytes))
+        if (string.Equals(evidence.Unit, "bytes", StringComparison.Ordinal) && long.TryParse(value, System.Globalization.CultureInfo.InvariantCulture, out long bytes))
         {
             return BytesText(bytes);
         }
@@ -355,15 +355,15 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
 
             if (checks.Count == 0)
             {
-                stateText = L("Diag_ValueState_NotExposed");
+                stateText = Loc.Get("Diag_ValueState_NotExposed");
                 stateBrush = BrushMuted;
-                findingsText = L("Diag_State_NoData");
+                findingsText = Loc.Get("Diag_State_NoData");
             }
             else if (checks.All(c => c.Status is DiagnosticCheckStatus.Failed or DiagnosticCheckStatus.TimedOut))
             {
-                stateText = L("Diag_State_CheckFailed");
+                stateText = Loc.Get("Diag_State_CheckFailed");
                 stateBrush = BrushMuted;
-                findingsText = L("Diag_State_NoData");
+                findingsText = Loc.Get("Diag_State_NoData");
             }
             else
             {
@@ -374,20 +374,20 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
 
                 (stateText, stateBrush) = worst switch
                 {
-                    DiagnosticSeverity.Critical or DiagnosticSeverity.Error => (L($"Diag_Severity_{worst}"), BrushError),
-                    DiagnosticSeverity.Warning => (L($"Diag_Severity_{worst}"), BrushWarning),
-                    DiagnosticSeverity.Info => (L($"Diag_Severity_{worst}"), BrushInfo),
-                    _ => (L("Diag_State_Passed"), BrushOk)
+                    DiagnosticSeverity.Critical or DiagnosticSeverity.Error => (Loc.Get($"Diag_Severity_{worst}"), BrushError),
+                    DiagnosticSeverity.Warning => (Loc.Get($"Diag_Severity_{worst}"), BrushWarning),
+                    DiagnosticSeverity.Info => (Loc.Get($"Diag_Severity_{worst}"), BrushInfo),
+                    _ => (Loc.Get("Diag_State_Passed"), BrushOk)
                 };
                 findingsText = findings.Count == 0
-                    ? L("Diag_Card_NoFinding")
-                    : TextFormatService.Format(System.Globalization.CultureInfo.CurrentCulture, L("Diag_Card_FindingsFormat"), findings.Count);
+                    ? Loc.Get("Diag_Card_NoFinding")
+                    : TextFormatService.Format(System.Globalization.CultureInfo.CurrentCulture, Loc.Get("Diag_Card_FindingsFormat"), findings.Count);
             }
 
             CategoryCards.Add(new DiagnosticCategoryCard
             {
                 Category = category,
-                Title = L($"Diag_Category_{category}"),
+                Title = Loc.Get($"Diag_Category_{category}"),
                 StateText = stateText,
                 StateBrush = stateBrush,
                 FindingsText = findingsText
@@ -410,11 +410,11 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
                 {
                     Id = summary.Id,
                     DateText = summary.StartedAtUtc.ToLocalTime().ToString("g", System.Globalization.CultureInfo.CurrentCulture),
-                    ModeText = L($"Diag_Mode_{summary.Mode}"),
-                    StatusText = L($"Diag_RunStatus_{summary.Status}"),
+                    ModeText = Loc.Get($"Diag_Mode_{summary.Mode}"),
+                    StatusText = Loc.Get($"Diag_RunStatus_{summary.Status}"),
                     FindingsText = TextFormatService.Format(
                         System.Globalization.CultureInfo.CurrentCulture,
-                        L("Diag_Card_FindingsFormat"),
+                        Loc.Get("Diag_Card_FindingsFormat"),
                         summary.FindingsWarning + summary.FindingsError + summary.FindingsCritical)
                 });
             }
@@ -442,7 +442,7 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
                 : "JSON report (*.json)|*.json";
 
             string? target = _dialog.ShowSaveFileDialog(
-                L(asText ? "Diag_ExportTextTitle" : "Diag_ExportJsonTitle"),
+                Loc.Get(asText ? "Diag_ExportTextTitle" : "Diag_ExportJsonTitle"),
                 filter,
                 asText ? ".txt" : ".json");
 
@@ -455,12 +455,12 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
                 ? DiagnosticReportExporter.ExportText(run)
                 : DiagnosticReportExporter.ExportJson(run);
             await File.WriteAllTextAsync(target, content, CancellationToken.None).ConfigureAwait(false);
-            StatusText = L("Diag_State_Exported");
+            StatusText = Loc.Get("Diag_State_Exported");
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.InvalidOperationException)
         {
             LoggingService.LogException(ex, $"{Subsystem}.Export");
-            StatusText = L("Diag_State_ExportFailed");
+            StatusText = Loc.Get("Diag_State_ExportFailed");
         }
     }
 
@@ -492,17 +492,6 @@ public partial class DiagnosticViewModel : INotifyPropertyChanged, IDisposable
         return brush;
     }
 
-    private static string L(string key)
-    {
-        try
-        {
-            return Application.Current?.TryFindResource(key) as string ?? key;
-        }
-        catch (Exception ex) when (ex is not System.OutOfMemoryException)
-        {
-            return key;
-        }
-    }
 
     private void RunOnUi(Action action)
     {

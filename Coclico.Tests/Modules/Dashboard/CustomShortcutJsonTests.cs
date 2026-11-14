@@ -6,10 +6,8 @@ namespace Coclico.Tests;
 
 public sealed class CustomShortcutJsonTests
 {
-    private static readonly JsonSerializerOptions Options = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-
     [Fact]
-    public void Serialize_UsesStableCamelCaseContract()
+    public void SerializeUsesStableCamelCaseContract()
     {
         var shortcut = new CustomShortcut
         {
@@ -24,18 +22,18 @@ public sealed class CustomShortcutJsonTests
 
         string json = JsonSerializer.Serialize(shortcut);
 
-        Assert.Contains("\"id\"", json);
-        Assert.Contains("\"title\"", json);
-        Assert.Contains("\"subtitle\"", json);
-        Assert.Contains("\"type\"", json);
-        Assert.Contains("\"target\"", json);
-        Assert.Contains("\"iconSymbol\"", json);
-        Assert.Contains("\"accentColor\"", json);
-        Assert.Contains("\"bgTint\"", json);
+        Assert.Contains("\"id\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"title\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"subtitle\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"type\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"target\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"iconSymbol\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"accentColor\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"bgTint\"", json, StringComparison.Ordinal);
     }
 
     [Fact]
-    public void RoundTrip_PreservesAllValues()
+    public void RoundTripPreservesAllValues()
     {
         var original = new CustomShortcut
         {
@@ -63,7 +61,7 @@ public sealed class CustomShortcutJsonTests
     }
 
     [Fact]
-    public void Deserialize_AcceptsLegacyJson()
+    public void DeserializeAcceptsLegacyJson()
     {
         const string json = """
             {
@@ -88,7 +86,7 @@ public sealed class CustomShortcutJsonTests
     }
 
     [Fact]
-    public void NewInstances_GetUniqueNonEmptyIds()
+    public void NewInstancesGetUniqueNonEmptyIds()
     {
         var first = new CustomShortcut();
         var second = new CustomShortcut();
@@ -99,7 +97,7 @@ public sealed class CustomShortcutJsonTests
     }
 
     [Fact]
-    public void ShortcutType_HasTheThreeExpectedValues()
+    public void ShortcutTypeHasTheThreeExpectedValues()
     {
         Assert.Equal(0, (int)ShortcutType.CoclicoAction);
         Assert.Equal(1, (int)ShortcutType.WindowsTool);

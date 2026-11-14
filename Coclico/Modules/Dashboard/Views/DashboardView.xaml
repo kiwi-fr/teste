@@ -49,37 +49,43 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto" Background="{DynamicResource BgBaseBrush}">
         <StackPanel x:Name="HomeSectionsContainer" Margin="36,28,36,40">
 
-            <Border x:Name="SecHeader" Margin="0,0,0,20" CornerRadius="12" Padding="24,20"
-                    Background="{DynamicResource BgCardBrush}"
-                    BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1">
-                <Grid>
-                    <Border CornerRadius="11" Margin="-24,-20" Height="70" VerticalAlignment="Top"
-                            Background="{DynamicResource EclipseGlowGradient}" IsHitTestVisible="False"/>
-
+            <Border x:Name="SecHeader" Margin="0,0,0,20" CornerRadius="12"
+                    Background="{DynamicResource PrimaryGradient}" Padding="1">
+                <Border CornerRadius="11" Background="{DynamicResource BgCardBrush}" Padding="24,20">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                        <Border CornerRadius="11,11,0,0" Margin="-24,-20,-24,0" Height="90" VerticalAlignment="Top"
+                                Background="{DynamicResource EclipseGlowGradient}" IsHitTestVisible="False"/>
 
-                        <StackPanel VerticalAlignment="Center">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,4">
-                                <Border Width="3" Height="26" Background="{DynamicResource ArchitecturalYellowBrush}" CornerRadius="1.5" Margin="0,0,12,0"/>
-                                <TextBlock x:Name="WelcomeText"
-                                           FontSize="24" FontWeight="Bold"
-                                           Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
-                                <TextBlock Text=" 👋" FontSize="22" VerticalAlignment="Center"
-                                           FontFamily="Segoe UI Emoji" Margin="4,0,0,0"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel VerticalAlignment="Center">
+                                <Border HorizontalAlignment="Left" Style="{StaticResource PageBadge}" Margin="0,0,0,10">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Style="{StaticResource LiveDot}" Margin="0,0,8,0"/>
+                                        <TextBlock Text="{DynamicResource Menu_Dashboard}" FontSize="10" FontWeight="Bold"
+                                                   Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,4">
+                                    <Border Width="3" Height="26" Background="{DynamicResource ArchitecturalYellowBrush}" CornerRadius="1.5" Margin="0,0,12,0"/>
+                                    <TextBlock x:Name="WelcomeText"
+                                               Style="{StaticResource CoclicoPageTitle}" VerticalAlignment="Center"/>
+                                    <TextBlock Text=" 👋" FontSize="26" VerticalAlignment="Center"
+                                               FontFamily="Segoe UI Emoji" Margin="4,0,0,0"/>
+                                </StackPanel>
+                                <TextBlock Text="{DynamicResource Dashboard_HeaderSubtitle}"
+                                           Style="{StaticResource PageHeaderSubtitle}" Margin="15,0,0,0"/>
                             </StackPanel>
-                            <TextBlock Text="{DynamicResource Dashboard_HeaderSubtitle}"
-                                       FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="15,0,0,0"/>
-                        </StackPanel>
 
                         <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal">
                             <ui:Button Click="BtnCustomizeHome_Click"
                                        Appearance="Transparent" Padding="14,9"
                                        Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}"
-                                       BorderThickness="1" CornerRadius="8"
+                                       BorderThickness="1" CornerRadius="12"
                                        Cursor="Hand" VerticalAlignment="Center" ToolTip="{DynamicResource Dashboard_CustomizeTooltip}">
                                 <StackPanel Orientation="Horizontal">
                                     <ui:SymbolIcon Symbol="PaintBrush24" FontSize="13" Foreground="{DynamicResource ArchitecturalYellowBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
@@ -89,58 +95,78 @@
                         </StackPanel>
                     </Grid>
                 </Grid>
+                </Border>
             </Border>
 
-            <Border x:Name="SecMetrics" Margin="0,0,0,20"
-                    CornerRadius="10" Padding="16,12"
-                    Background="{DynamicResource BgCardBrush}"
-                    BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="1"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="1"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="1"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+            <UniformGrid x:Name="SecMetrics" Columns="4" Margin="0,0,0,20">
 
-                    <StackPanel Grid.Column="0" Margin="12,2" VerticalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
-                            <TextBlock Text="{DynamicResource Dashboard_MetricCpu}" FontSize="9.5" FontWeight="Bold" Foreground="{DynamicResource TextHintBrush}"/>
+                <Border Style="{StaticResource EntrancePanel}" Margin="0,0,7,0" Padding="14,12">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <Border Width="26" Height="26" CornerRadius="10" Margin="0,0,8,0"
+                                    Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1">
+                                <ui:SymbolIcon Symbol="Gauge24" FontSize="13" Foreground="{DynamicResource PrimaryBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="{DynamicResource Dashboard_MetricCpu}" Style="{StaticResource MetricLabel}"/>
                         </StackPanel>
-                        <TextBlock Text="{Binding CpuUsageText, Mode=OneWay}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource ArchitecturalYellowBrush}"/>
+                        <TextBlock Text="{Binding CpuUsageText, Mode=OneWay}" Style="{StaticResource MetricValue}" Foreground="{DynamicResource PrimaryBrush}"/>
+                        <ProgressBar Height="4" Margin="0,8,0,0" Minimum="0" Maximum="100"
+                                     Value="{Binding CpuUsage, Mode=OneWay}"
+                                     Background="{DynamicResource OverlayLight}" Foreground="{DynamicResource PrimaryBrush}" BorderThickness="0"/>
                     </StackPanel>
+                </Border>
 
-                    <Border Grid.Column="1" Background="{DynamicResource BorderSubtleBrush}" Margin="0,4"/>
-
-                    <StackPanel Grid.Column="2" Margin="16,2" VerticalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
-                            <TextBlock Text="{DynamicResource Dashboard_MetricRam}" FontSize="9.5" FontWeight="Bold" Foreground="{DynamicResource TextHintBrush}"/>
+                <Border Style="{StaticResource EntrancePanel}" Margin="7,0,7,0" Padding="14,12">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <Border Width="26" Height="26" CornerRadius="10" Margin="0,0,8,0"
+                                    Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1">
+                                <ui:SymbolIcon Symbol="Memory16" FontSize="13" Foreground="{DynamicResource SecondaryBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="{DynamicResource Dashboard_MetricRam}" Style="{StaticResource MetricLabel}"/>
                         </StackPanel>
-                        <TextBlock Text="{Binding RamUsageText, Mode=OneWay}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                        <TextBlock Text="{Binding RamUsageText, Mode=OneWay}" Style="{StaticResource MetricValue}" Foreground="{DynamicResource SecondaryBrush}"/>
+                        <ProgressBar Height="4" Margin="0,8,0,0" Minimum="0" Maximum="100"
+                                     Value="{Binding RamUsagePercent, Mode=OneWay}"
+                                     Background="{DynamicResource OverlayLight}" Foreground="{DynamicResource SecondaryBrush}" BorderThickness="0"/>
                     </StackPanel>
+                </Border>
 
-                    <Border Grid.Column="3" Background="{DynamicResource BorderSubtleBrush}" Margin="0,4"/>
-
-                    <StackPanel Grid.Column="4" Margin="16,2" VerticalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
-                            <TextBlock Text="{DynamicResource Dashboard_MetricStorage}" FontSize="9.5" FontWeight="Bold" Foreground="{DynamicResource TextHintBrush}"/>
+                <Border Style="{StaticResource EntrancePanel}" Margin="7,0,7,0" Padding="14,12">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <Border Width="26" Height="26" CornerRadius="10" Margin="0,0,8,0"
+                                    Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1">
+                                <ui:SymbolIcon Symbol="DataUsage24" FontSize="13" Foreground="{DynamicResource InfoBlueBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="{DynamicResource Dashboard_MetricStorage}" Style="{StaticResource MetricLabel}"/>
                         </StackPanel>
-                        <TextBlock Text="{Binding DiskUsageText, Mode=OneWay}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                        <TextBlock Text="{Binding DiskUsageText, Mode=OneWay}" Style="{StaticResource MetricValue}" Foreground="{DynamicResource InfoBlueBrush}"/>
+                        <ProgressBar Height="4" Margin="0,8,0,0" Minimum="0" Maximum="100"
+                                     Value="{Binding DiskUsagePercent, Mode=OneWay}"
+                                     Background="{DynamicResource OverlayLight}" Foreground="{DynamicResource InfoBlueBrush}" BorderThickness="0"/>
                     </StackPanel>
+                </Border>
 
-                    <Border Grid.Column="5" Background="{DynamicResource BorderSubtleBrush}" Margin="0,4"/>
-
-                    <StackPanel Grid.Column="6" Margin="16,2" VerticalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
-                            <TextBlock Text="{DynamicResource Dashboard_MetricUptime}" FontSize="9.5" FontWeight="Bold" Foreground="{DynamicResource TextHintBrush}"/>
+                <Border Style="{StaticResource EntrancePanel}" Margin="7,0,0,0" Padding="14,12">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <Border Width="26" Height="26" CornerRadius="10" Margin="0,0,8,0"
+                                    Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1">
+                                <ui:SymbolIcon Symbol="Clock24" FontSize="13" Foreground="{DynamicResource SuccessBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="{DynamicResource Dashboard_MetricUptime}" Style="{StaticResource MetricLabel}"/>
                         </StackPanel>
-                        <TextBlock Text="{Binding UptimeText, Mode=OneWay}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        <TextBlock Text="{Binding UptimeText, Mode=OneWay}" Style="{StaticResource MetricValue}" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        <Border Height="4" Margin="0,8,0,0" CornerRadius="2" Background="{DynamicResource OverlayLight}"/>
                     </StackPanel>
-                </Grid>
-            </Border>
+                </Border>
+
+            </UniformGrid>
 
             <Border x:Name="SecQuickModes" Margin="0,0,0,20"
                     CornerRadius="{Binding CardCornerRadius}"
@@ -153,8 +179,7 @@
                             <Border Width="18" Height="18" CornerRadius="5" Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" Margin="0,0,8,0">
                                 <ui:SymbolIcon Symbol="Flash24" FontSize="11" Foreground="{DynamicResource ArchitecturalYellowBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
-                            <TextBlock Text="MODES SYSTÈME 1-CLIC" FontSize="10" FontWeight="Bold"
-                                       Foreground="{DynamicResource TextHintBrush}" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource Dashboard_QuickModes_Title}" Style="{StaticResource PageEyebrow}"/>
                         </StackPanel>
                     </Grid>
 
@@ -173,7 +198,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Width="34" Height="34" CornerRadius="8"
+                                <Border Width="34" Height="34" CornerRadius="12"
                                         Background="{DynamicResource GradZen}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                                         Margin="0,0,10,0" VerticalAlignment="Center">
                                     <ui:SymbolIcon Symbol="Sparkle24" FontSize="16" Foreground="{DynamicResource TextPrimaryBrush}"
@@ -195,7 +220,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Width="34" Height="34" CornerRadius="8"
+                                <Border Width="34" Height="34" CornerRadius="12"
                                         Background="{DynamicResource GradGamer}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                                         Margin="0,0,10,0" VerticalAlignment="Center">
                                     <ui:SymbolIcon Symbol="Games24" FontSize="16" Foreground="{DynamicResource PrimaryBrush}"
@@ -217,10 +242,10 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Width="34" Height="34" CornerRadius="8"
+                                <Border Width="34" Height="34" CornerRadius="12"
                                         Background="{DynamicResource GradWork}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                                         Margin="0,0,10,0" VerticalAlignment="Center">
-                                    <ui:SymbolIcon Symbol="Briefcase24" FontSize="16" Foreground="#10B981"
+                                    <ui:SymbolIcon Symbol="Briefcase24" FontSize="16" Foreground="{DynamicResource SuccessBrush}"
                                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -277,7 +302,7 @@
                                     CornerRadius="{Binding IconCornerRadius}"
                                     HorizontalAlignment="Left" Margin="0,0,0,10"
                                     Background="{DynamicResource GradCleaning}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1">
-                                <ui:SymbolIcon Symbol="Delete24" FontSize="18" Foreground="#10B981"
+                                <ui:SymbolIcon Symbol="Delete24" FontSize="18" Foreground="{DynamicResource SuccessBrush}"
                                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                             <TextBlock Grid.Row="1" Text="{DynamicResource Menu_Cleaning}"
@@ -443,7 +468,7 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <Border Width="30" Height="30" CornerRadius="6" Background="{DynamicResource BgSurfaceBrush}"
+                                        <Border Width="30" Height="30" CornerRadius="9" Background="{DynamicResource BgSurfaceBrush}"
                                                 HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,8,0">
                                             <ui:SymbolIcon Symbol="{Binding IconSymbol}" FontSize="14" Foreground="{DynamicResource ArchitecturalYellowBrush}"
                                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>

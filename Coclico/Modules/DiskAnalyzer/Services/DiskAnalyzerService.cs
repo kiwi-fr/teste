@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Coclico.Modules.DiskAnalyzer.Services;
 
-public sealed class DiskItemNode
+internal sealed class DiskItemNode
 {
     public string Name { get; }
     public string FullName { get; }
@@ -38,9 +38,9 @@ public sealed class DiskItemNode
     }
 }
 
-public sealed record DiskScanProgress(long Bytes, int Files, int Folders, string CurrentPath);
+internal sealed record DiskScanProgress(long Bytes, int Files, int Folders, string CurrentPath);
 
-public sealed class DiskZoneSnapshot
+internal sealed class DiskZoneSnapshot
 {
     public required string Name { get; init; }
     public required string FullName { get; init; }
@@ -49,7 +49,7 @@ public sealed class DiskZoneSnapshot
     public required List<DiskZoneSnapshot> Children { get; init; } = [];
 }
 
-public static class DiskAnalyzerService
+internal static class DiskAnalyzerService
 {
     public static List<DriveInfo> GetReadyDrives()
     {
@@ -120,7 +120,7 @@ public static class DiskAnalyzerService
                     {
                         foreach (DirectoryInfo sub in dirInfo.EnumerateDirectories())
                         {
-                            if ((sub.Attributes & FileAttributes.ReparsePoint) != 0)
+                            if ((sub.Attributes & FileAttributes.ReparsePoint) != FileAttributes.None)
                             {
                                 continue;
                             }

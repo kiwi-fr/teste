@@ -1,6 +1,6 @@
 namespace Coclico.Services;
 
-public interface IAppErrorManager
+internal interface IAppErrorManager
 {
     event EventHandler<AppBlockError>? BlockError;
 
@@ -19,7 +19,7 @@ public interface IAppErrorManager
     IReadOnlyDictionary<AppBlock, BlockStatus> GetBlockStatuses();
 }
 
-public enum AppBlock
+internal enum AppBlock
 {
     AI,
     AIRag,
@@ -39,7 +39,7 @@ public enum AppBlock
     Updates,
 }
 
-public enum AppErrorCode
+internal enum AppErrorCode
 {
     AI_ModelNotFound = 10001,
     AI_ModelLoadFailed = 10002,
@@ -108,9 +108,9 @@ public enum AppErrorCode
     DSB_ShortcutFailed = 150002,
 }
 
-public enum BlockStatus { Healthy, Degraded, Failed }
+internal enum BlockStatus { Healthy, Degraded, Failed }
 
-public sealed record AppBlockError(
+internal sealed record AppBlockError(
     AppBlock Block,
     AppErrorCode Code,
     string Message,

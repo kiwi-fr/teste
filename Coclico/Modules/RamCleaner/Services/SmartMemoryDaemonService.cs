@@ -1,13 +1,13 @@
 namespace Coclico.Services;
 
-public sealed class SmartMemoryDaemonService : ISmartMemoryDaemonService
+internal sealed class SmartMemoryDaemonService : ISmartMemoryDaemonService
 {
     private static readonly TimeSpan StatusRefreshInterval = TimeSpan.FromSeconds(30);
     private static readonly TimeSpan PressureSampleInterval = TimeSpan.FromSeconds(5);
     private const string Subsystem = "RamDaemon";
 
     private readonly SettingsService _settingsService;
-    private readonly object _stateLock = new();
+    private readonly Lock _stateLock = new();
     private readonly Action<CentralActivityLevel> _onActivityChanged;
 
     private bool _isEnabled;
@@ -378,7 +378,7 @@ public sealed class SmartMemoryDaemonService : ISmartMemoryDaemonService
             string summary = $"{MemoryCleanerService.FormatBytes(freed)} libérés ({profileLabel})";
             RecordCleanSuccess(freed, triggerMode, summary);
 
-            ToastService.Show($"[Auto-Clean {profileLabel}] {summary}");
+            ToastService.Show(Loc.Format("AutoClean_Summary", profileLabel, summary));
             CentralCircuitBreaker.Current.RecordSuccess(Subsystem);
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
@@ -412,7 +412,7 @@ public sealed class SmartMemoryDaemonService : ISmartMemoryDaemonService
     {
         lock (_stateLock)
         {
-            if (_statusMessage == msg)
+            if (string.Equals(_statusMessage, msg, StringComparison.Ordinal))
             {
                 return;
             }

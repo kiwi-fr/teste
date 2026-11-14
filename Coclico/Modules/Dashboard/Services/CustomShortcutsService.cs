@@ -6,14 +6,14 @@ using System.Text.Json.Serialization;
 
 namespace Coclico.Services;
 
-public enum ShortcutType
+internal enum ShortcutType
 {
     CoclicoAction,
     WindowsTool,
     CustomApp
 }
 
-public sealed class CustomShortcut
+internal sealed class CustomShortcut
 {
     [JsonPropertyName("id")]
     public string Id { get; set; } = Guid.NewGuid().ToString("N");
@@ -40,7 +40,7 @@ public sealed class CustomShortcut
     public string BgTint { get; set; } = "#13182E";
 }
 
-public sealed class CustomShortcutsService
+internal sealed class CustomShortcutsService
 {
     private static readonly string ShortcutsFilePath = Path.Join(
         SettingsService.GetUserDataDirectory(), "shortcuts.json");
@@ -109,7 +109,7 @@ public sealed class CustomShortcutsService
 
     public void RemoveShortcut(string id)
     {
-        CustomShortcut? existing = Shortcuts.FirstOrDefault(s => s.Id == id);
+        CustomShortcut? existing = Shortcuts.FirstOrDefault(s => string.Equals(s.Id, id, StringComparison.Ordinal));
         if (existing != null)
         {
             _ = Shortcuts.Remove(existing);
@@ -191,14 +191,14 @@ public sealed class CustomShortcutsService
             switch (shortcut.Type)
             {
                 case ShortcutType.CoclicoAction:
-                    if (shortcut.Target == "ACTION_CLEAN_RAM")
+                    if (string.Equals(shortcut.Target, "ACTION_CLEAN_RAM", StringComparison.Ordinal))
                     {
-                        ToastService.ShowInfo("Optimisation de la mémoire vive en cours...");
+                        ToastService.ShowInfo(Loc.Get("Shortcut_Cleaning"));
                         MemoryCleanerService.CleanResult result = await MemoryCleanerService.FullCleanAsync(false).ConfigureAwait(false);
                         long freedMb = result.TotalFreed / (1024 * 1024);
-                        ToastService.Show($"✅ Mémoire libérée avec succès : ~{freedMb} Mo !");
+                        ToastService.Show(Loc.Format("Shortcut_Cleaned", freedMb));
                     }
-                    else if (shortcut.Target.StartsWith("NAV_"))
+                    else if (shortcut.Target.StartsWith("NAV_", StringComparison.Ordinal))
                     {
                         string tag = shortcut.Target.Replace("NAV_", "");
                         navigateCallback?.Invoke(tag);
@@ -209,16 +209,23 @@ public sealed class CustomShortcutsService
                 case ShortcutType.CustomApp:
                     if (!string.IsNullOrWhiteSpace(shortcut.Target))
                     {
+                        if (shortcut.Type == ShortcutType.CustomApp && !File.Exists(shortcut.Target))
+                        {
+                            LoggingService.LogWarning($"[CustomShortcuts] Cible introuvable : '{shortcut.Target}'");
+                            ToastService.Show(Loc.Format("Shortcut_TargetMissing", shortcut.Title));
+                            break;
+                        }
+
                         if (!IsTargetAllowedByPolicy(shortcut.Target, shortcut.Type))
                         {
                             LoggingService.LogWarning(
                                 $"[CustomShortcuts] Lancement bloqué par la politique de sécurité : '{shortcut.Title}' -> {shortcut.Target}");
-                            ToastService.Show($"'{shortcut.Title}' a été bloqué par la politique de sécurité.");
+                            ToastService.Show(Loc.Format("Shortcut_Blocked", shortcut.Title));
                             break;
                         }
 
                         _ = Process.Start(new ProcessStartInfo(shortcut.Target) { UseShellExecute = true });
-                        ToastService.Show($"Lancement de '{shortcut.Title}'");
+                        ToastService.Show(Loc.Format("Shortcut_Launched", shortcut.Title));
                     }
                     break;
             }
@@ -226,7 +233,7 @@ public sealed class CustomShortcutsService
         catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)
         {
             LoggingService.LogException(ex, $"CustomShortcutsService.ExecuteShortcutAsync({shortcut.Title})");
-            ToastService.Show($"Impossible de lancer '{shortcut.Title}' : {ex.Message}");
+            ToastService.Show(Loc.Format("Shortcut_LaunchFailed", shortcut.Title, ex.Message));
         }
     }
 
@@ -238,29 +245,39 @@ public sealed class CustomShortcutsService
             return false;
         }
 
-        ISecurityPolicy? policy = ServiceContainer.GetOptional<ISecurityPolicy>();
+        ISecurityPolicy policy;
+        try
+        {
+            policy = ServiceContainer.GetRequired<ISecurityPolicy>();
+        }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
+        {
+            LoggingService.LogException(ex, "CustomShortcutsService.IsTargetAllowedByPolicy");
+            return false;
+        }
 
-        if (policy?.IsCommandBlocked(trimmed.ToLowerInvariant()) is true)
+        if (policy.IsCommandBlocked(trimmed.ToLowerInvariant()))
         {
             return false;
         }
 
         if (Uri.TryCreate(trimmed, UriKind.Absolute, out Uri? uri) &&
-            (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+            (string.Equals(uri.Scheme, Uri.UriSchemeHttp, StringComparison.Ordinal) || string.Equals(uri.Scheme, Uri.UriSchemeHttps, StringComparison.Ordinal)))
         {
             return true;
         }
 
         if (type == ShortcutType.WindowsTool)
         {
-            return policy == null || policy.IsApplicationAllowed(trimmed, out _);
+            return policy.IsApplicationAllowed(trimmed, out _);
         }
 
-        if (policy != null && policy.IsProtectedPath(trimmed.ToLowerInvariant()))
+        if (policy.IsProtectedPath(trimmed.ToLowerInvariant()))
         {
             return false;
         }
 
         return true;
     }
+
 }

@@ -15,13 +15,13 @@ public sealed class CentralUnitBusTests
         {
             Interlocked.Increment(ref factoryCalls);
             return Task.FromResult("value");
-        }, TimeSpan.FromMinutes(1));
+        }, TimeSpan.FromMinutes(1), cancellationToken: TestContext.Current.CancellationToken);
 
         string second = await bus.QueryAsync("Central.Tests.Gpu", ct =>
         {
             Interlocked.Increment(ref factoryCalls);
             return Task.FromResult("other");
-        }, TimeSpan.FromMinutes(1));
+        }, TimeSpan.FromMinutes(1), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("value", first);
         Assert.Equal("value", second);
@@ -40,15 +40,15 @@ public sealed class CentralUnitBusTests
         {
             Interlocked.Increment(ref factoryCalls);
             return Task.FromResult(1);
-        }, ttl);
+        }, ttl, cancellationToken: TestContext.Current.CancellationToken);
 
-        await Task.Delay(150);
+        await Task.Delay(150, TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         _ = await bus.QueryAsync("Central.Tests.Expired", ct =>
         {
             Interlocked.Increment(ref factoryCalls);
             return Task.FromResult(2);
-        }, ttl);
+        }, ttl, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, factoryCalls);
     }
@@ -65,15 +65,15 @@ public sealed class CentralUnitBusTests
         {
             Interlocked.Increment(ref lowCalls);
             return Task.FromResult(1);
-        }, ttl, CentralRequestPriority.Low);
+        }, ttl, CentralRequestPriority.Low, TestContext.Current.CancellationToken);
 
-        await Task.Delay(600);
+        await Task.Delay(600, TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         _ = await bus.QueryAsync("Central.Tests.Low", ct =>
         {
             Interlocked.Increment(ref lowCalls);
             return Task.FromResult(1);
-        }, ttl, CentralRequestPriority.Low);
+        }, ttl, CentralRequestPriority.Low, TestContext.Current.CancellationToken);
 
         Assert.Equal(1, lowCalls);
 
@@ -81,15 +81,15 @@ public sealed class CentralUnitBusTests
         {
             Interlocked.Increment(ref criticalCalls);
             return Task.FromResult(1);
-        }, ttl, CentralRequestPriority.Critical);
+        }, ttl, CentralRequestPriority.Critical, TestContext.Current.CancellationToken);
 
-        await Task.Delay(700);
+        await Task.Delay(700, TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         _ = await bus.QueryAsync("Central.Tests.Critical", ct =>
         {
             Interlocked.Increment(ref criticalCalls);
             return Task.FromResult(1);
-        }, ttl, CentralRequestPriority.Critical);
+        }, ttl, CentralRequestPriority.Critical, TestContext.Current.CancellationToken);
 
         Assert.Equal(2, criticalCalls);
     }
@@ -104,25 +104,25 @@ public sealed class CentralUnitBusTests
         Task<string> first = bus.QueryAsync("Central.Tests.Shared", async ct =>
         {
             Interlocked.Increment(ref factoryCalls);
-            await release.Task;
+            await release.Task.ConfigureAwait(false);
             return "shared";
-        }, TimeSpan.FromMinutes(1));
+        }, TimeSpan.FromMinutes(1), cancellationToken: TestContext.Current.CancellationToken);
 
         Task<string> second = bus.QueryAsync("Central.Tests.Shared", async ct =>
         {
             Interlocked.Increment(ref factoryCalls);
-            await release.Task;
+            await release.Task.ConfigureAwait(false);
             return "shared";
-        }, TimeSpan.FromMinutes(1));
+        }, TimeSpan.FromMinutes(1), cancellationToken: TestContext.Current.CancellationToken);
 
-        await Task.Delay(100);
+        await Task.Delay(100, TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, factoryCalls);
 
         release.SetResult();
 
-        Assert.Equal("shared", await first);
-        Assert.Equal("shared", await second);
+        Assert.Equal("shared", await first.ConfigureAwait(true));
+        Assert.Equal("shared", await second.ConfigureAwait(true));
         Assert.Equal(1, factoryCalls);
     }
 
@@ -137,7 +137,7 @@ public sealed class CentralUnitBusTests
         {
             Interlocked.Increment(ref factoryCalls);
             return Task.FromResult(1);
-        }, ttl);
+        }, ttl, cancellationToken: TestContext.Current.CancellationToken);
 
         bus.Invalidate("Central.Tests.Invalidated");
 
@@ -145,7 +145,7 @@ public sealed class CentralUnitBusTests
         {
             Interlocked.Increment(ref factoryCalls);
             return Task.FromResult(2);
-        }, ttl);
+        }, ttl, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, factoryCalls);
     }
@@ -162,7 +162,7 @@ public sealed class CentralUnitBusTests
             return Task.CompletedTask;
         });
 
-        await bus.SendAsync("Central.Tests.Route", "command");
+        await bus.SendAsync("Central.Tests.Route", "command", TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("command", routedCommand);
         Assert.Equal(1, bus.RoutedRequests);
@@ -173,7 +173,7 @@ public sealed class CentralUnitBusTests
     {
         var bus = new CentralUnitBus();
 
-        await Assert.ThrowsAsync<KeyNotFoundException>(() => bus.SendAsync("Central.Tests.Unknown", "command"));
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => bus.SendAsync("Central.Tests.Unknown", "command", TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
     [Fact]
@@ -188,22 +188,22 @@ public sealed class CentralUnitBusTests
             return Task.FromResult(1);
         }, TimeSpan.FromMinutes(1));
 
-        await Query("Central.Tests.A");
-        await Query("Central.Tests.B");
-        await Query("Central.Tests.C");
-        await Query("Central.Tests.D");
-        _ = await Query("Central.Tests.A");
-        await Query("Central.Tests.E");
+        await Query("Central.Tests.A").ConfigureAwait(true);
+        await Query("Central.Tests.B").ConfigureAwait(true);
+        await Query("Central.Tests.C").ConfigureAwait(true);
+        await Query("Central.Tests.D").ConfigureAwait(true);
+        _ = await Query("Central.Tests.A").ConfigureAwait(true);
+        await Query("Central.Tests.E").ConfigureAwait(true);
 
         Assert.Equal(5, factoryCalls);
         Assert.Equal(1, bus.EvictedEntries);
 
-        await Query("Central.Tests.B");
+        await Query("Central.Tests.B").ConfigureAwait(true);
 
         Assert.Equal(6, factoryCalls);
         Assert.Equal(2, bus.EvictedEntries);
 
-        _ = await Query("Central.Tests.A");
+        _ = await Query("Central.Tests.A").ConfigureAwait(true);
 
         Assert.Equal(6, factoryCalls);
     }

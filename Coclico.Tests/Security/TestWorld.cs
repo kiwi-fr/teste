@@ -4,7 +4,7 @@ using Coclico.Security.Infrastructure;
 
 namespace Coclico.Tests;
 
-public sealed class TestWorld : IDisposable
+internal sealed class TestWorld : IDisposable
 {
     public string RootDir { get; }
 

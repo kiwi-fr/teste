@@ -1,16 +1,15 @@
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Coclico.Modules.Diagnostics.Models;
 
-public enum DiagnosticActionRisk
+internal enum DiagnosticActionRisk
 {
     Low,
     Medium,
     High
 }
 
-public sealed record DiagnosticActionDescriptor
+internal sealed record DiagnosticActionDescriptor
 {
     public required string ActionId { get; init; }
 
@@ -29,7 +28,7 @@ public sealed record DiagnosticActionDescriptor
     public string? NavigationTag { get; init; }
 }
 
-public static class DiagnosticActionCatalog
+internal static class DiagnosticActionCatalog
 {
     public const string OpenDiskAnalyzer = "open_disk_analyzer";
 
@@ -103,14 +102,4 @@ public static class DiagnosticActionCatalog
     public static bool TryGet(string actionId, [NotNullWhen(true)] out DiagnosticActionDescriptor? descriptor)
         => Actions.TryGetValue(actionId, out descriptor);
 
-    public static bool IsKnown(string actionId) => Actions.ContainsKey(actionId);
-
-    [Conditional("DEBUG")]
-    internal static void ValidateCatalogIntegrity()
-    {
-        foreach (DiagnosticActionDescriptor descriptor in Actions.Values)
-        {
-            Debug.Assert(descriptor.RequiresConfirmation, "Every diagnostic action requires a confirmation.");
-        }
-    }
 }

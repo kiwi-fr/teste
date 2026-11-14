@@ -11,7 +11,7 @@ using Coclico.Security.Infrastructure;
 
 namespace Coclico.Installer.Services;
 
-public sealed record PayloadVerification
+internal sealed record PayloadVerification
 {
     public bool HasManifest { get; init; }
 
@@ -24,7 +24,7 @@ public sealed record PayloadVerification
     public string Reason { get; init; } = string.Empty;
 }
 
-public static class PayloadGuard
+internal static class PayloadGuard
 {
     private const string ManifestName = "integrity.json";
     private const string TrustPolicyResourceName = "Coclico.Installer.trust-policy.json";
@@ -358,6 +358,12 @@ public static class PayloadGuard
             return false;
         }
 
+        if (signedUtc > DateTime.UtcNow.AddMinutes(30))
+        {
+            reason = "horodatage de signature dans le futur";
+            return false;
+        }
+
         TrustedKeyEntry? key = trustedKeys.Find(k => string.Equals(k.KeyId, signedKeyId, StringComparison.Ordinal));
         if (key == null)
         {
@@ -453,46 +459,47 @@ public static class PayloadGuard
 
     private static List<TrustedKeyEntry> LoadTrustedKeys()
     {
+        Assembly assembly = typeof(PayloadGuard).Assembly;
+        using Stream? stream = assembly.GetManifestResourceStream(TrustPolicyResourceName);
+        if (stream == null)
+        {
+            throw new InvalidOperationException("Politique de confiance absente de l'installeur.");
+        }
+
+        string policyJson;
+        using (var reader = new StreamReader(stream))
+        {
+            policyJson = reader.ReadToEnd();
+        }
+
+        JsonNode? root;
         try
         {
-            Assembly assembly = typeof(PayloadGuard).Assembly;
-            using Stream? stream = assembly.GetManifestResourceStream(TrustPolicyResourceName);
-            if (stream == null)
-            {
-                return [];
-            }
-
-            string policyJson;
-            using (var reader = new StreamReader(stream))
-            {
-                policyJson = reader.ReadToEnd();
-            }
-
-            JsonNode? root = JsonNode.Parse(policyJson);
-            if (root is not JsonObject rootObject || rootObject["keys"] is not JsonArray keys)
-            {
-                return [];
-            }
-
-            var result = new List<TrustedKeyEntry>();
-            foreach (JsonObject key in keys.OfType<JsonObject>()
-                .Where(key => key["keyId"]?.GetValue<string>() is not null &&
-                              key["publicKeyBase64"]?.GetValue<string>() is not null))
-            {
-                result.Add(new TrustedKeyEntry(
-                    key["keyId"]!.GetValue<string>(),
-                    key["publicKeyBase64"]!.GetValue<string>(),
-                    DateTime.TryParse(key["activeFromUtc"]?.GetValue<string>(), null, System.Globalization.DateTimeStyles.RoundtripKind, out DateTime active) ? active : DateTime.UnixEpoch,
-                    DateTime.TryParse(key["revokedUtc"]?.GetValue<string>(), null, System.Globalization.DateTimeStyles.RoundtripKind, out DateTime revoked) ? revoked : null));
-            }
-
-            return result;
+            root = JsonNode.Parse(policyJson);
         }
         catch (Exception ex) when (ex is not OutOfMemoryException)
         {
-            Debug.WriteLine("[PayloadGuard] Politique de confiance illisible : " + ex.Message);
-            return [];
+            throw new InvalidOperationException("Politique de confiance illisible : " + ex.Message, ex);
         }
+
+        if (root is not JsonObject rootObject || rootObject["keys"] is not JsonArray keys)
+        {
+            throw new InvalidOperationException("Structure de politique de confiance invalide.");
+        }
+
+        var result = new List<TrustedKeyEntry>();
+        foreach (JsonObject key in keys.OfType<JsonObject>()
+            .Where(key => key["keyId"]?.GetValue<string>() is not null &&
+                          key["publicKeyBase64"]?.GetValue<string>() is not null))
+        {
+            result.Add(new TrustedKeyEntry(
+                key["keyId"]!.GetValue<string>(),
+                key["publicKeyBase64"]!.GetValue<string>(),
+                DateTime.TryParse(key["activeFromUtc"]?.GetValue<string>(), null, System.Globalization.DateTimeStyles.RoundtripKind, out DateTime active) ? active : DateTime.UnixEpoch,
+                DateTime.TryParse(key["revokedUtc"]?.GetValue<string>(), null, System.Globalization.DateTimeStyles.RoundtripKind, out DateTime revoked) ? revoked : null));
+        }
+
+        return result;
     }
 
     private static bool IsHex(string value)

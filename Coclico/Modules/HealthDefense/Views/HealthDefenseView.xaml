@@ -50,17 +50,17 @@
 
             <StackPanel Grid.Column="0" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,6" VerticalAlignment="Center">
-                    <Border Width="3" Height="3" CornerRadius="1.5" Background="{DynamicResource TextHintBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                    <TextBlock Text="{DynamicResource Health_HeaderBadge}" FontSize="10.5" FontWeight="Bold" Foreground="{DynamicResource TextHintBrush}" VerticalAlignment="Center"/>
+                    <Border Style="{StaticResource PageEyebrowDot}"/>
+                    <TextBlock Text="{DynamicResource Health_HeaderBadge}" Style="{StaticResource PageEyebrow}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <Border Width="4" Height="30" Background="{DynamicResource ArchitecturalYellowBrush}" CornerRadius="2" Margin="0,0,12,0"/>
-                    <TextBlock Text="{DynamicResource Health_Title}" FontSize="24" FontWeight="Bold"
-                               Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{DynamicResource Health_Title}" Style="{StaticResource CoclicoPageTitle}"
+                               VerticalAlignment="Center"/>
                 </StackPanel>
                 <TextBlock Text="{DynamicResource Health_Subtitle}"
-                           FontSize="12.5" Foreground="{DynamicResource TextSecondaryBrush}" Margin="16,4,0,0"/>
+                           Style="{StaticResource PageHeaderSubtitle}" Margin="16,4,0,0"/>
             </StackPanel>
 
             <Border Grid.Column="2" CornerRadius="{DynamicResource CornerBtn}" Padding="12,7"
@@ -84,7 +84,7 @@
             <Button x:Name="TabDefense" Click="Tab_Click" Tag="Defense" Cursor="Hand"
                     Background="Transparent" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                     Foreground="{DynamicResource TextPrimaryBrush}" FontSize="12" FontWeight="Bold" Padding="16,8"
-                    AutomationProperties.Name="Onglet Protection et diagnostic">
+                    AutomationProperties.Name="{DynamicResource Health_A11y_TabProtect}">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="{DynamicResource CornerBtn}"/>
@@ -95,7 +95,7 @@
             <Button x:Name="TabStartup" Click="Tab_Click" Tag="Startup" Cursor="Hand" Margin="8,0,0,0"
                     Background="Transparent" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                     Foreground="{DynamicResource TextMutedBrush}" FontSize="12" Padding="16,8"
-                    AutomationProperties.Name="Onglet Démarrage Windows">
+                    AutomationProperties.Name="{DynamicResource Health_A11y_TabStartup}">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="{DynamicResource CornerBtn}"/>
@@ -106,7 +106,7 @@
             <Button x:Name="TabSmart" Click="Tab_Click" Tag="Smart" Cursor="Hand" Margin="8,0,0,0"
                     Background="Transparent" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                     Foreground="{DynamicResource TextMutedBrush}" FontSize="12" Padding="16,8"
-                    AutomationProperties.Name="Onglet Santé disque S.M.A.R.T.">
+                    AutomationProperties.Name="{DynamicResource Health_A11y_TabSmart}">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="{DynamicResource CornerBtn}"/>
@@ -129,7 +129,7 @@
 
                 <Border Width="44" Height="44" CornerRadius="{DynamicResource CornerCard}" Margin="0,0,14,0"
                         Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1">
-                    <ui:SymbolIcon Symbol="Wrench24" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    <ui:SymbolIcon Symbol="Wrench24" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center"
                                    Foreground="{DynamicResource ArchitecturalYellowBrush}"/>
                 </Border>
 
@@ -149,13 +149,13 @@
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="14,0,0,0">
                     <Button Style="{StaticResource DangerButton}" Command="{Binding CancelCommand}"
-                            AutomationProperties.Name="Annuler la réparation en cours"
+                            AutomationProperties.Name="{DynamicResource Health_A11y_CancelRepair}"
                             Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}"
                             Padding="12,8" Margin="0,0,8,0">
                         <TextBlock Text="{DynamicResource Health_CancelFix}" FontWeight="Bold" FontSize="11"/>
                     </Button>
                     <Button Style="{StaticResource ArchitecturalActionCard}" Command="{Binding RunFullRepairCommand}"
-                            AutomationProperties.Name="Lancer la réparation intégrale Windows 1-clic"
+                            AutomationProperties.Name="{DynamicResource Health_A11y_FullRepair}"
                             IsEnabled="{Binding IsNotBusy}" Padding="18,10">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="{DynamicResource Health_LaunchOneClickFix}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
@@ -204,7 +204,7 @@
                                            FontSize="10" Foreground="{DynamicResource TextMutedBrush}"/>
                             </StackPanel>
                             <Button Grid.Column="2" Style="{StaticResource SecondaryButton}"
-                                    AutomationProperties.Name="Ouvrir MRT"
+                                    AutomationProperties.Name="{DynamicResource Health_A11y_Mrt}"
                                     Command="{Binding LaunchMrtCommand}" Padding="10,5" VerticalAlignment="Center">
                                 <TextBlock Text="{DynamicResource Health_OpenBtn}" FontSize="11" FontWeight="SemiBold"/>
                             </Button>
@@ -229,7 +229,7 @@
                                            FontSize="10" Foreground="{DynamicResource TextMutedBrush}"/>
                             </StackPanel>
                             <Button Grid.Column="2" Style="{StaticResource SecondaryButton}"
-                                    AutomationProperties.Name="Lancer scan rapide Defender"
+                                    AutomationProperties.Name="{DynamicResource Health_A11y_QuickScan}"
                                     Command="{Binding RunQuickScanCommand}" Padding="10,5" VerticalAlignment="Center">
                                 <TextBlock Text="{DynamicResource Health_ScanBtn}" FontSize="11" FontWeight="SemiBold"/>
                             </Button>
@@ -254,7 +254,7 @@
                                            FontSize="10" Foreground="{DynamicResource TextMutedBrush}"/>
                             </StackPanel>
                             <Button Grid.Column="2" Style="{StaticResource SecondaryButton}"
-                                    AutomationProperties.Name="Lancer scan complet Defender"
+                                    AutomationProperties.Name="{DynamicResource Health_A11y_FullScan}"
                                     Command="{Binding RunFullScanCommand}" Padding="10,5" VerticalAlignment="Center">
                                 <TextBlock Text="{DynamicResource Health_ScanBtn}" FontSize="11" FontWeight="SemiBold"/>
                             </Button>
@@ -303,7 +303,7 @@
                                            FontSize="10" Foreground="{DynamicResource TextMutedBrush}"/>
                             </StackPanel>
                             <Button Grid.Column="2" Style="{StaticResource SecondaryButton}"
-                                    AutomationProperties.Name="Programmer analyse hors-ligne"
+                                    AutomationProperties.Name="{DynamicResource Health_A11y_OfflineScan}"
                                     Command="{Binding RunOfflineScanCommand}" Padding="10,5" VerticalAlignment="Center">
                                 <TextBlock Text="{DynamicResource Health_ScheduleBtn}" FontSize="11" FontWeight="SemiBold"/>
                             </Button>
@@ -340,7 +340,7 @@
                                            FontSize="10" Foreground="{DynamicResource TextMutedBrush}"/>
                             </StackPanel>
                             <Button Grid.Column="2" Style="{StaticResource SecondaryButton}"
-                                    AutomationProperties.Name="Lancer SFC /scannow"
+                                    AutomationProperties.Name="{DynamicResource Health_A11y_Sfc}"
                                     Command="{Binding RunSfcCommand}" Padding="10,5" VerticalAlignment="Center">
                                 <TextBlock Text="{DynamicResource Health_LaunchBtn}" FontSize="11" FontWeight="SemiBold"/>
                             </Button>
@@ -365,7 +365,7 @@
                                            FontSize="10" Foreground="{DynamicResource TextMutedBrush}"/>
                             </StackPanel>
                             <Button Grid.Column="2" Style="{StaticResource SecondaryButton}"
-                                    AutomationProperties.Name="Lancer DISM RestoreHealth"
+                                    AutomationProperties.Name="{DynamicResource Health_A11y_Dism}"
                                     Command="{Binding RunDismRestoreCommand}" Padding="10,5" VerticalAlignment="Center">
                                 <TextBlock Text="{DynamicResource Health_LaunchBtn}" FontSize="11" FontWeight="SemiBold"/>
                             </Button>
@@ -524,17 +524,17 @@
                     <StackPanel Orientation="Horizontal">
                         <Border Width="6" CornerRadius="3" Background="{DynamicResource PrimaryBrush}" Margin="0,0,8,0"/>
                         <ui:SymbolIcon Symbol="Power24" FontSize="14" Foreground="{DynamicResource PrimaryBrush}" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                        <TextBlock Text="DÉMARRAGE WINDOWS" FontSize="11" FontWeight="Black"
+                        <TextBlock Text="{DynamicResource Health_StartupTitle}" FontSize="11" FontWeight="Black"
                                    Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <TextBlock Text="Liste des programmes qui se lancent avec Windows (registre HKCU, HKLM et dossier Démarrage). Désactiver une entrée ne supprime rien : l'action passe par le mécanisme StartupApproved du Gestionnaire des tâches, réversible en un clic. Les entrées système HKLM exigent les droits administrateur."
+                    <TextBlock Text="{DynamicResource Health_StartupDesc}"
                                FontSize="11" TextWrapping="Wrap" Margin="0,8,0,0"
                                Foreground="{DynamicResource TextSecondaryBrush}"/>
                     <Button Command="{Binding RefreshStartupCommand}" Cursor="Hand" Margin="0,10,0,0"
                             Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1"
                             Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" FontWeight="SemiBold"
                             Padding="12,7" HorizontalAlignment="Left"
-                            AutomationProperties.Name="Actualiser la liste des programmes au démarrage">
+                            AutomationProperties.Name="{DynamicResource Health_StartupRefresh}">
                         <Button.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" Value="{DynamicResource CornerBtn}"/>
@@ -542,7 +542,7 @@
                         </Button.Resources>
                         <StackPanel Orientation="Horizontal">
                             <ui:SymbolIcon Symbol="ArrowSync24" FontSize="12" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Actualiser la liste" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource Health_StartupRefresh}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
@@ -577,7 +577,7 @@
                                             </Border>
                                             <ui:ToggleSwitch IsChecked="{Binding IsEnabled, Mode=TwoWay}"
                                                              IsEnabled="{Binding CanToggle}" Margin="12,0,0,0"
-                                                             AutomationProperties.Name="Activer ou désactiver ce programme au démarrage"/>
+                                                             AutomationProperties.Name="{DynamicResource Health_A11y_ToggleStartup}"/>
                                         </StackPanel>
                                     </Grid>
                                 </Border>
@@ -601,17 +601,17 @@
                     <StackPanel Orientation="Horizontal">
                         <Border Width="6" CornerRadius="3" Background="{DynamicResource ArchitecturalYellowBrush}" Margin="0,0,8,0"/>
                         <ui:SymbolIcon Symbol="HardDrive24" FontSize="14" Foreground="{DynamicResource ArchitecturalYellowBrush}" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                        <TextBlock Text="SANTÉ DISQUE S.M.A.R.T." FontSize="11" FontWeight="Black"
+                        <TextBlock Text="{DynamicResource Health_SmartTitle}" FontSize="11" FontWeight="Black"
                                    Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <TextBlock Text="Lecture seule de l'état S.M.A.R.T. de vos disques physiques : Windows signale-t-il un risque de panne imminente ? Vraie information matérielle, sans score global inventé. L'état de santé est lu via l'API de stockage Windows, y compris les disques NVMe. Certains contrôleurs RAID matériels masquent ces données — dans ce cas la liste reste vide et un message s'affiche dans le journal."
+                    <TextBlock Text="{DynamicResource Health_SmartDesc}"
                                FontSize="11" TextWrapping="Wrap" Margin="0,8,0,0"
                                Foreground="{DynamicResource TextSecondaryBrush}"/>
                     <Button Command="{Binding CheckDiskHealthCommand}" IsEnabled="{Binding IsNotBusy}" Cursor="Hand" Margin="0,10,0,0"
                             Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1"
                             Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" FontWeight="SemiBold"
                             Padding="12,7" HorizontalAlignment="Left"
-                            AutomationProperties.Name="Vérifier l'état S.M.A.R.T. des disques">
+                            AutomationProperties.Name="{DynamicResource Health_SmartCheck}">
                         <Button.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" Value="{DynamicResource CornerBtn}"/>
@@ -619,7 +619,7 @@
                         </Button.Resources>
                         <StackPanel Orientation="Horizontal">
                             <ui:SymbolIcon Symbol="ArrowSync24" FontSize="12" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Vérifier mes disques" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource Health_SmartCheck}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>

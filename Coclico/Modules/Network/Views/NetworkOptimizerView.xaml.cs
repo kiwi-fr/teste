@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Windows;
 using System.Windows.Controls;
 using Coclico.Services;
 using Coclico.ViewModels;
@@ -8,7 +7,7 @@ namespace Coclico.Views;
 
 public partial class NetworkOptimizerView : UserControl
 {
-    public NetworkOptimizerViewModel ViewModel { get; }
+    internal NetworkOptimizerViewModel ViewModel { get; }
 
     public NetworkOptimizerView()
     {

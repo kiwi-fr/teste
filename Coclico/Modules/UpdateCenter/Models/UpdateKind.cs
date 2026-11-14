@@ -1,6 +1,6 @@
 namespace Coclico.Modules.UpdateCenter.Models;
 
-public enum UpdateKind
+internal enum UpdateKind
 {
     Application,
     Driver,

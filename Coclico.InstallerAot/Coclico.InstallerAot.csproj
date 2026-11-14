@@ -10,9 +10,21 @@
     <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
     <PublishTrimmed>true</PublishTrimmed>
     <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
-    <TrimMode>partial</TrimMode>
-    <NoWarn>$(NoWarn);IL3053</NoWarn>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TrimMode>full</TrimMode>
+    <!-- Optimisations taille du binaire natif : symboles stripés, pas d'ICU embarqué, pas de stack traces/debugger -->
+    <StripSymbols>true</StripSymbols>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <IlcOptimizationPreference>Size</IlcOptimizationPreference>
+    <StackTraceSupport>false</StackTraceSupport>
+    <DebuggerSupport>false</DebuggerSupport>
+    <EventSourceSupport>false</EventSourceSupport>
+    <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
+    <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
+    <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+    <!-- NU1903 : Tmds.DBus.Protocol n'est plus référencé directement ; la version transitive vient d'Avalonia.Desktop
+         et n'est jamais utilisée à l'exécution (installeur Windows uniquement). -->
+    <NoWarn>$(NoWarn);IL3053;NU1903</NoWarn>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <RootNamespace>Coclico.Installer</RootNamespace>
     <AssemblyName>Coclico.Installer</AssemblyName>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -31,12 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.3.8" />
-    <PackageReference Include="Tmds.DBus.Protocol" Version="0.21.3" />
+    <PackageReference Include="Avalonia" Version="11.3.8" />
     <PackageReference Include="Avalonia.Desktop" Version="11.3.8" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.8" />
-  </ItemGroup>
-  <ItemGroup>
+    <PackageReference Include="Tmds.DBus.Protocol" Version="0.95.2" />
     <ProjectReference Include="..\Coclico.Security\Coclico.Security.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -53,12 +63,11 @@
     <ItemGroup>
     <PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="2.88.9" GeneratePathProperty="true" />
     <PackageReference Include="HarfBuzzSharp.NativeAssets.Win32" Version="8.3.1.1" GeneratePathProperty="true" />
-    <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.25547.20250602" GeneratePathProperty="true" />
+    <!-- ANGLE retire : aucun UseAngle dans le code, l'installeur rend en Skia logiciel -->
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(PkgSkiaSharp_NativeAssets_Win32)\runtimes\win-x64\native\libSkiaSharp.dll" LogicalName="libSkiaSharp.dll" Link="NativeLibs\libSkiaSharp.dll" />
     <EmbeddedResource Include="$(PkgHarfBuzzSharp_NativeAssets_Win32)\runtimes\win-x64\native\libHarfBuzzSharp.dll" LogicalName="libHarfBuzzSharp.dll" Link="NativeLibs\libHarfBuzzSharp.dll" />
-    <EmbeddedResource Include="$(PkgAvalonia_Angle_Windows_Natives)\runtimes\win-x64\native\av_libglesv2.dll" LogicalName="av_libglesv2.dll" Link="NativeLibs\av_libglesv2.dll" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="Resources\plage.png" Condition="Exists('Resources\plage.png')" />

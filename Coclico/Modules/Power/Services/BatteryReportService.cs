@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Coclico.Services;
 
-public static class BatteryReportService
+internal static class BatteryReportService
 {
     private static string ReportsDir => Path.Join(SettingsService.SettingsDir, "reports");
 

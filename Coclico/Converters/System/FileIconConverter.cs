@@ -4,7 +4,7 @@ using System.Windows.Data;
 namespace Coclico.Converters;
 
 [ValueConversion(typeof(string), typeof(string))]
-public class FirstCharConverter : IValueConverter
+internal class FirstCharConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {

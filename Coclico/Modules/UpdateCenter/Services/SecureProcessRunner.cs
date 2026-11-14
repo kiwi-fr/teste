@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Coclico.Modules.UpdateCenter.Services;
 
-public sealed class SecureProcessRunner
+internal sealed class SecureProcessRunner
 {
     private static readonly IReadOnlySet<string> AllowedExecutables = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
@@ -18,10 +18,12 @@ public sealed class SecureProcessRunner
         if (!AllowedExecutables.Contains(fileName))
             throw new InvalidOperationException($"Executable not allowed: {fileName}");
 
+        string resolvedPath = Coclico.Services.SystemToolResolver.Resolve(fileName);
+
         using var process = new Process();
         process.StartInfo = new ProcessStartInfo
         {
-            FileName = fileName,
+            FileName = resolvedPath,
             UseShellExecute = false,
             CreateNoWindow = true,
             RedirectStandardOutput = true,

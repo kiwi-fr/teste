@@ -23,70 +23,50 @@
           <converters:HexToBrushConverter x:Key="HexToBrush"/>
           <converters:FirstCharConverter x:Key="FirstCharConverter"/>
           <converters:EqualityToBoolConverter x:Key="EqualityToBoolConverter"/>
-          <converters:EqualityToBoolConverter x:Key="EqualityConverter"/>
-
-          <SolidColorBrush x:Key="BgAppBrush" Color="#07080B" po:Freeze="True"/>
-          <SolidColorBrush x:Key="BgCardHoverBrush" Color="#1F1A22" po:Freeze="True"/>
           <SolidColorBrush x:Key="BgSidebarBrush" Color="#0A0B0F" po:Freeze="True"/>
           <SolidColorBrush x:Key="BorderAccentBrush" Color="#FF5722" po:Freeze="True"/>
           <SolidColorBrush x:Key="BorderAccentSecondaryBrush" Color="#FFA000" po:Freeze="True"/>
-          <SolidColorBrush x:Key="TextSidebarBrush" Color="#FAF5F2" po:Freeze="True"/>
-          <SolidColorBrush x:Key="BorderDefaultLightBrush" Color="#2A2226" po:Freeze="True"/>
-          <SolidColorBrush x:Key="BorderSubtleLightBrush" Color="#1A161A" po:Freeze="True"/>
-
           <Color x:Key="AccentPrimary">#FF453A</Color>
           <Color x:Key="AccentSecondary">#FFA000</Color>
           <Color x:Key="AccentCyan">#FF6B35</Color>
-          <Color x:Key="AccentCyanLight">#FF9E80</Color>
-          <Color x:Key="AccentSuccess">#10B981</Color>
-
           <sys:Double x:Key="GlobalFontSize">13</sys:Double>
           <sys:Double x:Key="Space4">4</sys:Double>
-          <sys:Double x:Key="Space8">8</sys:Double>
-          <sys:Double x:Key="Space12">12</sys:Double>
-          <sys:Double x:Key="Space16">16</sys:Double>
-          <sys:Double x:Key="Space24">24</sys:Double>
-          <sys:Double x:Key="Space32">32</sys:Double>
-          <sys:Double x:Key="InteractiveMinSize">40</sys:Double>
-          <Thickness x:Key="CardPadding">18,16,18,16</Thickness>
-          <Thickness x:Key="CardPadding_Compact">12,10,12,10</Thickness>
-
-          <Duration x:Key="AnimFast">0:0:0.10</Duration>
-          <Duration x:Key="AnimMed">0:0:0.15</Duration>
-          <Duration x:Key="AnimSlow">0:0:0.25</Duration>
-          <Duration x:Key="MotionMicro">0:0:0.12</Duration>
+          <sys:Double x:Key="Space2">2</sys:Double>
+          <Thickness x:Key="CardPadding">20,18,20,18</Thickness>
           <Duration x:Key="MotionComponent">0:0:0.20</Duration>
           <Duration x:Key="MotionPage">0:0:0.30</Duration>
 
-          <CornerRadius x:Key="CornerCard">10</CornerRadius>
-          <CornerRadius x:Key="CornerBtn">8</CornerRadius>
-          <CornerRadius x:Key="CornerSmall">6</CornerRadius>
+          <CornerRadius x:Key="CornerCard">16</CornerRadius>
+          <CornerRadius x:Key="CornerBtn">11</CornerRadius>
+          <CornerRadius x:Key="CornerSmall">8</CornerRadius>
           <CornerRadius x:Key="CornerPill">999</CornerRadius>
           <CornerRadius x:Key="CornerNode">8</CornerRadius>
 
-          <SolidColorBrush x:Key="BgBaseBrush"        Color="#07080B" po:Freeze="True"/>
-          <SolidColorBrush x:Key="BgPanelBrush"       Color="#0A0B0F" po:Freeze="True"/>
-          <SolidColorBrush x:Key="BgSurfaceBrush"     Color="#0E1016" po:Freeze="True"/>
-          <SolidColorBrush x:Key="BgCardBrush"        Color="#13151D" po:Freeze="True"/>
-          <SolidColorBrush x:Key="BgElevatedBrush"    Color="#1A1C26" po:Freeze="True"/>
-          <SolidColorBrush x:Key="BgHoverBrush"       Color="#222533" po:Freeze="True"/>
+          <RadialGradientBrush x:Key="BgBaseBrush" GradientOrigin="0.82,0.08" Center="0.82,0.08" RadiusX="1.15" RadiusY="1.15" po:Freeze="True">
+              <GradientStop Color="#221016" Offset="0"/>
+              <GradientStop Color="#120D13" Offset="0.28"/>
+              <GradientStop Color="#0A0B11" Offset="0.62"/>
+              <GradientStop Color="#060709" Offset="1"/>
+          </RadialGradientBrush>
+          <SolidColorBrush x:Key="BgPanelBrush"       Color="#E60B0C12" po:Freeze="True"/>
+          <SolidColorBrush x:Key="BgSurfaceBrush"     Color="#D8101319" po:Freeze="True"/>
+          <SolidColorBrush x:Key="BgCardBrush"        Color="#C9131722" po:Freeze="True"/>
+          <SolidColorBrush x:Key="BgElevatedBrush"    Color="#E01A1F2C" po:Freeze="True"/>
+          <SolidColorBrush x:Key="BgHoverBrush"       Color="#2A2434" po:Freeze="True"/>
 
-          <SolidColorBrush x:Key="BorderSubtleBrush"  Color="#221C20" po:Freeze="True"/>
-          <SolidColorBrush x:Key="BorderDefaultBrush" Color="#33262B" po:Freeze="True"/>
-          <SolidColorBrush x:Key="BorderStrongBrush"  Color="#5A3A40" po:Freeze="True"/>
+          <SolidColorBrush x:Key="BorderSubtleBrush"  Color="#14FFFFFF" po:Freeze="True"/>
+          <SolidColorBrush x:Key="BorderDefaultBrush" Color="#26FFFFFF" po:Freeze="True"/>
+          <SolidColorBrush x:Key="BorderStrongBrush"  Color="#40FFFFFF" po:Freeze="True"/>
 
           <SolidColorBrush x:Key="TextPrimaryBrush"   Color="#FFFFFF" po:Freeze="True"/>
-          <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D2CBC6" po:Freeze="True"/>
-          <SolidColorBrush x:Key="TextMutedBrush"     Color="#9C928B" po:Freeze="True"/>
-          <SolidColorBrush x:Key="TextHintBrush"      Color="#706760" po:Freeze="True"/>
+          <SolidColorBrush x:Key="TextSecondaryBrush" Color="#E4DDD8" po:Freeze="True"/>
+          <SolidColorBrush x:Key="TextMutedBrush"     Color="#ABA39C" po:Freeze="True"/>
+          <SolidColorBrush x:Key="TextHintBrush"      Color="#8F8880" po:Freeze="True"/>
           <SolidColorBrush x:Key="TextAccentBrush"    Color="#FF6B35" po:Freeze="True"/>
-          <SolidColorBrush x:Key="TextCyanBrush"      Color="#FF8A50" po:Freeze="True"/>
-
           <SolidColorBrush x:Key="PrimaryBrush"    Color="#FF453A" po:Freeze="True"/>
           <SolidColorBrush x:Key="SecondaryBrush"  Color="#FFA000" po:Freeze="True"/>
           <SolidColorBrush x:Key="AccentPrimaryBrush" Color="#FF453A" po:Freeze="True"/>
           <SolidColorBrush x:Key="AccentCyanBrush" Color="#FF6B35" po:Freeze="True"/>
-          <SolidColorBrush x:Key="BorderAccentPrimaryBrush" Color="#FF5722" po:Freeze="True"/>
           <SolidColorBrush x:Key="SuccessBrush"    Color="#10B981" po:Freeze="True"/>
           <SolidColorBrush x:Key="CyanBrush"       Color="#FF6B35" po:Freeze="True"/>
           <SolidColorBrush x:Key="WarnBrush"       Color="#FFA000" po:Freeze="True"/>
@@ -96,32 +76,17 @@
           <SolidColorBrush x:Key="ArchitecturalAmberBrush"  Color="#FF8A50" po:Freeze="True"/>
           <SolidColorBrush x:Key="ArchitecturalDarkTextBrush" Color="#07080B" po:Freeze="True"/>
 
-          <SolidColorBrush x:Key="NodeStartBrush"   Color="#10B981" po:Freeze="True"/>
-          <SolidColorBrush x:Key="NodeActionBrush"  Color="#FF6B35" po:Freeze="True"/>
-          <SolidColorBrush x:Key="NodeEndBrush"     Color="#FF3B30" po:Freeze="True"/>
-          <SolidColorBrush x:Key="NodeCmdBrush"     Color="#FFA000" po:Freeze="True"/>
-          <SolidColorBrush x:Key="NodeWaitBrush"    Color="#FF8A50" po:Freeze="True"/>
-
           <SolidColorBrush x:Key="OverlayLight"      Color="#0AFFFFFF" po:Freeze="True"/>
-          <SolidColorBrush x:Key="OverlayMid"        Color="#05FFFFFF" po:Freeze="True"/>
-          <SolidColorBrush x:Key="OverlayFaint"      Color="#03FFFFFF" po:Freeze="True"/>
           <SolidColorBrush x:Key="OverlayDark"       Color="#E607080B" po:Freeze="True"/>
-          <SolidColorBrush x:Key="OverlayDarkStrong" Color="#F207080B" po:Freeze="True"/>
-
           <LinearGradientBrush x:Key="PrimaryGradient" StartPoint="0,0" EndPoint="1,0">
-              <GradientStop Color="#FF3B30" Offset="0"/>
-              <GradientStop Color="#FF6B35" Offset="0.5"/>
-              <GradientStop Color="#FFA000" Offset="1"/>
+              <GradientStop Color="#FF4136" Offset="0"/>
+              <GradientStop Color="#FF7A1F" Offset="0.55"/>
+              <GradientStop Color="#FFB020" Offset="1"/>
           </LinearGradientBrush>
 
           <LinearGradientBrush x:Key="CyberGradient" StartPoint="0,0" EndPoint="1,0">
               <GradientStop Color="#E11D48" Offset="0"/>
               <GradientStop Color="#FF5722" Offset="1"/>
-          </LinearGradientBrush>
-
-          <LinearGradientBrush x:Key="PrimaryGradientDiag" StartPoint="0,0" EndPoint="1,1">
-              <GradientStop Color="#FF3B30" Offset="0"/>
-              <GradientStop Color="#FFA000" Offset="1"/>
           </LinearGradientBrush>
 
           <LinearGradientBrush x:Key="FoxGradient" StartPoint="0,0" EndPoint="1,0">
@@ -130,28 +95,11 @@
               <GradientStop Color="#FFA000" Offset="1"/>
           </LinearGradientBrush>
 
-          <LinearGradientBrush x:Key="FoxGradientDiag" StartPoint="0,0" EndPoint="1,1">
-              <GradientStop Color="#FF3B30" Offset="0"/>
-              <GradientStop Color="#FF7A00" Offset="0.55"/>
-              <GradientStop Color="#FFA000" Offset="1"/>
-          </LinearGradientBrush>
-
           <LinearGradientBrush x:Key="EclipseGlowGradient" StartPoint="0.5,0" EndPoint="0.5,1">
               <GradientStop Color="#33FF5722" Offset="0"/>
               <GradientStop Color="#0007080B" Offset="1"/>
           </LinearGradientBrush>
 
-          <LinearGradientBrush x:Key="SuccessGradient" StartPoint="0,0" EndPoint="1,0">
-              <GradientStop Color="#059669" Offset="0"/>
-              <GradientStop Color="#10B981" Offset="1"/>
-          </LinearGradientBrush>
-
-          <SolidColorBrush x:Key="NavGlowBrush" Color="#33FF5722"/>
-
-          <LinearGradientBrush x:Key="GradHome" StartPoint="0,0" EndPoint="1,1">
-              <GradientStop Color="#2563EB" Offset="0"/>
-              <GradientStop Color="#4F46E5" Offset="1"/>
-          </LinearGradientBrush>
           <LinearGradientBrush x:Key="GradRam" StartPoint="0,0" EndPoint="1,1">
               <GradientStop Color="#6366F1" Offset="0"/>
               <GradientStop Color="#8B5CF6" Offset="1"/>
@@ -176,18 +124,6 @@
               <GradientStop Color="#BE123C" Offset="0"/>
               <GradientStop Color="#F43F5E" Offset="1"/>
           </LinearGradientBrush>
-          <LinearGradientBrush x:Key="GradSettings" StartPoint="0,0" EndPoint="1,1">
-              <GradientStop Color="#475569" Offset="0"/>
-              <GradientStop Color="#64748B" Offset="1"/>
-          </LinearGradientBrush>
-          <LinearGradientBrush x:Key="GradHelp" StartPoint="0,0" EndPoint="1,1">
-              <GradientStop Color="#0891B2" Offset="0"/>
-              <GradientStop Color="#06B6D4" Offset="1"/>
-          </LinearGradientBrush>
-          <LinearGradientBrush x:Key="GradAi" StartPoint="0,0" EndPoint="1,1">
-              <GradientStop Color="#7C3AED" Offset="0"/>
-              <GradientStop Color="#EC4899" Offset="1"/>
-          </LinearGradientBrush>
           <LinearGradientBrush x:Key="GradZen" StartPoint="0,0" EndPoint="1,1">
               <GradientStop Color="#0369A1" Offset="0"/>
               <GradientStop Color="#38BDF8" Offset="1"/>
@@ -210,18 +146,6 @@
           <QuarticEase x:Key="SmoothEaseOut"  EasingMode="EaseOut"/>
 
           <SolidColorBrush x:Key="AccentBrush"   Color="#FF453A" po:Freeze="True"/>
-          <SolidColorBrush x:Key="WarningBrush"  Color="#FFA000" po:Freeze="True"/>
-          <SolidColorBrush x:Key="FocusBrush" Color="#FF6B35" po:Freeze="True"/>
-
-          <Style x:Key="RedSunPillBadge" TargetType="Border">
-              <Setter Property="Background" Value="#22FF5722"/>
-              <Setter Property="BorderBrush" Value="#88FF6B35"/>
-              <Setter Property="BorderThickness" Value="1"/>
-              <Setter Property="CornerRadius" Value="{StaticResource CornerPill}"/>
-              <Setter Property="Padding" Value="12,4"/>
-              <Setter Property="SnapsToDevicePixels" Value="True"/>
-          </Style>
-
           <Style x:Key="RedSunCard" TargetType="Border">
               <Setter Property="Background" Value="{DynamicResource BgCardBrush}"/>
               <Setter Property="BorderBrush" Value="{DynamicResource BorderDefaultBrush}"/>
@@ -231,148 +155,20 @@
               <Setter Property="SnapsToDevicePixels" Value="True"/>
           </Style>
 
-          <Style x:Key="RedSunPrimaryButton" TargetType="Button">
-              <Setter Property="Background" Value="{DynamicResource PrimaryGradient}"/>
-              <Setter Property="Foreground" Value="#FFFFFF"/>
-              <Setter Property="FontWeight" Value="SemiBold"/>
-              <Setter Property="FontSize" Value="13"/>
-              <Setter Property="BorderThickness" Value="0"/>
-              <Setter Property="Padding" Value="18,9"/>
-              <Setter Property="Cursor" Value="Hand"/>
-              <Setter Property="SnapsToDevicePixels" Value="True"/>
-              <Setter Property="Template">
-                  <Setter.Value>
-                      <ControlTemplate TargetType="Button">
-                          <Border x:Name="border"
-                                  Background="{TemplateBinding Background}"
-                                  CornerRadius="{StaticResource CornerPill}"
-                                  Padding="{TemplateBinding Padding}">
-                              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                          </Border>
-                          <ControlTemplate.Triggers>
-                              <Trigger Property="IsMouseOver" Value="True">
-                                  <Setter TargetName="border" Property="Opacity" Value="0.92"/>
-                              </Trigger>
-                              <Trigger Property="IsPressed" Value="True">
-                                  <Setter TargetName="border" Property="Opacity" Value="0.80"/>
-                              </Trigger>
-                          </ControlTemplate.Triggers>
-                      </ControlTemplate>
-                  </Setter.Value>
-              </Setter>
-          </Style>
-
-          <Style x:Key="CoclicoPanel" TargetType="Border">
-              <Setter Property="Background" Value="{DynamicResource BgCardBrush}"/>
-              <Setter Property="BorderBrush" Value="{DynamicResource BorderDefaultBrush}"/>
-              <Setter Property="BorderThickness" Value="1"/>
-              <Setter Property="CornerRadius" Value="{StaticResource CornerCard}"/>
-              <Setter Property="Padding" Value="{DynamicResource CardPadding}"/>
-              <Setter Property="SnapsToDevicePixels" Value="True"/>
-          </Style>
+          <Style x:Key="CoclicoPanel" TargetType="Border" BasedOn="{StaticResource RedSunCard}"/>
 
           <Style x:Key="CoclicoPageTitle" TargetType="TextBlock">
-              <Setter Property="FontSize" Value="24"/>
+              <Setter Property="FontSize" Value="27"/>
               <Setter Property="FontWeight" Value="Bold"/>
               <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
               <Setter Property="Margin" Value="0,0,0,4"/>
           </Style>
 
-          <Style x:Key="CoclicoMetaText" TargetType="TextBlock">
-              <Setter Property="FontSize" Value="11"/>
-              <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
-              <Setter Property="TextWrapping" Value="Wrap"/>
-          </Style>
-
-          <Style x:Key="CoclicoStatusBadge" TargetType="Border">
-              <Setter Property="Background" Value="{DynamicResource BgElevatedBrush}"/>
-              <Setter Property="BorderBrush" Value="{DynamicResource BorderDefaultBrush}"/>
-              <Setter Property="BorderThickness" Value="1"/>
-              <Setter Property="CornerRadius" Value="{StaticResource CornerPill}"/>
-              <Setter Property="Padding" Value="8,4"/>
-          </Style>
-
-          <Style x:Key="SubtleCard" TargetType="Border">
-              <Setter Property="Background"      Value="{DynamicResource BgCardBrush}"/>
-              <Setter Property="BorderBrush"     Value="{DynamicResource BorderDefaultBrush}"/>
-              <Setter Property="BorderThickness" Value="1"/>
-              <Setter Property="CornerRadius"    Value="{StaticResource CornerCard}"/>
-              <Setter Property="Padding"         Value="{DynamicResource CardPadding}"/>
-              <Setter Property="SnapsToDevicePixels" Value="True"/>
-          </Style>
-
-          <Style x:Key="ElevatedCard" TargetType="Border">
-              <Setter Property="Background"      Value="{DynamicResource BgElevatedBrush}"/>
-              <Setter Property="BorderBrush"     Value="{DynamicResource BorderStrongBrush}"/>
-              <Setter Property="BorderThickness" Value="1"/>
-              <Setter Property="CornerRadius"    Value="{StaticResource CornerCard}"/>
-              <Setter Property="Padding"         Value="{DynamicResource CardPadding}"/>
-              <Setter Property="SnapsToDevicePixels" Value="True"/>
-          </Style>
-
-          <Style x:Key="GlowCard" TargetType="Border">
-              <Setter Property="Background"      Value="{DynamicResource BgCardBrush}"/>
-              <Setter Property="BorderBrush"     Value="{DynamicResource BorderAccentBrush}"/>
-              <Setter Property="BorderThickness" Value="1"/>
-              <Setter Property="CornerRadius"    Value="{StaticResource CornerCard}"/>
-              <Setter Property="Padding" Value="18,16"/>
-              <Setter Property="SnapsToDevicePixels" Value="True"/>
-          </Style>
-
-          <Style x:Key="TerminalCard" TargetType="Border">
-              <Setter Property="Background"      Value="{DynamicResource BgPanelBrush}"/>
-              <Setter Property="BorderBrush"     Value="{DynamicResource BorderSubtleBrush}"/>
-              <Setter Property="BorderThickness" Value="1"/>
-              <Setter Property="CornerRadius"    Value="{StaticResource CornerSmall}"/>
-              <Setter Property="Padding"         Value="14,10"/>
-              <Setter Property="SnapsToDevicePixels" Value="True"/>
-          </Style>
-
-          <Style x:Key="PremiumCard" TargetType="Border">
-              <Setter Property="Background"      Value="{DynamicResource BgElevatedBrush}"/>
-              <Setter Property="BorderBrush"     Value="{DynamicResource BorderAccentBrush}"/>
-              <Setter Property="BorderThickness" Value="1"/>
-              <Setter Property="CornerRadius"    Value="{StaticResource CornerCard}"/>
-              <Setter Property="Padding"         Value="{DynamicResource CardPadding}"/>
-              <Setter Property="SnapsToDevicePixels" Value="True"/>
-          </Style>
-
-          <Style x:Key="AnimatedCard" TargetType="Border">
-              <Setter Property="Background"      Value="{DynamicResource BgCardBrush}"/>
-              <Setter Property="BorderBrush"     Value="{DynamicResource BorderDefaultBrush}"/>
-              <Setter Property="BorderThickness" Value="1"/>
-              <Setter Property="CornerRadius"    Value="{StaticResource CornerCard}"/>
-              <Setter Property="Padding"         Value="{DynamicResource CardPadding}"/>
-              <Setter Property="Cursor"          Value="Hand"/>
-              <Setter Property="SnapsToDevicePixels" Value="True"/>
-              <Style.Triggers>
-                  <Trigger Property="IsMouseOver" Value="True">
-                      <Setter Property="Background"  Value="{DynamicResource BgHoverBrush}"/>
-                      <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}"/>
-                  </Trigger>
-              </Style.Triggers>
-          </Style>
-
-          <Style x:Key="SectionLabel" TargetType="TextBlock">
-              <Setter Property="FontSize"   Value="10"/>
-              <Setter Property="FontWeight" Value="Black"/>
-              <Setter Property="Foreground" Value="{DynamicResource TextHintBrush}"/>
-              <Setter Property="Margin"     Value="2,0,0,14"/>
-              <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
-          </Style>
-
           <Style x:Key="SectionTitle" TargetType="TextBlock">
-              <Setter Property="FontSize"   Value="16"/>
+              <Setter Property="FontSize"   Value="17"/>
               <Setter Property="FontWeight" Value="SemiBold"/>
               <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
               <Setter Property="Margin"     Value="0,0,0,4"/>
-          </Style>
-
-          <Style x:Key="DescText" TargetType="TextBlock">
-              <Setter Property="FontSize"      Value="12"/>
-              <Setter Property="Foreground"    Value="{DynamicResource TextSecondaryBrush}"/>
-              <Setter Property="TextWrapping"  Value="Wrap"/>
-              <Setter Property="LineHeight"    Value="18"/>
           </Style>
 
           <Style TargetType="TextBlock">
@@ -556,95 +352,6 @@
                                       </Storyboard>
                                   </BeginStoryboard>
                               </EventTrigger>
-                          </ControlTemplate.Triggers>
-                      </ControlTemplate>
-                  </Setter.Value>
-              </Setter>
-          </Style>
-
-          <Style x:Key="CyberButton" TargetType="Button">
-              <Setter Property="Cursor"                     Value="Hand"/>
-              <Setter Property="Foreground"                 Value="#0A0A0C"/>
-              <Setter Property="FontWeight"                 Value="Bold"/>
-              <Setter Property="FontSize"                   Value="12.5"/>
-              <Setter Property="Padding"                    Value="16,8"/>
-              <Setter Property="BorderThickness"            Value="0"/>
-              <Setter Property="SnapsToDevicePixels"        Value="True"/>
-              <Setter Property="RenderTransformOrigin"      Value="0.5,0.5"/>
-              <Setter Property="Template">
-                  <Setter.Value>
-                      <ControlTemplate TargetType="Button">
-                          <Border x:Name="Bd"
-                                  Background="{DynamicResource CyberGradient}"
-                                  CornerRadius="{StaticResource CornerBtn}"
-                                  Padding="{TemplateBinding Padding}"
-                                  SnapsToDevicePixels="True">
-                              <Border.RenderTransform>
-                                  <ScaleTransform x:Name="BtnScale" ScaleX="1" ScaleY="1"/>
-                              </Border.RenderTransform>
-                              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                          </Border>
-                          <ControlTemplate.Triggers>
-                              <Trigger Property="IsEnabled" Value="False">
-                                  <Setter TargetName="Bd" Property="Opacity" Value="0.38"/>
-                              </Trigger>
-                              <EventTrigger RoutedEvent="Button.MouseEnter">
-                                  <BeginStoryboard>
-                                      <Storyboard>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleX"
-                                                           To="1.025" Duration="0:0:0.14"
-                                                           EasingFunction="{StaticResource SpringEaseOut}"/>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleY"
-                                                           To="1.025" Duration="0:0:0.14"
-                                                           EasingFunction="{StaticResource SpringEaseOut}"/>
-                                      </Storyboard>
-                                  </BeginStoryboard>
-                              </EventTrigger>
-                              <EventTrigger RoutedEvent="Button.MouseLeave">
-                                  <BeginStoryboard>
-                                      <Storyboard>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleX"
-                                                           To="1" Duration="0:0:0.14"
-                                                           EasingFunction="{StaticResource SmoothEaseOut}"/>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleY"
-                                                           To="1" Duration="0:0:0.14"
-                                                           EasingFunction="{StaticResource SmoothEaseOut}"/>
-                                      </Storyboard>
-                                  </BeginStoryboard>
-                              </EventTrigger>
-                              <EventTrigger RoutedEvent="Button.PreviewMouseLeftButtonDown">
-                                  <BeginStoryboard>
-                                      <Storyboard>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleX"
-                                                           To="0.96" Duration="0:0:0.07"/>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleY"
-                                                           To="0.96" Duration="0:0:0.07"/>
-                                      </Storyboard>
-                                  </BeginStoryboard>
-                              </EventTrigger>
-                              <EventTrigger RoutedEvent="Button.PreviewMouseLeftButtonUp">
-                                  <BeginStoryboard>
-                                      <Storyboard>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleX"
-                                                           To="1" Duration="0:0:0.22"
-                                                           EasingFunction="{StaticResource SpringBounce}"/>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleY"
-                                                           To="1" Duration="0:0:0.22"
-                                                           EasingFunction="{StaticResource SpringBounce}"/>
-                                      </Storyboard>
-                                  </BeginStoryboard>
-                              </EventTrigger>
-                              <Trigger Property="IsMouseOver" Value="True">
-                                  <Setter TargetName="Bd" Property="Opacity" Value="0.92"/>
-                              </Trigger>
                           </ControlTemplate.Triggers>
                       </ControlTemplate>
                   </Setter.Value>
@@ -858,93 +565,6 @@
               </Setter>
           </Style>
 
-          <Style x:Key="SuccessButton" TargetType="Button">
-              <Setter Property="Cursor"          Value="Hand"/>
-              <Setter Property="Foreground"      Value="White"/>
-              <Setter Property="FontWeight"      Value="SemiBold"/>
-              <Setter Property="Padding"         Value="18,9"/>
-              <Setter Property="BorderThickness" Value="0"/>
-              <Setter Property="Template">
-                  <Setter.Value>
-                      <ControlTemplate TargetType="Button">
-                          <Border x:Name="Bd"
-                                  CornerRadius="{StaticResource CornerBtn}"
-                                  Padding="{TemplateBinding Padding}">
-                              <Border.Background>
-                                  <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                      <GradientStop Color="#059669" Offset="0"/>
-                                      <GradientStop Color="#10D9A0" Offset="1"/>
-                                  </LinearGradientBrush>
-                              </Border.Background>
-                              <Border.RenderTransform>
-                                  <ScaleTransform x:Name="BtnScale" ScaleX="1" ScaleY="1"/>
-                              </Border.RenderTransform>
-                              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                          </Border>
-                          <ControlTemplate.Triggers>
-                              <Trigger Property="IsEnabled" Value="False">
-                                  <Setter TargetName="Bd" Property="Opacity" Value="0.38"/>
-                              </Trigger>
-                              <EventTrigger RoutedEvent="Button.MouseEnter">
-                                  <BeginStoryboard>
-                                      <Storyboard>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleX"
-                                                           To="1.04" Duration="0:0:0.15"
-                                                           EasingFunction="{StaticResource EaseOut}"/>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleY"
-                                                           To="1.04" Duration="0:0:0.15"
-                                                           EasingFunction="{StaticResource EaseOut}"/>
-                                      </Storyboard>
-                                  </BeginStoryboard>
-                              </EventTrigger>
-                              <EventTrigger RoutedEvent="Button.MouseLeave">
-                                  <BeginStoryboard>
-                                      <Storyboard>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleX"
-                                                           To="1" Duration="0:0:0.15"
-                                                           EasingFunction="{StaticResource EaseOut}"/>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleY"
-                                                           To="1" Duration="0:0:0.15"
-                                                           EasingFunction="{StaticResource EaseOut}"/>
-                                      </Storyboard>
-                                  </BeginStoryboard>
-                              </EventTrigger>
-                              <EventTrigger RoutedEvent="Button.PreviewMouseLeftButtonDown">
-                                  <BeginStoryboard>
-                                      <Storyboard>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleX"
-                                                           To="0.96" Duration="0:0:0.08"/>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleY"
-                                                           To="0.96" Duration="0:0:0.08"/>
-                                      </Storyboard>
-                                  </BeginStoryboard>
-                              </EventTrigger>
-                              <EventTrigger RoutedEvent="Button.PreviewMouseLeftButtonUp">
-                                  <BeginStoryboard>
-                                      <Storyboard>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleX"
-                                                           To="1" Duration="0:0:0.22"
-                                                           EasingFunction="{StaticResource EaseBack}"/>
-                                          <DoubleAnimation Storyboard.TargetName="BtnScale"
-                                                           Storyboard.TargetProperty="ScaleY"
-                                                           To="1" Duration="0:0:0.22"
-                                                           EasingFunction="{StaticResource EaseBack}"/>
-                                      </Storyboard>
-                                  </BeginStoryboard>
-                              </EventTrigger>
-                          </ControlTemplate.Triggers>
-                      </ControlTemplate>
-                  </Setter.Value>
-              </Setter>
-          </Style>
-
           <Style x:Key="NavItemStyle" TargetType="RadioButton">
               <Setter Property="Background"                 Value="Transparent"/>
               <Setter Property="Foreground"                 Value="{DynamicResource TextSecondaryBrush}"/>
@@ -988,9 +608,9 @@
                                   <Setter Property="Foreground"                  Value="{DynamicResource TextPrimaryBrush}"/>
                               </Trigger>
                               <Trigger Property="IsChecked" Value="True">
-                                  <Setter TargetName="Bd"        Property="Background"      Value="{DynamicResource BgElevatedBrush}"/>
+                                  <Setter TargetName="Bd"        Property="Background"      Value="#26FF6B35"/>
                                   <Setter TargetName="Bd"        Property="BorderThickness" Value="1"/>
-                                  <Setter TargetName="Bd"        Property="BorderBrush"     Value="{DynamicResource BorderDefaultBrush}"/>
+                                  <Setter TargetName="Bd"        Property="BorderBrush"     Value="#4DFF6B35"/>
                                   <Setter TargetName="Indicator" Property="Visibility"      Value="Visible"/>
                                   <Setter Property="Foreground"  Value="{DynamicResource TextPrimaryBrush}"/>
                                   <Setter Property="FontWeight"  Value="SemiBold"/>
@@ -1013,15 +633,6 @@
               </Setter>
           </Style>
 
-          <Style x:Key="CyberCard" TargetType="Border">
-              <Setter Property="Background"      Value="{DynamicResource BgCardBrush}"/>
-              <Setter Property="BorderBrush"     Value="{DynamicResource BorderAccentSecondaryBrush}"/>
-              <Setter Property="BorderThickness" Value="1"/>
-              <Setter Property="CornerRadius"    Value="{StaticResource CornerCard}"/>
-              <Setter Property="Padding"         Value="{DynamicResource CardPadding}"/>
-              <Setter Property="SnapsToDevicePixels" Value="True"/>
-          </Style>
-
           <Style x:Key="PillBadge" TargetType="Border">
               <Setter Property="Background"      Value="{DynamicResource BgElevatedBrush}"/>
               <Setter Property="BorderBrush"     Value="{DynamicResource BorderDefaultBrush}"/>
@@ -1031,31 +642,7 @@
               <Setter Property="SnapsToDevicePixels" Value="True"/>
           </Style>
 
-          <Style x:Key="PillBadgePrimary" TargetType="Border">
-              <Setter Property="Background"      Value="#26FF6B35"/>
-              <Setter Property="BorderBrush"     Value="{DynamicResource BorderAccentBrush}"/>
-              <Setter Property="BorderThickness" Value="1"/>
-              <Setter Property="CornerRadius"    Value="{StaticResource CornerPill}"/>
-              <Setter Property="Padding"         Value="8,3"/>
-              <Setter Property="SnapsToDevicePixels" Value="True"/>
-          </Style>
-
-          <Style x:Key="PillBadgeCyan" TargetType="Border">
-              <Setter Property="Background"      Value="#26FFA000"/>
-              <Setter Property="BorderBrush"     Value="{DynamicResource BorderAccentSecondaryBrush}"/>
-              <Setter Property="BorderThickness" Value="1"/>
-              <Setter Property="CornerRadius"    Value="{StaticResource CornerPill}"/>
-              <Setter Property="Padding"         Value="8,3"/>
-              <Setter Property="SnapsToDevicePixels" Value="True"/>
-          </Style>
-
-          <sys:Double x:Key="FontTitle">24</sys:Double>
-          <sys:Double x:Key="FontSection">18</sys:Double>
-          <sys:Double x:Key="FontCard">16</sys:Double>
-          <sys:Double x:Key="FontBody">13</sys:Double>
           <sys:Double x:Key="FontSmall">11</sys:Double>
-          <sys:Double x:Key="FontMicro">10</sys:Double>
-          <sys:Double x:Key="PageGap">16</sys:Double>
           <Thickness x:Key="PageMargin">28,20,28,16</Thickness>
 
           <SolidColorBrush x:Key="SuccessBgBrush" Color="#1710B981" po:Freeze="True"/>
@@ -1064,9 +651,21 @@
           <SolidColorBrush x:Key="WarnBorderBrush" Color="#33FFA000" po:Freeze="True"/>
           <SolidColorBrush x:Key="DangerBgBrush" Color="#17FF3B30" po:Freeze="True"/>
           <SolidColorBrush x:Key="DangerBorderBrush" Color="#33FF3B30" po:Freeze="True"/>
-          <SolidColorBrush x:Key="InfoBgBrush" Color="#17FF8A50" po:Freeze="True"/>
           <SolidColorBrush x:Key="InfoBorderBrush" Color="#33FF8A50" po:Freeze="True"/>
           <SolidColorBrush x:Key="SkeletonBrush" Color="#252A38" po:Freeze="True"/>
+
+          <SolidColorBrush x:Key="InfoBlueBrush"        Color="#38BDF8" po:Freeze="True"/>
+          <SolidColorBrush x:Key="InfoBlueBgBrush"      Color="#1A38BDF8" po:Freeze="True"/>
+          <SolidColorBrush x:Key="InfoBlueBorderBrush"  Color="#3338BDF8" po:Freeze="True"/>
+          <SolidColorBrush x:Key="VioletBgBrush"        Color="#1A6366F1" po:Freeze="True"/>
+          <SolidColorBrush x:Key="VioletBorderBrush"    Color="#336366F1" po:Freeze="True"/>
+          <SolidColorBrush x:Key="VioletTextBrush"      Color="#C4B5FD" po:Freeze="True"/>
+          <SolidColorBrush x:Key="SuccessDeepBgBrush"   Color="#0D2E1A" po:Freeze="True"/>
+          <SolidColorBrush x:Key="SuccessDeepBorderBrush" Color="#166534" po:Freeze="True"/>
+          <SolidColorBrush x:Key="AccentGlowBgBrush"    Color="#26FF6B35" po:Freeze="True"/>
+          <SolidColorBrush x:Key="OverlayBlackBrush"    Color="#CC000000" po:Freeze="True"/>
+          <SolidColorBrush x:Key="OverlayDangerBrush"   Color="#E008050F" po:Freeze="True"/>
+          <SolidColorBrush x:Key="OverlaySoftBrush"     Color="#20FFFFFF" po:Freeze="True"/>
 
           <Style x:Key="PageHeaderAccentBar" TargetType="Border">
               <Setter Property="Width" Value="4"/>
@@ -1082,6 +681,45 @@
               <Setter Property="FontSize" Value="{StaticResource FontSmall}"/>
               <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
               <Setter Property="TextWrapping" Value="Wrap"/>
+          </Style>
+
+          <Style x:Key="PageEyebrow" TargetType="TextBlock">
+              <Setter Property="FontSize"   Value="10.5"/>
+              <Setter Property="FontWeight" Value="Bold"/>
+              <Setter Property="Foreground" Value="{DynamicResource TextHintBrush}"/>
+              <Setter Property="VerticalAlignment" Value="Center"/>
+              <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+          </Style>
+
+          <Style x:Key="PageEyebrowDot" TargetType="Border">
+              <Setter Property="Width" Value="3"/>
+              <Setter Property="Height" Value="3"/>
+              <Setter Property="CornerRadius" Value="1.5"/>
+              <Setter Property="Background" Value="{DynamicResource TextHintBrush}"/>
+              <Setter Property="Margin" Value="0,0,8,0"/>
+              <Setter Property="VerticalAlignment" Value="Center"/>
+          </Style>
+
+          <Style x:Key="PageBadge" TargetType="Border">
+              <Setter Property="Background"      Value="{DynamicResource BgElevatedBrush}"/>
+              <Setter Property="BorderBrush"     Value="{DynamicResource BorderDefaultBrush}"/>
+              <Setter Property="BorderThickness" Value="1"/>
+              <Setter Property="CornerRadius"    Value="{StaticResource CornerPill}"/>
+              <Setter Property="Padding"         Value="10,4"/>
+              <Setter Property="SnapsToDevicePixels" Value="True"/>
+          </Style>
+
+          <Style x:Key="MetricValue" TargetType="TextBlock">
+              <Setter Property="FontSize"   Value="26"/>
+              <Setter Property="FontWeight" Value="Bold"/>
+              <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+              <Setter Property="VerticalAlignment" Value="Center"/>
+          </Style>
+
+          <Style x:Key="MetricLabel" TargetType="TextBlock">
+              <Setter Property="FontSize"   Value="9.5"/>
+              <Setter Property="FontWeight" Value="Bold"/>
+              <Setter Property="Foreground" Value="{DynamicResource TextHintBrush}"/>
           </Style>
 
           <Style x:Key="LiveDot" TargetType="Border">
@@ -1101,59 +739,169 @@
               </Style.Triggers>
           </Style>
 
-          <Style x:Key="SkeletonCard" TargetType="Border">
-              <Setter Property="Background" Value="{DynamicResource SkeletonBrush}"/>
-              <Setter Property="CornerRadius" Value="{StaticResource CornerSmall}"/>
-              <Setter Property="MinHeight" Value="14"/>
+          <Style x:Key="GlassCard" TargetType="Border">
+              <Setter Property="Background"      Value="{DynamicResource BgCardBrush}"/>
+              <Setter Property="BorderBrush"     Value="{DynamicResource BorderSubtleBrush}"/>
+              <Setter Property="BorderThickness" Value="1"/>
+              <Setter Property="CornerRadius"    Value="{DynamicResource CornerCard}"/>
+              <Setter Property="Padding"         Value="22,20"/>
               <Setter Property="SnapsToDevicePixels" Value="True"/>
+              <Style.Triggers>
+                  <Trigger Property="IsMouseOver" Value="True">
+                      <Setter Property="BorderBrush" Value="{DynamicResource BorderDefaultBrush}"/>
+                  </Trigger>
+              </Style.Triggers>
+          </Style>
+
+          <Style x:Key="IconTile" TargetType="Border">
+              <Setter Property="Width"         Value="34"/>
+              <Setter Property="Height"        Value="34"/>
+              <Setter Property="CornerRadius"  Value="10"/>
+              <Setter Property="Background"    Value="{DynamicResource BgElevatedBrush}"/>
+              <Setter Property="BorderBrush"   Value="{DynamicResource BorderSubtleBrush}"/>
+              <Setter Property="BorderThickness" Value="1"/>
+              <Setter Property="SnapsToDevicePixels" Value="True"/>
+          </Style>
+
+          <Style x:Key="CatRow" TargetType="Border">
+              <Setter Property="Background"      Value="{DynamicResource BgSurfaceBrush}"/>
+              <Setter Property="BorderBrush"     Value="{DynamicResource BorderSubtleBrush}"/>
+              <Setter Property="BorderThickness" Value="1"/>
+              <Setter Property="CornerRadius"    Value="12"/>
+              <Setter Property="Padding"         Value="12,10"/>
+              <Setter Property="Margin"          Value="0,0,0,8"/>
+              <Setter Property="SnapsToDevicePixels" Value="True"/>
+              <Style.Triggers>
+                  <Trigger Property="IsMouseOver" Value="True">
+                      <Setter Property="BorderBrush" Value="{DynamicResource BorderDefaultBrush}"/>
+                      <Setter Property="Background"  Value="{DynamicResource BgElevatedBrush}"/>
+                  </Trigger>
+              </Style.Triggers>
+          </Style>
+
+          <Style x:Key="EntranceCard" TargetType="Border" BasedOn="{StaticResource GlassCard}">
+              <Setter Property="Opacity" Value="0"/>
+              <Setter Property="RenderTransform">
+                  <Setter.Value>
+                      <TranslateTransform Y="16"/>
+                  </Setter.Value>
+              </Setter>
               <Style.Triggers>
                   <EventTrigger RoutedEvent="FrameworkElement.Loaded">
                       <BeginStoryboard>
-                          <Storyboard RepeatBehavior="Forever" AutoReverse="True">
-                              <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.55" To="1" Duration="0:0:1.2"/>
+                          <Storyboard>
+                              <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.5"
+                                               EasingFunction="{StaticResource EaseOut}"/>
+                              <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Y" To="0" Duration="0:0:0.55"
+                                               EasingFunction="{StaticResource SmoothEaseOut}"/>
                           </Storyboard>
                       </BeginStoryboard>
                   </EventTrigger>
               </Style.Triggers>
           </Style>
 
-          <Style x:Key="InteractiveCard" TargetType="Border">
-              <Setter Property="Background" Value="{DynamicResource BgCardBrush}"/>
-              <Setter Property="BorderBrush" Value="{DynamicResource BorderDefaultBrush}"/>
-              <Setter Property="BorderThickness" Value="1"/>
-              <Setter Property="CornerRadius" Value="{StaticResource CornerCard}"/>
-              <Setter Property="Padding" Value="{DynamicResource CardPadding}"/>
-              <Setter Property="Cursor" Value="Hand"/>
-              <Setter Property="SnapsToDevicePixels" Value="True"/>
+          <Style x:Key="EntrancePanel" TargetType="Border" BasedOn="{StaticResource RedSunCard}">
+              <Setter Property="Opacity" Value="0"/>
               <Setter Property="RenderTransform">
                   <Setter.Value>
-                      <TranslateTransform Y="0"/>
+                      <TranslateTransform Y="16"/>
                   </Setter.Value>
               </Setter>
               <Style.Triggers>
-                  <Trigger Property="IsMouseOver" Value="True">
-                      <Setter Property="Background" Value="{DynamicResource BgHoverBrush}"/>
-                      <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}"/>
-                      <Trigger.EnterActions>
-                          <BeginStoryboard>
-                              <Storyboard>
-                                  <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
-                                                   To="-1.5" Duration="{StaticResource MotionComponent}"
-                                                   EasingFunction="{StaticResource EaseOut}"/>
-                              </Storyboard>
-                          </BeginStoryboard>
-                      </Trigger.EnterActions>
-                      <Trigger.ExitActions>
-                          <BeginStoryboard>
-                              <Storyboard>
-                                  <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
-                                                   To="0" Duration="{StaticResource MotionComponent}"
-                                                   EasingFunction="{StaticResource SmoothEaseOut}"/>
-                              </Storyboard>
-                          </BeginStoryboard>
-                      </Trigger.ExitActions>
+                  <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                      <BeginStoryboard>
+                          <Storyboard>
+                              <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.5"
+                                               EasingFunction="{StaticResource EaseOut}"/>
+                              <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Y" To="0" Duration="0:0:0.55"
+                                               EasingFunction="{StaticResource SmoothEaseOut}"/>
+                          </Storyboard>
+                      </BeginStoryboard>
+                  </EventTrigger>
+              </Style.Triggers>
+          </Style>
+
+          <Style x:Key="ScrollThumbStyle" TargetType="Thumb">
+              <Setter Property="Template">
+                  <Setter.Value>
+                      <ControlTemplate TargetType="Thumb">
+                          <Border x:Name="Bd" Background="#26FFFFFF" CornerRadius="4" Margin="1,2"/>
+                          <ControlTemplate.Triggers>
+                              <Trigger Property="IsMouseOver" Value="True">
+                                  <Setter TargetName="Bd" Property="Background" Value="#4DFFFFFF"/>
+                              </Trigger>
+                              <Trigger Property="IsDragging" Value="True">
+                                  <Setter TargetName="Bd" Property="Background" Value="#8CFF6B35"/>
+                              </Trigger>
+                          </ControlTemplate.Triggers>
+                      </ControlTemplate>
+                  </Setter.Value>
+              </Setter>
+          </Style>
+
+          <Style TargetType="Thumb" BasedOn="{StaticResource ScrollThumbStyle}"/>
+
+          <Style TargetType="ScrollBar">
+              <Setter Property="Width" Value="10"/>
+              <Setter Property="Background" Value="Transparent"/>
+              <Setter Property="Template">
+                  <Setter.Value>
+                      <ControlTemplate TargetType="ScrollBar">
+                          <Grid x:Name="Root" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                              <Track x:Name="PART_Track" IsDirectionReversed="True">
+                                  <Track.DecreaseRepeatButton>
+                                      <RepeatButton Command="{x:Static ScrollBar.LineUpCommand}" Visibility="Collapsed"/>
+                                  </Track.DecreaseRepeatButton>
+                                  <Track.Thumb>
+                                      <Thumb Style="{StaticResource ScrollThumbStyle}"/>
+                                  </Track.Thumb>
+                                  <Track.IncreaseRepeatButton>
+                                      <RepeatButton Command="{x:Static ScrollBar.LineDownCommand}" Visibility="Collapsed"/>
+                                  </Track.IncreaseRepeatButton>
+                              </Track>
+                          </Grid>
+                          <ControlTemplate.Triggers>
+                              <Trigger Property="Orientation" Value="Horizontal">
+                                  <Setter TargetName="Root" Property="LayoutTransform">
+                                      <Setter.Value>
+                                          <RotateTransform Angle="-90"/>
+                                      </Setter.Value>
+                                  </Setter>
+                                  <Setter TargetName="PART_Track" Property="IsDirectionReversed" Value="False"/>
+                              </Trigger>
+                          </ControlTemplate.Triggers>
+                      </ControlTemplate>
+                  </Setter.Value>
+              </Setter>
+              <Style.Triggers>
+                  <Trigger Property="Orientation" Value="Horizontal">
+                      <Setter Property="Width" Value="Auto"/>
+                      <Setter Property="Height" Value="10"/>
                   </Trigger>
               </Style.Triggers>
+          </Style>
+
+          <Style TargetType="ToolTip">
+              <Setter Property="Background" Value="#F0161A22"/>
+              <Setter Property="BorderBrush" Value="#33FFFFFF"/>
+              <Setter Property="BorderThickness" Value="1"/>
+              <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+              <Setter Property="FontSize" Value="11"/>
+              <Setter Property="Padding" Value="10,6"/>
+              <Setter Property="Template">
+                  <Setter.Value>
+                      <ControlTemplate TargetType="ToolTip">
+                          <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                  BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="9"
+                                  Padding="{TemplateBinding Padding}">
+                              <Border.Effect>
+                                  <DropShadowEffect BlurRadius="14" ShadowDepth="3" Direction="270" Color="#000000" Opacity="0.5"/>
+                              </Border.Effect>
+                              <ContentPresenter/>
+                          </Border>
+                      </ControlTemplate>
+                  </Setter.Value>
+              </Setter>
           </Style>
 
       </ResourceDictionary>

@@ -52,7 +52,7 @@ public sealed class CentralUnitWatchdogTests : IDisposable
         int revives = 0;
         _watchdog.Register("SmartMemoryDaemon", TimeSpan.FromMilliseconds(50), () => Interlocked.Increment(ref revives));
 
-        await Task.Delay(120);
+        await Task.Delay(120, TestContext.Current.CancellationToken);
 
         Assert.Equal(1, _watchdog.CheckAll());
         Assert.Equal(1, Volatile.Read(ref revives));
@@ -72,7 +72,7 @@ public sealed class CentralUnitWatchdogTests : IDisposable
     {
         _watchdog.Register("Broken", TimeSpan.FromMilliseconds(50), () => throw new InvalidOperationException("revive failed"));
 
-        await Task.Delay(120);
+        await Task.Delay(120, TestContext.Current.CancellationToken);
 
         Assert.Equal(1, _watchdog.CheckAll());
     }
@@ -121,7 +121,7 @@ public sealed class CentralUnitWatchdogTests : IDisposable
                 DateTime deadline = DateTime.UtcNow + TimeSpan.FromSeconds(10);
                 while (Volatile.Read(ref revives) == 0 && DateTime.UtcNow < deadline)
                 {
-                    await Task.Delay(50);
+                    await Task.Delay(50, TestContext.Current.CancellationToken);
                 }
             }
             finally

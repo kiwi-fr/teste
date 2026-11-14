@@ -29,7 +29,7 @@ public sealed class RagServiceTests : IDisposable
     }
 
     [Fact]
-    public void BuildIndex_LoadsChunksFromMarkdown()
+    public void BuildIndexLoadsChunksFromMarkdown()
     {
         RagService rag = new();
         rag.BuildIndex(_docsDir);
@@ -38,7 +38,7 @@ public sealed class RagServiceTests : IDisposable
     }
 
     [Fact]
-    public void BuildIndex_MissingDirectory_IsNoop()
+    public void BuildIndexMissingDirectoryIsNoop()
     {
         RagService rag = new();
         rag.BuildIndex(Path.Join(Path.GetTempPath(), "coclico-rag-missing-" + Guid.NewGuid().ToString("N")));
@@ -47,7 +47,7 @@ public sealed class RagServiceTests : IDisposable
     }
 
     [Fact]
-    public void Search_ReturnsRelevantChunk()
+    public void SearchReturnsRelevantChunk()
     {
         RagService rag = new();
         rag.BuildIndex(_docsDir);
@@ -59,7 +59,7 @@ public sealed class RagServiceTests : IDisposable
     }
 
     [Fact]
-    public void Search_RanksTopicalDocumentFirst()
+    public void SearchRanksTopicalDocumentFirst()
     {
         RagService rag = new();
         rag.BuildIndex(_docsDir);
@@ -70,7 +70,7 @@ public sealed class RagServiceTests : IDisposable
     }
 
     [Fact]
-    public void Search_EmptyIndex_ReturnsEmpty()
+    public void SearchEmptyIndexReturnsEmpty()
     {
         RagService rag = new();
 
@@ -78,7 +78,7 @@ public sealed class RagServiceTests : IDisposable
     }
 
     [Fact]
-    public void Search_NoStopWordQuery_ReturnsEmpty()
+    public void SearchNoStopWordQueryReturnsEmpty()
     {
         RagService rag = new();
         rag.BuildIndex(_docsDir);
@@ -87,7 +87,7 @@ public sealed class RagServiceTests : IDisposable
     }
 
     [Fact]
-    public void Search_RespectsMaxCharsBudget()
+    public void SearchRespectsMaxCharsBudget()
     {
         RagService rag = new();
         rag.BuildIndex(_docsDir);

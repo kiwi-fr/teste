@@ -4,7 +4,7 @@ using System.Globalization;
 using Coclico.Modules.Diagnostics.Models;
 using Coclico.Modules.Diagnostics.Rules;
 
-public sealed class GpuCheck : IDiagnosticCheck
+internal sealed class GpuCheck : IDiagnosticCheck
 {
     public string Id => "gpu.info";
     public DiagnosticCategory Category => DiagnosticCategory.Gpu;

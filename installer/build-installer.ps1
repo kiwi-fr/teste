@@ -193,9 +193,19 @@ function New-CoclicoArchive {
     )
     if (Test-Path $ZipPath) { Remove-Item $ZipPath -Force }
 
-    $sevenZip = Get-Command 7z -ErrorAction SilentlyContinue
-    if ($sevenZip) {
-        Write-Host (T "  [*] 7-Zip detecte : compression Deflate niveau 9" "  [*] 7-Zip detected: Deflate level 9 compression") -ForegroundColor DarkGray
+    $sevenZipCmd = Get-Command 7z -ErrorAction SilentlyContinue
+    $sevenZipExe = if ($sevenZipCmd) { $sevenZipCmd.Source } else { $null }
+    if (-not $sevenZipExe) {
+        # 7-Zip installe mais hors du PATH : chercher dans les dossiers standard
+        foreach ($pf in @(${env:ProgramFiles}, ${env:ProgramFiles(x86)})) {
+            if ($pf) {
+                $cand = Join-Path $pf '7-Zip\7z.exe'
+                if (Test-Path $cand) { $sevenZipExe = $cand; break }
+            }
+        }
+    }
+    if ($sevenZipExe) {
+        Write-Host ((T "  [*] 7-Zip detecte : compression Deflate niveau 9" "  [*] 7-Zip detected: Deflate level 9 compression") + "  [$sevenZipExe]") -ForegroundColor DarkGray
         $stage = Join-Path ([System.IO.Path]::GetTempPath()) ("coclico_stage_" + [guid]::NewGuid().ToString("N"))
         New-Item -ItemType Directory -Path $stage -Force | Out-Null
         try {
@@ -210,7 +220,7 @@ function New-CoclicoArchive {
                 $index++
             }
             if ($ShowProgress) { Write-Host "" }
-            & 7z a -tzip -mx=9 -- $ZipPath "$stage\*" | Out-Null
+            & $sevenZipExe a -tzip -mx=9 -- $ZipPath "$stage\*" | Out-Null
             if ($LASTEXITCODE -ne 0) {
                 throw (T "7-Zip a echoue (code $LASTEXITCODE)." "7-Zip failed (code $LASTEXITCODE).")
             }
@@ -322,6 +332,7 @@ try {
             "--self-contained", "false",
             "--output", $publishDir,
             "-p:PublishSingleFile=false",
+            "-p:PublishReadyToRun=false",
             "-p:DebugSymbols=false",
             "-p:DebugType=None",
             "-p:Version=$Version",
@@ -595,7 +606,10 @@ try {
             "--runtime", "win-x64",
             "--self-contained", "true",
             "--output", $portableDir,
-            "-p:PublishSingleFile=false",
+            "-p:PublishSingleFile=true",
+            "-p:EnableCompressionInSingleFile=true",
+            "-p:IncludeNativeLibrariesForSelfExtract=true",
+            "-p:PublishReadyToRun=false",
             "-p:DebugSymbols=false",
             "-p:DebugType=None",
             "-p:Version=$Version",

@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using Coclico.Modules.Diagnostics.Models;
 using Coclico.Modules.Diagnostics.Rules;
 
-public sealed class NetworkCheck : IDiagnosticCheck
+internal sealed class NetworkCheck : IDiagnosticCheck
 {
     private static readonly string[] QuickTargets = ["1.1.1.1", "8.8.8.8"];
     private static readonly string[] FullTargets = ["1.1.1.1", "8.8.8.8", "9.9.9.9"];
@@ -67,9 +67,9 @@ public sealed class NetworkCheck : IDiagnosticCheck
             "Diag_Finding_NetworkInventory_Summary",
             [
                 DiagnosticEvidence.Measured("network.activeAdapter", "Diag_Evidence_ActiveAdapter", active?.Name ?? "-", "", "NetworkInterface"),
-                DiagnosticEvidence.Measured("network.linkSpeedMbps", "Diag_Evidence_LinkSpeed", linkSpeed?.ToString() ?? "-", "Mbps", "NetworkInterface"),
+                DiagnosticEvidence.Measured("network.linkSpeedMbps", "Diag_Evidence_LinkSpeed", linkSpeed?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "-", "Mbps", "NetworkInterface"),
                 DiagnosticEvidence.Measured("network.gateway", "Diag_Evidence_Gateway", gateway?.ToString() ?? "-", "", "NetworkInterface"),
-                DiagnosticEvidence.Measured("network.dns.resolveMs", "Diag_Evidence_DnsDuration", dnsFacts.ResolveMs is null ? "-" : Math.Round(dnsFacts.ResolveMs.Value, 0).ToString(), "ms", "DnsQuery")
+                DiagnosticEvidence.Measured("network.dns.resolveMs", "Diag_Evidence_DnsDuration", dnsFacts.ResolveMs is null ? "-" : Math.Round(dnsFacts.ResolveMs.Value, 0).ToString(System.Globalization.CultureInfo.InvariantCulture), "ms", "DnsQuery")
             ]));
 
         return DiagnosticCheckUtils.Complete(Id, Category, IsQuick, findings);

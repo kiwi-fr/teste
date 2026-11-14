@@ -1,6 +1,6 @@
 namespace Coclico.Modules.UpdateCenter.Models;
 
-public sealed record DriverInfo
+internal sealed record DriverInfo
 {
     public required string DeviceId { get; init; }
     public required string DeviceName { get; init; }

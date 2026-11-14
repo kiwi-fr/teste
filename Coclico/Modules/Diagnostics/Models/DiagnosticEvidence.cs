@@ -1,6 +1,6 @@
 namespace Coclico.Modules.Diagnostics.Models;
 
-public sealed record DiagnosticEvidence
+internal sealed record DiagnosticEvidence
 {
     public required string MetricId { get; init; }
 

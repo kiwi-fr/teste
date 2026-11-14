@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="Coclico.Modules.TelemetryBlocker.Views.TelemetryBlockerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="32,28,32,40" MaxWidth="880">
+
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                <Border Style="{StaticResource PageEyebrowDot}"/>
+                <TextBlock Style="{StaticResource PageEyebrow}" Text="{DynamicResource Telemetry_Eyebrow}"/>
+            </StackPanel>
+            <TextBlock Text="{DynamicResource Telemetry_Title}" Style="{StaticResource CoclicoPageTitle}"/>
+            <TextBlock Text="{DynamicResource Telemetry_Desc}" Style="{StaticResource PageHeaderSubtitle}" Margin="0,6,0,0"/>
+            <TextBlock Text="{DynamicResource Telemetry_HonestNote}" FontSize="11.5" TextWrapping="Wrap"
+                       Foreground="{DynamicResource TextHintBrush}" Margin="0,4,0,24"/>
+
+            <Border Style="{StaticResource EntranceCard}">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource Telemetry_Categories}" Style="{StaticResource SectionTitle}" Margin="0,0,0,14"/>
+
+                    <Border Style="{StaticResource CatRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource IconTile}" Margin="0,0,12,0">
+                                <ui:SymbolIcon Symbol="DocumentEdit24" FontSize="16" Foreground="{DynamicResource AccentCyanBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Grid.Column="1" Text="{DynamicResource Telemetry_Cat_Registry}" FontSize="13"
+                                       Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                            <ui:ToggleSwitch Grid.Column="2" IsChecked="{Binding CatRegistry, Mode=TwoWay}" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource CatRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource IconTile}" Margin="0,0,12,0">
+                                <ui:SymbolIcon Symbol="Settings24" FontSize="16" Foreground="{DynamicResource AccentCyanBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Grid.Column="1" Text="{DynamicResource Telemetry_Cat_Services}" FontSize="13"
+                                       Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                            <ui:ToggleSwitch Grid.Column="2" IsChecked="{Binding CatServices, Mode=TwoWay}" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource CatRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource IconTile}" Margin="0,0,12,0">
+                                <ui:SymbolIcon Symbol="Calendar24" FontSize="16" Foreground="{DynamicResource AccentCyanBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Grid.Column="1" Text="{DynamicResource Telemetry_Cat_ScheduledTasks}" FontSize="13"
+                                       Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                            <ui:ToggleSwitch Grid.Column="2" IsChecked="{Binding CatTasks, Mode=TwoWay}" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource CatRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource IconTile}" Margin="0,0,12,0">
+                                <ui:SymbolIcon Symbol="Globe24" FontSize="16" Foreground="{DynamicResource AccentCyanBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Grid.Column="1" Text="{DynamicResource Telemetry_Cat_Hosts}" FontSize="13"
+                                       Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                            <ui:ToggleSwitch Grid.Column="2" IsChecked="{Binding CatHosts, Mode=TwoWay}" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource CatRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource IconTile}" Margin="0,0,12,0">
+                                <ui:SymbolIcon Symbol="Shield24" FontSize="16" Foreground="{DynamicResource AccentCyanBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Grid.Column="1" Text="{DynamicResource Telemetry_Cat_AdsHosts}" FontSize="13"
+                                       Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                            <ui:ToggleSwitch Grid.Column="2" IsChecked="{Binding CatAdsHosts, Mode=TwoWay}" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource CatRow}" Margin="0,0,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource IconTile}" Margin="0,0,12,0">
+                                <ui:SymbolIcon Symbol="LockClosed24" FontSize="16" Foreground="{DynamicResource AccentCyanBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Grid.Column="1" Text="{DynamicResource Telemetry_Cat_DnsLockdown}" FontSize="13"
+                                       Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                            <ui:ToggleSwitch Grid.Column="2" IsChecked="{Binding CatDnsLockdown, Mode=TwoWay}" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
+                        <Button Content="{DynamicResource Telemetry_Apply}" Command="{Binding ApplyCommand}"
+                                Style="{StaticResource PrimaryButton}" Padding="18,9" Margin="0,0,10,0"/>
+                        <Button Content="{DynamicResource Telemetry_Restore}" Command="{Binding RestoreCommand}"
+                                Style="{StaticResource SecondaryButton}" Padding="18,9" Margin="0,0,10,0"/>
+                        <Button Content="{DynamicResource Telemetry_Verify}" Command="{Binding VerifyCommand}"
+                                Style="{StaticResource SecondaryButton}" Padding="18,9"/>
+                    </StackPanel>
+
+                    <Border Style="{StaticResource PageBadge}" HorizontalAlignment="Left" Margin="0,16,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Style="{StaticResource LiveDot}" Margin="0,0,8,0"/>
+                            <TextBlock Text="{Binding Status}" FontSize="11.5" TextWrapping="Wrap"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <ItemsControl ItemsSource="{Binding Log}" Margin="0,8,0,0">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" FontSize="11" Foreground="{DynamicResource TextHintBrush}" TextWrapping="Wrap"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="{DynamicResource Telemetry_Ext_Title}" Style="{StaticResource SectionTitle}" Margin="0,28,0,12"/>
+            <Border Style="{StaticResource EntranceCard}">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource Telemetry_Ext_Desc}" FontSize="12.5" TextWrapping="Wrap"
+                               Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                        <ComboBox MinWidth="150" SelectedIndex="{Binding SelectedBrowserIndex, Mode=TwoWay}"
+                                  Padding="10,7">
+                            <ComboBoxItem Content="{DynamicResource Telemetry_Browser_Chrome}"/>
+                            <ComboBoxItem Content="{DynamicResource Telemetry_Browser_Edge}"/>
+                            <ComboBoxItem Content="{DynamicResource Telemetry_Browser_Firefox}"/>
+                            <ComboBoxItem Content="{DynamicResource Telemetry_Browser_Brave}"/>
+                            <ComboBoxItem Content="{DynamicResource Telemetry_Browser_Zen}"/>
+                        </ComboBox>
+                        <Button Content="{DynamicResource Telemetry_Ext_Install}" Command="{Binding InstallExtensionCommand}"
+                                Style="{StaticResource PrimaryButton}" Padding="18,9" Margin="12,0,0,0"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding ExtensionStatus}" FontSize="11" TextWrapping="Wrap"
+                               Foreground="{DynamicResource TextHintBrush}" Margin="0,12,0,0"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

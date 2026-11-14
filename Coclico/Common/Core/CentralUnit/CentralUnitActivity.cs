@@ -1,6 +1,6 @@
 namespace Coclico.Services;
 
-public enum CentralActivityLevel
+internal enum CentralActivityLevel
 {
     StartingUp,
     Active,
@@ -9,14 +9,20 @@ public enum CentralActivityLevel
     ExternalPressure
 }
 
-public sealed class CentralUnitActivity
+internal sealed class CentralUnitActivity
 {
-    private readonly object _stateLock = new();
+    private readonly Lock _stateLock = new();
     private bool _started;
     private bool _windowVisible;
     private bool _trayMinimized;
     private bool _aiInference;
     private bool _externalPressure;
+    private double _intervalFactor = 1.0;
+
+    private const double IntervalFactorBackground = 3.0;
+    private const double IntervalFactorIdle = 10.0;
+    private const double IntervalFactorAdditiveStep = 0.1;
+    private const double IntervalFactorMultiplicativeCut = 0.5;
 
     public CentralActivityLevel Level { get; private set; } = CentralActivityLevel.StartingUp;
 
@@ -85,14 +91,37 @@ public sealed class CentralUnitActivity
 
     public TimeSpan AdaptInterval(TimeSpan baseInterval)
     {
-        return Level switch
+        if (Level == CentralActivityLevel.ExternalPressure)
         {
-            CentralActivityLevel.Active or CentralActivityLevel.StartingUp => baseInterval,
-            CentralActivityLevel.Background => TimeSpan.FromTicks(baseInterval.Ticks * 3),
-            CentralActivityLevel.Idle => TimeSpan.FromTicks(baseInterval.Ticks * 10),
-            CentralActivityLevel.ExternalPressure => Timeout.InfiniteTimeSpan,
-            _ => baseInterval
+            return Timeout.InfiniteTimeSpan;
+        }
+
+        double target = Level switch
+        {
+            CentralActivityLevel.Background => IntervalFactorBackground,
+            CentralActivityLevel.Idle => IntervalFactorIdle,
+            _ => 1.0
         };
+
+        double factor = MoveFactorToward(target);
+        return TimeSpan.FromTicks((long)(baseInterval.Ticks * factor));
+    }
+
+    private double MoveFactorToward(double target)
+    {
+        lock (_stateLock)
+        {
+            if (target > _intervalFactor)
+            {
+                _intervalFactor = Math.Min(target, _intervalFactor + IntervalFactorAdditiveStep);
+            }
+            else if (target < _intervalFactor)
+            {
+                _intervalFactor = Math.Max(target, _intervalFactor * IntervalFactorMultiplicativeCut);
+            }
+
+            return _intervalFactor;
+        }
     }
 
     private void RecomputeLevel()

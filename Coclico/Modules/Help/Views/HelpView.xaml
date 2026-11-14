@@ -28,10 +28,10 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListBoxItem">
-                                    <Border x:Name="Bd" CornerRadius="8" Background="Transparent" Padding="{TemplateBinding Padding}">
+                                    <Border x:Name="Bd" CornerRadius="12" Background="Transparent" Padding="{TemplateBinding Padding}">
                                         <ContentPresenter/>
                                         <VisualStateManager.VisualStateGroups>
-                                            <VisualStateGroup x:Name="SelectionStates">
+                                            <VisualStateGroup>
                                                 <VisualState x:Name="Selected">
                                                     <Storyboard>
                                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Bd" Storyboard.TargetProperty="Background">
@@ -39,7 +39,7 @@
                                                         </ObjectAnimationUsingKeyFrames>
                                                     </Storyboard>
                                                 </VisualState>
-                                                <VisualState x:Name="Unselected"/>
+                                                <VisualState/>
                                             </VisualStateGroup>
                                         </VisualStateManager.VisualStateGroups>
                                     </Border>
@@ -86,7 +86,7 @@
                         Padding="26,22" Margin="0,0,0,24"
                         Background="{DynamicResource BgCardBrush}">
                     <StackPanel>
-                        <TextBlock Text="{DynamicResource Help_Guide}" FontSize="22" FontWeight="Bold"
+                        <TextBlock Text="{DynamicResource Help_Guide}" FontSize="26" FontWeight="Bold"
                                    Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,4"/>
                         <TextBlock Text="{DynamicResource Help_Guide_Subtitle}" FontSize="12"
                                    Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,20"/>
@@ -102,7 +102,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Border Width="40" Height="40" CornerRadius="{StaticResource CornerNode}" VerticalAlignment="Top"
-                                        Background="#26FF6B35" BorderBrush="{DynamicResource BorderAccentBrush}" BorderThickness="1">
+                                        Background="{DynamicResource AccentGlowBgBrush}" BorderBrush="{DynamicResource BorderAccentBrush}" BorderThickness="1">
                                     <ui:SymbolIcon Symbol="Home24" FontSize="18" Foreground="{DynamicResource ArchitecturalYellowBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                                 <StackPanel Grid.Column="1" Margin="14,0,0,0">
@@ -254,7 +254,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Border Width="40" Height="40" CornerRadius="{StaticResource CornerNode}" VerticalAlignment="Top"
-                                        Background="#26FF6B35" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1">
+                                        Background="{DynamicResource AccentGlowBgBrush}" BorderBrush="{DynamicResource BorderDefaultBrush}" BorderThickness="1">
                                     <ui:SymbolIcon Symbol="Settings24" FontSize="18" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                                 <StackPanel Grid.Column="1" Margin="14,0,0,0">
@@ -273,7 +273,7 @@
                         Padding="26,22"
                         Background="{DynamicResource BgCardBrush}">
                     <StackPanel>
-                        <TextBlock x:Name="TxtVersionTitle" FontSize="22" FontWeight="Bold"
+                        <TextBlock x:Name="TxtVersionTitle" FontSize="26" FontWeight="Bold"
                                    Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,4"/>
                         <TextBlock Text="{DynamicResource Help_Version_Subtitle}" FontSize="12"
                                    Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,20"/>
@@ -351,7 +351,7 @@
                         Padding="26,22"
                         Background="{DynamicResource BgCardBrush}">
                     <StackPanel>
-                        <TextBlock Text="{DynamicResource Help_Info_Title}" FontSize="22" FontWeight="Bold"
+                        <TextBlock Text="{DynamicResource Help_Info_Title}" FontSize="26" FontWeight="Bold"
                                    Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,4"/>
                         <TextBlock Text="{DynamicResource Help_Info_Subtitle}" FontSize="12"
                                    Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,20"/>

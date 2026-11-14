@@ -80,3 +80,8 @@ installer/Key/*.pwd.protected
 *.key
 *.pem
 *.pub
+
+**/.vscode/settings.json
+**/.vibe/skills/code/SKILL.md
+
+vibe/

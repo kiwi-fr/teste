@@ -70,7 +70,7 @@ public sealed class CentralErrorTriageTests
         var triage = new CentralErrorTriage();
 
         triage.Record(new InvalidOperationException("boom"), "Context.A");
-        await Task.Delay(30);
+        await Task.Delay(30, TestContext.Current.CancellationToken);
         triage.Record(new InvalidOperationException("boom"), "Context.A");
 
         CentralErrorEntry entry = triage.GetTop(10).Single();

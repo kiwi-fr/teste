@@ -2,7 +2,7 @@ namespace Coclico.Modules.Diagnostics.Services;
 
 using Coclico.Modules.Diagnostics.Models;
 
-public interface IDiagnosticHistoryService
+internal interface IDiagnosticHistoryService
 {
     Task SaveAsync(DiagnosticRun run, CancellationToken cancellationToken);
 

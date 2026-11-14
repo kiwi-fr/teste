@@ -5,7 +5,7 @@ using Coclico.Modules.Diagnostics.Models;
 using Coclico.Modules.Diagnostics.Rules;
 using Coclico.Services;
 
-public interface IDiagnosticOrchestrator
+internal interface IDiagnosticOrchestrator
 {
     Task<DiagnosticRun> RunAsync(
         DiagnosticRequest request,
@@ -13,7 +13,7 @@ public interface IDiagnosticOrchestrator
         CancellationToken cancellationToken);
 }
 
-public sealed class DiagnosticOrchestrator : IDiagnosticOrchestrator
+internal sealed class DiagnosticOrchestrator : IDiagnosticOrchestrator
 {
     private const string Subsystem = "DiagnosticOrchestrator";
 
@@ -55,7 +55,7 @@ public sealed class DiagnosticOrchestrator : IDiagnosticOrchestrator
         using SemaphoreSlim gate = new(maxParallel, maxParallel);
 
         List<DiagnosticCheckResult> results = [];
-        object resultLock = new();
+        Lock resultLock = new();
 
         try
         {

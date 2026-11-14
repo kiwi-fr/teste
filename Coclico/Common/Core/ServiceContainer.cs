@@ -4,7 +4,7 @@ using Serilog;
 
 namespace Coclico.Services;
 
-public static class ServiceContainer
+internal static class ServiceContainer
 {
     private static volatile bool _isBuilt;
     private static Lazy<IServiceProvider> _lazy = CreateUnbuilt("Service container not built. Call Build() at startup.");
@@ -67,11 +67,6 @@ public static class ServiceContainer
         {
             return null;
         }
-    }
-
-    public static IServiceScope CreateScope()
-    {
-        return Provider.CreateScope();
     }
 
     public static void Shutdown()

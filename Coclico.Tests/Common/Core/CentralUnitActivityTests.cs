@@ -16,14 +16,25 @@ public sealed class CentralUnitActivityTests
     }
 
     [Fact]
-    public void StartedWithoutWindowOrTrayIsBackground()
+    public void StartedWithoutWindowOrTrayRampsTowardBackgroundInterval()
     {
         var activity = new CentralUnitActivity();
 
         activity.MarkStarted();
 
         Assert.Equal(CentralActivityLevel.Background, activity.Level);
-        Assert.Equal(TimeSpan.FromSeconds(12), activity.AdaptInterval(TimeSpan.FromSeconds(4)));
+
+        TimeSpan first = activity.AdaptInterval(TimeSpan.FromSeconds(4));
+        Assert.True(first > TimeSpan.FromSeconds(4));
+        Assert.True(first < TimeSpan.FromSeconds(12));
+
+        TimeSpan current = first;
+        for (int i = 0; i < 200 && current < TimeSpan.FromSeconds(12); i++)
+        {
+            current = activity.AdaptInterval(TimeSpan.FromSeconds(4));
+        }
+
+        Assert.Equal(TimeSpan.FromSeconds(12), current);
     }
 
     [Fact]
@@ -39,7 +50,7 @@ public sealed class CentralUnitActivityTests
     }
 
     [Fact]
-    public void HiddenWindowWithTrayIsIdleWithTenTimesInterval()
+    public void HiddenWindowWithTrayRampsToTenTimesIntervalThenReturnsProgressively()
     {
         var activity = new CentralUnitActivity();
 
@@ -48,7 +59,30 @@ public sealed class CentralUnitActivityTests
         activity.SetTrayMinimized(true);
 
         Assert.Equal(CentralActivityLevel.Idle, activity.Level);
-        Assert.Equal(TimeSpan.FromSeconds(40), activity.AdaptInterval(TimeSpan.FromSeconds(4)));
+
+        TimeSpan current = TimeSpan.FromSeconds(4);
+        for (int i = 0; i < 200 && current < TimeSpan.FromSeconds(40); i++)
+        {
+            current = activity.AdaptInterval(TimeSpan.FromSeconds(4));
+        }
+
+        Assert.Equal(TimeSpan.FromSeconds(40), current);
+
+        activity.SetWindowVisible(true);
+
+        Assert.Equal(CentralActivityLevel.Active, activity.Level);
+
+        TimeSpan relaxed = activity.AdaptInterval(TimeSpan.FromSeconds(4));
+        Assert.True(relaxed > TimeSpan.FromSeconds(4));
+        Assert.True(relaxed < TimeSpan.FromSeconds(40));
+
+        current = relaxed;
+        for (int i = 0; i < 20 && current > TimeSpan.FromSeconds(4); i++)
+        {
+            current = activity.AdaptInterval(TimeSpan.FromSeconds(4));
+        }
+
+        Assert.Equal(TimeSpan.FromSeconds(4), current);
     }
 
     [Fact]

@@ -1,6 +1,6 @@
 namespace Coclico.Modules.Cleaning.Models;
 
-public sealed class CleaningCategory
+internal sealed class CleaningCategory
 {
     public string Key { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
@@ -19,7 +19,7 @@ public sealed class CleaningCategory
     public bool IsSizeMeasurable { get; set; } = true;
 }
 
-public sealed class CleaningResult
+internal sealed class CleaningResult
 {
     public long TotalBytesFreed { get; set; }
     public int FilesDeleted { get; set; }

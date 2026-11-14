@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Coclico.Services;
 
-public sealed class SecurityPolicyModel
+internal sealed class SecurityPolicyModel
 {
     [JsonPropertyName("blockedCommandPatterns")]
     public List<string> BlockedCommandPatterns { get; set; } = [];
@@ -21,7 +21,7 @@ public sealed class SecurityPolicyModel
     public List<string> ProtectedPathSegments { get; set; } = [];
 }
 
-public sealed class SecurityPolicyService : ISecurityPolicy
+internal sealed class SecurityPolicyService : ISecurityPolicy
 {
     private static readonly string PolicyPath = Path.Join(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -78,9 +78,15 @@ public sealed class SecurityPolicyService : ISecurityPolicy
         Environment.GetFolderPath(Environment.SpecialFolder.Windows),
         Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
         Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
-        Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs"),
-        Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
     ];
+
+    private static readonly FrozenSet<string> _aiForbiddenProcessNames = new[]
+    {
+        "cmd", "cmd.exe", "powershell", "powershell.exe", "pwsh", "pwsh.exe",
+        "wt", "wt.exe", "conhost", "conhost.exe", "regedit", "regedit.exe",
+        "reg", "reg.exe", "taskkill", "taskkill.exe", "mshta", "mshta.exe",
+        "rundll32", "rundll32.exe", "cscript", "cscript.exe", "wscript", "wscript.exe",
+    }.ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
     private static readonly Dictionary<string, string> _standardSystemApps = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -232,7 +238,7 @@ public sealed class SecurityPolicyService : ISecurityPolicy
         if (File.Exists(trimmed))
         {
             string ext = Path.GetExtension(trimmed).ToLowerInvariant();
-            if (ext == ".exe")
+            if (string.Equals(ext, ".exe", StringComparison.Ordinal))
             {
                 string fullPath = Path.GetFullPath(trimmed);
                 if (IsApprovedExecutableLocation(fullPath))
@@ -247,6 +253,44 @@ public sealed class SecurityPolicyService : ISecurityPolicy
         }
 
         return false;
+    }
+
+    public bool IsAiLaunchAllowed(string targetPath)
+    {
+        if (string.IsNullOrWhiteSpace(targetPath))
+        {
+            return false;
+        }
+
+        if (!IsApplicationAllowed(targetPath, out string? resolved) || string.IsNullOrWhiteSpace(resolved))
+        {
+            return false;
+        }
+
+        if (Uri.TryCreate(resolved, UriKind.Absolute, out Uri? uri) && !string.Equals(uri.Scheme, Uri.UriSchemeFile, StringComparison.Ordinal))
+        {
+            return uri.Scheme.Equals("ms-settings", StringComparison.OrdinalIgnoreCase);
+        }
+
+        if (!Path.IsPathRooted(resolved))
+        {
+            return !_aiForbiddenProcessNames.Contains(resolved);
+        }
+
+        if (_aiForbiddenProcessNames.Contains(Path.GetFileName(resolved)) ||
+            _aiForbiddenProcessNames.Contains(Path.GetFileNameWithoutExtension(resolved)))
+        {
+            return false;
+        }
+
+        string fullPath = Path.GetFullPath(resolved);
+        if (File.Exists(fullPath) && !IsApprovedExecutableLocation(fullPath))
+        {
+            LoggingService.LogWarning($"[SecurityPolicy] Lancement IA hors emplacements approuvés refusé : {fullPath}");
+            return false;
+        }
+
+        return true;
     }
 
     private static bool IsApprovedExecutableLocation(string fullPath)

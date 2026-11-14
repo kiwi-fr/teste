@@ -1,6 +1,6 @@
 namespace Coclico.Services.Algorithms;
 
-public static class SimpleStemmer
+internal static class SimpleStemmer
 {
     private static readonly string[] FrenchSuffixes = BuildSuffixes(
         "issements", "issement", "ements", "ement", "ations", "ation",
@@ -96,7 +96,7 @@ public static class SimpleStemmer
     private static string[] BuildSuffixes(params string[] suffixes)
     {
         return suffixes
-            .Distinct()
+            .Distinct(StringComparer.Ordinal)
             .OrderByDescending(s => s.Length)
             .ToArray();
     }

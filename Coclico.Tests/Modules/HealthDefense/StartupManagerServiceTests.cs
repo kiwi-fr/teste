@@ -11,7 +11,7 @@ public sealed class StartupManagerServiceTests
     private const string TestEntryName = "CoclicoStartupManagerServiceTests";
 
     [Fact]
-    public void ListStartupEntries_IncludesHkcuRunEntry()
+    public void ListStartupEntriesIncludesHkcuRunEntry()
     {
         try
         {
@@ -32,7 +32,7 @@ public sealed class StartupManagerServiceTests
     }
 
     [Fact]
-    public void SetEntryEnabled_DisablesAndReEnablesEntry()
+    public void SetEntryEnabledDisablesAndReEnablesEntry()
     {
         try
         {
@@ -63,7 +63,7 @@ public sealed class StartupManagerServiceTests
     }
 
     [Fact]
-    public void SetEntryEnabled_DoesNotDeleteOriginalRunValue()
+    public void SetEntryEnabledDoesNotDeleteOriginalRunValue()
     {
         try
         {
@@ -85,7 +85,7 @@ public sealed class StartupManagerServiceTests
     }
 
     [Fact]
-    public void SetEntryEnabled_LockedEntry_ReturnsFalse()
+    public void SetEntryEnabledLockedEntryReturnsFalse()
     {
         var locked = new StartupEntry("NimporteQuelService", "cmd", "HKLM", IsEnabled: true, CanToggle: false);
 
@@ -95,7 +95,7 @@ public sealed class StartupManagerServiceTests
     }
 
     [Fact]
-    public void SetEntryEnabled_NullEntry_ReturnsFalse()
+    public void SetEntryEnabledNullEntryReturnsFalse()
     {
         bool result = StartupManagerService.SetEntryEnabled(null!, enabled: false);
 

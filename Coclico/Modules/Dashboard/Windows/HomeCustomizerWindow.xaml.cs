@@ -9,7 +9,7 @@ using Coclico.Services;
 
 namespace Coclico.Views;
 
-public class SectionItemViewModel
+internal class SectionItemViewModel
 {
     public string Id { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
@@ -164,7 +164,7 @@ public partial class HomeCustomizerWindow : Window
             return (Application.Current?.Resources[key] as string) ?? fallback;
         }
 
-        var map = new Dictionary<string, (string Title, string Desc, bool Visible)>
+        var map = new Dictionary<string, (string Title, string Desc, bool Visible)>(StringComparer.Ordinal)
         {
             ["Header"] = (GetRes("Customize_Section_Header", "En-tête & Message de bienvenue"),
                           GetRes("Customize_Section_Header_Desc", "Salutation personnalisée et accès aux réglages"),
@@ -242,7 +242,7 @@ public partial class HomeCustomizerWindow : Window
             return;
         }
 
-        _service.Settings.GridColumns = rb.Tag?.ToString() == "2" ? 2 : 3;
+        _service.Settings.GridColumns = string.Equals(rb.Tag?.ToString(), "2", StringComparison.Ordinal) ? 2 : 3;
         _service.NotifyChanged();
     }
 

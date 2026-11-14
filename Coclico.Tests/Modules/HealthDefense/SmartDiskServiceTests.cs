@@ -6,7 +6,7 @@ namespace Coclico.Tests.Modules.HealthDefense;
 public sealed class SmartDiskServiceTests
 {
     [Fact]
-    public void GetDiskStatus_NeverThrows()
+    public void GetDiskStatusNeverThrows()
     {
         Exception? exception = Record.Exception(() => _ = SmartDiskService.GetDiskStatus());
 
@@ -14,7 +14,7 @@ public sealed class SmartDiskServiceTests
     }
 
     [Fact]
-    public void GetDiskStatus_ReturnsNonNullList()
+    public void GetDiskStatusReturnsNonNullList()
     {
         List<SmartDiskStatus> status = SmartDiskService.GetDiskStatus();
 

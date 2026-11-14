@@ -8,7 +8,7 @@ namespace Coclico.Tests;
 public sealed class CleaningServiceTests
 {
     [Fact]
-    public void FormatSize_EnglishCulture_UsesEnglishUnits()
+    public void FormatSizeEnglishCultureUsesEnglishUnits()
     {
         using CulturePin pin = CulturePin.For("en-US");
 
@@ -21,7 +21,7 @@ public sealed class CleaningServiceTests
     }
 
     [Fact]
-    public void FormatSize_FrenchCulture_UsesFrenchUnits()
+    public void FormatSizeFrenchCultureUsesFrenchUnits()
     {
         using CulturePin pin = CulturePin.For("fr-FR");
 
@@ -32,7 +32,7 @@ public sealed class CleaningServiceTests
     }
 
     [Fact]
-    public void GetAvailableCategories_ReturnsNonEmptyUniqueKeys()
+    public void GetAvailableCategoriesReturnsNonEmptyUniqueKeys()
     {
         List<CleaningCategory> categories = new CleaningService().GetAvailableCategories();
 
@@ -49,7 +49,7 @@ public sealed class CleaningServiceTests
     }
 
     [Fact]
-    public void GetAvailableCategories_ContainsCoreCleanupCategories()
+    public void GetAvailableCategoriesContainsCoreCleanupCategories()
     {
         List<string> keys = new CleaningService().GetAvailableCategories().Select(c => c.Key).ToList();
 

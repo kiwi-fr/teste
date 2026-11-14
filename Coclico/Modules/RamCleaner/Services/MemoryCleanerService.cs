@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Coclico.Services;
 
-public static class MemoryCleanerService
+internal static class MemoryCleanerService
 {
     [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll")]
@@ -31,10 +31,6 @@ public static class MemoryCleanerService
     [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("advapi32.dll")]
     private static extern int RegFlushKey(IntPtr hKey);
-
-    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-    [DllImport("dnsapi.dll")]
-    private static extern bool DnsFlushResolverCache();
 
     [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", SetLastError = true)]
@@ -94,25 +90,6 @@ public static class MemoryCleanerService
     [DllImport("iphlpapi.dll", SetLastError = true)]
     private static extern int FlushIpNetTable(uint dwIfIndex);
 
-    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-    [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool GlobalMemoryStatusEx([In, Out] ref MEMORYSTATUSEX lpBuffer);
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct MEMORYSTATUSEX
-    {
-        public uint dwLength;
-        public uint dwMemoryLoad;
-        public ulong ullTotalPhys;
-        public ulong ullAvailPhys;
-        public ulong ullTotalPageFile;
-        public ulong ullAvailPageFile;
-        public ulong ullTotalVirtual;
-        public ulong ullAvailVirtual;
-        public ulong ullAvailExtendedVirtual;
-    }
-
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     private struct TokPriv1Luid
     {
@@ -155,11 +132,7 @@ public static class MemoryCleanerService
                 "fontdrvhost", "sihost", "ctfmon", "startmenuexperiencehost", "shellexperiencehost" }
         .ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
-    private static readonly FrozenSet<string> _kernelProcessNames =
-        new[] { "smss", "csrss", "wininit", "winlogon", "lsass", "services" }
-        .ToFrozenSet(StringComparer.OrdinalIgnoreCase);
-
-    private static readonly object _cpuLock = new();
+    private static readonly Lock _cpuLock = new();
     private static long _cpuIdleLast, _cpuKernelLast, _cpuUserLast;
 
     private static bool AcquirePrivilege(string privilege)
@@ -188,7 +161,8 @@ public static class MemoryCleanerService
         return false;
     }
 
-    public struct RamInfo
+    [StructLayout(LayoutKind.Auto)]
+    internal struct RamInfo
     {
         public long TotalPhysBytes;
         public long AvailPhysBytes;
@@ -200,32 +174,77 @@ public static class MemoryCleanerService
         public long AvailPageBytes;
         public double PhysUsedPercent;
         public double VirtUsedPercent;
+
+        public bool Equals(RamInfo other)
+        {
+            return TotalPhysBytes == other.TotalPhysBytes &&
+                AvailPhysBytes == other.AvailPhysBytes &&
+                UsedPhysBytes == other.UsedPhysBytes &&
+                TotalVirtBytes == other.TotalVirtBytes &&
+                AvailVirtBytes == other.AvailVirtBytes &&
+                UsedVirtBytes == other.UsedVirtBytes &&
+                TotalPageBytes == other.TotalPageBytes &&
+                AvailPageBytes == other.AvailPageBytes &&
+                PhysUsedPercent.Equals(other.PhysUsedPercent) &&
+                VirtUsedPercent.Equals(other.VirtUsedPercent);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is RamInfo other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = new HashCode();
+            hash.Add(TotalPhysBytes);
+            hash.Add(AvailPhysBytes);
+            hash.Add(UsedPhysBytes);
+            hash.Add(TotalVirtBytes);
+            hash.Add(AvailVirtBytes);
+            hash.Add(UsedVirtBytes);
+            hash.Add(TotalPageBytes);
+            hash.Add(AvailPageBytes);
+            hash.Add(PhysUsedPercent);
+            hash.Add(VirtUsedPercent);
+            return hash.ToHashCode();
+        }
+
+        public static bool operator ==(RamInfo left, RamInfo right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(RamInfo left, RamInfo right)
+        {
+            return !(left == right);
+        }
     }
 
     public static RamInfo GetRamInfo()
     {
-        var stat = new MEMORYSTATUSEX { dwLength = (uint)Marshal.SizeOf<MEMORYSTATUSEX>() };
-        if (!GlobalMemoryStatusEx(ref stat))
+        var stat = new NativeWin32.MemoryStatusEx { Length = (uint)Marshal.SizeOf<NativeWin32.MemoryStatusEx>() };
+        if (!NativeWin32.GlobalMemoryStatusEx(ref stat))
         {
             return new RamInfo();
         }
 
-        long commitTotal = (long)stat.ullTotalPageFile;
-        long commitAvail = (long)stat.ullAvailPageFile;
+        long commitTotal = (long)stat.TotalPageFile;
+        long commitAvail = (long)stat.AvailablePageFile;
         long commitUsed = Math.Max(0, commitTotal - commitAvail);
 
         return new RamInfo
         {
-            TotalPhysBytes = (long)stat.ullTotalPhys,
-            AvailPhysBytes = (long)stat.ullAvailPhys,
-            UsedPhysBytes = (long)(stat.ullTotalPhys - stat.ullAvailPhys),
+            TotalPhysBytes = (long)stat.TotalPhysical,
+            AvailPhysBytes = (long)stat.AvailablePhysical,
+            UsedPhysBytes = (long)(stat.TotalPhysical - stat.AvailablePhysical),
             TotalVirtBytes = commitTotal,
             AvailVirtBytes = commitAvail,
             UsedVirtBytes = commitUsed,
-            TotalPageBytes = (long)stat.ullTotalPageFile,
-            AvailPageBytes = (long)stat.ullAvailPageFile,
-            PhysUsedPercent = stat.ullTotalPhys > 0
-                ? (double)(stat.ullTotalPhys - stat.ullAvailPhys) / stat.ullTotalPhys * 100.0 : 0,
+            TotalPageBytes = (long)stat.TotalPageFile,
+            AvailPageBytes = (long)stat.AvailablePageFile,
+            PhysUsedPercent = stat.TotalPhysical > 0
+                ? (double)(stat.TotalPhysical - stat.AvailablePhysical) / stat.TotalPhysical * 100.0 : 0,
             VirtUsedPercent = commitTotal > 0
                 ? (double)commitUsed / commitTotal * 100.0 : 0,
         };
@@ -252,32 +271,29 @@ public static class MemoryCleanerService
         int selfPid;
         try { selfPid = Process.GetCurrentProcess().Id; } catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException) { LoggingService.LogException(ex, "MemoryCleanerService.EmptyWorkingSets"); selfPid = -1; }
 
-        foreach (Process proc in Process.GetProcesses())
+        foreach (Process proc in ProcessSnapshotProvider.Capture())
         {
-            using (proc)
+            try
             {
-                try
+                int pid = proc.Id;
+                if (pid <= 4 || pid == selfPid || pid == specificExcludePid || (protectForeground && pid == fgPid))
                 {
-                    int pid = proc.Id;
-                    if (pid <= 4 || pid == selfPid || pid == specificExcludePid || (protectForeground && pid == fgPid))
-                    {
-                        continue;
-                    }
-
-                    if (_criticalProcessNames.Contains(proc.ProcessName))
-                    {
-                        continue;
-                    }
-
-                    nint h = OpenProcess(PROCESS_ALL_TRIM, false, pid);
-                    if (h != IntPtr.Zero)
-                    {
-                        _ = SetProcessWorkingSetSize(h, new IntPtr(-1), new IntPtr(-1));
-                        _ = CloseHandle(h);
-                    }
+                    continue;
                 }
-                catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MemoryCleanerService.EmptyWorkingSets.TrimProcess"); }
+
+                if (_criticalProcessNames.Contains(proc.ProcessName))
+                {
+                    continue;
+                }
+
+                nint h = OpenProcess(PROCESS_ALL_TRIM, false, pid);
+                if (h != IntPtr.Zero)
+                {
+                    _ = SetProcessWorkingSetSize(h, new IntPtr(-1), new IntPtr(-1));
+                    _ = CloseHandle(h);
+                }
             }
+            catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MemoryCleanerService.EmptyWorkingSets.TrimProcess"); }
         }
 
         Thread.Sleep(200);
@@ -361,7 +377,7 @@ public static class MemoryCleanerService
         try
         {
             RamInfo before = GetRamInfo();
-            _ = DnsFlushResolverCache();
+            _ = NativeWin32.DnsFlushResolverCache();
             RamInfo after = GetRamInfo();
             return Math.Max(0, after.AvailPhysBytes - before.AvailPhysBytes);
         }
@@ -409,7 +425,8 @@ public static class MemoryCleanerService
         return NtSetSystemInformationInt(SystemMemoryListInformation, ref command, sizeof(int));
     }
 
-    public struct CleanResult
+    [StructLayout(LayoutKind.Auto)]
+    internal struct CleanResult
     {
         public long WorkingSetsFreed;
         public long StandbyFreed;
@@ -432,6 +449,73 @@ public static class MemoryCleanerService
         public long TotalFreed;
         public RamInfo Before;
         public RamInfo After;
+
+        public bool Equals(CleanResult other)
+        {
+            return WorkingSetsFreed == other.WorkingSetsFreed &&
+                StandbyFreed == other.StandbyFreed &&
+                LowPriorityStandbyFreed == other.LowPriorityStandbyFreed &&
+                ModifiedPageListFreed == other.ModifiedPageListFreed &&
+                CombinedPageListFreed == other.CombinedPageListFreed &&
+                ModifiedFileCacheFreed == other.ModifiedFileCacheFreed &&
+                SystemFileCacheFreed == other.SystemFileCacheFreed &&
+                RegistryCacheFreed == other.RegistryCacheFreed &&
+                DnsCacheFreed == other.DnsCacheFreed &&
+                GcCollectFreed == other.GcCollectFreed &&
+                StandbyFastFreed == other.StandbyFastFreed &&
+                KernelTrimFreed == other.KernelTrimFreed &&
+                SuperFetchFreed == other.SuperFetchFreed &&
+                HeapCompactFreed == other.HeapCompactFreed &&
+                ClipboardFreed == other.ClipboardFreed &&
+                ArpCacheFreed == other.ArpCacheFreed &&
+                NetBiosCacheFreed == other.NetBiosCacheFreed &&
+                AllSessionsFreed == other.AllSessionsFreed &&
+                TotalFreed == other.TotalFreed &&
+                Before.Equals(other.Before) &&
+                After.Equals(other.After);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is CleanResult other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = new HashCode();
+            hash.Add(WorkingSetsFreed);
+            hash.Add(StandbyFreed);
+            hash.Add(LowPriorityStandbyFreed);
+            hash.Add(ModifiedPageListFreed);
+            hash.Add(CombinedPageListFreed);
+            hash.Add(ModifiedFileCacheFreed);
+            hash.Add(SystemFileCacheFreed);
+            hash.Add(RegistryCacheFreed);
+            hash.Add(DnsCacheFreed);
+            hash.Add(GcCollectFreed);
+            hash.Add(StandbyFastFreed);
+            hash.Add(KernelTrimFreed);
+            hash.Add(SuperFetchFreed);
+            hash.Add(HeapCompactFreed);
+            hash.Add(ClipboardFreed);
+            hash.Add(ArpCacheFreed);
+            hash.Add(NetBiosCacheFreed);
+            hash.Add(AllSessionsFreed);
+            hash.Add(TotalFreed);
+            hash.Add(Before);
+            hash.Add(After);
+            return hash.ToHashCode();
+        }
+
+        public static bool operator ==(CleanResult left, CleanResult right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(CleanResult left, CleanResult right)
+        {
+            return !(left == right);
+        }
     }
 
     public static Task<CleanResult> FullCleanAsync(
@@ -452,77 +536,73 @@ public static class MemoryCleanerService
         var result = new CleanResult { Before = before };
 
         progress?.Report("Emptying Working Sets...");
-        result.WorkingSetsFreed = await Task.Run(() => EmptyWorkingSets(protectForeground), ct);
+        result.WorkingSetsFreed = await Task.Run(() => EmptyWorkingSets(protectForeground), ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Flushing modified file cache...");
-        result.ModifiedFileCacheFreed = await Task.Run(FlushModifiedFileCache, ct);
+        result.ModifiedFileCacheFreed = await Task.Run(FlushModifiedFileCache, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Clearing system file cache...");
-        result.SystemFileCacheFreed = await Task.Run(ClearSystemFileCache, ct);
+        result.SystemFileCacheFreed = await Task.Run(ClearSystemFileCache, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Flushing registry cache...");
-        result.RegistryCacheFreed = await Task.Run(FlushRegistryCache, ct);
+        result.RegistryCacheFreed = await Task.Run(FlushRegistryCache, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Purging Standby list...");
-        result.StandbyFreed = await Task.Run(FlushStandbyList, ct);
+        result.StandbyFreed = await Task.Run(FlushStandbyList, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Purging low-priority Standby list...");
-        result.LowPriorityStandbyFreed = await Task.Run(FlushLowPriorityStandbyList, ct);
+        result.LowPriorityStandbyFreed = await Task.Run(FlushLowPriorityStandbyList, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Purging combined page list...");
-        result.CombinedPageListFreed = await Task.Run(FlushCombinedPageList, ct);
+        result.CombinedPageListFreed = await Task.Run(FlushCombinedPageList, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Flushing modified page list...");
-        result.ModifiedPageListFreed = await Task.Run(FlushModifiedPageList, ct);
+        result.ModifiedPageListFreed = await Task.Run(FlushModifiedPageList, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Flushing DNS cache...");
-        result.DnsCacheFreed = await Task.Run(FlushDnsCache, ct);
+        result.DnsCacheFreed = await Task.Run(FlushDnsCache, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report(".NET Garbage Collect...");
-        result.GcCollectFreed = await Task.Run(ForceGcCollect, ct);
+        result.GcCollectFreed = await Task.Run(ForceGcCollect, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Fast Standby purge...");
-        result.StandbyFastFreed = await Task.Run(FlushStandbyListFast, ct);
+        result.StandbyFastFreed = await Task.Run(FlushStandbyListFast, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Windows kernel working set...");
-        result.KernelTrimFreed = await Task.Run(TrimKernelWorkingSet, ct);
+        result.KernelTrimFreed = await Task.Run(TrimKernelWorkingSet, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Compacting memory heaps...");
-        result.HeapCompactFreed = await Task.Run(CompactAllHeaps, ct);
-
-        ct.ThrowIfCancellationRequested();
-        progress?.Report("Clearing clipboard...");
-        result.ClipboardFreed = await Task.Run(ClearClipboard, ct);
+        result.HeapCompactFreed = await Task.Run(CompactAllHeaps, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Flushing ARP cache...");
-        result.ArpCacheFreed = await Task.Run(FlushArpCache, ct);
+        result.ArpCacheFreed = await Task.Run(FlushArpCache, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Flushing NetBIOS cache...");
-        result.NetBiosCacheFreed = await Task.Run(FlushNetBiosCache, ct);
+        result.NetBiosCacheFreed = await Task.Run(FlushNetBiosCache, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Trimming all sessions working sets...");
-        result.AllSessionsFreed = await Task.Run(TrimAllSessionsWorkingSets, ct);
+        result.AllSessionsFreed = await Task.Run(TrimAllSessionsWorkingSets, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Flushing SuperFetch / SysMain...");
-        result.SuperFetchFreed = await FlushSuperFetchAsync(ct);
+        result.SuperFetchFreed = await FlushSuperFetchAsync(ct).ConfigureAwait(false);
 
-        await Task.Delay(800, ct);
+        await Task.Delay(800, ct).ConfigureAwait(false);
         result.After = GetRamInfo();
 
         long sumIndividual = result.WorkingSetsFreed + result.StandbyFreed
@@ -554,31 +634,18 @@ public static class MemoryCleanerService
             : $"{bytes / (1024.0 * 1024 * 1024):F2} GB";
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    private struct FILETIME { public uint Low; public uint High; }
-
-    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-    [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern bool GetSystemTimes(
-        out FILETIME idleTime, out FILETIME kernelTime, out FILETIME userTime);
-
-    private static long FtToLong(FILETIME f)
-    {
-        return ((long)f.High << 32) | f.Low;
-    }
-
     public static double GetSystemCpuPercent()
     {
-        if (!GetSystemTimes(out FILETIME idle, out FILETIME kernel, out FILETIME user))
+        if (!NativeWin32.GetSystemTimes(out NativeWin32.FileTime idle, out NativeWin32.FileTime kernel, out NativeWin32.FileTime user))
         {
             return 0;
         }
 
         lock (_cpuLock)
         {
-            long i = FtToLong(idle);
-            long k = FtToLong(kernel);
-            long u = FtToLong(user);
+            long i = idle.ToInt64();
+            long k = kernel.ToInt64();
+            long u = user.ToInt64();
             long di = i - _cpuIdleLast;
             long total = k - _cpuKernelLast + (u - _cpuUserLast);
             _cpuIdleLast = i;
@@ -615,40 +682,63 @@ public static class MemoryCleanerService
         catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "[MemoryCleaner] TrimProcessWorkingSetById failed"); }
     }
 
-    public struct ProcessMemInfo
+    internal struct ProcessMemInfo
     {
         public string Name;
         public long WorkingSetMb;
         public long PrivateMb;
         public int Pid;
+
+        public bool Equals(ProcessMemInfo other)
+        {
+            return StringComparer.Ordinal.Equals(Name, other.Name) &&
+                WorkingSetMb == other.WorkingSetMb &&
+                PrivateMb == other.PrivateMb &&
+                Pid == other.Pid;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is ProcessMemInfo other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name is null ? 0 : StringComparer.Ordinal.GetHashCode(Name), WorkingSetMb, PrivateMb, Pid);
+        }
+
+        public static bool operator ==(ProcessMemInfo left, ProcessMemInfo right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ProcessMemInfo left, ProcessMemInfo right)
+        {
+            return !(left == right);
+        }
     }
 
     public static List<ProcessMemInfo> GetTopProcessesByMemory(int n = 8)
     {
         var heap = new PriorityQueue<ProcessMemInfo, long>(n + 1);
-        foreach (Process p in Process.GetProcesses())
+        foreach (Process p in ProcessSnapshotProvider.Capture())
+        try
         {
-            using (p)
+            var info = new ProcessMemInfo
             {
-                try
-                {
-                    var info = new ProcessMemInfo
-                    {
-                        Name = p.ProcessName,
-                        WorkingSetMb = p.WorkingSet64 / (1024 * 1024),
-                        PrivateMb = p.PrivateMemorySize64 / (1024 * 1024),
-                        Pid = p.Id,
-                    };
-                    heap.Enqueue(info, info.WorkingSetMb);
+                Name = p.ProcessName,
+                WorkingSetMb = p.WorkingSet64 / (1024 * 1024),
+                PrivateMb = p.PrivateMemorySize64 / (1024 * 1024),
+                Pid = p.Id,
+            };
+            heap.Enqueue(info, info.WorkingSetMb);
 
-                    if (heap.Count > n)
-                    {
-                        _ = heap.Dequeue();
-                    }
-                }
-                catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "[MemoryCleaner] GetTopProcessesByMemory: failed to read process info"); }
+            if (heap.Count > n)
+            {
+                _ = heap.Dequeue();
             }
         }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "[MemoryCleaner] GetTopProcessesByMemory: failed to read process info"); }
 
         var result = new List<ProcessMemInfo>(heap.Count);
         while (heap.Count > 0)
@@ -660,12 +750,40 @@ public static class MemoryCleanerService
         return result;
     }
 
-    public struct GpuInfo
+    internal struct GpuInfo
     {
         public string Name;
         public long AdapterRamMb;
         public long SharedUsedMb;
         public bool IsIntegrated;
+
+        public bool Equals(GpuInfo other)
+        {
+            return StringComparer.Ordinal.Equals(Name, other.Name) &&
+                AdapterRamMb == other.AdapterRamMb &&
+                SharedUsedMb == other.SharedUsedMb &&
+                IsIntegrated == other.IsIntegrated;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is GpuInfo other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name is null ? 0 : StringComparer.Ordinal.GetHashCode(Name), AdapterRamMb, SharedUsedMb, IsIntegrated);
+        }
+
+        public static bool operator ==(GpuInfo left, GpuInfo right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(GpuInfo left, GpuInfo right)
+        {
+            return !(left == right);
+        }
     }
 
     private static GpuInfo? _staticGpuInfo;
@@ -680,7 +798,7 @@ public static class MemoryCleanerService
                 "SELECT SharedUsage FROM Win32_PerfRawData_GPUPerformanceCounters_GPUAdapterMemory");
             foreach (System.Management.ManagementObject o in memSrc.Get())
             {
-                result.SharedUsedMb = Convert.ToInt64(o["SharedUsage"] ?? 0L) / (1024 * 1024);
+                result.SharedUsedMb = Convert.ToInt64(o["SharedUsage"] ?? 0L, System.Globalization.CultureInfo.InvariantCulture) / (1024 * 1024);
                 break;
             }
         }
@@ -706,7 +824,7 @@ public static class MemoryCleanerService
             {
                 info.Name = o["Caption"]?.ToString() ?? "GPU";
                 ulong ram = 0UL;
-                try { ram = Convert.ToUInt64(o["AdapterRAM"] ?? 0UL); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "[MemoryCleaner] GetGpuInfo: failed to read AdapterRAM"); }
+                try { ram = Convert.ToUInt64(o["AdapterRAM"] ?? 0UL, System.Globalization.CultureInfo.InvariantCulture); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "[MemoryCleaner] GetGpuInfo: failed to read AdapterRAM"); }
                 info.AdapterRamMb = (long)(ram / (1024 * 1024));
                 info.IsIntegrated = info.Name.Contains("Intel", StringComparison.OrdinalIgnoreCase)
                                    || info.Name.Contains("UHD", StringComparison.OrdinalIgnoreCase)
@@ -726,7 +844,7 @@ public static class MemoryCleanerService
         return info;
     }
 
-    public enum CleanProfile
+    internal enum CleanProfile
     {
         Quick,
         Smart,
@@ -747,36 +865,36 @@ public static class MemoryCleanerService
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Purging Standby list (fast)...");
-        result.StandbyFastFreed = await Task.Run(FlushStandbyListFast, ct);
+        result.StandbyFastFreed = await Task.Run(FlushStandbyListFast, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Purging Standby list...");
-        result.StandbyFreed = await Task.Run(FlushStandbyList, ct);
+        result.StandbyFreed = await Task.Run(FlushStandbyList, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Purging low-priority Standby...");
-        result.LowPriorityStandbyFreed = await Task.Run(FlushLowPriorityStandbyList, ct);
+        result.LowPriorityStandbyFreed = await Task.Run(FlushLowPriorityStandbyList, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Clearing system file cache...");
-        result.SystemFileCacheFreed = await Task.Run(ClearSystemFileCache, ct);
+        result.SystemFileCacheFreed = await Task.Run(ClearSystemFileCache, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report("Flushing DNS cache...");
-        result.DnsCacheFreed = await Task.Run(FlushDnsCache, ct);
+        result.DnsCacheFreed = await Task.Run(FlushDnsCache, ct).ConfigureAwait(false);
 
         ct.ThrowIfCancellationRequested();
         progress?.Report(".NET Garbage Collect...");
-        result.GcCollectFreed = await Task.Run(ForceGcCollect, ct);
+        result.GcCollectFreed = await Task.Run(ForceGcCollect, ct).ConfigureAwait(false);
 
         if (!purgeStandbyOnly)
         {
             ct.ThrowIfCancellationRequested();
             progress?.Report("Trimming background working sets...");
-            result.WorkingSetsFreed = await Task.Run(() => EmptyWorkingSets(protectForeground: protectForeground), ct);
+            result.WorkingSetsFreed = await Task.Run(() => EmptyWorkingSets(protectForeground: protectForeground), ct).ConfigureAwait(false);
         }
 
-        await Task.Delay(250, ct);
+        await Task.Delay(250, ct).ConfigureAwait(false);
         result.After = GetRamInfo();
 
         long sumIndividual = result.WorkingSetsFreed + result.StandbyFreed
@@ -877,12 +995,12 @@ public static class MemoryCleanerService
         LoggingService.LogInfo($"[MemoryCleanerService.CleanByProfileAsync] Entry - profile={profile}, protectFg={protectForeground}");
         if (profile == CleanProfile.Deep)
         {
-            return await FullCleanAsync(protectForeground, progress, ct);
+            return await FullCleanAsync(protectForeground, progress, ct).ConfigureAwait(false);
         }
 
         if (profile == CleanProfile.Smart)
         {
-            return await SmartCleanAsync(protectForeground: protectForeground, purgeStandbyOnly: false, progress, ct);
+            return await SmartCleanAsync(protectForeground: protectForeground, purgeStandbyOnly: false, progress, ct).ConfigureAwait(false);
         }
 
         RamInfo before = GetRamInfo();
@@ -891,75 +1009,75 @@ public static class MemoryCleanerService
         if (profile == CleanProfile.Quick)
         {
             progress?.Report("Emptying Working Sets...");
-            result.WorkingSetsFreed = await Task.Run(() => EmptyWorkingSets(protectForeground), ct);
+            result.WorkingSetsFreed = await Task.Run(() => EmptyWorkingSets(protectForeground), ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
             progress?.Report("Purging Standby list (fast)...");
-            result.StandbyFastFreed = await Task.Run(FlushStandbyListFast, ct);
+            result.StandbyFastFreed = await Task.Run(FlushStandbyListFast, ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
             progress?.Report("Purging Standby list...");
-            result.StandbyFreed = await Task.Run(FlushStandbyList, ct);
+            result.StandbyFreed = await Task.Run(FlushStandbyList, ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
             progress?.Report("Flushing DNS cache...");
-            result.DnsCacheFreed = await Task.Run(FlushDnsCache, ct);
+            result.DnsCacheFreed = await Task.Run(FlushDnsCache, ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
             progress?.Report(".NET Garbage Collect...");
-            result.GcCollectFreed = await Task.Run(ForceGcCollect, ct);
+            result.GcCollectFreed = await Task.Run(ForceGcCollect, ct).ConfigureAwait(false);
         }
         else
         {
             progress?.Report("Emptying Working Sets...");
-            result.WorkingSetsFreed = await Task.Run(() => EmptyWorkingSets(protectForeground), ct);
+            result.WorkingSetsFreed = await Task.Run(() => EmptyWorkingSets(protectForeground), ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
             progress?.Report("Flushing modified file cache...");
-            result.ModifiedFileCacheFreed = await Task.Run(FlushModifiedFileCache, ct);
+            result.ModifiedFileCacheFreed = await Task.Run(FlushModifiedFileCache, ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
             progress?.Report("Clearing system file cache...");
-            result.SystemFileCacheFreed = await Task.Run(ClearSystemFileCache, ct);
+            result.SystemFileCacheFreed = await Task.Run(ClearSystemFileCache, ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
             progress?.Report("Flushing registry cache...");
-            result.RegistryCacheFreed = await Task.Run(FlushRegistryCache, ct);
+            result.RegistryCacheFreed = await Task.Run(FlushRegistryCache, ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
             progress?.Report("Purging Standby list...");
-            result.StandbyFreed = await Task.Run(FlushStandbyList, ct);
+            result.StandbyFreed = await Task.Run(FlushStandbyList, ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
             progress?.Report("Purging low-priority Standby...");
-            result.LowPriorityStandbyFreed = await Task.Run(FlushLowPriorityStandbyList, ct);
+            result.LowPriorityStandbyFreed = await Task.Run(FlushLowPriorityStandbyList, ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
             progress?.Report("Purging combined page list...");
-            result.CombinedPageListFreed = await Task.Run(FlushCombinedPageList, ct);
+            result.CombinedPageListFreed = await Task.Run(FlushCombinedPageList, ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
             progress?.Report("Flushing modified page list...");
-            result.ModifiedPageListFreed = await Task.Run(FlushModifiedPageList, ct);
+            result.ModifiedPageListFreed = await Task.Run(FlushModifiedPageList, ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
             progress?.Report("Flushing DNS cache...");
-            result.DnsCacheFreed = await Task.Run(FlushDnsCache, ct);
+            result.DnsCacheFreed = await Task.Run(FlushDnsCache, ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
             progress?.Report(".NET Garbage Collect...");
-            result.GcCollectFreed = await Task.Run(ForceGcCollect, ct);
+            result.GcCollectFreed = await Task.Run(ForceGcCollect, ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
             progress?.Report("Compacting memory heaps...");
-            result.HeapCompactFreed = await Task.Run(CompactAllHeaps, ct);
+            result.HeapCompactFreed = await Task.Run(CompactAllHeaps, ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
             progress?.Report("Trimming all sessions...");
-            result.AllSessionsFreed = await Task.Run(TrimAllSessionsWorkingSets, ct);
+            result.AllSessionsFreed = await Task.Run(TrimAllSessionsWorkingSets, ct).ConfigureAwait(false);
         }
 
-        await Task.Delay(800, ct);
+        await Task.Delay(800, ct).ConfigureAwait(false);
         result.After = GetRamInfo();
 
         long sumIndividual = result.WorkingSetsFreed + result.StandbyFreed
@@ -1005,26 +1123,6 @@ public static class MemoryCleanerService
             catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MemoryCleanerService.TrimKernelWorkingSet.TrimPid"); }
         }
 
-        foreach (Process p in Process.GetProcesses())
-        {
-            using (p)
-            {
-                try
-                {
-                    if (_kernelProcessNames.Contains(p.ProcessName))
-                    {
-                        nint h = OpenProcess(PROCESS_ALL_TRIM, false, p.Id);
-                        if (h != IntPtr.Zero)
-                        {
-                            _ = SetProcessWorkingSetSize(h, new IntPtr(-1), new IntPtr(-1));
-                            _ = CloseHandle(h);
-                        }
-                    }
-                }
-                catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MemoryCleanerService.TrimKernelWorkingSet.TrimKernelProcess"); }
-            }
-        }
-
         Thread.Sleep(150);
         RamInfo after = GetRamInfo();
         return Math.Max(0, after.AvailPhysBytes - before.AvailPhysBytes);
@@ -1044,11 +1142,20 @@ public static class MemoryCleanerService
                     sc.WaitForStatus(
                         System.ServiceProcess.ServiceControllerStatus.Stopped,
                         TimeSpan.FromSeconds(10));
-                    ct.ThrowIfCancellationRequested();
-                    sc.Start();
-                    sc.WaitForStatus(
-                        System.ServiceProcess.ServiceControllerStatus.Running,
-                        TimeSpan.FromSeconds(10));
+                    try
+                    {
+                        ct.ThrowIfCancellationRequested();
+                    }
+                    finally
+                    {
+                        if (sc.Status == System.ServiceProcess.ServiceControllerStatus.Stopped)
+                        {
+                            sc.Start();
+                            sc.WaitForStatus(
+                                System.ServiceProcess.ServiceControllerStatus.Running,
+                                TimeSpan.FromSeconds(10));
+                        }
+                    }
                 }
             }, ct).ConfigureAwait(false);
         }
@@ -1119,7 +1226,7 @@ public static class MemoryCleanerService
         RamInfo before = GetRamInfo();
         try
         {
-            var psi = new System.Diagnostics.ProcessStartInfo("nbtstat", "-R")
+            var psi = new System.Diagnostics.ProcessStartInfo(Coclico.Services.SystemToolResolver.Resolve("nbtstat.exe"), "-R")
             {
                 CreateNoWindow = true,
                 UseShellExecute = false,
@@ -1139,15 +1246,24 @@ public static class MemoryCleanerService
         _ = AcquirePrivilege("SeDebugPrivilege");
         _ = AcquirePrivilege("SeIncreaseQuotaPrivilege");
 
-        foreach (Process p in Process.GetProcesses())
+        int fgPid = GetForegroundProcessId();
+        int selfPid;
+        try { selfPid = Process.GetCurrentProcess().Id; } catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException) { LoggingService.LogException(ex, "MemoryCleanerService.TrimAllSessionsWorkingSets"); selfPid = -1; }
+
+        foreach (Process p in ProcessSnapshotProvider.Capture())
         {
-            using (p)
             {
                 try
                 {
+                    int pid = p.Id;
+                    if (pid <= 4 || pid == selfPid || pid == fgPid || _criticalProcessNames.Contains(p.ProcessName))
+                    {
+                        continue;
+                    }
+
                     if (p.SessionId > 0)
                     {
-                        nint h = OpenProcess(PROCESS_ALL_TRIM, false, p.Id);
+                        nint h = OpenProcess(PROCESS_ALL_TRIM, false, pid);
                         if (h != IntPtr.Zero)
                         {
                             _ = SetProcessWorkingSetSize(h, new IntPtr(-1), new IntPtr(-1));

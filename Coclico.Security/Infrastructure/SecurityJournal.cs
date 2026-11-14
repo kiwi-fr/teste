@@ -10,6 +10,8 @@ public sealed class SecurityJournal
 
     private readonly byte[] _key;
     private readonly string _journalPath;
+    private string? _lastMacCache;
+    private long _lastMacLength = -1;
 
     public SecurityJournal(string journalPath, byte[] key)
     {
@@ -39,13 +41,29 @@ public sealed class SecurityJournal
         lock (_key)
         {
             RotateIfNeeded();
-            string? previousMac = ReadLastMac();
+            string? previousMac = GetLastMacCached();
             string mac = ComputeMac(previousMac, sanitized);
             string entry = sanitized + "|" + mac;
             using var stream = new FileStream(_journalPath, FileMode.Append, FileAccess.Write, FileShare.Read);
             using var writer = new StreamWriter(stream, new UTF8Encoding(false));
             writer.WriteLine(entry);
+            _lastMacCache = mac;
+            _lastMacLength = new FileInfo(_journalPath).Length;
         }
+    }
+
+    private string? GetLastMacCached()
+    {
+        var info = new FileInfo(_journalPath);
+        if (_lastMacLength >= 0 && info.Length == _lastMacLength)
+        {
+            return _lastMacCache;
+        }
+
+        string? mac = ReadLastMac();
+        _lastMacCache = mac;
+        _lastMacLength = info.Length;
+        return mac;
     }
 
     public JournalVerification Verify()
@@ -73,9 +91,19 @@ public sealed class SecurityJournal
             string body = lines[i][..lastPipe];
             string mac = lines[i][(lastPipe + 1)..];
             string expected = ComputeMac(previousMac, body);
-            if (!CryptographicOperations.FixedTimeEquals(
-                    Convert.FromHexString(mac),
-                    Convert.FromHexString(expected)))
+            byte[] macBytes;
+            byte[] expectedBytes;
+            try
+            {
+                macBytes = Convert.FromHexString(mac);
+                expectedBytes = Convert.FromHexString(expected);
+            }
+            catch (FormatException)
+            {
+                return new JournalVerification { IsIntact = false, FirstBrokenLine = i + 1, Reason = "journal line mac is malformed" };
+            }
+
+            if (!CryptographicOperations.FixedTimeEquals(macBytes, expectedBytes))
             {
                 return new JournalVerification { IsIntact = false, FirstBrokenLine = i + 1, Reason = "journal chain is broken" };
             }
@@ -107,7 +135,7 @@ public sealed class SecurityJournal
 
         string signaturePath = exportPath + ".sig";
         File.WriteAllBytes(exportPath, content);
-        string signature = string.Join("|", "CCLS1", verification.IsIntact ? "1" : "0", verification.FirstBrokenLine.ToString(), mac);
+        string signature = string.Join("|", "CCLS1", verification.IsIntact ? "1" : "0", verification.FirstBrokenLine.ToString(System.Globalization.CultureInfo.InvariantCulture), mac);
         File.WriteAllText(signaturePath, signature + Environment.NewLine, new UTF8Encoding(false));
 
         return new JournalExportResult
@@ -149,13 +177,26 @@ public sealed class SecurityJournal
         byte[] content = File.ReadAllBytes(exportPath);
         var journal = new SecurityJournal(exportPath, key);
         string expected = journal.ComputeMac(null, Convert.ToHexString(content).ToLowerInvariant());
-        if (!CryptographicOperations.FixedTimeEquals(Convert.FromHexString(parts[3]), Convert.FromHexString(expected)))
+        byte[] signatureBytes;
+        byte[] expectedBytes;
+        try
+        {
+            signatureBytes = Convert.FromHexString(parts[3]);
+            expectedBytes = Convert.FromHexString(expected);
+        }
+        catch (FormatException)
+        {
+            reason = "export signature mac is malformed";
+            return false;
+        }
+
+        if (!CryptographicOperations.FixedTimeEquals(signatureBytes, expectedBytes))
         {
             reason = "export signature mismatch: the exported journal has been modified since the export";
             return false;
         }
 
-        if (parts[1] == "0")
+        if (string.Equals(parts[1], "0", StringComparison.Ordinal))
         {
             reason = "export signature is valid but the journal chain was already broken when it was exported";
             return false;
@@ -167,7 +208,7 @@ public sealed class SecurityJournal
     public static string BuildLine(DateTime utcTimestamp, string appVersion, string eventName, string component, string result, string code, string detail)
     {
         DateTime utc = DateTime.SpecifyKind(utcTimestamp, DateTimeKind.Utc);
-        string timestamp = utc.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        string timestamp = utc.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", System.Globalization.CultureInfo.InvariantCulture);
         return string.Join("|",
             timestamp,
             Sanitize(appVersion),
@@ -211,6 +252,8 @@ public sealed class SecurityJournal
 
         File.Move(_journalPath, rotated);
         EnsureHeader();
+        _lastMacCache = null;
+        _lastMacLength = -1;
     }
 
     private string? ReadLastMac()

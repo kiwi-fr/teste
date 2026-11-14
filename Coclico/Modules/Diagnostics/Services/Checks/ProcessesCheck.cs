@@ -6,7 +6,7 @@ using Coclico.Modules.Diagnostics.Rules;
 using Coclico.Services;
 using Microsoft.Win32;
 
-public sealed class ProcessesCheck : IDiagnosticCheck
+internal sealed class ProcessesCheck : IDiagnosticCheck
 {
     private const int MaxStartupEntriesReported = 30;
 
@@ -28,25 +28,22 @@ public sealed class ProcessesCheck : IDiagnosticCheck
 
         try
         {
-            Process[] processes = Process.GetProcesses();
+            Process[] processes = ProcessSnapshotProvider.Capture();
             processCount = processes.Length;
 
             long totalRam = MemoryCleanerService.GetRamInfo().TotalPhysBytes;
             long topWorkingSet = 0;
             foreach (Process process in processes)
             {
-                using (process)
+                try
                 {
-                    try
+                    if (process.WorkingSet64 > topWorkingSet)
                     {
-                        if (process.WorkingSet64 > topWorkingSet)
-                        {
-                            topWorkingSet = process.WorkingSet64;
-                            topRamName = process.ProcessName;
-                        }
+                        topWorkingSet = process.WorkingSet64;
+                        topRamName = process.ProcessName;
                     }
-                    catch (Exception ex) when (ex is not System.OutOfMemoryException) { _ = ex; }
                 }
+                catch (Exception ex) when (ex is not System.OutOfMemoryException) { _ = ex; }
             }
 
             if (topRamName is not null && totalRam > 0)
@@ -131,7 +128,7 @@ public sealed class ProcessesCheck : IDiagnosticCheck
             {
                 if (item["Name"] is string name
                     && item["PercentProcessorTime"] is string raw
-                    && double.TryParse(raw, out double percent)
+                    && double.TryParse(raw, System.Globalization.CultureInfo.InvariantCulture, out double percent)
                     && percent > topPercent)
                 {
                     topPercent = percent;

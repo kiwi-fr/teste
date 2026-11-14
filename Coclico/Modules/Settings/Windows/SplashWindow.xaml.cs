@@ -30,10 +30,10 @@ public partial class SplashWindow : Window
 
         try
         {
-            await ServiceContainer.GetRequired<StartupService>().RunStartupAsync(progress, cts.Token);
+            await ServiceContainer.GetRequired<StartupService>().RunStartupAsync(progress, cts.Token).ConfigureAwait(false);
 
             TriggerFlashIgnition();
-            await Task.Delay(260);
+            await Task.Delay(120).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {

@@ -4,9 +4,9 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Coclico.Services;
-using Coclico.ViewModels;
+using Coclico.Modules.RamCleaner.ViewModels;
 
-namespace Coclico.Views;
+namespace Coclico.Modules.RamCleaner.Views;
 
 public partial class RamCleanerView : UserControl
 {
@@ -16,7 +16,7 @@ public partial class RamCleanerView : UserControl
     private readonly DispatcherTimer _gpuTimer = new();
     private Polyline? _sparkline;
 
-    public RamCleanerViewModel ViewModel { get; }
+    internal RamCleanerViewModel ViewModel { get; }
 
     public RamCleanerView()
     {

@@ -7,7 +7,7 @@ namespace Coclico.Views;
 
 public partial class CleaningView : UserControl
 {
-    public CleaningViewModel ViewModel { get; }
+    internal CleaningViewModel ViewModel { get; }
 
     public CleaningView()
     {
@@ -24,7 +24,7 @@ public partial class CleaningView : UserControl
     private async Task OnLoadedAsync(object sender, RoutedEventArgs e)
     {
         ViewModel.AttachLanguageChanged();
-        await ViewModel.ScanAsync();
+        await ViewModel.ScanAsync().ConfigureAwait(false);
     }
 
     private void OnUnloaded(object sender, RoutedEventArgs e)

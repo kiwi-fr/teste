@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
@@ -5,20 +6,31 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Coclico.Security.Infrastructure;
 using Coclico.Services;
 
 namespace Coclico.Modules.Apps.Services;
 
-public sealed class GitHubToolService
+internal sealed class GitHubToolService
 {
-    public sealed record GithubAsset(string Name, string DownloadUrl);
+    internal sealed record GithubAsset(string Name, string DownloadUrl);
 
-    public sealed record GithubToolResult(bool Success, string ExtractedDir, string? ExePath, string? Error);
+    internal sealed record GithubToolResult(bool Success, string ExtractedDir, string? ExePath, string? Error, bool NeedsExplicitConfirmation = false);
 
-    private static readonly HttpClient Http = new()
+    private static readonly HttpClient Http = new(new OutboundDomainGuardHandler())
     {
         Timeout = TimeSpan.FromMinutes(15)
     };
+
+    private static readonly FrozenSet<string> _approvedRepos = new[]
+    {
+        "hbashton/DS4Windows",
+        "Orbmu2k/nvidiaProfileInspector",
+        "GSDragoon/RadeonSoftwareSlimmer",
+        "MicaForEveryone/MicaForEveryone",
+        "sorayuki/obs-multi-rtmp",
+        "iandiv/appgroup",
+    }.ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
     private readonly IProcessExecutionService _processExecution;
 
@@ -47,7 +59,7 @@ public sealed class GitHubToolService
         response.EnsureSuccessStatusCode();
 
         using JsonDocument doc = await JsonDocument.ParseAsync(
-            await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false), cancellationToken: ct);
+            await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false), cancellationToken: ct).ConfigureAwait(false);
         var assets = new List<(string Name, string Url)>();
         if (doc.RootElement.TryGetProperty("assets", out JsonElement assetsElement))
         {
@@ -83,7 +95,7 @@ public sealed class GitHubToolService
             response.EnsureSuccessStatusCode();
 
             using JsonDocument doc = await JsonDocument.ParseAsync(
-                await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false), cancellationToken: ct);
+                await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false), cancellationToken: ct).ConfigureAwait(false);
 
             if (!doc.RootElement.TryGetProperty("assets", out JsonElement assetsElement))
             {
@@ -134,8 +146,14 @@ public sealed class GitHubToolService
         }
     }
 
-    public async Task<GithubToolResult> InstallToolAsync(string toolName, string repo, string pattern, IProgress<string>? log = null, CancellationToken ct = default)
+    public async Task<GithubToolResult> InstallToolAsync(string toolName, string repo, string pattern, IProgress<string>? log = null, CancellationToken ct = default, bool allowUnverified = false)
     {
+        if (!_approvedRepos.Contains(repo))
+        {
+            LoggingService.LogWarning($"[GitHubToolService] Dépôt GitHub non approuvé refusé : {repo}");
+            return new GithubToolResult(false, string.Empty, null, $"Dépôt GitHub non approuvé : {repo}.");
+        }
+
         try
         {
             string root = GetAppsRootDir();
@@ -159,7 +177,8 @@ public sealed class GitHubToolService
             using (HttpResponseMessage response = await Http.GetAsync(asset.DownloadUrl, HttpCompletionOption.ResponseHeadersRead, ct).ConfigureAwait(false))
             {
                 response.EnsureSuccessStatusCode();
-                await using (FileStream fs = File.Create(partial))
+                FileStream fs = File.Create(partial);
+                await using (fs.ConfigureAwait(false))
                 {
                     await response.Content.CopyToAsync(fs, ct).ConfigureAwait(false);
                 }
@@ -171,10 +190,19 @@ public sealed class GitHubToolService
             }
 
             string? expectedHash = await TryGetExpectedChecksumAsync(repo, asset.Name, ct).ConfigureAwait(false);
+            if (expectedHash is null && !allowUnverified)
+            {
+                LoggingService.LogWarning($"[GitHubToolService] Installation refusée : aucune somme de contrôle publiée pour {asset.Name} ({repo}).");
+                return new GithubToolResult(false, string.Empty, null,
+                    $"Aucune somme de contrôle SHA-256 publiée pour {asset.Name}. Une confirmation explicite est requise pour installer un téléchargement non vérifiable.",
+                    NeedsExplicitConfirmation: true);
+            }
+
             if (expectedHash is not null)
             {
                 string actualHash;
-                await using (FileStream hashStream = File.OpenRead(partial))
+                FileStream hashStream = File.OpenRead(partial);
+                await using (hashStream.ConfigureAwait(false))
                 {
                     actualHash = Convert.ToHexString(await SHA256.HashDataAsync(hashStream, ct).ConfigureAwait(false));
                 }
@@ -189,11 +217,12 @@ public sealed class GitHubToolService
             }
             else
             {
-                log?.Report($"Aucune somme de contrôle publiée pour {asset.Name} : téléchargement non vérifiable.");
-                LoggingService.LogWarning($"[GitHubToolService] Release sans checksum pour {asset.Name} ({repo}).");
+                log?.Report($"Aucune somme de contrôle publiée pour {asset.Name} : installation en mode explicitement confirmé.");
+                LoggingService.LogWarning($"[GitHubToolService] Release sans checksum pour {asset.Name} ({repo}) : installation confirmée par l'utilisateur.");
             }
 
             File.Move(partial, destination, true);
+            MarkOfTheWeb.Apply(destination);
             log?.Report($"Téléchargement terminé : {Math.Round(new FileInfo(destination).Length / 1024.0 / 1024.0, 2)} Mo");
 
             string toolDir = GetToolDir(toolName);
@@ -202,7 +231,30 @@ public sealed class GitHubToolService
             if (asset.Name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
             {
                 Directory.CreateDirectory(toolDir);
+
                 using ZipArchive archive = ZipFile.OpenRead(destination);
+                if (!ArchiveGuard.IsEntryCountAllowed(archive.Entries.Count))
+                {
+                    return new GithubToolResult(false, string.Empty, null, "Archive refusée : nombre d'entrées anormal.");
+                }
+
+                long accumulatedBytes = 0;
+                foreach (ZipArchiveEntry entry in archive.Entries)
+                {
+                    if (!ArchiveGuard.IsSafeArchiveEntry(entry.FullName))
+                    {
+                        LoggingService.LogWarning($"[GitHubToolService] Entrée d'archive non sûre refusée : {entry.FullName}");
+                        return new GithubToolResult(false, string.Empty, null, $"Archive refusée : entrée non sûre '{entry.FullName}'.");
+                    }
+
+                    if (!ArchiveGuard.IsEntrySizeAllowed(entry.Length, accumulatedBytes))
+                    {
+                        return new GithubToolResult(false, string.Empty, null, "Archive refusée : taille totale excessive.");
+                    }
+
+                    accumulatedBytes += entry.Length;
+                }
+
                 archive.ExtractToDirectory(toolDir, overwriteFiles: true);
 
                 log?.Report($"Extrait dans {toolDir}");

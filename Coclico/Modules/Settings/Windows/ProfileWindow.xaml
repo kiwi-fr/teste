@@ -57,7 +57,7 @@
                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="18,0,0,0">
                         <TextBlock x:Name="UserNameText" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
                         <Border Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
-                                CornerRadius="6" HorizontalAlignment="Left" Padding="8,3" Margin="0,5,0,5">
+                                CornerRadius="9" HorizontalAlignment="Left" Padding="8,3" Margin="0,5,0,5">
                             <TextBlock x:Name="AccountTypeText" Text="{DynamicResource Profile_AccountTypeLocal}" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" FontWeight="SemiBold"/>
                         </Border>
                         <TextBlock x:Name="UserEmailText" Foreground="{DynamicResource TextHintBrush}" FontSize="11.5" FontWeight="SemiBold"/>
@@ -70,7 +70,7 @@
                            Foreground="{DynamicResource TextHintBrush}" Margin="0,0,0,10"/>
 
                 <ui:Button Click="OpenInfo_Click" Appearance="Transparent" HorizontalAlignment="Stretch" Margin="0,0,0,8" Padding="12,10"
-                           Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
+                           Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -84,7 +84,7 @@
                 </ui:Button>
 
                 <ui:Button Click="OpenAccounts_Click" Appearance="Transparent" HorizontalAlignment="Stretch" Margin="0,0,0,8" Padding="12,10"
-                           Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
+                           Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -98,7 +98,7 @@
                 </ui:Button>
 
                 <ui:Button Click="OpenDataFolder_Click" Appearance="Transparent" HorizontalAlignment="Stretch" Margin="0,0,0,8" Padding="12,10"
-                           Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8">
+                           Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12">
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -111,7 +111,7 @@
                     </Grid>
                 </ui:Button>
 
-                <Border Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8"
+                <Border Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="12"
                         Padding="14,10" Margin="0,12,0,0">
                     <Grid>
                         <Grid.ColumnDefinitions>

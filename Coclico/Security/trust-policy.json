@@ -1,5 +1,12 @@
 {
-  "keys": [],
+  "keys": [
+    {
+      "keyId": "coclico-release-1eea2a4c1e31f6ca",
+      "publicKeyBase64": "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA92gB8L2jrxMiAkekikGjodadiCJP7I9vam9lMHHEJywgbTXJ6rZ5jj1OJnM/3aMblU6kamq6U0AQB1Amsi3DqmanPIhDs25pVEoXASo/oahAtd8CoSN1Oy53OnlTKUmLGC2xKzUrDOEIgQtcnB+RYfgbg17bK0rBOvA91R7EwFdFYAl2/xxQ5zECPHx8Uk7aiYgxe14jxzltnJvHh+rDkQPwvRzX3GnQjnfp7cwMJXq/DqTi4L6u1Eqi8i91ci68kcpWCkNR1waEUfzFKxecDx2ZGJvpQv4Mat48kv7tchTxBmqpaPJq/zqqF3bAynvdHj6SHgLWtCFRoQ7z12BMVSm5xZ8XKNSCvL3Btr6f1rFPuT7voDqXmaZY4uxCyiW+qHrrCqw/l6tprV4b7LQieXiWV4ntEUm4sKd5Uf+Y2TmH+PZBcjBiz9tIbF/uBV0w5e2pZW3CffCy8kyOhGjzUQxumHGWYf5te0v4eJcZN3qx+sUD9LyGXYNWYEIjFy/ZV8HWugNzVDewzkWmSP88MYk84oU8mJ6K6ogV0oDMOTSDDjgIpWtQuqobcz9c2RqhQ+KY/OL07e92xs7NFPZ0s/gjZa+EO0DDq3HF3o0Z1z9OofSvdlzM0adTPkt9idlQSpWBHBNeVcXhVZHdUFkZ9zst/el8aRfQPIEaMrTUNXcCAwEAAQ==",
+      "activeFromUtc": "2026-11-03T19:01:51Z",
+      "revokedUtc": null
+    }
+  ],
   "updatePolicy": {
     "minimumAllowedVersion": "2.2.2",
     "lastKnownGoodVersion": "2.2.2",

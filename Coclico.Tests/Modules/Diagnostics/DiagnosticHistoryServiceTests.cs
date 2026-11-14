@@ -38,7 +38,7 @@ public sealed class DiagnosticHistoryServiceTests : IDisposable
     };
 
     [Fact]
-    public async Task SaveThenGet_RoundTripsTheRun()
+    public async Task SaveThenGetRoundTripsTheRun()
     {
         DiagnosticHistoryService service = CreateService();
         DiagnosticRun run = MakeRun();
@@ -68,14 +68,14 @@ public sealed class DiagnosticHistoryServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task GetById_UnknownId_ReturnsNull()
+    public async Task GetByIdUnknownIdReturnsNull()
     {
         DiagnosticHistoryService service = CreateService();
         Assert.Null(await service.GetByIdAsync(Guid.NewGuid(), CancellationToken.None));
     }
 
     [Fact]
-    public async Task Delete_RemovesTheRun()
+    public async Task DeleteRemovesTheRun()
     {
         DiagnosticHistoryService service = CreateService();
         DiagnosticRun run = MakeRun();
@@ -88,10 +88,10 @@ public sealed class DiagnosticHistoryServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task GetRecent_OrdersByDateDescending()
+    public async Task GetRecentOrdersByDateDescending()
     {
         DiagnosticHistoryService service = CreateService();
-        DateTime baseTime = new(2026, 10, 1, 0, 0, 0, DateTimeKind.Utc);
+        DateTime baseTime = DateTime.UtcNow.AddDays(-10).AddHours(-1);
         await service.SaveAsync(MakeRun(baseTime.AddDays(1)), CancellationToken.None);
         await service.SaveAsync(MakeRun(baseTime.AddDays(3)), CancellationToken.None);
         await service.SaveAsync(MakeRun(baseTime.AddDays(2)), CancellationToken.None);
@@ -105,10 +105,10 @@ public sealed class DiagnosticHistoryServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task Retention_ByCount_KeepsOnlyMostRecent()
+    public async Task RetentionByCountKeepsOnlyMostRecent()
     {
         DiagnosticHistoryService service = CreateService(retentionCount: 3, retentionDays: 30);
-        DateTime baseTime = new(2026, 10, 1, 0, 0, 0, DateTimeKind.Utc);
+        DateTime baseTime = DateTime.UtcNow.AddDays(-10).AddHours(-1);
         for (int day = 1; day <= 5; day++)
         {
             await service.SaveAsync(MakeRun(baseTime.AddDays(day)), CancellationToken.None);
@@ -123,11 +123,11 @@ public sealed class DiagnosticHistoryServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task CorruptJsonFile_DoesNotCrashAndIsIgnored()
+    public async Task CorruptJsonFileDoesNotCrashAndIsIgnored()
     {
         Directory.CreateDirectory(_baseDirectory);
         string corruptFile = Path.Join(_baseDirectory, Guid.NewGuid().ToString("N") + ".json");
-        File.WriteAllText(corruptFile, "{ this is not valid json");
+        await File.WriteAllTextAsync(corruptFile, "{ this is not valid json", TestContext.Current.CancellationToken);
 
         DiagnosticHistoryService service = CreateService();
         DiagnosticRun run = MakeRun();
@@ -142,7 +142,7 @@ public sealed class DiagnosticHistoryServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task Save_IsAtomic_NoTempFileLeftBehind()
+    public async Task SaveIsAtomicNoTempFileLeftBehind()
     {
         DiagnosticHistoryService service = CreateService();
         DiagnosticRun run = MakeRun();

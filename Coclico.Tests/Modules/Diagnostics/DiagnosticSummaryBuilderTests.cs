@@ -23,7 +23,7 @@ public sealed class DiagnosticSummaryBuilderTests
     };
 
     [Fact]
-    public void Build_CountsFindingsBySeverity()
+    public void BuildCountsFindingsBySeverity()
     {
         DiagnosticRun run = new()
         {
@@ -48,7 +48,7 @@ public sealed class DiagnosticSummaryBuilderTests
     }
 
     [Fact]
-    public void Build_CountsChecksByOutcome()
+    public void BuildCountsChecksByOutcome()
     {
         DiagnosticRun run = new()
         {
@@ -73,7 +73,7 @@ public sealed class DiagnosticSummaryBuilderTests
     }
 
     [Fact]
-    public void Build_EmptyRun_GivesZeroCounters()
+    public void BuildEmptyRunGivesZeroCounters()
     {
         DiagnosticSummary summary = DiagnosticSummaryBuilder.Build(new DiagnosticRun());
 
@@ -84,7 +84,7 @@ public sealed class DiagnosticSummaryBuilderTests
     }
 
     [Fact]
-    public void Build_ContainsNoGlobalScore()
+    public void BuildContainsNoGlobalScore()
     {
         DiagnosticSummaryBuilder.Build(new DiagnosticRun());
 
@@ -101,7 +101,7 @@ public sealed class DiagnosticSummaryBuilderTests
     }
 
     [Fact]
-    public void Build_NullRun_Throws()
+    public void BuildNullRunThrows()
     {
         Assert.Throws<ArgumentNullException>(() => DiagnosticSummaryBuilder.Build(null!));
     }

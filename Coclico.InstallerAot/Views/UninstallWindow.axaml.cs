@@ -11,7 +11,7 @@ using Microsoft.Win32;
 
 namespace Coclico.Installer.Views;
 
-public partial class UninstallWindow : Window
+internal partial class UninstallWindow : Window
 {
     private readonly string _installPath;
     private CancellationTokenSource? _cts;
@@ -135,7 +135,7 @@ public partial class UninstallWindow : Window
             ChkConfirmCompleteRemoval.Focus();
             await MessageDialog.ShowWarningAsync(this,
                 InstallerLocalization.Get("UnConfirmTitle"),
-                InstallerLocalization.Get("UnConfirmMsg"));
+                InstallerLocalization.Get("UnConfirmMsg")).ConfigureAwait(false);
             return;
         }
 
@@ -158,7 +158,7 @@ public partial class UninstallWindow : Window
             });
 
             string? targetPath = string.IsNullOrEmpty(_installPath) ? null : _installPath;
-            await InstallService.FullUninstallAsync(progress, targetPath, ChkKeepUserData.IsChecked is true, _cts.Token);
+            await InstallService.FullUninstallAsync(progress, targetPath, ChkKeepUserData.IsChecked is true, _cts.Token).ConfigureAwait(false);
 
             PanelMain.IsVisible = false;
             PanelGoodbye.IsVisible = true;
@@ -194,7 +194,7 @@ public partial class UninstallWindow : Window
     {
         try
         {
-            await handler();
+            await handler().ConfigureAwait(false);
         }
         catch (OperationCanceledException ex) { _ = ex; }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)

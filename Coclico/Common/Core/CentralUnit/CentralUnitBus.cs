@@ -3,20 +3,21 @@ using System.Diagnostics;
 
 namespace Coclico.Services;
 
-public enum CentralRequestPriority
+internal enum CentralRequestPriority
 {
     Low,
     Normal,
     Critical
 }
 
-public sealed class CentralUnitBus
+internal sealed class CentralUnitBus
 {
     private const int DefaultMaxCacheEntries = 256;
 
     private readonly ConcurrentDictionary<string, CacheEntry> _cache = new(StringComparer.Ordinal);
     private readonly ConcurrentDictionary<string, object> _inFlight = new(StringComparer.Ordinal);
     private readonly ConcurrentDictionary<string, Func<object, CancellationToken, Task>> _routes = new(StringComparer.Ordinal);
+    private readonly ConcurrentDictionary<string, TokenBucket> _routeBuckets = new(StringComparer.Ordinal);
     private readonly int _maxCacheEntries;
     private long _droppedRequests;
     private long _routedRequests;
@@ -40,8 +41,9 @@ public sealed class CentralUnitBus
             return cachedValue;
         }
 
+        string typedKey = $"[{typeof(T).FullName}]{key}";
         Lazy<Task<T>> lazy = new(() => ExecuteFactoryAsync(key, factory, ttl, cancellationToken), LazyThreadSafetyMode.ExecutionAndPublication);
-        object winner = _inFlight.GetOrAdd(key, lazy);
+        object winner = _inFlight.GetOrAdd(typedKey, lazy);
         if (!ReferenceEquals(winner, lazy))
         {
             if (winner is Lazy<Task<T>> shared)
@@ -59,7 +61,7 @@ public sealed class CentralUnitBus
         }
         finally
         {
-            _ = _inFlight.TryRemove(key, out _);
+            _ = _inFlight.TryRemove(typedKey, out _);
         }
     }
 
@@ -76,11 +78,22 @@ public sealed class CentralUnitBus
         _routes[route] = (command, cancellationToken) => handler((TCommand)command, cancellationToken);
     }
 
+    public void ConfigureRouteRate(string route, int capacity, double refillPerSecond)
+    {
+        _routeBuckets[route] = new TokenBucket(Math.Max(1, capacity), Math.Max(0, refillPerSecond));
+    }
+
     public Task SendAsync(string route, object command, CancellationToken cancellationToken = default)
     {
         if (!_routes.TryGetValue(route, out Func<object, CancellationToken, Task>? handler))
         {
             throw new KeyNotFoundException($"CentralUnitBus : aucune route enregistrée pour '{route}'.");
+        }
+
+        if (_routeBuckets.TryGetValue(route, out TokenBucket? bucket) && !bucket.TryConsume())
+        {
+            Interlocked.Increment(ref _droppedRequests);
+            return Task.CompletedTask;
         }
 
         Interlocked.Increment(ref _routedRequests);
@@ -147,5 +160,29 @@ public sealed class CentralUnitBus
         public DateTime StoredUtc { get; init; }
 
         public long LastAccessStamp { get; set; }
+    }
+
+    private sealed class TokenBucket(int capacity, double refillPerSecond)
+    {
+        private readonly Lock _lock = new();
+        private double _tokens = capacity;
+        private long _lastRefillStamp = Stopwatch.GetTimestamp();
+
+        public bool TryConsume()
+        {
+            lock (_lock)
+            {
+                double elapsedSeconds = (Stopwatch.GetTimestamp() - _lastRefillStamp) / (double)Stopwatch.Frequency;
+                _lastRefillStamp = Stopwatch.GetTimestamp();
+                _tokens = Math.Min(capacity, _tokens + elapsedSeconds * refillPerSecond);
+                if (_tokens >= 1.0)
+                {
+                    _tokens -= 1.0;
+                    return true;
+                }
+
+                return false;
+            }
+        }
     }
 }

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace Coclico.Installer.Models;
 
-public enum InstallerLanguage
+internal enum InstallerLanguage
 {
     French,
     English
 }
 
-public static class InstallerLocalization
+internal static class InstallerLocalization
 {
     public static InstallerLanguage CurrentLanguage { get; set; } =
         System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("fr", StringComparison.OrdinalIgnoreCase)

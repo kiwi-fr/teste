@@ -6,7 +6,7 @@ namespace Coclico.Tests;
 public sealed class PowerPlanCatalogTests
 {
     [Fact]
-    public void PlanNames_AreTheThreeCoclicoPlans()
+    public void PlanNamesAreTheThreeCoclicoPlans()
     {
         Assert.Equal("Coclico economie", PowerPlanCatalog.GetPlanName(CoclicoPowerMode.Economy));
         Assert.Equal("Coclico optimal", PowerPlanCatalog.GetPlanName(CoclicoPowerMode.Optimal));
@@ -14,7 +14,7 @@ public sealed class PowerPlanCatalogTests
     }
 
     [Fact]
-    public void TryGetModeFromPlanName_RoundTripsAndIgnoresCase()
+    public void TryGetModeFromPlanNameRoundTripsAndIgnoresCase()
     {
         Assert.Equal(CoclicoPowerMode.Economy, PowerPlanCatalog.TryGetModeFromPlanName("Coclico economie"));
         Assert.Equal(CoclicoPowerMode.Optimal, PowerPlanCatalog.TryGetModeFromPlanName(" coclico OPTIMAL "));
@@ -25,7 +25,7 @@ public sealed class PowerPlanCatalogTests
     }
 
     [Fact]
-    public void BuildSetIndexArguments_BuildsPowercfgCommands()
+    public void BuildSetIndexArgumentsBuildsPowercfgCommands()
     {
         PowerSettingOverride setting = new(
             PowerPlanCatalog.SubProcessor,
@@ -50,7 +50,7 @@ public sealed class PowerPlanCatalogTests
     }
 
     [Fact]
-    public void Settings_CoverTheThreeModesWithDistinctValues()
+    public void SettingsCoverTheThreeModesWithDistinctValues()
     {
         foreach (CoclicoPowerMode mode in Enum.GetValues<CoclicoPowerMode>())
         {
@@ -76,7 +76,7 @@ public sealed class PowerPlanCatalogTests
     }
 
     [Fact]
-    public void BaseSchemes_MatchWindowsBuiltins()
+    public void BaseSchemesMatchWindowsBuiltins()
     {
         Assert.Equal(PowerPlanCatalog.BasePowerSaverGuid, PowerPlanCatalog.GetBaseSchemeGuid(CoclicoPowerMode.Economy));
         Assert.Equal(PowerPlanCatalog.BaseBalancedGuid, PowerPlanCatalog.GetBaseSchemeGuid(CoclicoPowerMode.Optimal));

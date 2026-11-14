@@ -12,7 +12,7 @@ public sealed class ConvertersTests
 {
     private static readonly CultureInfo Fr = CultureInfo.GetCultureInfo("fr-FR");
     [Fact]
-    public void EqualityMulti_EqualValues_ReturnsTrue()
+    public void EqualityMultiEqualValuesReturnsTrue()
     {
         var converter = new EqualityToBoolConverter();
 
@@ -22,7 +22,7 @@ public sealed class ConvertersTests
     }
 
     [Fact]
-    public void EqualityMulti_DifferentValues_ReturnsFalse()
+    public void EqualityMultiDifferentValuesReturnsFalse()
     {
         var converter = new EqualityToBoolConverter();
 
@@ -32,7 +32,7 @@ public sealed class ConvertersTests
     }
 
     [Fact]
-    public void EqualityMulti_UnsetValue_ReturnsFalse()
+    public void EqualityMultiUnsetValueReturnsFalse()
     {
         var converter = new EqualityToBoolConverter();
 
@@ -43,7 +43,7 @@ public sealed class ConvertersTests
     }
 
     [Fact]
-    public void EqualityMulti_NullArray_ReturnsFalse()
+    public void EqualityMultiNullArrayReturnsFalse()
     {
         var converter = new EqualityToBoolConverter();
 
@@ -53,7 +53,7 @@ public sealed class ConvertersTests
     }
 
     [Fact]
-    public void EqualityMulti_SingleValue_ReturnsFalse()
+    public void EqualityMultiSingleValueReturnsFalse()
     {
         var converter = new EqualityToBoolConverter();
 
@@ -63,7 +63,7 @@ public sealed class ConvertersTests
     }
 
     [Fact]
-    public void EqualityMulti_ThreeUnequalValues_ReturnsFalse()
+    public void EqualityMultiThreeUnequalValuesReturnsFalse()
     {
         var converter = new EqualityToBoolConverter();
 
@@ -73,7 +73,7 @@ public sealed class ConvertersTests
     }
 
     [Fact]
-    public void EqualitySingle_CaseInsensitiveComparisonWithParameter()
+    public void EqualitySingleCaseInsensitiveComparisonWithParameter()
     {
         var converter = new EqualityToBoolConverter();
 
@@ -85,7 +85,7 @@ public sealed class ConvertersTests
     [Theory]
     [InlineData(null, "en")]
     [InlineData("en", null)]
-    public void EqualitySingle_NullValueOrParameter_ReturnsFalse(object? value, object? parameter)
+    public void EqualitySingleNullValueOrParameterReturnsFalse(object? value, object? parameter)
     {
         var converter = new EqualityToBoolConverter();
 
@@ -95,7 +95,7 @@ public sealed class ConvertersTests
     }
 
     [Fact]
-    public void EqualitySingle_ConvertBackParsesEnumTargetType()
+    public void EqualitySingleConvertBackParsesEnumTargetType()
     {
         var converter = new EqualityToBoolConverter();
 
@@ -105,7 +105,7 @@ public sealed class ConvertersTests
     }
 
     [Fact]
-    public void EqualitySingle_ConvertBackWithFalse_ReturnsDoNothing()
+    public void EqualitySingleConvertBackWithFalseReturnsDoNothing()
     {
         var converter = new EqualityToBoolConverter();
 
@@ -118,7 +118,7 @@ public sealed class ConvertersTests
     [InlineData("martin", "M")]
     [InlineData("  elodie  ", "E")]
     [InlineData("école", "É")]
-    public void FirstChar_ReturnsUppercasedInitial(string input, string expected)
+    public void FirstCharReturnsUppercasedInitial(string input, string expected)
     {
         var converter = new FirstCharConverter();
 
@@ -131,7 +131,7 @@ public sealed class ConvertersTests
     [InlineData("")]
     [InlineData("   ")]
     [InlineData(null)]
-    public void FirstChar_EmptyOrNull_ReturnsQuestionMark(object? input)
+    public void FirstCharEmptyOrNullReturnsQuestionMark(object? input)
     {
         var converter = new FirstCharConverter();
 
@@ -141,7 +141,7 @@ public sealed class ConvertersTests
     }
 
     [Fact]
-    public void FirstChar_ConvertBack_Throws()
+    public void FirstCharConvertBackThrows()
     {
         var converter = new FirstCharConverter();
 
@@ -150,7 +150,7 @@ public sealed class ConvertersTests
     }
 
     [Fact]
-    public void HexBrush_ValidHex_ReturnsFrozenBrushWithThatColor()
+    public void HexBrushValidHexReturnsFrozenBrushWithThatColor()
     {
         var converter = new HexToBrushConverter();
 
@@ -164,7 +164,7 @@ public sealed class ConvertersTests
     [Theory]
     [InlineData("not-a-color")]
     [InlineData(42)]
-    public void HexBrush_InvalidInput_ReturnsGrayFallback(object input)
+    public void HexBrushInvalidInputReturnsGrayFallback(object input)
     {
         var converter = new HexToBrushConverter();
 
@@ -175,7 +175,7 @@ public sealed class ConvertersTests
     }
 
     [Fact]
-    public void HexBrush_SameHexTwice_ReturnsCachedInstance()
+    public void HexBrushSameHexTwiceReturnsCachedInstance()
     {
         var converter = new HexToBrushConverter();
 
@@ -186,7 +186,7 @@ public sealed class ConvertersTests
     }
 
     [Fact]
-    public void HexBrush_ConvertBack_Throws()
+    public void HexBrushConvertBackThrows()
     {
         var converter = new HexToBrushConverter();
 
@@ -198,7 +198,7 @@ public sealed class ConvertersTests
     [InlineData(true, Visibility.Collapsed)]
     [InlineData(false, Visibility.Visible)]
     [InlineData(null, Visibility.Visible)]
-    public void InverseBool_TrueCollapses_FalseOrNullShows(object? input, Visibility expected)
+    public void InverseBoolTrueCollapsesFalseOrNullShows(object? input, Visibility expected)
     {
         var converter = new InverseBoolToVisibilityConverter();
 
@@ -211,7 +211,7 @@ public sealed class ConvertersTests
     [InlineData(Visibility.Visible, false)]
     [InlineData(Visibility.Collapsed, true)]
     [InlineData(Visibility.Hidden, true)]
-    public void InverseBool_ConvertBackInverts(Visibility input, bool expected)
+    public void InverseBoolConvertBackInverts(Visibility input, bool expected)
     {
         var converter = new InverseBoolToVisibilityConverter();
 
@@ -221,7 +221,7 @@ public sealed class ConvertersTests
     }
 
     [Fact]
-    public void InverseBool_ConvertBackNonVisibility_Throws()
+    public void InverseBoolConvertBackNonVisibilityThrows()
     {
         var converter = new InverseBoolToVisibilityConverter();
 

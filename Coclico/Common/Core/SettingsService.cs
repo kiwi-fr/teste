@@ -8,7 +8,7 @@ using Microsoft.Win32;
 
 namespace Coclico.Services;
 
-public class AppSettings
+internal class AppSettings
 {
     [JsonPropertyName("language")]
     public string Language { get; set; } = "fr";
@@ -39,6 +39,24 @@ public class AppSettings
 
     [JsonPropertyName("minimizeToTray")]
     public bool MinimizeToTray { get; set; }
+
+    [JsonPropertyName("telemetryBlockEnabled")]
+    public bool TelemetryBlockEnabled { get; set; }
+
+    [JsonPropertyName("packetShieldEnabled")]
+    public bool PacketShieldEnabled { get; set; } = true;
+
+    [JsonPropertyName("packetShieldStrict")]
+    public bool PacketShieldStrict { get; set; } = true;
+
+    [JsonPropertyName("packetShieldHeuristics")]
+    public bool PacketShieldHeuristics { get; set; } = true;
+
+    [JsonPropertyName("telemetryBlockProfile")]
+    public string TelemetryBlockProfile { get; set; } = "Recommended";
+
+    [JsonPropertyName("telemetryBlockCategories")]
+    public string TelemetryBlockCategories { get; set; } = "Registry,Services,ScheduledTasks,Hosts,AdsHosts,DnsLockdown";
 
     [JsonPropertyName("firstRun")]
     public bool FirstRun { get; set; } = true;
@@ -138,9 +156,9 @@ public class AppSettings
     public string SkippedUpdateVersion { get; set; } = "";
 }
 
-public class SettingsService
+internal class SettingsService
 {
-    public static class ThemeOpacityBounds
+    internal static class ThemeOpacityBounds
     {
         public const double BackgroundMin = 0.20;
         public const double BackgroundMax = 1.0;
@@ -201,47 +219,35 @@ public class SettingsService
         await LoadCoreAsync().ConfigureAwait(false);
     }
 
-    public void Load()
-    {
-        _ioLock.Wait();
-        bool modified = false;
-        try
-        {
-            if (File.Exists(SettingsPath))
-            {
-                string json = File.ReadAllText(SettingsPath);
-                AppSettings loaded = JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
-                Settings = Sanitize(loaded, out modified);
-            }
-            else
-            {
-                Settings = new AppSettings();
-            }
-        }
-        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Text.Json.JsonException or System.FormatException)
-        {
-            Settings = new AppSettings();
-            LoggingService.LogException(ex, "SettingsService.Load");
-        }
-        finally
-        {
-            _ = _ioLock.Release();
-        }
-
-        if (modified)
-        {
-            Save();
-        }
-    }
-
     public Task SaveAsync()
     {
         return SaveCoreAsync();
     }
 
+    private readonly Lock _saveGate = new();
+    private Task _saveChain = Task.CompletedTask;
+
     public void Save()
     {
-        _ = Task.Run(SaveCoreAsync);
+        lock (_saveGate)
+        {
+            _saveChain = _saveChain
+                .ContinueWith(
+                    static (previous, state) => ((SettingsService)state!).SaveCoreAsync(),
+                    this,
+                    CancellationToken.None,
+                    TaskContinuationOptions.ExecuteSynchronously,
+                    TaskScheduler.Default)
+                .Unwrap();
+        }
+    }
+
+    public Task FlushPendingSavesAsync()
+    {
+        lock (_saveGate)
+        {
+            return _saveChain;
+        }
     }
 
     public void ApplyFrom(AppSettings source)
@@ -288,6 +294,8 @@ public class SettingsService
         }
     }
 
+    private const long MaxSettingsFileBytes = 1024 * 1024;
+
     public async Task<bool> ImportFromAsync(string sourcePath)
     {
         if (string.IsNullOrWhiteSpace(sourcePath) || !File.Exists(sourcePath))
@@ -297,6 +305,7 @@ public class SettingsService
 
         try
         {
+            Guard.EnsureFileSizeLimit(sourcePath, MaxSettingsFileBytes, nameof(sourcePath));
             string json = await File.ReadAllTextAsync(sourcePath).ConfigureAwait(false);
             AppSettings imported = JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
             AppSettings copy = Sanitize(imported, out _);
@@ -320,7 +329,7 @@ public class SettingsService
             LoggingService.LogInfo($"[SettingsService] Réglages importés depuis « {sourcePath} »");
             return true;
         }
-        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Text.Json.JsonException or System.FormatException)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Text.Json.JsonException or System.FormatException or ArgumentException)
         {
             LoggingService.LogException(ex, "SettingsService.ImportFrom");
             return false;
@@ -338,8 +347,13 @@ public class SettingsService
                 return;
             }
 
-            string exePath = Process.GetCurrentProcess().MainModule?.FileName
-                ?? Path.Join(AppContext.BaseDirectory, "Coclico.exe");
+            string? processPath = Environment.ProcessPath;
+            bool isDotnetHost = !string.IsNullOrEmpty(processPath)
+                && (Path.GetFileName(processPath).Equals("dotnet", StringComparison.OrdinalIgnoreCase)
+                    || Path.GetFileName(processPath).Equals("dotnet.exe", StringComparison.OrdinalIgnoreCase));
+            string exePath = !isDotnetHost && !string.IsNullOrEmpty(processPath)
+                ? processPath
+                : Path.Join(AppContext.BaseDirectory, "Coclico.exe");
 
             key.SetValue("Coclico", '"' + exePath + '"');
         }
@@ -388,6 +402,15 @@ public class SettingsService
         finally
         {
             _ = _ioLock.Release();
+        }
+
+        if (Settings.LaunchAtStartup)
+        {
+            EnableAutostart();
+        }
+        else
+        {
+            DisableAutostart();
         }
 
         if (modified)

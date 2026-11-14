@@ -25,7 +25,7 @@ public sealed class SettingsServiceExportImportTests : IDisposable
     }
 
     [Fact]
-    public async Task ExportToAsync_WritesValidJsonFile()
+    public async Task ExportToAsyncWritesValidJsonFile()
     {
         var service = new SettingsService();
         service.Settings.Language = "en";
@@ -35,13 +35,13 @@ public sealed class SettingsServiceExportImportTests : IDisposable
 
         Assert.True(success);
         Assert.True(File.Exists(path));
-        string json = await File.ReadAllTextAsync(path);
-        Assert.Contains("\"language\"", json);
-        Assert.Contains("\"en\"", json);
+        string json = await File.ReadAllTextAsync(path, TestContext.Current.CancellationToken);
+        Assert.Contains("\"language\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"en\"", json, StringComparison.Ordinal);
     }
 
     [Fact]
-    public async Task ExportToAsync_EmptyPath_ReturnsFalse()
+    public async Task ExportToAsyncEmptyPathReturnsFalse()
     {
         var service = new SettingsService();
 
@@ -51,7 +51,7 @@ public sealed class SettingsServiceExportImportTests : IDisposable
     }
 
     [Fact]
-    public async Task ImportFromAsync_MissingFile_ReturnsFalse()
+    public async Task ImportFromAsyncMissingFileReturnsFalse()
     {
         var service = new SettingsService();
 
@@ -61,7 +61,7 @@ public sealed class SettingsServiceExportImportTests : IDisposable
     }
 
     [Fact]
-    public async Task ImportFromAsync_RoundTrip_AppliesExportedSettings()
+    public async Task ImportFromAsyncRoundTripAppliesExportedSettings()
     {
         var exporter = new SettingsService();
         exporter.Settings.Language = "en";
@@ -78,10 +78,10 @@ public sealed class SettingsServiceExportImportTests : IDisposable
     }
 
     [Fact]
-    public async Task ImportFromAsync_PreservesInstallationFields()
+    public async Task ImportFromAsyncPreservesInstallationFields()
     {
         string path = Path.Join(_tempDir, "installation-fields.json");
-        await File.WriteAllTextAsync(path, "{ \"firstRun\": true, \"hasSeenWelcome\": true, \"language\": \"en\" }");
+        await File.WriteAllTextAsync(path, "{ \"firstRun\": true, \"hasSeenWelcome\": true, \"language\": \"en\" }", TestContext.Current.CancellationToken);
 
         var importer = new SettingsService();
         importer.Settings.FirstRun = false;
@@ -96,10 +96,10 @@ public sealed class SettingsServiceExportImportTests : IDisposable
     }
 
     [Fact]
-    public async Task ImportFromAsync_InvalidJson_ReturnsFalse()
+    public async Task ImportFromAsyncInvalidJsonReturnsFalse()
     {
         string path = Path.Join(_tempDir, "invalide.json");
-        await File.WriteAllTextAsync(path, "ceci n'est pas du json");
+        await File.WriteAllTextAsync(path, "ceci n'est pas du json", TestContext.Current.CancellationToken);
 
         var service = new SettingsService();
 
@@ -109,10 +109,10 @@ public sealed class SettingsServiceExportImportTests : IDisposable
     }
 
     [Fact]
-    public async Task ImportFromAsync_UnknownLanguage_IsSanitized()
+    public async Task ImportFromAsyncUnknownLanguageIsSanitized()
     {
         string path = Path.Join(_tempDir, "langue-invalide.json");
-        await File.WriteAllTextAsync(path, "{ \"language\": \"zz\" }");
+        await File.WriteAllTextAsync(path, "{ \"language\": \"zz\" }", TestContext.Current.CancellationToken);
 
         var service = new SettingsService();
 

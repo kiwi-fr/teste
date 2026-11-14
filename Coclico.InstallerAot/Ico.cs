@@ -2,7 +2,7 @@ using Avalonia.Media;
 
 namespace Coclico.Installer;
 
-public static class AppBrushes
+internal static class AppBrushes
 {
     public static readonly IBrush BgBase = new SolidColorBrush(Color.FromRgb(0x07, 0x08, 0x0B));
     public static readonly IBrush BgCard = new SolidColorBrush(Color.FromRgb(0x13, 0x14, 0x1A));
@@ -21,7 +21,7 @@ public static class AppBrushes
     public static readonly IBrush Transparent = Brushes.Transparent;
 }
 
-public static class Ico
+internal static class Ico
 {
     public static readonly Geometry CheckCircle = Geometry.Parse(
         "F0M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Zm-1.41 14.24-4.24-4.23 1.41-1.42 2.82 2.82 6.24-6.24 1.42 1.41-7.65 7.66Z");

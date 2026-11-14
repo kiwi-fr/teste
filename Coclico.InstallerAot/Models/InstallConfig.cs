@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Coclico.Installer.Models;
 
-public class InstallConfig
+internal class InstallConfig
 {
     public static string DefaultInstallPath => Path.Join(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),

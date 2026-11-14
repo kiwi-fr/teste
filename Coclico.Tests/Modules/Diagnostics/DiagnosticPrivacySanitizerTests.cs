@@ -14,7 +14,7 @@ public sealed class DiagnosticPrivacySanitizerTests
     [InlineData("D:\\Games\\setup.exe", "D:\\Games\\setup.exe")]
     [InlineData("", "")]
     [InlineData(null, "")]
-    public void SanitizeText_MasksUserProfilePaths(string? input, string expected)
+    public void SanitizeTextMasksUserProfilePaths(string? input, string expected)
     {
         string result = _sanitizer.SanitizeText(input);
         if (input is null || input.Length == 0)
@@ -34,7 +34,7 @@ public sealed class DiagnosticPrivacySanitizerTests
     }
 
     [Fact]
-    public void SanitizeText_MasksSerialNumbers()
+    public void SanitizeTextMasksSerialNumbers()
     {
         string result = _sanitizer.SanitizeText("Serial Number: ABC12345-XYZ");
 
@@ -43,7 +43,7 @@ public sealed class DiagnosticPrivacySanitizerTests
     }
 
     [Fact]
-    public void SanitizeText_MasksLocalMachineName()
+    public void SanitizeTextMasksLocalMachineName()
     {
         string machineName = Environment.MachineName;
         if (string.IsNullOrEmpty(machineName))
@@ -57,7 +57,7 @@ public sealed class DiagnosticPrivacySanitizerTests
     }
 
     [Fact]
-    public void SanitizeFindings_MasksEntitiesAndEvidence()
+    public void SanitizeFindingsMasksEntitiesAndEvidence()
     {
         DiagnosticFinding finding = new()
         {
@@ -96,7 +96,7 @@ public sealed class DiagnosticPrivacySanitizerTests
     }
 
     [Fact]
-    public void SanitizeFindings_DoesNotMutateInput()
+    public void SanitizeFindingsDoesNotMutateInput()
     {
         DiagnosticFinding finding = new()
         {
@@ -114,7 +114,7 @@ public sealed class DiagnosticPrivacySanitizerTests
     }
 
     [Fact]
-    public void SensitiveMetrics_MacAndSerial_AreFullyMasked()
+    public void SensitiveMetricsMacAndSerialAreFullyMasked()
     {
         DiagnosticFinding finding = new()
         {

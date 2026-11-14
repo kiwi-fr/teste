@@ -2,7 +2,7 @@ using Coclico.Models.Network;
 
 namespace Coclico.Services.Network;
 
-public interface INetworkOptimizerService
+internal interface INetworkOptimizerService
 {
     Task<IReadOnlyList<NetworkAdapterInfo>> GetNetworkAdaptersAsync(CancellationToken ct = default);
     Task<IReadOnlyList<NetworkTuningParameter>> GetTuningStatusAsync(string? targetAdapterId = null, CancellationToken ct = default);
@@ -14,13 +14,13 @@ public interface INetworkOptimizerService
     Task<(double PingMs, double JitterMs, double PacketLoss)> MeasureLatencyAsync(string targetHost = "1.1.1.1", int count = 10, CancellationToken ct = default);
 }
 
-public enum NetworkTuningMode
+internal enum NetworkTuningMode
 {
     AutoTested,
     Full
 }
 
-public interface INetworkBenchmarkService
+internal interface INetworkBenchmarkService
 {
     Task<(double MedianMs, double MeanMs, double JitterMs, double P95Ms, double PacketLossPercent)> RunStatisticalPingAsync(
         string host,

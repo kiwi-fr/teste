@@ -1,11 +1,11 @@
 namespace Coclico.Services;
 
-public sealed record AiDecisionContext(
+internal sealed record AiDecisionContext(
     string Prompt,
     string RawResponse,
     string DecisionMode);
 
-public sealed record AuditEntry(
+internal sealed record AuditEntry(
     DateTimeOffset Timestamp,
     string Actor,
     string Action,
@@ -14,7 +14,7 @@ public sealed record AuditEntry(
     string? Details = null,
     AiDecisionContext? AiDecision = null);
 
-public interface IAuditLog
+internal interface IAuditLog
 {
     Task LogAsync(AuditEntry entry);
 

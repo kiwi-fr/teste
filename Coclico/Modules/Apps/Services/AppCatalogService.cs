@@ -4,9 +4,9 @@ using System.Text.Json;
 
 namespace Coclico.Modules.Apps.Services;
 
-public sealed class AppCatalogService
+internal sealed class AppCatalogService
 {
-    public sealed record AppCatalogEntry(
+    internal sealed record AppCatalogEntry(
         string Id,
         string Kind,
         string Name,
@@ -16,7 +16,7 @@ public sealed class AppCatalogService
         string Category,
         string Description);
 
-    public sealed record AppPackDefinition(string Id, string Name, string Description, List<string> AppIds);
+    internal sealed record AppPackDefinition(string Id, string Name, string Description, List<string> AppIds);
 
     private sealed record CatalogFile(int SchemaVersion, List<AppCatalogEntry> Apps);
     private sealed record PacksFile(int SchemaVersion, List<AppPackDefinition> Packs);
@@ -43,11 +43,6 @@ public sealed class AppCatalogService
         return _cachedPacks;
     }
 
-    public AppCatalogEntry? FindApp(string appId)
-    {
-        return GetApps().FirstOrDefault(a => string.Equals(a.Id, appId, StringComparison.OrdinalIgnoreCase));
-    }
-
     public List<AppCatalogEntry> GetApps()
     {
         if (_cached != null)
@@ -66,7 +61,7 @@ public sealed class AppCatalogService
 
     public List<string> GetCategories()
     {
-        return [.. GetApps().Select(static a => a.Category).Distinct().OrderBy(static c => c, StringComparer.OrdinalIgnoreCase)];
+        return [.. GetApps().Select(static a => a.Category).Distinct(StringComparer.Ordinal).OrderBy(static c => c, StringComparer.OrdinalIgnoreCase)];
     }
 
     public static string GetSafeFolderName(string name)

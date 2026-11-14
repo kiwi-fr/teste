@@ -7,7 +7,7 @@ using System.Windows.Interop;
 
 namespace Coclico.Services;
 
-public sealed class KeyboardShortcut
+internal sealed class KeyboardShortcut
 {
     [JsonPropertyName("id")]
     public string Id { get; set; } = Guid.NewGuid().ToString();
@@ -39,13 +39,12 @@ public sealed class KeyboardShortcut
         get
         {
             if (string.IsNullOrEmpty(ChainName)) return Action;
-            string prefix = ServiceContainer.GetOptional<LocalizationService>()?.CurrentLanguage == "en" ? "Launch: " : "Lancer: ";
-            return $"{prefix}{ChainName}";
+            return Loc.Get("Kbd_Launch") + ChainName;
         }
     }
 }
 
-public sealed class KeyboardShortcutsService : IDisposable
+internal sealed class KeyboardShortcutsService : IDisposable
 {
     private const uint MOD_ALT = 0x0001;
     private const uint MOD_CONTROL = 0x0002;
@@ -59,6 +58,8 @@ public sealed class KeyboardShortcutsService : IDisposable
         "Coclico", "keyboard_shortcuts.json");
 
     private static readonly JsonSerializerOptions _saveOptions = new() { WriteIndented = true };
+
+    private const long MaxShortcutsFileBytes = 1024 * 1024;
 
     private readonly List<KeyboardShortcut> _shortcuts = [];
     private readonly Dictionary<int, KeyboardShortcut> _registeredIds = [];
@@ -85,8 +86,7 @@ public sealed class KeyboardShortcutsService : IDisposable
     }
     public void AddShortcut(KeyboardShortcut shortcut)
     {
-        int existing = _shortcuts.FindIndex(s =>
-            s.Modifiers == shortcut.Modifiers && s.Key == shortcut.Key);
+        int existing = _shortcuts.FindIndex(s => string.Equals(s.Modifiers, shortcut.Modifiers, StringComparison.Ordinal) && string.Equals(s.Key, shortcut.Key, StringComparison.Ordinal));
         if (existing >= 0)
         {
             _shortcuts[existing] = shortcut;
@@ -101,7 +101,7 @@ public sealed class KeyboardShortcutsService : IDisposable
 
     public void RemoveShortcut(string id)
     {
-        int s = _shortcuts.FindIndex(x => x.Id == id);
+        int s = _shortcuts.FindIndex(x => string.Equals(x.Id, id, StringComparison.Ordinal));
         if (s < 0)
         {
             return;
@@ -113,20 +113,6 @@ public sealed class KeyboardShortcutsService : IDisposable
         RegisterAll();
     }
 
-    public void UpdateShortcut(KeyboardShortcut shortcut)
-    {
-        int idx = _shortcuts.FindIndex(s => s.Id == shortcut.Id);
-        if (idx < 0)
-        {
-            return;
-        }
-
-        UnregisterAll();
-        _shortcuts[idx] = shortcut;
-        Save();
-        RegisterAll();
-    }
-
     public void Load()
     {
         _shortcuts.Clear();
@@ -134,6 +120,7 @@ public sealed class KeyboardShortcutsService : IDisposable
         {
             if (File.Exists(DataPath))
             {
+                Guard.EnsureFileSizeLimit(DataPath, MaxShortcutsFileBytes, nameof(DataPath));
                 string json = File.ReadAllText(DataPath);
                 List<KeyboardShortcut>? list = JsonSerializer.Deserialize<List<KeyboardShortcut>>(json);
                 if (list != null)
@@ -142,7 +129,7 @@ public sealed class KeyboardShortcutsService : IDisposable
                 }
             }
         }
-        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Text.Json.JsonException or System.FormatException) { LoggingService.LogException(ex, "KeyboardShortcutsService.Load"); }
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Text.Json.JsonException or System.FormatException or ArgumentException) { LoggingService.LogException(ex, "KeyboardShortcutsService.Load"); }
     }
 
     public void Save()

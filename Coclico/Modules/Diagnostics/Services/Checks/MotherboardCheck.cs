@@ -1,9 +1,8 @@
 namespace Coclico.Modules.Diagnostics.Services.Checks;
 
 using Coclico.Modules.Diagnostics.Models;
-using Coclico.Modules.Diagnostics.Rules;
 
-public sealed class MotherboardCheck : IDiagnosticCheck
+internal sealed class MotherboardCheck : IDiagnosticCheck
 {
     public string Id => "motherboard.info";
     public DiagnosticCategory Category => DiagnosticCategory.Motherboard;

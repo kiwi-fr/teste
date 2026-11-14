@@ -8,7 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Coclico.ViewModels;
 
-public class HealthDefenseViewModel : INotifyPropertyChanged
+internal class HealthDefenseViewModel : INotifyPropertyChanged
 {
     private readonly SystemHealthService _healthService;
     private CancellationTokenSource? _cts;
@@ -128,12 +128,12 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
 
     public async Task RefreshStatusAsync()
     {
-        SystemHealthService.DefenderStatusInfo status = await _healthService.GetDefenderStatusAsync();
+        SystemHealthService.DefenderStatusInfo status = await _healthService.GetDefenderStatusAsync().ConfigureAwait(false);
         IsAntivirusActive = status.IsAntivirusActive;
         IsRealTimeProtectionOn = status.IsRealTimeProtectionOn;
         SignatureVersion = status.SignatureVersion;
         LastUpdatedText = status.LastUpdatedTime.HasValue
-            ? status.LastUpdatedTime.Value.ToString("dd/MM/yyyy HH:mm")
+            ? status.LastUpdatedTime.Value.ToString("dd/MM/yyyy HH:mm", System.Globalization.CultureInfo.InvariantCulture)
             : "Récemment";
     }
 
@@ -164,7 +164,7 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
         try
         {
             AppendLog($"Démarrage : {actionTitle}");
-            await action(_cts.Token);
+            await action(_cts.Token).ConfigureAwait(false);
             AppendLog($"Terminé : {actionTitle}");
         }
         catch (OperationCanceledException)
@@ -181,7 +181,7 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
             IsBusy = false;
             BusyActionTitle = string.Empty;
             _cts = null;
-            await RefreshStatusAsync();
+            await RefreshStatusAsync().ConfigureAwait(false);
         }
     }
 
@@ -196,28 +196,28 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
                     CurrentStepNumber = step;
                     CurrentStepDescription = desc;
                 },
-                ct: ct);
+                ct: ct).ConfigureAwait(false);
 
             LastScanSummary = res.Summary;
-        });
+        }).ConfigureAwait(false);
     }
 
     private async Task RunQuickScanAsync()
     {
         await ExecuteActionWrapperAsync("Analyse Rapide Windows Defender", async ct =>
         {
-            SystemHealthService.DiagnosticResult res = await _healthService.RunQuickDefenderScanAsync(AppendLog, ct);
+            SystemHealthService.DiagnosticResult res = await _healthService.RunQuickDefenderScanAsync(AppendLog, ct).ConfigureAwait(false);
             LastScanSummary = res.Summary;
-        });
+        }).ConfigureAwait(false);
     }
 
     private async Task RunFullScanAsync()
     {
         await ExecuteActionWrapperAsync("Analyse Complète Windows Defender", async ct =>
         {
-            SystemHealthService.DiagnosticResult res = await _healthService.RunFullDefenderScanAsync(AppendLog, ct);
+            SystemHealthService.DiagnosticResult res = await _healthService.RunFullDefenderScanAsync(AppendLog, ct).ConfigureAwait(false);
             LastScanSummary = res.Summary;
-        });
+        }).ConfigureAwait(false);
     }
 
     private async Task RunOfflineScanAsync()
@@ -235,24 +235,24 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
 
         await ExecuteActionWrapperAsync("Analyse Hors-Ligne Defender", async ct =>
         {
-            SystemHealthService.DiagnosticResult res = await _healthService.ScheduleOfflineDefenderScanAsync(AppendLog, ct);
+            SystemHealthService.DiagnosticResult res = await _healthService.ScheduleOfflineDefenderScanAsync(AppendLog, ct).ConfigureAwait(false);
             LastScanSummary = res.Summary;
-        });
+        }).ConfigureAwait(false);
     }
 
     private async Task UpdateSignaturesAsync()
     {
         await ExecuteActionWrapperAsync("Mise à jour des définitions Defender", async ct =>
         {
-            SystemHealthService.DiagnosticResult res = await _healthService.UpdateDefenderSignaturesAsync(AppendLog, ct);
+            SystemHealthService.DiagnosticResult res = await _healthService.UpdateDefenderSignaturesAsync(AppendLog, ct).ConfigureAwait(false);
             LastScanSummary = res.Summary;
-        });
+        }).ConfigureAwait(false);
     }
 
     private async Task LaunchMrtAsync()
     {
         AppendLog("Lancement de l'Outil de suppression des logiciels malveillants Microsoft (MRT)...");
-        bool started = await _healthService.LaunchMrtAsync(quiet: false);
+        bool started = await _healthService.LaunchMrtAsync(quiet: false).ConfigureAwait(false);
         if (started)
         {
             AppendLog("✅ Fenêtre MRT ouverte avec succès.");
@@ -267,54 +267,54 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
     {
         await ExecuteActionWrapperAsync("Vérification des fichiers système (SFC /scannow)", async ct =>
         {
-            SystemHealthService.DiagnosticResult res = await _healthService.RunSfcScanAsync(AppendLog, ct);
+            SystemHealthService.DiagnosticResult res = await _healthService.RunSfcScanAsync(AppendLog, ct).ConfigureAwait(false);
             LastScanSummary = res.Summary;
-        });
+        }).ConfigureAwait(false);
     }
 
     private async Task RunDismRestoreAsync()
     {
         await ExecuteActionWrapperAsync("Restauration de l'image Windows (DISM /RestoreHealth)", async ct =>
         {
-            SystemHealthService.DiagnosticResult res = await _healthService.RunDismRestoreHealthAsync(AppendLog, ct);
+            SystemHealthService.DiagnosticResult res = await _healthService.RunDismRestoreHealthAsync(AppendLog, ct).ConfigureAwait(false);
             LastScanSummary = res.Summary;
-        });
+        }).ConfigureAwait(false);
     }
 
     private async Task RunDismCleanupAsync()
     {
         await ExecuteActionWrapperAsync("Nettoyage du magasin des composants (WinSxS)", async ct =>
         {
-            SystemHealthService.DiagnosticResult res = await _healthService.RunDismComponentCleanupAsync(AppendLog, ct);
+            SystemHealthService.DiagnosticResult res = await _healthService.RunDismComponentCleanupAsync(AppendLog, ct).ConfigureAwait(false);
             LastScanSummary = res.Summary;
-        });
+        }).ConfigureAwait(false);
     }
 
     private async Task RunChkdskAsync()
     {
         await ExecuteActionWrapperAsync("Analyse du système de fichiers (CHKDSK /scan)", async ct =>
         {
-            SystemHealthService.DiagnosticResult res = await _healthService.RunChkdskScanAsync(AppendLog, ct);
+            SystemHealthService.DiagnosticResult res = await _healthService.RunChkdskScanAsync(AppendLog, ct).ConfigureAwait(false);
             LastScanSummary = res.Summary;
-        });
+        }).ConfigureAwait(false);
     }
 
     private async Task ResetNetworkAsync()
     {
         await ExecuteActionWrapperAsync("Réinitialisation Réseau & Winsock", async ct =>
         {
-            SystemHealthService.DiagnosticResult res = await _healthService.ResetNetworkStackAsync(AppendLog, ct);
+            SystemHealthService.DiagnosticResult res = await _healthService.ResetNetworkStackAsync(AppendLog, ct).ConfigureAwait(false);
             LastScanSummary = res.Summary;
-        });
+        }).ConfigureAwait(false);
     }
 
     private async Task ResetUpdateAsync()
     {
         await ExecuteActionWrapperAsync("Réinitialisation de Windows Update", async ct =>
         {
-            SystemHealthService.DiagnosticResult res = await _healthService.ResetWindowsUpdateAsync(AppendLog, ct);
+            SystemHealthService.DiagnosticResult res = await _healthService.ResetWindowsUpdateAsync(AppendLog, ct).ConfigureAwait(false);
             LastScanSummary = res.Summary;
-        });
+        }).ConfigureAwait(false);
     }
 
     private void LoadStartupEntries()
@@ -352,7 +352,7 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
         await ExecuteActionWrapperAsync("Vérification S.M.A.R.T. des disques", async _ =>
         {
             AppendLog("Lecture de l'état S.M.A.R.T. des disques physiques (lecture seule)…");
-            List<SmartDiskStatus> statuses = await Task.Run(SmartDiskService.GetDiskStatus);
+            List<SmartDiskStatus> statuses = await Task.Run(SmartDiskService.GetDiskStatus).ConfigureAwait(false);
 
             DiskHealth.Clear();
             foreach (SmartDiskStatus status in statuses)
@@ -370,7 +370,7 @@ public class HealthDefenseViewModel : INotifyPropertyChanged
                     ? $"❌ Santé disque : {statuses.Count} disque(s) vérifié(s), au moins un signale un risque de panne imminente. Sauvegardez vos données importantes !"
                     : $"Santé disque : {statuses.Count} disque(s) vérifié(s), aucun signe de panne imminente.");
             }
-        });
+        }).ConfigureAwait(false);
     }
 
     private void CancelOperation()

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<style>
+  body { font: 14px/1.5 system-ui, sans-serif; width: 280px; margin: 0; padding: 16px; color: #eee; background: radial-gradient(120% 90% at 85% -10%, #2a1420 0%, #141019 45%, #0b0c12 100%); }
+  h1 { font-size: 16px; margin: 0 0 10px; font-family: Georgia, serif; font-style: italic; }
+  label { display: flex; justify-content: space-between; align-items: center; margin: 8px 0; cursor: pointer; }
+  button { width: 100%; margin-top: 10px; background: linear-gradient(90deg, #ff4136, #ff7a1f, #ffb020); color: #16090a; font-weight: 700; border: 0; padding: 9px; border-radius: 11px; cursor: pointer; }
+  .count { color: #c0392b; font-weight: bold; }
+  .site { color: #888; font-size: 12px; word-break: break-all; }
+  h1 { display: flex; align-items: center; gap: 8px; }
+  h1 img { width: 22px; height: 22px; }
+  h2 { font-size: 12px; margin: 12px 0 4px; color: #aaa; text-transform: uppercase; letter-spacing: .04em; }
+  #netlog { list-style: none; margin: 0; padding: 0; max-height: 150px; overflow-y: auto; font-size: 11px; }
+  #netlog li { display: flex; justify-content: space-between; gap: 6px; padding: 2px 0; border-bottom: 1px solid #222; align-items: center; }
+  #netlog .h { color: #e67e22; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #netlog .t { color: #777; flex-shrink: 0; }
+  #netlog .empty { color: #666; border: 0; }
+  .cat { font-size: 9px; padding: 1px 5px; border-radius: 8px; background: #333; color: #ccc; flex-shrink: 0; }
+  .cat-Publicité { background: #7c2d12; color: #fdba74; }
+  .cat-Analytique, .cat-Télémétrie-appareil { background: #134e4a; color: #5eead4; }
+  .cat-Réseau\ social { background: #1e3a8a; color: #93c5fd; }
+  .cat-Affiliation { background: #4a1d96; color: #d8b4fe; }
+  .cat-Consentement { background: #713f12; color: #fde047; }
+  .cat-Minage { background: #7f1d1d; color: #fca5a5; }
+  .cat-Vidéo { background: #701a75; color: #f0abfc; }
+  #cats { font-size: 10.5px; color: #999; margin-top: 4px; }
+  #cats b { color: #eee; }
+  .note { color: #667; font-size: 10.5px; margin-top: 8px; }
+  .warn { color: #e6a23c; font-size: 11px; margin: 2px 0 0; }
+</style>
+</head>
+<body>
+  <h1><img src="icons/icon-32.png" alt="">Coclico AdBlock</h1>
+  <label><span>Bloqueur actif</span><input type="checkbox" id="master"></label>
+  <label><span>Bouclier réseau (requêtes)</span><input type="checkbox" id="shield"></label>
+  <label><span>Mode agressif (bêta)</span><input type="checkbox" id="aggr"></label>
+  <p id="aggrWarn" class="warn" hidden>Attention : ce mode peut ralentir la navigation et causer des problèmes sur certains sites (publicités, vidéos…).</p>
+  <label><span>Scriptlets (YouTube…)</span><input type="checkbox" id="scriptlets"></label>
+  <label><span>Désactivé sur ce site</span><input type="checkbox" id="siteOff"></label>
+  <label><span>Sélecteur d'élément</span><input type="checkbox" id="picker"></label>
+  <p>Bloquées aujourd'hui : <span class="count" id="count">0</span> — <b>Total : <span class="count" id="countTotal">0</span></b> — Cookies supprimés : <span class="count" id="cookieCount">0</span></p>
+  <p class="site" id="site"></p>
+  <h2>Détail des blocages</h2>
+  <div id="cats"></div>
+  <ul id="netlog"><li class="empty">Aucune requête interceptée pour le moment.</li></ul>
+  <p class="note">Le blocage système (carte réseau) se fait dans l'app Coclico.</p>
+  <button id="options">Options…</button>
+  <script src="popup.js"></script>
+</body>
+</html>

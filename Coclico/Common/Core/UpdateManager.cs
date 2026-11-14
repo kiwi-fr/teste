@@ -14,30 +14,32 @@ using Microsoft.Extensions.Logging;
 
 namespace Coclico.Services;
 
-public class UpdateManager(ILogger<UpdateManager> logger)
+internal class UpdateManager(ILogger<UpdateManager> logger)
 {
     private const string GitHubApiUrl = "https://api.github.com/repos";
     private const string GitHubOwner = "Coclico-cy";
     private const string GitHubRepo = "Coclico";
     private const long MaxInstallerSizeBytes = 2L * 1024 * 1024 * 1024;
+    private const long MaxHashFileBytes = 64 * 1024;
 
     private static readonly HttpClient _httpClient = CreateHttpClient();
+    private static readonly ConcurrentDictionary<string, SignedIntegrityManifest> _authenticatedManifests = new(StringComparer.Ordinal);
     private static readonly JsonSerializerOptions ReleaseJsonOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
         WriteIndented = false
     };
-    private static readonly Regex NamedHashLineRegex = new(@"^([a-fA-F0-9]{64})\s+\*?(\S.*)$", RegexOptions.Compiled);
-    private static readonly Regex BareHashLineRegex = new(@"^([a-fA-F0-9]{64})$", RegexOptions.Compiled);
+    private static readonly Regex NamedHashLineRegex = new(@"^([a-fA-F0-9]{64})\s+\*?(\S.*)$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+    private static readonly Regex BareHashLineRegex = new(@"^([a-fA-F0-9]{64})$", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
     private static readonly Regex SetupAssetPattern =
-        new(@"^Coclico-\d+(\.\d+){0,3}\.exe$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        new(@"^Coclico-\d+(\.\d+){0,3}\.exe$", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
 
     private readonly ConcurrentDictionary<string, string> _verifiedAssets = new(StringComparer.OrdinalIgnoreCase);
     private readonly ILogger<UpdateManager> _logger = logger;
 
     private static HttpClient CreateHttpClient()
     {
-        var client = new HttpClient();
+        var client = new HttpClient(new Coclico.Security.Infrastructure.OutboundDomainGuardHandler());
         client.DefaultRequestHeaders.Add(
             "User-Agent",
             "Coclico-UpdateManager/1.0.0 (+https://github.com/" + GitHubOwner + "/" + GitHubRepo + ")"
@@ -51,7 +53,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
     {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
         cts.CancelAfter(timeout);
-        return await _httpClient.GetAsync(url, completion, cts.Token);
+        return await _httpClient.GetAsync(url, completion, cts.Token).ConfigureAwait(false);
     }
 
     public async Task<GitHubRelease?> CheckForUpdatesAsync(string currentVersion, CancellationToken ct = default)
@@ -62,7 +64,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
 
             string url = $"{GitHubApiUrl}/{GitHubOwner}/{GitHubRepo}/releases/latest";
             using HttpResponseMessage response = await GetAsyncWithTimeoutAsync(
-                url, TimeSpan.FromSeconds(30), HttpCompletionOption.ResponseContentRead, ct);
+                url, TimeSpan.FromSeconds(30), HttpCompletionOption.ResponseContentRead, ct).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -70,7 +72,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
                 return null;
             }
 
-            string json = await response.Content.ReadAsStringAsync(ct) ?? string.Empty;
+            string json = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false) ?? string.Empty;
             GitHubRelease? release = JsonSerializer.Deserialize<GitHubRelease>(json, ReleaseJsonOptions);
 
             if (release == null)
@@ -130,6 +132,11 @@ public class UpdateManager(ILogger<UpdateManager> logger)
             return false;
         }
 
+        if (authentication.IsAuthenticated && authentication.VerifiedManifest is not null)
+        {
+            _authenticatedManifests[release.TagName] = authentication.VerifiedManifest;
+        }
+
         if (!authentication.IsAuthenticated)
         {
             _logger.LogWarning($"Release {release.TagName} is not signed: {authentication.Reason}");
@@ -185,6 +192,14 @@ public class UpdateManager(ILogger<UpdateManager> logger)
                 return false;
             }
 
+            if (!SetupAssetPattern.IsMatch(assetName))
+            {
+                _logger.LogError($"Refusing asset with unexpected name '{assetName}'.");
+                return false;
+            }
+
+            string fullPath = Guard.EnsurePathInside(Path.GetTempPath(), savePath, nameof(savePath));
+
             if (!IsTrustedDownloadUrl(asset.BrowserDownloadUrl, out Uri? downloadUri))
             {
                 _logger.LogError("Refusing update asset from an untrusted download URL.");
@@ -197,7 +212,13 @@ public class UpdateManager(ILogger<UpdateManager> logger)
                 return false;
             }
 
-            string? expectedHash = await ResolveExpectedHashAsync(release, asset, assetName, ct);
+            if (LoadTrustPolicy().Keys.Count > 0 && !_authenticatedManifests.ContainsKey(release.TagName))
+            {
+                _logger.LogError("Refusing update asset from a release without an authenticated signed manifest.");
+                return false;
+            }
+
+            string? expectedHash = await ResolveExpectedHashAsync(release, asset, assetName, ct).ConfigureAwait(false);
             if (string.IsNullOrWhiteSpace(expectedHash) || !IsSha256Hex(expectedHash))
             {
                 _logger.LogError("Refusing update asset without a valid SHA-256 digest.");
@@ -221,23 +242,32 @@ public class UpdateManager(ILogger<UpdateManager> logger)
                 return false;
             }
 
-            _ = Directory.CreateDirectory(Path.GetDirectoryName(savePath) ?? ".");
-            string fullPath = Path.GetFullPath(savePath);
+            _ = Directory.CreateDirectory(Path.GetDirectoryName(fullPath) ?? ".");
             string tempPath = fullPath + ".download-" + Guid.NewGuid().ToString("N");
             long totalBytesRead = 0;
             try
             {
-                await using (Stream contentStream = await assetResponse.Content.ReadAsStreamAsync(ct))
-                await using (var fileStream = new FileStream(
-                    tempPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 128 * 1024, useAsync: true))
+                Stream contentStream = await assetResponse.Content.ReadAsStreamAsync(downloadCts.Token).ConfigureAwait(false);
+                await using (contentStream.ConfigureAwait(false))
                 {
-                    byte[] buffer = new byte[128 * 1024];
-                    int bytesRead;
-                    while ((bytesRead = await contentStream.ReadAsync(buffer.AsMemory(0, buffer.Length), ct)) > 0)
+                    var fileStream = new FileStream(
+                    tempPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 128 * 1024, useAsync: true);
+                    await using (fileStream.ConfigureAwait(false))
                     {
-                        await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), ct);
-                        totalBytesRead += bytesRead;
-                        progress?.Report(totalBytesRead);
+                        byte[] buffer = new byte[128 * 1024];
+                        int bytesRead;
+                        while ((bytesRead = await contentStream.ReadAsync(buffer.AsMemory(0, buffer.Length), downloadCts.Token).ConfigureAwait(false)) > 0)
+                        {
+                            await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), downloadCts.Token).ConfigureAwait(false);
+                            totalBytesRead += bytesRead;
+                            if (totalBytesRead > MaxInstallerSizeBytes)
+                            {
+                                _logger.LogError("Refusing update asset: stream exceeded the size limit.");
+                                return false;
+                            }
+
+                            progress?.Report(totalBytesRead);
+                        }
                     }
                 }
 
@@ -247,10 +277,29 @@ public class UpdateManager(ILogger<UpdateManager> logger)
                     return false;
                 }
 
-                string actualHash;
-                await using (FileStream hashStream = File.OpenRead(tempPath))
+                TrustPolicyDocument embeddedPolicy = LoadTrustPolicy();
+                if (embeddedPolicy.Keys.Count > 0 && !_authenticatedManifests.ContainsKey(release.TagName))
                 {
-                    actualHash = Convert.ToHexString(await SHA256.HashDataAsync(hashStream, ct));
+                    ReleaseAuthenticationResult embedded = await ReleaseAuthentication
+                        .AuthenticateEmbeddedAsync(tempPath, new TrustPolicy { Keys = embeddedPolicy.Keys }, release.TagName, ct)
+                        .ConfigureAwait(false);
+                    if (embedded.VerifiedManifest != null)
+                    {
+                        _authenticatedManifests[release.TagName] = embedded.VerifiedManifest;
+                    }
+
+                    if (!embedded.IsAuthenticated)
+                    {
+                        _logger.LogError($"Refusing update asset: embedded integrity manifest not authenticated ({embedded.Reason}).");
+                        return false;
+                    }
+                }
+
+                string actualHash;
+                FileStream hashStream = File.OpenRead(tempPath);
+                await using (hashStream.ConfigureAwait(false))
+                {
+                    actualHash = Convert.ToHexString(await SHA256.HashDataAsync(hashStream, downloadCts.Token).ConfigureAwait(false));
                 }
 
                 if (!CryptographicOperations.FixedTimeEquals(
@@ -260,7 +309,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
                     return false;
                 }
 
-                if (!TryReplaceInstaller(tempPath, fullPath))
+                if (!await TryReplaceInstallerAsync(tempPath, fullPath).ConfigureAwait(false))
                 {
                     _logger.LogError($"Cannot replace '{Path.GetFileName(fullPath)}': the file is locked by another process. Close the running application and retry the update.");
                     return false;
@@ -339,6 +388,12 @@ public class UpdateManager(ILogger<UpdateManager> logger)
                 _logger.LogWarning("Installer is not Authenticode-signed; proceeding (SHA-256 integrity verified only).");
             }
 
+            if (!IsSignerPinned(fullPath))
+            {
+                _logger.LogError("Refusing to launch an installer signed by an unexpected publisher.");
+                return false;
+            }
+
             _logger.LogInformation($"Launching verified installer: {fullPath}");
             var psi = new ProcessStartInfo
             {
@@ -395,7 +450,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "UpdateManager.IsNewerVersion");
-            return string.Compare(latestTag, currentVersion) > 0;
+            return string.Compare(latestTag, currentVersion, StringComparison.Ordinal) > 0;
         }
     }
 
@@ -517,8 +572,8 @@ public class UpdateManager(ILogger<UpdateManager> logger)
     private static bool IsTrustedDownloadUrl(string? url, out Uri? uri)
     {
         if (!Uri.TryCreate(url, UriKind.Absolute, out uri) ||
-            uri.Scheme != Uri.UriSchemeHttps ||
-            (uri.Host != "github.com" && uri.Host != "objects.githubusercontent.com"))
+!string.Equals(uri.Scheme, Uri.UriSchemeHttps, StringComparison.Ordinal) ||
+            (!string.Equals(uri.Host, "github.com", StringComparison.Ordinal) && !string.Equals(uri.Host, "objects.githubusercontent.com", StringComparison.Ordinal)))
         {
             return false;
         }
@@ -526,7 +581,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
         return true;
     }
 
-    private static bool TryReplaceInstaller(string tempPath, string fullPath)
+    private static async Task<bool> TryReplaceInstallerAsync(string tempPath, string fullPath)
     {
         const int maxAttempts = 3;
         for (int attempt = 1; attempt <= maxAttempts; attempt++)
@@ -541,28 +596,34 @@ public class UpdateManager(ILogger<UpdateManager> logger)
                 LoggingService.LogException(exMove, "UpdateManager.TryReplaceInstaller.Move");
             }
 
-            try
-            {
-                if (File.Exists(fullPath))
-                {
-                    File.Delete(fullPath);
-                }
-            }
-            catch (Exception exDelete) when (exDelete is System.IO.IOException or System.UnauthorizedAccessException)
-            {
-                LoggingService.LogException(exDelete, "UpdateManager.TryReplaceInstaller.Delete");
-            }
-
             if (attempt < maxAttempts)
             {
-                Thread.Sleep(400);
+                await Task.Delay(400).ConfigureAwait(false);
             }
         }
 
         return false;
     }
 
-    private async Task<string?> ResolveExpectedHashAsync(
+    private Task<string?> ResolveExpectedHashAsync(
+        GitHubRelease release, GitHubAsset asset, string assetName, CancellationToken ct)
+    {
+        if (_authenticatedManifests.TryGetValue(release.TagName, out SignedIntegrityManifest? manifest))
+        {
+            ManifestFileEntry? entry = manifest.Manifest.Files.Find(f =>
+                f.Path.Equals(assetName, StringComparison.OrdinalIgnoreCase));
+
+            if (entry != null)
+            {
+                return Task.FromResult<string?>(entry.Sha256);
+            }
+
+        }
+
+        return ResolveExpectedHashFromChannelAsync(release, asset, assetName, ct);
+    }
+
+    private async Task<string?> ResolveExpectedHashFromChannelAsync(
         GitHubRelease release, GitHubAsset asset, string assetName, CancellationToken ct)
     {
         if (!string.IsNullOrWhiteSpace(asset.Digest))
@@ -578,7 +639,8 @@ public class UpdateManager(ILogger<UpdateManager> logger)
             a.Name.Equals("SHA256SUMS.txt", StringComparison.OrdinalIgnoreCase) ||
             a.Name.Equals("checksums.txt", StringComparison.OrdinalIgnoreCase));
 
-        if (shaAsset == null || !Uri.TryCreate(shaAsset.BrowserDownloadUrl, UriKind.Absolute, out Uri? shaUri))
+        if (shaAsset == null || shaAsset.Size is <= 0 or > MaxHashFileBytes
+            || !IsTrustedDownloadUrl(shaAsset.BrowserDownloadUrl, out Uri? shaUri))
         {
             return null;
         }
@@ -618,7 +680,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
     private static List<int> ParseVersionParts(string versionString)
     {
         return versionString.Split('.', StringSplitOptions.RemoveEmptyEntries)
-            .Where(part => int.TryParse(part, out _))
+            .Where(part => int.TryParse(part, System.Globalization.CultureInfo.InvariantCulture, out _))
             .Select(int.Parse)
             .ToList();
     }
@@ -660,7 +722,62 @@ public class UpdateManager(ILogger<UpdateManager> logger)
         }
     }
 
-    private static readonly bool EnforceAuthenticodeSignature = false;
+    private const bool EnforceAuthenticodeSignature = false;
+    private const string? RequiredSignerSubjectDn = null;
+    private const string? RequiredSignerThumbprint = null;
+
+    private static bool IsSignerPinned(string filePath)
+    {
+        if (string.IsNullOrWhiteSpace(RequiredSignerSubjectDn) && string.IsNullOrWhiteSpace(RequiredSignerThumbprint))
+        {
+            TryLogSignerIdentity(filePath);
+            return true;
+        }
+
+        try
+        {
+#pragma warning disable SYSLIB0057
+            using System.Security.Cryptography.X509Certificates.X509Certificate signer =
+                System.Security.Cryptography.X509Certificates.X509Certificate.CreateFromSignedFile(filePath);
+#pragma warning restore SYSLIB0057
+            if (!string.IsNullOrWhiteSpace(RequiredSignerThumbprint)
+                && !string.Equals(signer.GetCertHashString(), RequiredSignerThumbprint, StringComparison.OrdinalIgnoreCase))
+            {
+                LoggingService.LogWarning($"[UpdateManager] Signataire refusé (thumbprint {signer.GetCertHashString()}) pour '{Path.GetFileName(filePath)}'.");
+                return false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(RequiredSignerSubjectDn)
+                && !string.Equals(signer.Subject, RequiredSignerSubjectDn, StringComparison.OrdinalIgnoreCase))
+            {
+                LoggingService.LogWarning($"[UpdateManager] Signataire refusé ({signer.Subject}) pour '{Path.GetFileName(filePath)}'.");
+                return false;
+            }
+
+            return true;
+        }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
+        {
+            LoggingService.LogException(ex, "UpdateManager.IsSignerPinned");
+            return false;
+        }
+    }
+
+    private static void TryLogSignerIdentity(string filePath)
+    {
+        try
+        {
+#pragma warning disable SYSLIB0057
+            using System.Security.Cryptography.X509Certificates.X509Certificate signer =
+                System.Security.Cryptography.X509Certificates.X509Certificate.CreateFromSignedFile(filePath);
+#pragma warning restore SYSLIB0057
+            LoggingService.LogInfo($"[UpdateManager] Signataire de '{Path.GetFileName(filePath)}' : {signer.Subject} (thumbprint {signer.GetCertHashString()}).");
+        }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
+        {
+            LoggingService.LogWarning($"[UpdateManager] Identité du signataire illisible pour '{Path.GetFileName(filePath)}' : {ex.Message}");
+        }
+    }
 
     private static readonly Guid WinTrustActionGenericVerifyV2 = new("00AAC56B-CD44-11d0-8CC2-00C04FC295EE");
 
@@ -679,7 +796,7 @@ public class UpdateManager(ILogger<UpdateManager> logger)
     private static extern uint WinVerifyTrust([In] IntPtr hwnd, [In] ref Guid pgActionId, [In] ref WinTrustFileInfo pWVTData);
 }
 
-public class GitHubRelease
+internal class GitHubRelease
 {
     [JsonPropertyName("tag_name")]
     public string TagName { get; set; } = string.Empty;
@@ -706,7 +823,7 @@ public class GitHubRelease
     public string HtmlUrl { get; set; } = string.Empty;
 }
 
-public class GitHubAsset
+internal class GitHubAsset
 {
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;

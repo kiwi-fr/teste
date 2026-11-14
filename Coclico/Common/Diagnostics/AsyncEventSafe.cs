@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Coclico.Services;
 
-public static class AsyncEventSafe
+internal static class AsyncEventSafe
 {
     public static void Run(Func<Task> handler, string operationName)
     {

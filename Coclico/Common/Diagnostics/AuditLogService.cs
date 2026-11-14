@@ -5,7 +5,7 @@ using System.Threading.Channels;
 
 namespace Coclico.Services;
 
-public sealed class AuditLogService : IAuditLog, IDisposable
+internal sealed class AuditLogService : IAuditLog, IDisposable
 {
     private const int ChannelCapacity = 10000;
     private const int TailReadBytes = 256 * 1024;
@@ -47,7 +47,7 @@ public sealed class AuditLogService : IAuditLog, IDisposable
         try
         {
             string[] files = Directory.EnumerateFiles(_auditDir, "audit-*.log")
-                .OrderByDescending(f => f)
+                .OrderByDescending(f => f, StringComparer.Ordinal)
                 .ToArray();
 
             foreach (string file in files)
@@ -129,6 +129,15 @@ public sealed class AuditLogService : IAuditLog, IDisposable
         {
             LoggingService.LogException(exSwallow, "AuditLogService.Dispose");
         }
+
+        try
+        {
+            _writer?.Dispose();
+            _writer = null;
+            _writerPath = null;
+        }
+        catch (Exception exSwallow) when (exSwallow is not System.OutOfMemoryException) { _ = exSwallow; }
+
         _cts.Dispose();
     }
 
@@ -140,7 +149,7 @@ public sealed class AuditLogService : IAuditLog, IDisposable
             await foreach (AuditEntry entry in _channel.Reader.ReadAllAsync(_cts.Token).ConfigureAwait(false))
             {
                 string expectedPath = CurrentAuditFilePath();
-                if (currentPath != expectedPath)
+                if (!string.Equals(currentPath, expectedPath, StringComparison.Ordinal))
                 {
                     currentPath = expectedPath;
                 }
@@ -155,13 +164,22 @@ public sealed class AuditLogService : IAuditLog, IDisposable
         }
     }
 
+    private StreamWriter? _writer;
+    private string? _writerPath;
+
     private async Task WriteAuditEntryAsync(string path, AuditEntry entry)
     {
-        using FileStream stream = new(path, FileMode.Append, FileAccess.Write, FileShare.ReadWrite, 4096, useAsync: true);
-        using StreamWriter writer = new(stream, Encoding.UTF8) { AutoFlush = false };
+        if (_writer == null || !string.Equals(_writerPath, path, StringComparison.Ordinal))
+        {
+            _writer?.Dispose();
+            var stream = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.ReadWrite, 4096, useAsync: true);
+            _writer = new StreamWriter(stream, Encoding.UTF8) { AutoFlush = false };
+            _writerPath = path;
+        }
+
         string json = JsonSerializer.Serialize(entry, _json);
-        await writer.WriteLineAsync(json).ConfigureAwait(false);
-        await writer.FlushAsync().ConfigureAwait(false);
+        await _writer.WriteLineAsync(json).ConfigureAwait(false);
+        await _writer.FlushAsync().ConfigureAwait(false);
     }
 
     private static async IAsyncEnumerable<string> ReadLinesFromEndAsync(string filePath)
@@ -174,8 +192,10 @@ public sealed class AuditLogService : IAuditLog, IDisposable
 
         try
         {
-            await using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, useAsync: true);
-            long tailLength = Math.Min(stream.Length, TailReadBytes);
+            var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, useAsync: true);
+            await using (stream.ConfigureAwait(false))
+            {
+                long tailLength = Math.Min(stream.Length, TailReadBytes);
             stream.Seek(-tailLength, SeekOrigin.End);
 
             using var reader = new StreamReader(stream, Encoding.UTF8);
@@ -183,6 +203,7 @@ public sealed class AuditLogService : IAuditLog, IDisposable
             if (!string.IsNullOrEmpty(content))
             {
                 allLines = content.Split('\n');
+            }
             }
         }
         catch (Exception exSwallow) when (exSwallow is System.IO.IOException or System.UnauthorizedAccessException)
@@ -198,7 +219,7 @@ public sealed class AuditLogService : IAuditLog, IDisposable
 
     private string CurrentAuditFilePath()
     {
-        string today = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd");
+        string today = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
         return Path.Join(_auditDir, $"audit-{today}.log");
     }
 }

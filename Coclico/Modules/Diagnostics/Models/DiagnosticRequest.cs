@@ -1,6 +1,6 @@
 namespace Coclico.Modules.Diagnostics.Models;
 
-public sealed record DiagnosticRequest
+internal sealed record DiagnosticRequest
 {
     public required DiagnosticMode Mode { get; init; }
 
@@ -19,19 +19,19 @@ public sealed record DiagnosticRequest
         => new() { Mode = DiagnosticMode.Targeted, Categories = categories.ToHashSet() };
 }
 
-public sealed record DiagnosticProgress(
+internal sealed record DiagnosticProgress(
     string CurrentCheckId,
     DiagnosticCategory CurrentCategory,
     int CompletedChecks,
     int TotalChecks);
 
-public sealed record DiagnosticEnvironment(
+internal sealed record DiagnosticEnvironment(
     bool IsElevated,
     bool HasBattery,
     bool HardwareSensorsEnabled,
     string OsVersion);
 
-public sealed class DiagnosticContext
+internal sealed class DiagnosticContext
 {
     public required DiagnosticEnvironment Environment { get; init; }
 

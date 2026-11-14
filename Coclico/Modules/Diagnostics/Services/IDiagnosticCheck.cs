@@ -2,7 +2,7 @@ namespace Coclico.Modules.Diagnostics.Services;
 
 using Coclico.Modules.Diagnostics.Models;
 
-public interface IDiagnosticCheck
+internal interface IDiagnosticCheck
 {
     string Id { get; }
 

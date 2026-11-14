@@ -15,7 +15,7 @@ public partial class AppsView : UserControl
     private readonly NotifyCollectionChangedEventHandler? _logHandler;
     private bool _isSubscribed;
 
-    public AppsViewModel? ViewModel => DataContext as AppsViewModel;
+    internal AppsViewModel? ViewModel => DataContext as AppsViewModel;
 
     public AppsView()
     {

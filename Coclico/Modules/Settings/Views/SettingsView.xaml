@@ -76,7 +76,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
                         <Grid>
-                            <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}" Margin="0,0,4,0">
+                            <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="12" Padding="{TemplateBinding Padding}" Margin="0,0,4,0">
                                 <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center"/>
                             </Border>
                             <Border x:Name="Indicator" Width="4" HorizontalAlignment="Left" CornerRadius="0,2,2,0" Background="{DynamicResource PrimaryBrush}" Visibility="Collapsed" Margin="0,3,0,3"/>
@@ -109,7 +109,7 @@
             <StackPanel Margin="12,24">
                 <TextBlock Text="{DynamicResource Settings_NavHeader}" Style="{StaticResource GroupLabel}" Margin="12,0,0,12"/>
 
-                <ListBox x:Name="NavList" BorderThickness="0" Background="Transparent"
+                <ListBox BorderThickness="0" Background="Transparent"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          SelectionMode="Single">
                     <ListBox.ItemContainerStyle>
@@ -319,7 +319,7 @@
                                     <TextBlock Text="{DynamicResource Settings_LaunchAtStartup}" Style="{StaticResource OptionTitle}"/>
                                     <TextBlock Text="{DynamicResource Settings_LaunchAtStartup_Desc}" Style="{StaticResource OptionDesc}"/>
                                 </StackPanel>
-                                <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding LaunchAtStartup}"/>
+                                <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding LaunchAtStartup, Mode=TwoWay}"/>
                             </Grid>
                         </Border>
 
@@ -335,7 +335,7 @@
                                 </StackPanel>
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                                     <Button Content="{DynamicResource Settings_MinimizeToTray_Test}" Click="BtnTestMinimize_Click" Margin="0,0,12,0" Style="{StaticResource SecondaryButton}" Padding="12,7"/>
-                                    <ui:ToggleSwitch IsChecked="{Binding MinimizeToTray}"/>
+                                    <ui:ToggleSwitch IsChecked="{Binding MinimizeToTray, Mode=TwoWay}"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -438,16 +438,16 @@
                             </Grid>
                         </Border>
 
-                        <TextBlock Text="SAUVEGARDE DES RÉGLAGES" Style="{StaticResource GroupLabel}" Margin="0,14,0,0"/>
+                        <TextBlock Text="{DynamicResource Settings_BackupTitle}" Style="{StaticResource GroupLabel}" Margin="0,14,0,0"/>
                         <Border Style="{StaticResource OptionRow}">
                             <StackPanel>
-                                <TextBlock Text="Exportez tous vos réglages Coclico dans un fichier JSON pour les mettre en sécurité ou les transférer sur un autre PC. L'import ne touche jamais les données propres à cette installation (première exécution, écrans de bienvenue)."
+                                <TextBlock Text="{DynamicResource Settings_ExportDesc}"
                                            Style="{StaticResource OptionDesc}" Margin="0,0,0,12"/>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Content="Exporter mes réglages" Click="BtnExportSettings_Click" Margin="0,0,12,0" Style="{StaticResource SecondaryButton}" Padding="14,8"
-                                            AutomationProperties.Name="Exporter les réglages dans un fichier JSON"/>
-                                    <Button Content="Importer des réglages" Click="BtnImportSettings_Click" Style="{StaticResource PrimaryButton}" Padding="14,8"
-                                            AutomationProperties.Name="Importer les réglages depuis un fichier JSON"/>
+                                    <Button Content="{DynamicResource Settings_ExportBtn}" Click="BtnExportSettings_Click" Margin="0,0,12,0" Style="{StaticResource SecondaryButton}" Padding="14,8"
+                                            AutomationProperties.Name="{DynamicResource Settings_A11y_Export}"/>
+                                    <Button Content="{DynamicResource Settings_ImportBtn}" Click="BtnImportSettings_Click" Style="{StaticResource PrimaryButton}" Padding="14,8"
+                                            AutomationProperties.Name="{DynamicResource Settings_A11y_Import}"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>

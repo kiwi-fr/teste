@@ -7,15 +7,11 @@ using Coclico.Services;
 
 namespace Coclico.Modules.Cleaning.Services;
 
-public class CleaningService
+internal class CleaningService
 {
     [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
     private static extern int SHEmptyRecycleBin(IntPtr hwnd, string? pszRootPath, uint dwFlags);
-
-    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-    [DllImport("dnsapi.dll")]
-    private static extern bool DnsFlushResolverCache();
 
     [StructLayout(LayoutKind.Sequential)]
     private struct SHQUERYRBINFO
@@ -49,7 +45,7 @@ public class CleaningService
     private const uint SHERB_NOPROGRESSUI = 0x00000002;
     private const uint SHERB_NOSOUND = 0x00000004;
 
-    private static readonly Dictionary<string, Func<CleaningCategory, CancellationToken, Task>> CleanActions = new()
+    private static readonly Dictionary<string, Func<CleaningCategory, CancellationToken, Task>> CleanActions = new(StringComparer.Ordinal)
     {
         ["TempFiles"] = CleanWindowsTempAsync,
         ["RecycleBin"] = CleanRecycleBinAsync,
@@ -266,7 +262,7 @@ public class CleaningService
                             {
                                 foreach (string f in Directory.EnumerateFiles(thumbDir, "thumbcache_*.db"))
                                 {
-                                    try { var fi = new FileInfo(f); bytes += fi.Length; count++; } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "CleaningService.ScanAllCategories"); }
+                                    try { var fi = new FileInfo(f); bytes += fi.Length; count++; } catch (Exception ex) when (ex is not OutOfMemoryException) { LoggingService.LogException(ex, "CleaningService.ScanAllCategories"); }
                                 }
                             }
                             break;
@@ -328,7 +324,7 @@ public class CleaningService
                             string memDmp = Path.Join(windows, "MEMORY.DMP");
                             if (File.Exists(memDmp))
                             {
-                                try { var fi = new FileInfo(memDmp); bytes += fi.Length; count++; } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "CleaningService.ScanAllCategories"); }
+                                try { var fi = new FileInfo(memDmp); bytes += fi.Length; count++; } catch (Exception ex) when (ex is not OutOfMemoryException) { LoggingService.LogException(ex, "CleaningService.ScanAllCategories"); }
                             }
                             break;
 
@@ -344,13 +340,13 @@ public class CleaningService
                             break;
                     }
                 }
-                catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { LoggingService.LogException(ex, "CleaningService.ScanAllCategories"); }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { LoggingService.LogException(ex, "CleaningService.ScanAllCategories"); }
 
                 cat.BytesFound = bytes;
                 cat.FileCount = count;
                 cat.IsSizeMeasurable = measurable;
             }
-        }, ct);
+        }, ct).ConfigureAwait(false);
     }
 
     public async Task<CleaningResult> ExecuteDeepCleanAsync(
@@ -380,7 +376,7 @@ public class CleaningService
                 if (!string.IsNullOrEmpty(category.Key) &&
                     CleanActions.TryGetValue(category.Key, out var action))
                 {
-                    await action(category, ct);
+                    await action(category, ct).ConfigureAwait(false);
                 }
                 else
                 {
@@ -409,8 +405,8 @@ public class CleaningService
     {
         string winTemp = Path.GetTempPath();
         string systemTemp = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Temp");
-        await CleanDirectorySafeAsync(winTemp, cat, ct);
-        await CleanDirectorySafeAsync(systemTemp, cat, ct);
+        await CleanDirectorySafeAsync(winTemp, cat, ct).ConfigureAwait(false);
+        await CleanDirectorySafeAsync(systemTemp, cat, ct).ConfigureAwait(false);
     }
 
     private static async Task CleanRecycleBinAsync(CleaningCategory cat, CancellationToken ct)
@@ -420,12 +416,12 @@ public class CleaningService
             try
             {
                 QueryRecycleBin(null, out long rbBytes, out long rbItems);
-                _ = SHEmptyRecycleBin(IntPtr.Zero, null, SHERB_NOCONFIRMATION | SHERB_NOPROGRESSUI | SHERB_NOSOUND);
+                _ = SHEmptyRecycleBin(nint.Zero, null, SHERB_NOCONFIRMATION | SHERB_NOPROGRESSUI | SHERB_NOSOUND);
                 cat.BytesFreed += rbBytes;
                 cat.FilesDeleted += (int)rbItems;
             }
-            catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "DeepCleaning.RecycleBin"); }
-        }, ct);
+            catch (Exception ex) when (ex is not OutOfMemoryException) { LoggingService.LogException(ex, "DeepCleaning.RecycleBin"); }
+        }, ct).ConfigureAwait(false);
     }
 
     private static async Task CleanThumbnailCacheAsync(CleaningCategory cat, CancellationToken ct)
@@ -453,11 +449,11 @@ public class CleaningService
                         fi.Delete();
                         cat.FilesDeleted++;
                     }
-                    catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "CleaningService.CleanThumbnailCache"); }
+                    catch (Exception ex) when (ex is not OutOfMemoryException) { LoggingService.LogException(ex, "CleaningService.CleanThumbnailCache"); }
                 }
             }
-            catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.OperationCanceledException) { LoggingService.LogException(ex, "DeepCleaning.ThumbnailCache"); }
-        }, ct);
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or OperationCanceledException) { LoggingService.LogException(ex, "DeepCleaning.ThumbnailCache"); }
+        }, ct).ConfigureAwait(false);
     }
 
     private static async Task FlushDnsCacheAsync(CleaningCategory cat, CancellationToken ct)
@@ -466,11 +462,11 @@ public class CleaningService
         {
             try
             {
-                _ = DnsFlushResolverCache();
+                _ = NativeWin32.DnsFlushResolverCache();
                 cat.FilesDeleted += 1;
             }
-            catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "DeepCleaning.FlushDns"); }
-        }, ct);
+            catch (Exception ex) when (ex is not OutOfMemoryException) { LoggingService.LogException(ex, "DeepCleaning.FlushDns"); }
+        }, ct).ConfigureAwait(false);
     }
 
     private static async Task CleanBrowserCachesAsync(CleaningCategory cat, CancellationToken ct)
@@ -482,7 +478,7 @@ public class CleaningService
             ct.ThrowIfCancellationRequested();
             if (Directory.Exists(path))
             {
-                await CleanDirectorySafeAsync(path, cat, ct);
+                await CleanDirectorySafeAsync(path, cat, ct).ConfigureAwait(false);
             }
         }
 
@@ -491,7 +487,7 @@ public class CleaningService
         {
             foreach (string cache2 in Directory.EnumerateDirectories(firefoxProfilesDir).Select(profile => Path.Join(profile, "cache2")).Where(Directory.Exists))
             {
-                await CleanDirectorySafeAsync(cache2, cat, ct);
+                await CleanDirectorySafeAsync(cache2, cat, ct).ConfigureAwait(false);
             }
         }
     }
@@ -511,7 +507,7 @@ public class CleaningService
             ct.ThrowIfCancellationRequested();
             if (Directory.Exists(path))
             {
-                await CleanOldFilesAsync(path, TimeSpan.FromDays(7), cat, ct);
+                await CleanOldFilesAsync(path, TimeSpan.FromDays(7), cat, ct).ConfigureAwait(false);
             }
         }
     }
@@ -523,7 +519,7 @@ public class CleaningService
 
         if (Directory.Exists(softwareDist))
         {
-            await CleanDirectorySafeAsync(softwareDist, cat, ct);
+            await CleanDirectorySafeAsync(softwareDist, cat, ct).ConfigureAwait(false);
         }
     }
 
@@ -534,7 +530,7 @@ public class CleaningService
             ct.ThrowIfCancellationRequested();
             if (Directory.Exists(dir))
             {
-                await CleanDirectorySafeAsync(dir, cat, ct);
+                await CleanDirectorySafeAsync(dir, cat, ct).ConfigureAwait(false);
             }
         }
     }
@@ -545,7 +541,7 @@ public class CleaningService
         string miniDump = Path.Join(windows, "Minidump");
         if (Directory.Exists(miniDump))
         {
-            await CleanDirectorySafeAsync(miniDump, cat, ct);
+            await CleanDirectorySafeAsync(miniDump, cat, ct).ConfigureAwait(false);
         }
 
         string memDmp = Path.Join(windows, "MEMORY.DMP");
@@ -570,7 +566,7 @@ public class CleaningService
 
         if (Directory.Exists(waasDir))
         {
-            await CleanDirectorySafeAsync(waasDir, cat, ct);
+            await CleanDirectorySafeAsync(waasDir, cat, ct).ConfigureAwait(false);
         }
     }
 
@@ -755,10 +751,10 @@ public class CleaningService
                                     cat.FilesDeleted++;
                                 }
                             }
-                            catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "CleaningService.CleanDirectorySafe"); }
+                            catch (Exception ex) when (ex is not OutOfMemoryException) { LoggingService.LogException(ex, "CleaningService.CleanDirectorySafe"); }
                         }
                     }
-                    catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "CleaningService.CleanDirectorySafe"); }
+                    catch (Exception ex) when (ex is not OutOfMemoryException) { LoggingService.LogException(ex, "CleaningService.CleanDirectorySafe"); }
 
                     if (!string.Equals(current.FullName, path, StringComparison.OrdinalIgnoreCase))
                     {
@@ -776,14 +772,14 @@ public class CleaningService
                             Directory.Delete(dir);
                         }
                     }
-                    catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { LoggingService.LogException(ex, "CleaningService.CleanDirectorySafe"); }
+                    catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { LoggingService.LogException(ex, "CleaningService.CleanDirectorySafe"); }
                 }
             }
-            catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.OperationCanceledException)
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or OperationCanceledException)
             {
                 LoggingService.LogException(ex, $"DeepCleaning.CleanDir({path})");
             }
-        }, ct);
+        }, ct).ConfigureAwait(false);
     }
 
     private static async Task CleanOldFilesAsync(string path, TimeSpan maxAge, CleaningCategory cat, CancellationToken ct)
@@ -827,16 +823,16 @@ public class CleaningService
                                     cat.FilesDeleted++;
                                 }
                             }
-                            catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "CleaningService.CleanOldFiles"); }
+                            catch (Exception ex) when (ex is not OutOfMemoryException) { LoggingService.LogException(ex, "CleaningService.CleanOldFiles"); }
                         }
                     }
-                    catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "CleaningService.CleanOldFiles"); }
+                    catch (Exception ex) when (ex is not OutOfMemoryException) { LoggingService.LogException(ex, "CleaningService.CleanOldFiles"); }
                 }
             }
-            catch (Exception ex) when (ex is not System.OutOfMemoryException)
+            catch (Exception ex) when (ex is not OutOfMemoryException)
             {
                 LoggingService.LogException(ex, $"DeepCleaning.CleanOldFiles({path})");
             }
-        }, ct);
+        }, ct).ConfigureAwait(false);
     }
 }

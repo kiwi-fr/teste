@@ -4,14 +4,14 @@ using System.ServiceProcess;
 
 namespace Coclico.Services;
 
-public sealed class StartupHealthService
+internal sealed class StartupHealthService
 {
     private static readonly string[] CriticalServices = { "wuauserv", "bits", "dosvc" };
 
     private bool _lastWingetAvailable;
     private bool _lastInternetAvailable;
 
-    public class HealthReport
+    internal class HealthReport
     {
         public bool IsHealthy { get; set; } = true;
         public string Message { get; set; } = string.Empty;
@@ -22,7 +22,7 @@ public sealed class StartupHealthService
     {
         var report = new HealthReport();
 
-        bool internetOk = await IsConnectedToInternetAsync();
+        bool internetOk = await IsConnectedToInternetAsync().ConfigureAwait(false);
         _lastInternetAvailable = internetOk;
         if (!internetOk)
         {
@@ -47,7 +47,7 @@ public sealed class StartupHealthService
                             if (sc.Status is ServiceControllerStatus.Stopped or ServiceControllerStatus.Paused)
                             {
                                 sc.Start();
-                                await Task.Run(() => sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(5)));
+                                await Task.Run(() => sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(5))).ConfigureAwait(false);
                             }
                         }
                         catch (InvalidOperationException)
@@ -73,7 +73,7 @@ public sealed class StartupHealthService
             }
         }
 
-        bool wingetOk = await IsWingetOperational();
+        bool wingetOk = await IsWingetOperational().ConfigureAwait(false);
         _lastWingetAvailable = wingetOk;
         if (!wingetOk)
         {
@@ -90,7 +90,7 @@ public sealed class StartupHealthService
     {
         try
         {
-            IPHostEntry entry = await Dns.GetHostEntryAsync("www.microsoft.com");
+            IPHostEntry entry = await Dns.GetHostEntryAsync("www.microsoft.com").ConfigureAwait(false);
             return entry.AddressList.Length > 0;
         }
         catch (Exception ex) when (ex is System.Net.Http.HttpRequestException or System.Net.Sockets.SocketException) { return false; }
@@ -102,7 +102,7 @@ public sealed class StartupHealthService
         {
             var psi = new ProcessStartInfo
             {
-                FileName = "winget",
+                FileName = Coclico.Services.SystemToolResolver.Resolve("winget.exe"),
                 Arguments = "--version",
                 CreateNoWindow = true,
                 UseShellExecute = false
@@ -116,7 +116,7 @@ public sealed class StartupHealthService
             using var exitCts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
             try
             {
-                await proc.WaitForExitAsync(exitCts.Token);
+                await proc.WaitForExitAsync(exitCts.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -129,8 +129,4 @@ public sealed class StartupHealthService
         catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException or System.OperationCanceledException) { return false; }
     }
 
-    public void ResetWingetCache()
-    {
-        _lastWingetAvailable = false;
-    }
 }

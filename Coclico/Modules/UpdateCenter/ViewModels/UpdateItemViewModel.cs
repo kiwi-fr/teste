@@ -4,7 +4,7 @@ using Coclico.Modules.UpdateCenter.Models;
 
 namespace Coclico.Modules.UpdateCenter.ViewModels;
 
-public sealed class UpdateItemViewModel : INotifyPropertyChanged
+internal sealed class UpdateItemViewModel : INotifyPropertyChanged
 {
     private UpdateItemStatus? _status;
     private bool _isSelected;

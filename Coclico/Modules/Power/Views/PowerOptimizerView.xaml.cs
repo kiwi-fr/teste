@@ -29,7 +29,7 @@ public partial class PowerOptimizerView : UserControl
         _gaugeTimer.Start();
 
         Unloaded += OnUnloaded;
-        Loaded += async (_, _) => await LoadStateAsync();
+        Loaded += async (_, _) => await LoadStateAsync().ConfigureAwait(false);
     }
 
     private void OnUnloaded(object sender, RoutedEventArgs e)
@@ -48,9 +48,9 @@ public partial class PowerOptimizerView : UserControl
         _refreshing = true;
         try
         {
-            PowerStateSummary state = await _cpuPower.GetStateSummaryAsync();
+            PowerStateSummary state = await _cpuPower.GetStateSummaryAsync().ConfigureAwait(false);
 
-            AdminChipText.Text = state.IsElevated ? "Administrateur" : "Droits admin requis";
+            AdminChipText.Text = state.IsElevated ? Loc.Get("Power_AdminChipAdmin") : Loc.Get("Power_AdminChipNeeded");
             AdminChipText.Foreground = state.IsElevated
                 ? FindResource("SuccessBrush") as Brush ?? AdminChipText.Foreground
                 : FindResource("TextSecondaryBrush") as Brush ?? AdminChipText.Foreground;
@@ -58,7 +58,7 @@ public partial class PowerOptimizerView : UserControl
 
             ActivePlanText.Text = $"Plan : {state.ActiveSchemeName}";
 
-            Dictionary<CoclicoPowerMode, string> plans = await _cpuPower.FindCoclicoPlansAsync();
+            Dictionary<CoclicoPowerMode, string> plans = await _cpuPower.FindCoclicoPlansAsync().ConfigureAwait(false);
             UpdatePlanCard(CoclicoPowerMode.Economy, StatusEconomy, CardEconomy, plans, state);
             UpdatePlanCard(CoclicoPowerMode.Optimal, StatusOptimal, CardOptimal, plans, state);
             UpdatePlanCard(CoclicoPowerMode.Performance, StatusPerformance, CardPerformance, plans, state);
@@ -67,11 +67,11 @@ public partial class PowerOptimizerView : UserControl
 
             if (!state.IsElevated)
             {
-                StatusText.Text = "Relance Coclico en tant qu'administrateur pour créer, activer ou tester les plans d'alimentation.";
+                StatusText.Text = Loc.Get("Power_AdminNeeded");
             }
             else if (ServiceContainer.GetRequired<SettingsService>().Settings.AdaptivePowerEnabled && !_adaptive.IsEnabled)
             {
-                (bool started, string message) = await _adaptive.StartAsync();
+                (bool started, string message) = await _adaptive.StartAsync().ConfigureAwait(false);
                 if (!started)
                 {
                     ToastService.ShowWarning(message);
@@ -99,14 +99,14 @@ public partial class PowerOptimizerView : UserControl
     {
         if (!plans.TryGetValue(mode, out _))
         {
-            statusText.Text = "Absent";
+            statusText.Text = Loc.Get("Power_StatusAbsent");
             statusText.Foreground = FindResource("TextMutedBrush") as Brush ?? statusText.Foreground;
             card.BorderBrush = FindResource("BorderSubtleBrush") as Brush ?? card.BorderBrush;
             return;
         }
 
         bool isActive = state.ActiveCoclicoMode == mode;
-        statusText.Text = isActive ? "Actif" : "Prêt";
+        statusText.Text = isActive ? Loc.Get("Power_StatusActive") : Loc.Get("Power_StatusReady");
         statusText.Foreground = isActive
             ? FindResource("SuccessBrush") as Brush ?? statusText.Foreground
             : FindResource("TextSecondaryBrush") as Brush ?? statusText.Foreground;
@@ -131,7 +131,7 @@ public partial class PowerOptimizerView : UserControl
 
         bool running = _adaptive.IsEnabled;
         BtnToggleAdaptive.Content = running ? "Arrêter" : "Activer";
-        AdaptiveStatusText.Text = running ? _adaptive.Status : "Mode adaptatif inactif.";
+        AdaptiveStatusText.Text = running ? _adaptive.Status : Loc.Get("Power_AdaptiveIdle");
     }
 
     private void OnAdaptiveStatusChanged(string status)
@@ -153,16 +153,16 @@ public partial class PowerOptimizerView : UserControl
     {
         if (!_cpuPower.IsElevated)
         {
-            ToastService.ShowWarning("Les droits administrateur sont requis pour créer les plans Coclico.");
+            ToastService.ShowWarning(Loc.Get("Power_AdminCreate"));
             return;
         }
 
         BtnCreatePlans.IsEnabled = false;
-        StatusText.Text = "Création et configuration des plans Coclico en cours...";
+        StatusText.Text = Loc.Get("Power_Creating");
         try
         {
             IProgress<string> progress = new Progress<string>(message => StatusText.Text = message);
-            PowerPlanSetupReport report = await _cpuPower.EnsureCoclicoPlansAsync(progress);
+            PowerPlanSetupReport report = await _cpuPower.EnsureCoclicoPlansAsync(progress).ConfigureAwait(false);
 
             PlansReportText.Text = report.Success
                 ? $"{report.AppliedSettings} paramètres appliqués, {report.SkippedSettings} ignorés (non supportés par ce PC)."
@@ -170,22 +170,22 @@ public partial class PowerOptimizerView : UserControl
 
             if (report.Success)
             {
-                ToastService.Show("Plans Coclico prêts et auto-configurés.");
+                ToastService.Show(Loc.Get("Power_PlansReady"));
             }
             else
             {
-                ToastService.ShowError("Impossible de créer tous les plans Coclico.");
+                ToastService.ShowError(Loc.Get("Power_PlansCreateError"));
             }
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "PowerOptimizerView.CreatePlans");
-            ToastService.ShowError("Erreur pendant la configuration des plans.");
+            ToastService.ShowError(Loc.Get("Power_PlansConfigError"));
         }
         finally
         {
             BtnCreatePlans.IsEnabled = true;
-            await LoadStateAsync();
+            await LoadStateAsync().ConfigureAwait(false);
         }
     }
 
@@ -193,7 +193,7 @@ public partial class PowerOptimizerView : UserControl
     {
         if (!_cpuPower.IsElevated)
         {
-            ToastService.ShowWarning("Les droits administrateur sont requis pour changer de plan.");
+            ToastService.ShowWarning(Loc.Get("Power_AdminSwitch"));
             return;
         }
 
@@ -201,11 +201,11 @@ public partial class PowerOptimizerView : UserControl
         {
             if (_adaptive.IsEnabled)
             {
-                await _adaptive.StopAsync();
+                await _adaptive.StopAsync().ConfigureAwait(false);
                 UpdateAdaptiveUi();
             }
 
-            (bool ok, string message) = await _cpuPower.ActivatePlanAsync(mode);
+            (bool ok, string message) = await _cpuPower.ActivatePlanAsync(mode).ConfigureAwait(false);
             if (ok)
             {
                 ToastService.Show(message);
@@ -218,10 +218,10 @@ public partial class PowerOptimizerView : UserControl
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, $"PowerOptimizerView.ActivateMode({mode})");
-            ToastService.ShowError("Erreur pendant l'activation du plan.");
+            ToastService.ShowError(Loc.Get("Power_ActivateError"));
         }
 
-        await LoadStateAsync();
+        await LoadStateAsync().ConfigureAwait(false);
     }
 
     private void BtnActivateEconomy_Click(object sender, RoutedEventArgs e) => _ = ActivateModeAsync(CoclicoPowerMode.Economy);
@@ -237,7 +237,7 @@ public partial class PowerOptimizerView : UserControl
     {
         if (!_cpuPower.IsElevated)
         {
-            ToastService.ShowWarning("Les droits administrateur sont requis pour supprimer les plans.");
+            ToastService.ShowWarning(Loc.Get("Power_AdminDelete"));
             return;
         }
 
@@ -256,10 +256,10 @@ public partial class PowerOptimizerView : UserControl
         {
             if (_adaptive.IsEnabled)
             {
-                await _adaptive.StopAsync();
+                await _adaptive.StopAsync().ConfigureAwait(false);
             }
 
-            (bool ok, string message) = await _cpuPower.DeleteCoclicoPlansAsync();
+            (bool ok, string message) = await _cpuPower.DeleteCoclicoPlansAsync().ConfigureAwait(false);
             if (ok)
             {
                 ToastService.Show(message);
@@ -272,10 +272,10 @@ public partial class PowerOptimizerView : UserControl
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "PowerOptimizerView.DeletePlans");
-            ToastService.ShowError("Erreur pendant la suppression des plans.");
+            ToastService.ShowError(Loc.Get("Power_DeleteError"));
         }
 
-        await LoadStateAsync();
+        await LoadStateAsync().ConfigureAwait(false);
     }
 
     private void BtnToggleAdaptive_Click(object sender, RoutedEventArgs e)
@@ -288,11 +288,11 @@ public partial class PowerOptimizerView : UserControl
         {
             if (_adaptive.IsEnabled)
             {
-                await _adaptive.StopAsync();
+                await _adaptive.StopAsync().ConfigureAwait(false);
             }
             else
             {
-                (bool started, string message) = await _adaptive.StartAsync();
+                (bool started, string message) = await _adaptive.StartAsync().ConfigureAwait(false);
                 if (!started)
                 {
                     ToastService.ShowError(message);
@@ -302,7 +302,7 @@ public partial class PowerOptimizerView : UserControl
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "PowerOptimizerView.ToggleAdaptive");
-            ToastService.ShowError("Erreur du mode adaptatif.");
+            ToastService.ShowError(Loc.Get("Power_AdaptiveError"));
         }
         finally
         {
@@ -323,7 +323,7 @@ public partial class PowerOptimizerView : UserControl
 
         if (!_cpuPower.IsElevated)
         {
-            ToastService.ShowWarning("Les droits administrateur sont requis pour le test comparatif.");
+            ToastService.ShowWarning(Loc.Get("Power_AdminBenchmark"));
             return;
         }
 
@@ -333,44 +333,21 @@ public partial class PowerOptimizerView : UserControl
         BenchmarkProgress.Visibility = Visibility.Visible;
         BenchmarkProgress.Value = 0;
 
+        double best = 0;
+        IProgress<PowerBenchmarkStep> progress = new Progress<PowerBenchmarkStep>(step =>
+        {
+            BenchmarkProgress.Value = step.ProgressPercent;
+            if (step.Score > 0)
+            {
+                best = Math.Max(best, step.Score);
+                AddBenchmarkRow(step.Mode, step.Score, best);
+            }
+        });
+        IProgress<string> status = new Progress<string>(message => StatusText.Text = message);
+
         try
         {
-            await _cpuPower.EnsureCoclicoPlansAsync();
-            PowerSchemeInfo? original = await _cpuPower.GetActiveSchemeAsync();
-
-            _ = await Task.Run(() => CpuPowerBenchmark.Run(TimeSpan.FromMilliseconds(400), CancellationToken.None));
-
-            CoclicoPowerMode[] modes = [CoclicoPowerMode.Economy, CoclicoPowerMode.Optimal, CoclicoPowerMode.Performance];
-            List<(CoclicoPowerMode Mode, double Score)> results = [];
-            double best = 0;
-
-            for (int i = 0; i < modes.Length; i++)
-            {
-                CoclicoPowerMode mode = modes[i];
-                StatusText.Text = $"Test du plan « {PowerPlanCatalog.GetPlanName(mode)} »...";
-                BenchmarkProgress.Value = (100.0 * i) / modes.Length;
-
-                (bool activated, _) = await _cpuPower.ActivatePlanAsync(mode);
-                if (!activated)
-                {
-                    continue;
-                }
-
-                await Task.Delay(1500);
-                double score = await Task.Run(() => CpuPowerBenchmark.Run(TimeSpan.FromSeconds(5), CancellationToken.None));
-                results.Add((mode, score));
-                best = Math.Max(best, score);
-                AddBenchmarkRow(mode, score, best);
-            }
-
-            if (original != null)
-            {
-                StatusText.Text = "Restauration du plan de départ...";
-                CoclicoPowerMode? originalMode = PowerPlanCatalog.TryGetModeFromPlanName(original.Name);
-                _ = originalMode is { } mode
-                    ? await _cpuPower.ActivatePlanAsync(mode)
-                    : await _cpuPower.ActivateRawSchemeAsync(original.Guid, original.Name);
-            }
+            List<PowerBenchmarkResult> results = await PowerBenchmarkOrchestrator.RunAsync(_cpuPower, progress, status).ConfigureAwait(false);
 
             BenchmarkProgress.Value = 100;
             double top = results.Count == 0 ? 0 : results.Max(r => r.Score);
@@ -386,14 +363,14 @@ public partial class PowerOptimizerView : UserControl
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "PowerOptimizerView.Benchmark");
-            ToastService.ShowError("Erreur pendant le test comparatif.");
+            ToastService.ShowError(Loc.Get("Power_BenchmarkError"));
         }
         finally
         {
             _benchmarkRunning = false;
             BtnRunBenchmark.IsEnabled = true;
             BenchmarkProgress.Visibility = Visibility.Collapsed;
-            await LoadStateAsync();
+            await LoadStateAsync().ConfigureAwait(false);
         }
     }
 
@@ -480,27 +457,28 @@ public partial class PowerOptimizerView : UserControl
         _batteryReportRunning = true;
         try
         {
-            StatusText.Text = "Génération du rapport batterie Windows (powercfg)…";
-            string? reportPath = await BatteryReportService.GenerateReportAsync();
+            StatusText.Text = Loc.Get("Power_BatteryGenerating");
+            string? reportPath = await BatteryReportService.GenerateReportAsync().ConfigureAwait(false);
 
             if (reportPath == null)
             {
-                StatusText.Text = "Rapport batterie non généré (PC fixe sans batterie ou powercfg indisponible — détails dans les journaux).";
-                ToastService.ShowWarning("Impossible de générer le rapport batterie : sur un PC fixe sans batterie, Windows n'en produit pas.");
+                StatusText.Text = Loc.Get("Power_BatteryNone");
+                ToastService.ShowWarning(Loc.Get("Power_BatteryToastNone"));
                 return;
             }
 
-            StatusText.Text = $"Rapport batterie généré : {reportPath}";
+            StatusText.Text = Loc.Format("Power_BatteryDone", reportPath);
             BatteryReportService.OpenReport(reportPath);
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "PowerOptimizerView.BatteryReport");
-            StatusText.Text = "Erreur inattendue pendant la génération du rapport batterie (détails dans les journaux).";
+            StatusText.Text = Loc.Get("Power_BatteryError");
         }
         finally
         {
             _batteryReportRunning = false;
         }
     }
+
 }

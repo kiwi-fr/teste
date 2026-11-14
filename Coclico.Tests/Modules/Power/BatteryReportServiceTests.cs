@@ -6,7 +6,7 @@ namespace Coclico.Tests.Modules.Power;
 public sealed class BatteryReportServiceTests
 {
     [Fact]
-    public async Task GenerateReportAsync_NeverThrows()
+    public async Task GenerateReportAsyncNeverThrows()
     {
         Exception? exception = await Record.ExceptionAsync(GenerateAsync);
 
@@ -14,7 +14,7 @@ public sealed class BatteryReportServiceTests
 
         static async Task GenerateAsync()
         {
-            string? reportPath = await BatteryReportService.GenerateReportAsync();
+            string? reportPath = await BatteryReportService.GenerateReportAsync().ConfigureAwait(false);
             if (reportPath != null)
             {
 
@@ -24,7 +24,7 @@ public sealed class BatteryReportServiceTests
     }
 
     [Fact]
-    public void OpenReport_NonexistentPath_DoesNotThrow()
+    public void OpenReportNonexistentPathDoesNotThrow()
     {
         string nonexistent = Path.Join(Path.GetTempPath(), "coclico-inexistant-" + Guid.NewGuid().ToString("N") + ".html");
 

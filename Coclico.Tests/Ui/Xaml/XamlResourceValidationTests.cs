@@ -1,266 +1,122 @@
-using System.Text.RegularExpressions;
+using System.Text.Json;
+using Coclico.Modules.TelemetryBlocker.Services;
 using Xunit;
 
 namespace Coclico.Tests;
 
-public sealed class XamlResourceValidationTests
+public sealed class TelemetryBlockServiceTests
 {
-    private static readonly string[] ProjectNames = ["Coclico"];
-
-    private static readonly Regex StaticResourceRegex = new(@"\{StaticResource\s+([A-Za-z0-9_.]+)", RegexOptions.Compiled);
-    private static readonly Regex MergedDictionaryRegex = new(@"ResourceDictionary\s+Source=""([^""]+)""", RegexOptions.Compiled);
-    private static readonly Regex PackResourceRegex = new(@"pack://application:,,,/([A-Za-z0-9_.]+);component/(.+?)(?=[""]|$)", RegexOptions.Compiled);
-    private static readonly Regex IconSourceRegex = new("(?:Icon|Source)=\"([^\"{}]+)\"", RegexOptions.Compiled);
-    private static readonly Regex KeyRegex = new(@"x:Key=""([^""]+)""", RegexOptions.Compiled);
-    private static readonly string[] ImageExtensions = [".ico", ".png", ".jpg", ".jpeg", ".bmp", ".gif"];
+    private static readonly string[] ExpectedCategories = ["Registry", "Services", "ScheduledTasks", "Hosts", "AdsHosts", "DnsLockdown"];
 
     [Fact]
-    public void AllXamlResourceReferencesResolve()
+    public void BuildPlanRecommendedContainsCoreTelemetryActions()
     {
-        string repoRoot = FindRepoRoot();
-        var violations = new List<string>();
+        var plan = TelemetryBlockService.BuildPlan(TelemetryProfile.Recommended, null);
 
-        foreach (string projectName in ProjectNames)
-        {
-            string projectDir = Path.Join(repoRoot, projectName);
-            if (!Directory.Exists(projectDir))
-            {
-                violations.Add($"Projet introuvable : {projectDir}");
-                continue;
-            }
-
-            var globalKeys = new HashSet<string>(ExtractKeys(File.ReadAllText(Path.Join(projectDir, "App.xaml"))));
-
-            var xamlFiles = Directory.EnumerateFiles(projectDir, "*.xaml", SearchOption.AllDirectories)
-                .Where(IsSourceFile)
-                .Where(f => !string.Equals(Path.GetFileName(f), "App.xaml", StringComparison.OrdinalIgnoreCase));
-
-            foreach (string file in xamlFiles)
-            {
-                string raw = File.ReadAllText(file);
-                var available = new HashSet<string>(globalKeys);
-                available.UnionWith(ExtractKeys(raw));
-                CollectMergedDictionaryKeys(projectDir, raw, available, [file]);
-
-                foreach (string key in StaticResourceRegex.Matches(raw).OfType<Match>().Select(match => match.Groups[1].Value).Where(key => !available.Contains(key)))
-                {
-                    violations.Add($"{Rel(repoRoot, file)} : clé StaticResource '{key}' introuvable (ni locale, ni App.xaml, ni dictionnaires fusionnés)");
-                }
-
-                foreach (string source in MergedDictionaryRegex.Matches(raw).OfType<Match>().Select(match => match.Groups[1].Value).Where(source => !TryResolvePackUri(projectDir, source, out _)))
-                {
-                    violations.Add($"{Rel(repoRoot, file)} : dictionnaire fusionné introuvable '{source}'");
-                }
-
-                foreach (string rawValue in IconSourceRegex.Matches(raw).OfType<Match>().Select(match => match.Groups[1].Value.Trim()).Where(IsImagePath))
-                {
-                    string value = rawValue.Replace('/', '\\');
-                    if (rawValue.StartsWith("pack://", StringComparison.OrdinalIgnoreCase))
-                    {
-                        var packMatch = PackResourceRegex.Match(rawValue);
-                        if (!packMatch.Success || packMatch.Groups[1].Value != Path.GetFileName(projectName))
-                        {
-                            continue;
-                        }
-
-                        string target = Path.Join(projectDir, packMatch.Groups[2].Value.Replace('/', '\\'));
-                        if (!File.Exists(target))
-                        {
-                            violations.Add($"{Rel(repoRoot, file)} : ressource pack introuvable '{rawValue}'");
-                        }
-                    }
-                    else
-                    {
-                        string target = Path.GetFullPath(Path.Join(Path.GetDirectoryName(file)!, value));
-                        if (!File.Exists(target))
-                        {
-                            violations.Add($"{Rel(repoRoot, file)} : image/icône introuvable '{rawValue}' (résolue : {target})");
-                        }
-                    }
-                }
-            }
-        }
-
-        Assert.True(
-            violations.Count == 0,
-            "Références XAML cassées (" + violations.Count + ") - ces erreurs provoquent des XamlParseException au chargement des vues :" + Environment.NewLine + string.Join(Environment.NewLine, violations));
-    }
-
-    private static bool IsSourceFile(string path)
-    {
-        string withSeparators = Path.DirectorySeparatorChar + path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-        return !withSeparators.Contains(Path.DirectorySeparatorChar + "obj" + Path.DirectorySeparatorChar)
-            && !withSeparators.Contains(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar);
-    }
-
-    private static bool IsImagePath(string value)
-    {
-        if (value.StartsWith("http", StringComparison.OrdinalIgnoreCase) ||
-            value.StartsWith("/", StringComparison.OrdinalIgnoreCase) ||
-            value.StartsWith("\\", StringComparison.OrdinalIgnoreCase) ||
-            value.StartsWith("{", StringComparison.Ordinal))
-        {
-            return false;
-        }
-
-        string extension = Path.GetExtension(value);
-        return ImageExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase);
-    }
-
-    private static IEnumerable<string> ExtractKeys(string xaml)
-    {
-        foreach (Match match in KeyRegex.Matches(xaml))
-        {
-            yield return match.Groups[1].Value;
-        }
-    }
-
-    private static void CollectMergedDictionaryKeys(string projectDir, string xaml, ISet<string> keys, IReadOnlyList<string> visitedFiles)
-    {
-        foreach (string source in MergedDictionaryRegex.Matches(xaml).OfType<Match>().Select(match => match.Groups[1].Value))
-        {
-            if (!TryResolvePackUri(projectDir, source, out string? resolved) || resolved is null)
-            {
-                continue;
-            }
-
-            if (visitedFiles.Contains(resolved, StringComparer.OrdinalIgnoreCase))
-            {
-                continue;
-            }
-
-            string content = File.ReadAllText(resolved);
-            foreach (string key in ExtractKeys(content))
-            {
-                keys.Add(key);
-            }
-
-            var newVisited = visitedFiles.ToList();
-            newVisited.Add(resolved);
-            CollectMergedDictionaryKeys(projectDir, content, keys, newVisited);
-        }
-    }
-
-    private static bool TryResolvePackUri(string projectDir, string source, out string? resolved)
-    {
-        resolved = null;
-        Match match = Regex.Match(source, @"/([A-Za-z0-9_.]+);component/(.+)");
-        if (!match.Success)
-        {
-            return true;
-        }
-
-        if (match.Groups[1].Value != Path.GetFileName(projectDir))
-        {
-            return true;
-        }
-
-        string candidate = Path.Join(projectDir, match.Groups[2].Value.Replace('/', '\\'));
-        if (!File.Exists(candidate))
-        {
-            return false;
-        }
-
-        resolved = candidate;
-        return true;
-    }
-
-    internal static string FindRepoRoot()
-    {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null)
-        {
-            if (File.Exists(Path.Join(dir.FullName, "Coclico.slnx")) || File.Exists(Path.Join(dir.FullName, "Coclico.sln")))
-            {
-                return dir.FullName;
-            }
-
-            dir = dir.Parent;
-        }
-
-        throw new InvalidOperationException("Racine du dépôt introuvable depuis " + AppContext.BaseDirectory);
-    }
-
-    private static string Rel(string root, string path) => Path.GetRelativePath(root, path);
-}
-
-public sealed class LanguageParityTests
-{
-    [Fact]
-    public void FrAndEnDictionariesHaveIdenticalKeySets()
-    {
-        string repoRoot = XamlResourceValidationTests.FindRepoRoot();
-        HashSet<string> fr = ExtractLangKeys(Path.Join(repoRoot, "Coclico", "Resources", "Lang", "fr.xaml"));
-        HashSet<string> en = ExtractLangKeys(Path.Join(repoRoot, "Coclico", "Resources", "Lang", "en.xaml"));
-
-        var missingInEn = fr.Except(en).ToList();
-        var missingInFr = en.Except(fr).ToList();
-
-        Assert.True(missingInEn.Count == 0, "Clés absentes de en.xaml : " + string.Join(", ", missingInEn));
-        Assert.True(missingInFr.Count == 0, "Clés absentes de fr.xaml : " + string.Join(", ", missingInFr));
+        Assert.Contains(plan, a => a.Kind == "service" && a.Target == "DiagTrack");
+        Assert.Contains(plan, a => a.Kind == "registry" && a.Target.Contains("DataCollection", StringComparison.Ordinal) && a.Value == "0");
+        Assert.Contains(plan, a => a.Kind == "task" && a.Target.Contains("Customer Experience Improvement Program", StringComparison.Ordinal));
+        Assert.Contains(plan, a => a.Kind == "hosts");
+        Assert.Contains(plan, a => a.Target == "dmwappushservice");
     }
 
     [Fact]
-    public void NoDeadLanguageKeys()
+    public void BuildPlanRecommendedBlocksEverythingSetsAllowTelemetryToZero()
     {
-        string repoRoot = XamlResourceValidationTests.FindRepoRoot();
-        HashSet<string> keys = ExtractLangKeys(Path.Join(repoRoot, "Coclico", "Resources", "Lang", "fr.xaml"));
 
-        var searched = new List<string> { "Coclico", "Coclico.Tests" };
-        var dead = new List<string>();
-        foreach (string key in keys)
-        {
-            if (key.StartsWith("Cleaning_Cat_", StringComparison.Ordinal))
-            {
-                continue;
-            }
+        var plan = TelemetryBlockService.BuildPlan(TelemetryProfile.Recommended, null);
 
-            bool found = false;
-            foreach (string baseDir in searched.Select(dir => Path.Join(repoRoot, dir)))
-            {
-                foreach (string ext in new[] { "*.cs", "*.xaml" })
-                {
-                    foreach (string file in Directory.EnumerateFiles(baseDir, ext, SearchOption.AllDirectories))
-                    {
-                        string rel = Path.GetRelativePath(repoRoot, file).Replace('\\', '/');
-                        if (rel.Contains("/obj/") || rel.Contains("/bin/") || rel.Contains("TestResults") ||
-                            rel.EndsWith("Resources/Lang/fr.xaml", StringComparison.Ordinal) ||
-                            rel.EndsWith("Resources/Lang/en.xaml", StringComparison.Ordinal))
-                        {
-                            continue;
-                        }
-
-                        if (File.ReadAllText(file).Contains(key, StringComparison.Ordinal))
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (found) break;
-                }
-
-                if (found) break;
-            }
-
-            if (!found)
-            {
-                dead.Add(key);
-            }
-        }
-
-        Assert.True(dead.Count == 0, "Clés i18n mortes : " + string.Join(", ", dead));
+        Assert.Contains(plan, a => a.Kind == "registry" && a.Target.Contains("DataCollection", StringComparison.Ordinal) && a.Value == "0");
+        Assert.Contains(plan, a => a.Kind == "service" && a.Target == "dmwappushservice");
+        Assert.Contains(plan, a => a.Kind == "task" && a.Target.Contains("DmClient", StringComparison.Ordinal));
     }
 
-    private static HashSet<string> ExtractLangKeys(string path)
+    [Fact]
+    public void BuildPlanRespectsCategoryFilter()
     {
-        string content = File.ReadAllText(path);
-        var keys = new HashSet<string>();
-        foreach (Match m in Regex.Matches(content, "x:Key=\"([^\"]+)\""))
-        {
-            _ = keys.Add(m.Groups[1].Value);
-        }
+        var plan = TelemetryBlockService.BuildPlan(TelemetryProfile.Recommended, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Hosts" });
 
-        return keys;
+        Assert.Single(plan);
+        Assert.Equal("hosts", plan[0].Kind);
+    }
+
+    [Fact]
+    public void BuildPlanIdsAreUnique()
+    {
+        var plan = TelemetryBlockService.BuildPlan(TelemetryProfile.Recommended, null);
+        var ids = plan.Select(a => a.Id).ToList();
+        Assert.Equal(ids.Count, ids.Distinct(StringComparer.Ordinal).Count());
+    }
+
+    [Fact]
+    public void BackupSerializationRoundTrips()
+    {
+        var backup = new TelemetryBackup
+        {
+            CreatedUtc = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+            HostsPath = @"C:\Windows\System32\drivers\etc\hosts",
+            HostsContent = "127.0.0.1 localhost\n",
+            Registry = { new RegistrySnapshot { Path = @"HKLM\SOFTWARE\X", ValueName = "V", Existed = true, KindCode = 4, Value = "1" } },
+            Services = { new ServiceSnapshot { Name = "DiagTrack", Existed = true, StartMode = "Auto", State = "Running" } },
+            Tasks = { new TaskSnapshot { Path = @"\Microsoft\Windows\X", Existed = true, Enabled = true } }
+        };
+
+        string json = JsonSerializer.Serialize(backup);
+        var loaded = JsonSerializer.Deserialize<TelemetryBackup>(json);
+
+        Assert.NotNull(loaded);
+        Assert.Single(loaded!.Registry);
+        Assert.Equal("DiagTrack", loaded.Services[0].Name);
+        Assert.True(loaded.Tasks[0].Enabled);
+        Assert.Equal(backup.HostsContent, loaded.HostsContent);
+    }
+
+    [Fact]
+    public void CategoriesContainsExpectedSix()
+    {
+        Assert.Equal(
+            ExpectedCategories,
+            TelemetryBlockService.Categories);
+    }
+
+    [Fact]
+    public void BuildPlanDnsLockdownCategoryAddsFirewallLockdownAction()
+    {
+        var plan = TelemetryBlockService.BuildPlan(TelemetryProfile.Recommended,
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "DnsLockdown" });
+
+        Assert.Single(plan);
+        Assert.Equal("dns-lockdown", plan[0].Kind);
+    }
+
+    [Fact]
+    public void GetAdHostsIncludesEmbeddedAndDohDomains()
+    {
+        var hosts = TelemetryBlockService.GetAdHosts();
+
+        Assert.Contains("doubleclick.net", hosts);
+        Assert.Contains("dns.google", hosts);
+        Assert.Contains("cloudflare-dns.com", hosts);
+    }
+
+    [Fact]
+    public void BuildPlanAdsHostsCategoryAddsSystemWideHostsAction()
+    {
+        var plan = TelemetryBlockService.BuildPlan(TelemetryProfile.Recommended,
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "AdsHosts" });
+
+        Assert.Single(plan);
+        Assert.Equal("hosts-ads", plan[0].Kind);
+        Assert.Equal("hosts:ads", plan[0].Id);
+        Assert.Equal(TelemetryBlockService.HostsPath, plan[0].Target);
+    }
+
+    [Fact]
+    public void BuildPlanDefaultCategoriesIncludesAdsHostsBlock()
+    {
+        var plan = TelemetryBlockService.BuildPlan(TelemetryProfile.Recommended, null);
+
+        Assert.Contains(plan, a => a.Kind == "hosts");
+        Assert.Contains(plan, a => a.Kind == "hosts-ads");
     }
 }

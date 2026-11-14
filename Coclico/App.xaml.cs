@@ -2,7 +2,6 @@ using System.IO;
 using System.Reflection;
 using System.Runtime;
 using System.Windows;
-using System.Windows.Media.Animation;
 using Coclico.Services;
 using Coclico.Views;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,10 +41,39 @@ public partial class App : Application
         InitializeComponent();
     }
 
+    private Mutex? _singleInstanceMutex;
+
+    private bool AcquireSingleInstanceLock()
+    {
+        if (Environment.GetCommandLineArgs().Contains("--allow-multi-instance", StringComparer.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        _singleInstanceMutex = new Mutex(true, @"Local\Coclico.SingleInstance", out bool createdNew);
+        if (createdNew)
+        {
+            return true;
+        }
+
+        _singleInstanceMutex.Dispose();
+        _singleInstanceMutex = null;
+        return false;
+    }
+
     protected override async void OnStartup(StartupEventArgs e)
     {
         try
         {
+            if (!AcquireSingleInstanceLock())
+            {
+                LoggingService.LogWarning("Coclico est déjà en cours d'exécution : la seconde instance est fermée.");
+                Shutdown(0);
+                return;
+            }
+
+            _ = ProcessMitigations.TryEnableDataExecutionPrevention();
+
             RemoveLegacyAiCredentialVault();
 
             System.Windows.Media.RenderOptions.ProcessRenderMode =
@@ -56,17 +84,11 @@ public partial class App : Application
 
             GCSettings.LatencyMode = GCLatencyMode.Interactive;
 
-            Timeline.DesiredFrameRateProperty.OverrideMetadata(
-                typeof(Timeline),
-                new FrameworkPropertyMetadata { DefaultValue = 30 });
-
             try
             {
                 ServiceContainer.Build(services =>
                 {
                     _ = services.AddSingleton<IAppErrorManager, AppErrorManager>();
-                    _ = services.AddSingleton<IAuditLog, AuditLogService>();
-                    _ = services.AddSingleton<ISecurityPolicy, SecurityPolicyService>();
                     _ = services.AddSingleton<ICacheService, CacheService>();
                     _ = services.AddSingleton<IResourceAllocator, ResourceAllocatorService>();
 
@@ -78,6 +100,7 @@ public partial class App : Application
                     _ = services.AddSingleton<LocalizationService>();
                     _ = services.AddSingleton<ResourceGuardService>();
                     _ = services.AddSingleton<NetworkMonitorService>();
+                    _ = services.AddSingleton<PacketFilterService>();
                     _ = services.AddSingleton<Coclico.Services.Network.INetworkBenchmarkService, Coclico.Services.Network.NetworkBenchmarkService>();
                     _ = services.AddSingleton<Coclico.Services.Network.INetworkOptimizerService, Coclico.Services.Network.NetworkOptimizerService>();
                     _ = services.AddSingleton<Coclico.Services.AI.MultiProviderClient>();
@@ -104,6 +127,9 @@ public partial class App : Application
                     _ = services.AddSingleton<HomeCustomizationService>();
 
                     _ = services.AddSingleton<IDialogService, DialogService>();
+
+                    _ = services.AddSingleton<Coclico.Modules.TelemetryBlocker.Services.TelemetryBlockService>();
+                    _ = services.AddTransient<Coclico.Modules.TelemetryBlocker.ViewModels.TelemetryBlockerViewModel>();
 
                     _ = services.AddSingleton<Coclico.Modules.Power.Services.CpuPowerService>();
                     _ = services.AddSingleton<Coclico.Modules.Power.Services.AdaptivePowerService>();
@@ -139,7 +165,7 @@ public partial class App : Application
                     _ = services.AddTransient<Coclico.ViewModels.HealthDefenseViewModel>();
                     _ = services.AddTransient<Coclico.ViewModels.AppsViewModel>();
                     _ = services.AddTransient<Coclico.ViewModels.NetworkOptimizerViewModel>();
-                    _ = services.AddTransient<Coclico.ViewModels.RamCleanerViewModel>();
+                    _ = services.AddTransient<Coclico.Modules.RamCleaner.ViewModels.RamCleanerViewModel>();
                     _ = services.AddTransient<Coclico.ViewModels.ProgramsViewModel>();
                     _ = services.AddTransient<Coclico.ViewModels.DiskAnalyzerViewModel>();
                     _ = services.AddTransient<Coclico.ViewModels.DiagnosticViewModel>();
@@ -156,9 +182,8 @@ public partial class App : Application
                 LoggingService.LogException(ex, "App.DIInit");
 
                 _ = System.Windows.MessageBox.Show(
-                    "Le conteneur de services de Coclico n'a pas pu être initialisé.\n" +
-                    "Consultez les journaux dans %AppData%\\Coclico\\logs pour le détail.\n\n" + ex.Message,
-                    "Coclico erreur critique", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    Loc.Format("App_DIInitFailed", ex.Message),
+                    Loc.Get("App_ErrorTitle"), System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 Shutdown(-1);
                 return;
             }
@@ -178,7 +203,7 @@ public partial class App : Application
             var splash = new SplashWindow();
             splash.Show();
 
-            await splash.RunStartupAsync();
+            await splash.RunStartupAsync().ConfigureAwait(false);
 
             try { CentralUnitService.Current.MarkStartupCompleted(); }
             catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "App.MarkStartupCompleted"); }
@@ -196,7 +221,68 @@ public partial class App : Application
             if (settings.FirstRun)
             {
                 settings.FirstRun = false;
-                await ServiceContainer.GetRequired<SettingsService>().SaveAsync();
+                await ServiceContainer.GetRequired<SettingsService>().SaveAsync().ConfigureAwait(false);
+            }
+
+            if (settings.TelemetryBlockEnabled)
+            {
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        var profile = Coclico.Modules.TelemetryBlocker.Services.TelemetryProfile.Recommended;
+                        var cats = new HashSet<string>(
+                            (settings.TelemetryBlockCategories ?? string.Join(",", Coclico.Modules.TelemetryBlocker.Services.TelemetryBlockService.Categories))
+                                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries),
+                            StringComparer.OrdinalIgnoreCase);
+                        await ServiceContainer.GetRequired<Coclico.Modules.TelemetryBlocker.Services.TelemetryBlockService>()
+                            .ReapplyIfNeededAsync(profile, cats).ConfigureAwait(false);
+                    }
+                    catch (Exception ex) when (ex is not System.OutOfMemoryException)
+                    {
+                        LoggingService.LogException(ex, "App.TelemetryBlockReapply");
+                    }
+                });
+            }
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    if (PacketFilterService.IsAdministrator())
+                    {
+                        await Services.BlocklistUpdaterService.FetchAndCacheAsync().ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        Services.BlocklistUpdaterService.LoadCached();
+                    }
+                }
+                catch (Exception ex) when (ex is not System.OutOfMemoryException)
+                {
+                    LoggingService.LogException(ex, "App.BlocklistUpdate");
+                }
+            });
+
+            if (settings.PacketShieldEnabled)
+            {
+                _ = Task.Run(() =>
+                {
+                    try
+                    {
+                        var shield = ServiceContainer.GetOptional<PacketFilterService>();
+                        if (shield != null && shield.IsAdmin && !shield.IsRunning)
+                        {
+                            shield.Strict = settings.PacketShieldStrict;
+                            shield.HeuristicsEnabled = settings.PacketShieldHeuristics;
+                            shield.Start();
+                        }
+                    }
+                    catch (Exception ex) when (ex is not System.OutOfMemoryException)
+                    {
+                        LoggingService.LogException(ex, "App.PacketShieldAutostart");
+                    }
+                });
             }
 
             try { ServiceContainer.GetRequired<LocalizationService>().SetLanguage(settings.Language); }
@@ -207,21 +293,21 @@ public partial class App : Application
             ShutdownMode = ShutdownMode.OnMainWindowClose;
 
             string launchModeSetting = settings.LaunchMode;
-            if (launchModeSetting == nameof(LaunchMode.Minimized))
+            if (string.Equals(launchModeSetting, nameof(LaunchMode.Minimized), StringComparison.Ordinal))
             {
                 mainWindow.WindowState = WindowState.Minimized;
                 mainWindow.Show();
                 try { CentralUnitService.Current.SetWindowVisible(false); }
                 catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "App.LaunchModeMinimized"); }
             }
-            else if (launchModeSetting == nameof(LaunchMode.Tray))
+            else if (string.Equals(launchModeSetting, nameof(LaunchMode.Tray), StringComparison.Ordinal))
             {
                 mainWindow.Show();
                 mainWindow.Hide();
                 try { CentralUnitService.Current.SetTrayMinimized(true); }
                 catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "App.LaunchModeTray"); }
             }
-            else if (launchModeSetting == nameof(LaunchMode.Maximized))
+            else if (string.Equals(launchModeSetting, nameof(LaunchMode.Maximized), StringComparison.Ordinal))
             {
                 mainWindow.WindowState = WindowState.Maximized;
                 mainWindow.Show();
@@ -259,8 +345,27 @@ public partial class App : Application
         {
             LogException(ex);
             LoggingService.LogException(ex, "App.OnStartupFatal");
-            _ = MessageBox.Show($"Erreur au démarrage de Coclico :\n{ex.Message}\n\nConsultez les journaux dans %APPDATA%\\Coclico\\logs.", "Coclico - Erreur de démarrage", MessageBoxButton.OK, MessageBoxImage.Error);
+            _ = MessageBox.Show(Loc.Format("App_StartupError", ex.Message), Loc.Get("App_ErrorTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
             Shutdown(-1);
+        }
+    }
+
+    private void ReleaseSingleInstanceLock()
+    {
+        try
+        {
+            _singleInstanceMutex?.ReleaseMutex();
+        }
+        catch (ApplicationException)
+        {
+        }
+        catch (ObjectDisposedException)
+        {
+        }
+        finally
+        {
+            _singleInstanceMutex?.Dispose();
+            _singleInstanceMutex = null;
         }
     }
 
@@ -303,15 +408,14 @@ public partial class App : Application
 
         LogException(e.Exception);
 
-        string message = "Une erreur imprévue est survenue. Veuillez redémarrer l'application.\n" +
-                      "Détails : " + e.Exception.Message;
+        string message = Loc.Format("App_UnexpectedError", e.Exception.Message);
 
         if (e.Exception is System.Windows.Markup.XamlParseException xamlEx && xamlEx.InnerException != null)
         {
-            message += "\nXAML : " + xamlEx.InnerException.Message;
+            message += Loc.Format("App_XamlSuffix", xamlEx.InnerException.Message);
         }
 
-        _ = MessageBox.Show(message, "Coclico Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        _ = MessageBox.Show(message, Loc.Get("App_ErrorTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
         e.Handled = true;
     }
 

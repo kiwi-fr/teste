@@ -1,10 +1,11 @@
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 
 namespace Coclico.Services;
 
-public sealed class CacheService : ICacheService
+internal sealed class CacheService : ICacheService
 {
     private static readonly string CacheDir = Path.Join(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Coclico", "cache");
@@ -13,195 +14,14 @@ public sealed class CacheService : ICacheService
     private static readonly SemaphoreSlim[] _stripedLocks =
         Enumerable.Range(0, LockStripeCount).Select(_ => new SemaphoreSlim(1, 1)).ToArray();
 
+    private readonly ConcurrentDictionary<string, SemaphoreSlim> _keyLocks = new(StringComparer.Ordinal);
+
     private static readonly char[] _invalidChars = Path.GetInvalidFileNameChars();
     private static readonly JsonSerializerOptions _serializeOptions = new() { WriteIndented = false };
 
     public CacheService()
     {
         _ = Directory.CreateDirectory(CacheDir);
-    }
-
-    public void Set<T>(string key, T value, TimeSpan? ttl = null)
-    {
-        string path = GetPath(key);
-        SemaphoreSlim sem = GetLock(path);
-        sem.Wait();
-        try
-        {
-            WriteEntry(path, value, ttl);
-        }
-        catch (Exception ex) when (ex is not System.OutOfMemoryException)
-        {
-            LoggingService.LogException(ex, "CacheService.Set");
-        }
-        finally
-        {
-            _ = sem.Release();
-        }
-    }
-
-    public T? Get<T>(string key)
-    {
-        return TryGet(key, out T? value) ? value : default;
-    }
-
-    public bool TryGet<T>(string key, out T? value)
-    {
-        string path = GetPath(key);
-        SemaphoreSlim sem = GetLock(path);
-        sem.Wait();
-        try
-        {
-            return TryReadEntry(path, out value);
-        }
-        catch (Exception ex) when (ex is not System.OutOfMemoryException)
-        {
-            LoggingService.LogException(ex, "CacheService.TryGet");
-            value = default;
-            return false;
-        }
-        finally
-        {
-            _ = sem.Release();
-        }
-    }
-
-    public bool Has(string key)
-    {
-        string path = GetPath(key);
-        SemaphoreSlim sem = GetLock(path);
-        sem.Wait();
-        try
-        {
-            return HasValidExpiry(path);
-        }
-        catch (Exception ex) when (ex is not System.OutOfMemoryException)
-        {
-            LoggingService.LogException(ex, "CacheService.Has");
-            return false;
-        }
-        finally
-        {
-            _ = sem.Release();
-        }
-    }
-
-    public void Invalidate(string key)
-    {
-        string path = GetPath(key);
-        SemaphoreSlim sem = GetLock(path);
-        sem.Wait();
-        try
-        {
-            DeleteBestEffort(path);
-        }
-        finally
-        {
-            _ = sem.Release();
-        }
-    }
-
-    public void SetInSubdir<T>(string subdir, string key, T value, TimeSpan? ttl = null)
-    {
-        string path = GetPath(subdir, key);
-        SemaphoreSlim sem = GetLock(path);
-        sem.Wait();
-        try
-        {
-            _ = Directory.CreateDirectory(GetSubdirPath(subdir));
-            WriteEntry(path, value, ttl);
-        }
-        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
-        {
-            LoggingService.LogException(ex, "CacheService.Set(subdir)");
-        }
-        finally
-        {
-            _ = sem.Release();
-        }
-    }
-
-    public T? GetFromSubdir<T>(string subdir, string key)
-    {
-        string path = GetPath(subdir, key);
-        SemaphoreSlim sem = GetLock(path);
-        sem.Wait();
-        try
-        {
-            return TryReadEntry(path, out T? value) ? value : default;
-        }
-        catch (Exception ex) when (ex is not System.OutOfMemoryException)
-        {
-            LoggingService.LogException(ex, "CacheService.Get(subdir)");
-            return default;
-        }
-        finally
-        {
-            _ = sem.Release();
-        }
-    }
-
-    public bool HasInSubdir(string subdir, string key)
-    {
-        string path = GetPath(subdir, key);
-        SemaphoreSlim sem = GetLock(path);
-        sem.Wait();
-        try
-        {
-            return HasValidExpiry(path);
-        }
-        catch (Exception ex) when (ex is not System.OutOfMemoryException)
-        {
-            LoggingService.LogException(ex, "CacheService.Has(subdir)");
-            return false;
-        }
-        finally
-        {
-            _ = sem.Release();
-        }
-    }
-
-    public void InvalidateInSubdir(string subdir, string key)
-    {
-        string path = GetPath(subdir, key);
-        SemaphoreSlim sem = GetLock(path);
-        sem.Wait();
-        try
-        {
-            DeleteBestEffort(path);
-        }
-        finally
-        {
-            _ = sem.Release();
-        }
-    }
-
-    public void ClearSubdir(string subdir)
-    {
-        try
-        {
-            string dir = GetSubdirPath(subdir);
-            if (Directory.Exists(dir))
-            {
-                DeleteAllJsonFiles(dir, allDirectories: false);
-            }
-        }
-        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
-        {
-            LoggingService.LogException(ex, "CacheService.ClearSubdir");
-        }
-    }
-
-    public void Clear()
-    {
-        try
-        {
-            DeleteAllJsonFiles(CacheDir, allDirectories: true);
-        }
-        catch (Exception ex) when (ex is not System.OutOfMemoryException)
-        {
-            LoggingService.LogException(ex, "CacheService.Clear");
-        }
     }
 
     public long GetCacheSizeBytes()
@@ -221,32 +41,6 @@ public sealed class CacheService : ICacheService
             LoggingService.LogException(ex, "CacheService.GetCacheSizeBytes");
             return 0;
         }
-    }
-
-    public T GetOrSet<T>(string key, Func<T> factory, TimeSpan? ttl = null)
-    {
-        string path = GetPath(key);
-        if (TryReadEntry(path, out T? cached))
-        {
-            return cached!;
-        }
-
-        T value = factory();
-        Set(key, value, ttl);
-        return value;
-    }
-
-    public T GetOrSetInSubdir<T>(string subdir, string key, Func<T> factory, TimeSpan? ttl = null)
-    {
-        string path = GetPath(subdir, key);
-        if (TryReadEntry(path, out T? cached))
-        {
-            return cached!;
-        }
-
-        T value = factory();
-        SetInSubdir(subdir, key, value, ttl);
-        return value;
     }
 
     public async Task SetAsync<T>(string key, T value, TimeSpan? ttl = null)
@@ -422,50 +216,30 @@ public sealed class CacheService : ICacheService
     public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> factory, TimeSpan? ttl = null)
     {
         string path = GetPath(key);
+
         (bool found, T? cached) = await TryReadEntryAsync<T>(path).ConfigureAwait(false);
         if (found)
         {
             return cached!;
         }
 
-        T value = await factory().ConfigureAwait(false);
-        await SetAsync(key, value, ttl).ConfigureAwait(false);
-        return value;
-    }
-
-    public async Task<T> GetOrSetInSubdirAsync<T>(string subdir, string key, Func<Task<T>> factory, TimeSpan? ttl = null)
-    {
-        string path = GetPath(subdir, key);
-        (bool found, T? cached) = await TryReadEntryAsync<T>(path).ConfigureAwait(false);
-        if (found)
-        {
-            return cached!;
-        }
-
-        T value = await factory().ConfigureAwait(false);
-        await SetInSubdirAsync(subdir, key, value, ttl).ConfigureAwait(false);
-        return value;
-    }
-
-    private static bool TryReadEntry<T>(string path, out T? value)
-    {
-        value = default;
-        if (!File.Exists(path))
-        {
-            return false;
-        }
-
+        SemaphoreSlim keyLock = _keyLocks.GetOrAdd(path, static _ => new SemaphoreSlim(1, 1));
+        await keyLock.WaitAsync().ConfigureAwait(false);
         try
         {
-            using FileStream stream = File.OpenRead(path);
-            CacheEntry<T>? entry = JsonSerializer.Deserialize<CacheEntry<T>>(stream, _serializeOptions);
-            return EntryIsValid(entry, path, out value);
+            (found, cached) = await TryReadEntryAsync<T>(path).ConfigureAwait(false);
+            if (found)
+            {
+                return cached!;
+            }
+
+            T value = await factory().ConfigureAwait(false);
+            await SetAsync(key, value, ttl).ConfigureAwait(false);
+            return value;
         }
-        catch (JsonException ex)
+        finally
         {
-            LoggingService.LogException(ex, "CacheService.CorruptedEntry");
-            DeleteBestEffort(path);
-            return false;
+            _ = keyLock.Release();
         }
     }
 
@@ -478,14 +252,17 @@ public sealed class CacheService : ICacheService
 
         try
         {
-            await using FileStream stream = File.OpenRead(path);
-            CacheEntry<T>? entry = await JsonSerializer
+            FileStream stream = File.OpenRead(path);
+            await using (stream.ConfigureAwait(false))
+            {
+                CacheEntry<T>? entry = await JsonSerializer
                 .DeserializeAsync<CacheEntry<T>>(stream, _serializeOptions)
                 .ConfigureAwait(false);
 
             return EntryIsValid(entry, path, out T? value)
                 ? (true, value)
                 : (false, default);
+            }
         }
         catch (JsonException ex)
         {
@@ -528,25 +305,6 @@ public sealed class CacheService : ICacheService
         }
     }
 
-    private static bool HasValidExpiry(string path)
-    {
-        if (!File.Exists(path))
-        {
-            return false;
-        }
-
-        using FileStream stream = File.OpenRead(path);
-        using var doc = JsonDocument.Parse(stream);
-        if (doc.RootElement.TryGetProperty("ExpiresAt", out JsonElement expiryEl)
-            && expiryEl.ValueKind == JsonValueKind.String
-            && DateTime.TryParse(expiryEl.GetString(), out DateTime expiry))
-        {
-            return DateTime.UtcNow <= expiry;
-        }
-
-        return true;
-    }
-
     private static async Task<bool> HasValidExpiryAsync(string path)
     {
         if (!File.Exists(path))
@@ -554,28 +312,19 @@ public sealed class CacheService : ICacheService
             return false;
         }
 
-        await using FileStream stream = File.OpenRead(path);
-        using JsonDocument doc = await JsonDocument.ParseAsync(stream).ConfigureAwait(false);
+        FileStream stream = File.OpenRead(path);
+        await using (stream.ConfigureAwait(false))
+        {
+            using JsonDocument doc = await JsonDocument.ParseAsync(stream).ConfigureAwait(false);
         if (doc.RootElement.TryGetProperty("ExpiresAt", out JsonElement expiryEl)
             && expiryEl.ValueKind == JsonValueKind.String
-            && DateTime.TryParse(expiryEl.GetString(), out DateTime expiry))
+            && DateTime.TryParse(expiryEl.GetString(), System.Globalization.CultureInfo.InvariantCulture, out DateTime expiry))
         {
             return DateTime.UtcNow <= expiry;
         }
 
         return true;
-    }
-
-    private static void WriteEntry<T>(string path, T value, TimeSpan? ttl)
-    {
-        var entry = new CacheEntry<T>
-        {
-            Value = value,
-            CreatedAt = DateTime.UtcNow,
-            ExpiresAt = BuildExpiry(path, ttl)
-        };
-
-        WriteAtomically(path, stream => JsonSerializer.Serialize(stream, entry, _serializeOptions));
+        }
     }
 
     private static async Task WriteEntryAsync<T>(string path, T value, TimeSpan? ttl)
@@ -609,31 +358,13 @@ public sealed class CacheService : ICacheService
         }
     }
 
-    private static void WriteAtomically(string path, Action<FileStream> write)
-    {
-        string tmpPath = path + ".tmp";
-        try
-        {
-            using (FileStream stream = File.Create(tmpPath))
-            {
-                write(stream);
-            }
-
-            File.Move(tmpPath, path, overwrite: true);
-        }
-        catch
-        {
-            DeleteBestEffort(tmpPath);
-            throw;
-        }
-    }
-
     private static async Task WriteAtomicallyAsync(string path, Func<FileStream, Task> write)
     {
         string tmpPath = path + ".tmp";
         try
         {
-            await using (FileStream stream = File.Create(tmpPath))
+            FileStream stream = File.Create(tmpPath);
+            await using (stream.ConfigureAwait(false))
             {
                 await write(stream).ConfigureAwait(false);
             }
@@ -686,7 +417,7 @@ public sealed class CacheService : ICacheService
 
     private static SemaphoreSlim GetLock(string key)
     {
-        return _stripedLocks[(uint)key.GetHashCode() % LockStripeCount];
+        return _stripedLocks[(uint)StringComparer.Ordinal.GetHashCode(key) % LockStripeCount];
     }
 
     private static string SanitizeKey(string key)

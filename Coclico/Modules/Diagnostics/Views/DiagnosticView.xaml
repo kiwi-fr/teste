@@ -45,19 +45,17 @@
 
             <StackPanel Grid.Column="0">
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
-                    <Border Width="3" Height="3" CornerRadius="1.5" Background="{DynamicResource TextHintBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                    <TextBlock Text="{DynamicResource Diag_Badge}" FontSize="10.5" FontWeight="Bold"
-                               Foreground="{DynamicResource TextHintBrush}" VerticalAlignment="Center"/>
+                    <Border Style="{StaticResource PageEyebrowDot}"/>
+                    <TextBlock Text="{DynamicResource Diag_Badge}" Style="{StaticResource PageEyebrow}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,4">
                     <Border Width="4" Height="30" Background="{DynamicResource ArchitecturalYellowBrush}" CornerRadius="2" Margin="0,0,12,0"/>
-                    <TextBlock Text="{DynamicResource Diag_Title}" FontSize="24" FontWeight="Bold"
-                               Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{DynamicResource Diag_Title}" Style="{StaticResource CoclicoPageTitle}"
+                               VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <TextBlock Text="{DynamicResource Diag_Subtitle}" FontSize="12"
-                           Foreground="{DynamicResource TextHintBrush}" TextWrapping="Wrap"/>
+                <TextBlock Text="{DynamicResource Diag_Subtitle}" Style="{StaticResource PageHeaderSubtitle}"/>
             </StackPanel>
 
             <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0">

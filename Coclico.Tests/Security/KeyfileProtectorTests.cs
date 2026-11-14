@@ -23,7 +23,7 @@ public sealed class KeyfileProtectorTests : IDisposable
         string publicKey = KeyfileProtector.ExportPublicKeyBase64(loaded);
 
         Assert.Equal(File.ReadAllText(pubkey).Trim(), publicKey);
-        Assert.StartsWith("coclico-release-", keyId);
+        Assert.StartsWith("coclico-release-", keyId, StringComparison.Ordinal);
         byte[] message = [1, 2, 3, 4];
         Assert.True(loaded.VerifyData(message, created.SignData(message, HashAlgorithmName.SHA256, RSASignaturePadding.Pss), HashAlgorithmName.SHA256, RSASignaturePadding.Pss));
     }

@@ -7,19 +7,19 @@ namespace Coclico.Tests;
 public sealed class DiskAnalyzerTests
 {
     [Fact]
-    public async Task ScanAsync_ComputesSizesAndHierarchyCorrectly()
+    public async Task ScanAsyncComputesSizesAndHierarchyCorrectly()
     {
         string dir = Path.Join(Path.GetTempPath(), "coclico-disk-test-" + Guid.NewGuid().ToString("N")[..8]);
         string sub1 = Path.Join(dir, "Sub1");
         string sub2 = Path.Join(sub1, "Sub2");
         _ = Directory.CreateDirectory(sub2);
-        await File.WriteAllBytesAsync(Path.Join(dir, "a.bin"), new byte[1000]);
-        await File.WriteAllBytesAsync(Path.Join(sub1, "b.bin"), new byte[2000]);
-        await File.WriteAllBytesAsync(Path.Join(sub2, "c.bin"), new byte[4000]);
+        await File.WriteAllBytesAsync(Path.Join(dir, "a.bin"), new byte[1000], TestContext.Current.CancellationToken);
+        await File.WriteAllBytesAsync(Path.Join(sub1, "b.bin"), new byte[2000], TestContext.Current.CancellationToken);
+        await File.WriteAllBytesAsync(Path.Join(sub2, "c.bin"), new byte[4000], TestContext.Current.CancellationToken);
 
         try
         {
-            DiskItemNode node = await DiskAnalyzerService.ScanAsync(dir, null);
+            DiskItemNode node = await DiskAnalyzerService.ScanAsync(dir, null, ct: TestContext.Current.CancellationToken);
 
             Assert.Equal(7000, node.SizeBytes);
             Assert.Equal(3, node.FileCount);
@@ -46,7 +46,7 @@ public sealed class DiskAnalyzerTests
     }
 
     [Fact]
-    public void FormatSize_UsesHumanReadableUnits()
+    public void FormatSizeUsesHumanReadableUnits()
     {
         Assert.Equal("512 o", DiskItemNode.FormatSize(512));
         Assert.Equal("1 Ko", DiskItemNode.FormatSize(1024));
@@ -54,7 +54,7 @@ public sealed class DiskAnalyzerTests
     }
 
     [Fact]
-    public void DiskAnalyzerView_InstantiatesWithoutXamlErrors()
+    public void DiskAnalyzerViewInstantiatesWithoutXamlErrors()
     {
         Coclico.Modules.DiskAnalyzer.Views.DiskAnalyzerView? view = null;
         Exception? error = null;

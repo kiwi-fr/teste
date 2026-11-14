@@ -1,6 +1,6 @@
 namespace Coclico.Services;
 
-public interface IDialogService
+internal interface IDialogService
 {
     void ShowMessage(string message, string title = "Coclico", System.Windows.Window? owner = null);
 

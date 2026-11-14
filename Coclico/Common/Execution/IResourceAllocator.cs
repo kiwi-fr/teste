@@ -1,6 +1,6 @@
 namespace Coclico.Services;
 
-public enum PriorityLevel
+internal enum PriorityLevel
 {
     Idle = 0,
     BelowNormal = 1,
@@ -10,9 +10,9 @@ public enum PriorityLevel
     RealTime = 5,
 }
 
-public sealed record QosResult(bool Success, string Message, int ProcessId, string ProcessName);
+internal sealed record QosResult(bool Success, string Message, int ProcessId, string ProcessName);
 
-public interface IResourceAllocator
+internal interface IResourceAllocator
 {
     QosResult SetProcessPriority(int processId, PriorityLevel level);
 
@@ -27,7 +27,7 @@ public interface IResourceAllocator
     IReadOnlyList<ProcessQosSnapshot> GetSystemSnapshot();
 }
 
-public sealed record ProcessQosSnapshot(
+internal sealed record ProcessQosSnapshot(
     int Pid,
     string Name,
     PriorityLevel Priority,

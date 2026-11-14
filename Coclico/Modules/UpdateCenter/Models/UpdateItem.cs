@@ -1,6 +1,6 @@
 namespace Coclico.Modules.UpdateCenter.Models;
 
-public sealed record UpdateItem
+internal sealed record UpdateItem
 {
     public required string Id { get; init; }
     public required string Name { get; init; }

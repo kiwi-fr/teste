@@ -20,7 +20,7 @@ public sealed class SmartMemoryDaemonServiceTests : IDisposable
     [InlineData("Threshold", AutoCleanMode.ThresholdPercent)]
     [InlineData("Hybrid", AutoCleanMode.Hybrid)]
     [InlineData("n'importe quoi", AutoCleanMode.Interval)]
-    public void ParseModeSetting_MapsLegacyAndCanonicalValues(string? input, AutoCleanMode expected)
+    public void ParseModeSettingMapsLegacyAndCanonicalValues(string? input, AutoCleanMode expected)
     {
         Assert.Equal(expected, SmartMemoryDaemonService.ParseModeSetting(input));
     }
@@ -29,7 +29,7 @@ public sealed class SmartMemoryDaemonServiceTests : IDisposable
     [InlineData(AutoCleanMode.ThresholdPercent, "ThresholdPercent")]
     [InlineData(AutoCleanMode.Hybrid, "Hybrid")]
     [InlineData(AutoCleanMode.Interval, "Interval")]
-    public void ModeSettingToString_RoundTripsWithParse(AutoCleanMode mode, string expected)
+    public void ModeSettingToStringRoundTripsWithParse(AutoCleanMode mode, string expected)
     {
         Assert.Equal(expected, SmartMemoryDaemonService.ModeSettingToString(mode));
         Assert.Equal(
@@ -38,7 +38,7 @@ public sealed class SmartMemoryDaemonServiceTests : IDisposable
     }
 
     [Fact]
-    public void Constructor_WithDefaultSettings_ReadsDefaults()
+    public void ConstructorWithDefaultSettingsReadsDefaults()
     {
         Assert.False(_daemon.IsEnabled);
         Assert.Equal(AutoCleanMode.Interval, _daemon.Mode);
@@ -48,19 +48,19 @@ public sealed class SmartMemoryDaemonServiceTests : IDisposable
     }
 
     [Fact]
-    public void TimeUntilNextClean_IsNullWhenDaemonDisabled()
+    public void TimeUntilNextCleanIsNullWhenDaemonDisabled()
     {
         Assert.Null(_daemon.TimeUntilNextClean);
     }
 
     [Fact]
-    public void StatusMessage_HasInitialValue()
+    public void StatusMessageHasInitialValue()
     {
         Assert.False(string.IsNullOrWhiteSpace(_daemon.StatusMessage));
     }
 
     [Fact]
-    public void SessionCounters_StartAtZero()
+    public void SessionCountersStartAtZero()
     {
         Assert.Equal(0, _daemon.TotalSessionFreedBytes);
         Assert.Equal(0, _daemon.LastFreedBytes);

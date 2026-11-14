@@ -2,13 +2,13 @@ using System.Management;
 
 namespace Coclico.Services;
 
-public sealed record SmartDiskStatus(
+internal sealed record SmartDiskStatus(
     string InstanceName,
     bool PredictsFailure,
     uint Reason,
     string Advisory);
 
-public static class SmartDiskService
+internal static class SmartDiskService
 {
     public static List<SmartDiskStatus> GetDiskStatus()
     {

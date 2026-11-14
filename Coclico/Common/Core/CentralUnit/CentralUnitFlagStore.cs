@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 
 namespace Coclico.Services;
 
-public static class CentralFlags
+internal static class CentralFlags
 {
     public const string StartupCompleted = "Central.Startup.Completed";
     public const string PressureSample = "Central.Pressure.Sample";
@@ -16,14 +16,14 @@ public static class CentralFlags
     public const string WatchdogCheckDue = "Central.Watchdog.Check.Due";
 }
 
-public sealed class CentralUnitFlagStore : IDisposable
+internal sealed class CentralUnitFlagStore : IDisposable
 {
     private static readonly TimeSpan MaxSchedulerSleep = TimeSpan.FromMinutes(10);
 
     private readonly ConcurrentDictionary<string, TaskCompletionSource<bool>> _waiters = new(StringComparer.Ordinal);
     private readonly ConcurrentDictionary<string, byte> _pending = new(StringComparer.Ordinal);
     private readonly ConcurrentDictionary<string, byte> _criticalFlags = new(StringComparer.Ordinal);
-    private readonly object _scheduleLock = new();
+    private readonly Lock _scheduleLock = new();
     private readonly Dictionary<string, DateTime> _schedules = new(StringComparer.Ordinal);
     private DateTime _nextDueUtc = DateTime.MaxValue;
     private CancellationTokenSource _wakeCts = new();

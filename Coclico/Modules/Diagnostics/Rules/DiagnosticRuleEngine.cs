@@ -2,7 +2,7 @@ namespace Coclico.Modules.Diagnostics.Rules;
 
 using Coclico.Modules.Diagnostics.Models;
 
-public static class DiagnosticRuleEngine
+internal static class DiagnosticRuleEngine
 {
     public const string RulesVersion = "1.0";
 

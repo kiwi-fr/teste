@@ -5,7 +5,7 @@ using Coclico.Modules.Diagnostics.Models;
 using Coclico.Modules.Diagnostics.Rules;
 using Coclico.Services;
 
-public sealed class MemoryCheck : IDiagnosticCheck
+internal sealed class MemoryCheck : IDiagnosticCheck
 {
     public string Id => "memory.pressure";
     public DiagnosticCategory Category => DiagnosticCategory.Memory;
@@ -51,7 +51,7 @@ public sealed class MemoryCheck : IDiagnosticCheck
     {
         try
         {
-            return Process.GetProcesses().Length;
+            return ProcessSnapshotProvider.Capture().Length;
         }
         catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)
         {
@@ -64,7 +64,7 @@ public sealed class MemoryCheck : IDiagnosticCheck
         try
         {
             ct.ThrowIfCancellationRequested();
-            Process? top = Process.GetProcesses()
+            Process? top = ProcessSnapshotProvider.Capture()
                 .OrderByDescending(p => SafeWorkingSet(p))
                 .FirstOrDefault();
 

@@ -10,7 +10,7 @@ using Microsoft.Win32;
 
 namespace Coclico.Services;
 
-public partial class InstalledProgramsService
+internal partial class InstalledProgramsService
 {
     private static readonly SearchValues<string> BlacklistValues = SearchValues.Create(
         [
@@ -26,19 +26,19 @@ public partial class InstalledProgramsService
         new[] { "genshin", "honkai", "star rail", "valorant", "league of legends", "overwatch", "minecraft", "roblox", "dota", "warcraft" }
         .ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
-    [GeneratedRegex("\"DisplayName\"\\s*:\\s*\"([^\"]+)\"", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    [GeneratedRegex("\"DisplayName\"\\s*:\\s*\"([^\"]+)\"", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture)]
     private static partial Regex EpicNameRegex();
 
-    [GeneratedRegex("\"InstallLocation\"\\s*:\\s*\"([^\"]+)\"", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    [GeneratedRegex("\"InstallLocation\"\\s*:\\s*\"([^\"]+)\"", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture)]
     private static partial Regex EpicPathRegex();
 
-    [GeneratedRegex("\"LaunchExecutable\"\\s*:\\s*\"([^\"]+)\"", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    [GeneratedRegex("\"LaunchExecutable\"\\s*:\\s*\"([^\"]+)\"", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture)]
     private static partial Regex EpicExeRegex();
 
-    [GeneratedRegex("\"name\"\\s+\"([^\"]+)\"", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    [GeneratedRegex("\"name\"\\s+\"([^\"]+)\"", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture)]
     private static partial Regex SteamNameRegex();
 
-    [GeneratedRegex("\"installdir\"\\s+\"([^\"]+)\"", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    [GeneratedRegex("\"installdir\"\\s+\"([^\"]+)\"", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture)]
     private static partial Regex SteamDirRegex();
 
     private static readonly string[] SystemAllowList =
@@ -94,7 +94,7 @@ public partial class InstalledProgramsService
     private static string ManualAppsPath => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Coclico", "manual_apps.json");
 
     private List<ProgramInfo>? _memoryCache;
-    private readonly object _memoryCacheLock = new();
+    private readonly Lock _memoryCacheLock = new();
     private Dictionary<string, CustomAppEntry>? _customAppsDataCache;
 
     public void InvalidateMemoryCache()
@@ -119,12 +119,12 @@ public partial class InstalledProgramsService
         {
             return _memoryCache?.Where(p => !string.IsNullOrEmpty(p.IconPath))
                                 .Select(p => p.IconPath)
-                                .Distinct()
+                                .Distinct(StringComparer.Ordinal)
                                 .ToList() ?? [];
         }
     }
 
-    public class ProgramInfo
+    internal class ProgramInfo
     {
         public string Name { get; set; } = string.Empty;
         public string InstallPath { get; set; } = string.Empty;
@@ -138,7 +138,7 @@ public partial class InstalledProgramsService
         public string UninstallString { get; set; } = string.Empty;
     }
 
-    public class FilterGroup : INotifyPropertyChanged
+    internal class FilterGroup : INotifyPropertyChanged
     {
         public string Name
         {
@@ -242,7 +242,7 @@ public partial class InstalledProgramsService
                 foreach (FilterGroup g in groups)
                 {
                     string migrated = MigrateCategory(g.CategoryFilter);
-                    if (migrated != g.CategoryFilter) { g.CategoryFilter = migrated; dirty = true; }
+                    if (!string.Equals(migrated, g.CategoryFilter, StringComparison.Ordinal)) { g.CategoryFilter = migrated; dirty = true; }
                 }
                 if (dirty)
                 {
@@ -274,7 +274,7 @@ public partial class InstalledProgramsService
                 _ = Directory.CreateDirectory(dir);
             }
 
-            var toSave = groups.Where(g => g.Name != "Bibliothèque").Take(4).ToList();
+            var toSave = groups.Where(g => !string.Equals(g.Name, "Bibliothèque", StringComparison.Ordinal)).Take(4).ToList();
             toSave.Insert(0, new FilterGroup { Name = "Bibliothèque", IsStatic = true });
             string content = JsonSerializer.Serialize(toSave);
             string tmp = FilterGroupsPath + ".tmp";
@@ -360,7 +360,7 @@ public partial class InstalledProgramsService
             foreach (ProgramInfo app in result)
             {
                 string normName = NormalizeName(app.Name);
-                string normPath = app.InstallPath.ToLower().TrimEnd('\\');
+                string normPath = app.InstallPath.ToLowerInvariant().TrimEnd('\\');
                 string nameKey = normName + "|" + normPath;
 
                 if (!string.IsNullOrEmpty(app.ExePath) && byExe.TryGetValue(app.ExePath, out ProgramInfo? ex1))
@@ -409,9 +409,9 @@ public partial class InstalledProgramsService
                 string groupKey = words.Length >= 2 ? words[0] + " " + words[1] : normName;
 
                 return (p.InstallPath ?? string.Empty).Contains("Program Files", StringComparison.OrdinalIgnoreCase)
-                    ? groupKey + "_" + (p.InstallPath ?? string.Empty).ToLower()
+                    ? groupKey + "_" + (p.InstallPath ?? string.Empty).ToLowerInvariant()
                     : groupKey;
-            })
+            }, StringComparer.Ordinal)
             .Select(g =>
             {
                 if (g.Count() > 1)
@@ -426,7 +426,7 @@ public partial class InstalledProgramsService
                 }
                 return g.First();
             })
-            .OrderBy(p => p.Name)
+            .OrderBy(p => p.Name, StringComparer.Ordinal)
             .ToList();
 
         finalizedList.AddRange(LoadManualApplications());
@@ -488,9 +488,9 @@ public partial class InstalledProgramsService
 
     private static string DetermineCategory(ProgramInfo p)
     {
-        string name = p.Name.ToLower();
-        string path = p.InstallPath.ToLower();
-        string pub = p.Publisher.ToLower();
+        string name = p.Name.ToLowerInvariant();
+        string path = p.InstallPath.ToLowerInvariant();
+        string pub = p.Publisher.ToLowerInvariant();
 
         if (p.Source is "Steam" or "Epic Games" or "GOG" or "Ubisoft" or "EA" or "Rockstar")
         {
@@ -509,7 +509,7 @@ public partial class InstalledProgramsService
 
         bool outilVideo = name.Contains("adobe") || name.Contains("premiere") || name.Contains("vegas") || name.Contains("da vinci") || name.Contains("blender") || name.Contains("editing") || name.Contains("montage");
         bool outilPro = name.Contains("visual studio") || name.Contains("code") || name.Contains("docker") || name.Contains("sql") || name.Contains("office") || name.Contains("excel") || name.Contains("word");
-        bool outilSysteme = path.Contains("\\windows\\") || name.Contains("system") || p.Source == "Microsoft Store";
+        bool outilSysteme = path.Contains("\\windows\\") || name.Contains("system") || string.Equals(p.Source, "Microsoft Store", StringComparison.Ordinal);
         bool jeu = IsKnownGame(p.Name) || path.Contains("games") || path.Contains("jeux");
 
         return outilVideo ? "Video Montage"
@@ -634,7 +634,7 @@ public partial class InstalledProgramsService
         {
             bool isAllowed = SystemAllowList.Any(a => name.Contains(a, StringComparison.OrdinalIgnoreCase));
 
-            if (p.Source != "Windows")
+            if (!string.Equals(p.Source, "Windows", StringComparison.Ordinal))
             {
                 return false;
             }
@@ -701,9 +701,9 @@ public partial class InstalledProgramsService
                 try
                 {
                     object? shortcut = shellType.InvokeMember(
-                        "CreateShortcut", System.Reflection.BindingFlags.InvokeMethod, null, shell, new object?[] { shortcutPath });
+                        "CreateShortcut", System.Reflection.BindingFlags.InvokeMethod, null, shell, new object?[] { shortcutPath }, System.Globalization.CultureInfo.InvariantCulture);
                     string? targetPath = shortcut?.GetType().InvokeMember(
-                        "TargetPath", System.Reflection.BindingFlags.GetProperty, null, shortcut, null) as string;
+                        "TargetPath", System.Reflection.BindingFlags.GetProperty, null, shortcut, null, System.Globalization.CultureInfo.InvariantCulture) as string;
 
                     if (string.IsNullOrEmpty(targetPath) || !targetPath.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
                     {
@@ -774,7 +774,7 @@ public partial class InstalledProgramsService
                         {
                             sizeBytes = sizeKbL * 1024;
                         }
-                        else if (estimatedSize is string sizeStr && long.TryParse(sizeStr, out long parsedKb))
+                        else if (estimatedSize is string sizeStr && long.TryParse(sizeStr, System.Globalization.CultureInfo.InvariantCulture, out long parsedKb))
                         {
                             sizeBytes = parsedKb * 1024;
                         }
@@ -843,7 +843,7 @@ public partial class InstalledProgramsService
 
                     long sizeBytes = 0;
                     Match sizeMatch = Regex.Match(content, "\"InstallSize\"\\s*:\\s*(\\d+)");
-                    if (sizeMatch.Success && long.TryParse(sizeMatch.Groups[1].Value, out long sVal))
+                    if (sizeMatch.Success && long.TryParse(sizeMatch.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture, out long sVal))
                     {
                         sizeBytes = sVal;
                     }
@@ -904,7 +904,7 @@ public partial class InstalledProgramsService
 
                     long sizeBytes = 0;
                     Match sizeMatch = Regex.Match(content, "\"SizeOnDisk\"\\s+\"(\\d+)\"");
-                    if (sizeMatch.Success && long.TryParse(sizeMatch.Groups[1].Value, out long sVal))
+                    if (sizeMatch.Success && long.TryParse(sizeMatch.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture, out long sVal))
                     {
                         sizeBytes = sVal;
                     }
@@ -1023,7 +1023,7 @@ public partial class InstalledProgramsService
             {
                 shell = Activator.CreateInstance(shellType);
                 object? folder = shellType.InvokeMember(
-                    "NameSpace", System.Reflection.BindingFlags.InvokeMethod, null, shell, new object?[] { "shell:AppsFolder" });
+                    "NameSpace", System.Reflection.BindingFlags.InvokeMethod, null, shell, new object?[] { "shell:AppsFolder" }, System.Globalization.CultureInfo.InvariantCulture);
                 object? folderItems = folder?.GetType().InvokeMember(
                     "Items", System.Reflection.BindingFlags.InvokeMethod, null, folder, null);
                 foreach (object item in (System.Collections.IEnumerable)folderItems!)
@@ -1091,7 +1091,7 @@ public partial class InstalledProgramsService
     {
         if (_customAppsDataCache != null)
         {
-            return new Dictionary<string, CustomAppEntry>(_customAppsDataCache);
+            return new Dictionary<string, CustomAppEntry>(_customAppsDataCache, StringComparer.Ordinal);
         }
 
         try
@@ -1166,7 +1166,7 @@ public partial class InstalledProgramsService
     {
         try
         {
-            Dictionary<string, CustomAppEntry> data = new(LoadCustomAppsData());
+            Dictionary<string, CustomAppEntry> data = new(LoadCustomAppsData(), StringComparer.Ordinal);
             if (!string.IsNullOrWhiteSpace(category))
             {
                 category = MigrateCategory(category);

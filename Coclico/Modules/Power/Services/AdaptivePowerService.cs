@@ -1,9 +1,8 @@
-using System.Runtime.InteropServices;
 using Coclico.Services;
 
 namespace Coclico.Modules.Power.Services;
 
-public sealed record AdaptivePowerConfig
+internal sealed record AdaptivePowerConfig
 {
     public int HighThresholdPercent { get; init; } = 60;
     public int LowThresholdPercent { get; init; } = 25;
@@ -13,14 +12,14 @@ public sealed record AdaptivePowerConfig
     public TimeSpan SampleInterval { get; init; } = TimeSpan.FromSeconds(3);
 }
 
-public enum AdaptivePowerAction
+internal enum AdaptivePowerAction
 {
     None,
     SwitchToPerformance,
     SwitchToEconomy
 }
 
-public enum AdaptivePowerReason
+internal enum AdaptivePowerReason
 {
     Cooldown,
     HighLoad,
@@ -28,7 +27,7 @@ public enum AdaptivePowerReason
     NormalLoad
 }
 
-public sealed class CpuLoadWindow
+internal sealed class CpuLoadWindow
 {
     private readonly Queue<(DateTime Utc, double Usage)> _samples = new();
     private readonly TimeSpan _retention;
@@ -72,7 +71,7 @@ public sealed class CpuLoadWindow
     }
 }
 
-public static class AdaptivePowerRules
+internal static class AdaptivePowerRules
 {
     public static (AdaptivePowerAction Action, AdaptivePowerReason Reason, double LoadPercent) Evaluate(
         CpuLoadWindow window,
@@ -102,15 +101,16 @@ public static class AdaptivePowerRules
     }
 }
 
-public sealed class AdaptivePowerService
+internal sealed class AdaptivePowerService
 {
     private readonly CpuPowerService _cpuPower;
     private readonly SettingsService _settings;
-    private readonly object _stateLock = new();
+    private readonly Lock _stateLock = new();
     private readonly AdaptivePowerConfig _config = new();
 
     private CancellationTokenSource? _cts;
     private Task? _loopTask;
+    private bool _starting;
     private System.Threading.Timer? _saveTimer;
     private CpuLoadWindow _window = new(TimeSpan.FromMinutes(2));
     private CoclicoPowerMode _currentMode = CoclicoPowerMode.Optimal;
@@ -174,59 +174,79 @@ public sealed class AdaptivePowerService
 
     public async Task<(bool Started, string Message)> StartAsync(CancellationToken ct = default)
     {
-        if (IsEnabled)
-        {
-            return (true, "Mode adaptatif deja actif.");
-        }
-
-        if (!_cpuPower.IsElevated)
-        {
-            return (false, "Les droits administrateur sont requis pour le mode adaptatif.");
-        }
-
-        PowerPlanSetupReport report = await _cpuPower.EnsureCoclicoPlansAsync(null, ct).ConfigureAwait(false);
-        if (!report.Success)
-        {
-            return (false, "Impossible de creer ou verifier les plans Coclico.");
-        }
-
-        PowerStateSummary state = await _cpuPower.GetStateSummaryAsync(ct).ConfigureAwait(false);
-        if (state.ActiveCoclicoMode is null)
-        {
-            (bool ok, string message) = await _cpuPower.ActivatePlanAsync(CoclicoPowerMode.Optimal, ct).ConfigureAwait(false);
-            if (!ok)
-            {
-                return (false, message);
-            }
-
-            lock (_stateLock)
-            {
-                _currentMode = CoclicoPowerMode.Optimal;
-                _lastTimes = null;
-            }
-        }
-        else
-        {
-            lock (_stateLock)
-            {
-                _currentMode = state.ActiveCoclicoMode.Value;
-            }
-        }
-
         lock (_stateLock)
         {
-            _window = new CpuLoadWindow(TimeSpan.FromMinutes(2));
-            _lastSwitchUtc = DateTime.UtcNow;
-            _cts = new CancellationTokenSource();
-            CancellationToken token = _cts.Token;
-            _loopTask = Task.Run(() => LoopAsync(token), CancellationToken.None);
-            _status = "Surveillance de la charge CPU en cours.";
+            if (_cts != null || _starting)
+            {
+                return (true, "Mode adaptatif deja actif.");
+            }
+
+            _starting = true;
         }
 
-        _settings.Settings.AdaptivePowerEnabled = true;
-        await _settings.SaveAsync().ConfigureAwait(false);
-        StatusChanged?.Invoke(Status);
-        return (true, "Mode optimal adaptatif actif.");
+        try
+        {
+            if (!_cpuPower.IsElevated)
+            {
+                return (false, "Les droits administrateur sont requis pour le mode adaptatif.");
+            }
+
+            PowerPlanSetupReport report = await _cpuPower.EnsureCoclicoPlansAsync(null, ct).ConfigureAwait(false);
+            if (!report.Success)
+            {
+                return (false, "Impossible de creer ou verifier les plans Coclico.");
+            }
+
+            PowerStateSummary state = await _cpuPower.GetStateSummaryAsync(ct).ConfigureAwait(false);
+            if (state.ActiveCoclicoMode is null)
+            {
+                (bool ok, string message) = await _cpuPower.ActivatePlanAsync(CoclicoPowerMode.Optimal, ct).ConfigureAwait(false);
+                if (!ok)
+                {
+                    return (false, message);
+                }
+
+                lock (_stateLock)
+                {
+                    _currentMode = CoclicoPowerMode.Optimal;
+                    _lastTimes = null;
+                }
+            }
+            else
+            {
+                lock (_stateLock)
+                {
+                    _currentMode = state.ActiveCoclicoMode.Value;
+                }
+            }
+
+            lock (_stateLock)
+            {
+                if (_cts != null)
+                {
+                    return (true, "Mode adaptatif deja actif.");
+                }
+
+                _window = new CpuLoadWindow(TimeSpan.FromMinutes(2));
+                _lastSwitchUtc = DateTime.UtcNow;
+                _cts = new CancellationTokenSource();
+                CancellationToken token = _cts.Token;
+                _loopTask = Task.Run(() => LoopAsync(token), CancellationToken.None);
+                _status = "Surveillance de la charge CPU en cours.";
+            }
+
+            _settings.Settings.AdaptivePowerEnabled = true;
+            await _settings.SaveAsync().ConfigureAwait(false);
+            StatusChanged?.Invoke(Status);
+            return (true, "Mode optimal adaptatif actif.");
+        }
+        finally
+        {
+            lock (_stateLock)
+            {
+                _starting = false;
+            }
+        }
     }
 
     public async Task StopAsync()
@@ -270,7 +290,7 @@ public sealed class AdaptivePowerService
     {
         lock (_stateLock)
         {
-            (long idle, long total) = NativeCpuTiming.GetTimes();
+            (long idle, long total) = GetSystemTimesTotals();
             (long Idle, long Total)? previous = _lastTimes;
             _lastTimes = (idle, total);
 
@@ -435,9 +455,9 @@ public sealed class AdaptivePowerService
         return reason switch
         {
             AdaptivePowerReason.HighLoad =>
-                TextFormatService.Format(loc?.Get("Power_Reason_HighLoad") ?? "Charge {0:0}% maintenue, passage en performance.", loadPercent),
+                TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, loc?.Get("Power_Reason_HighLoad") ?? "Charge {0:0}% maintenue, passage en performance.", loadPercent),
             AdaptivePowerReason.LowLoad =>
-                TextFormatService.Format(loc?.Get("Power_Reason_LowLoad") ?? "Charge {0:0}% maintenue, passage en economie.", loadPercent),
+                TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, loc?.Get("Power_Reason_LowLoad") ?? "Charge {0:0}% maintenue, passage en economie.", loadPercent),
             AdaptivePowerReason.Cooldown =>
                 loc?.Get("Power_Reason_Cooldown") ?? "Repos entre deux changements de plan.",
             _ =>
@@ -445,32 +465,13 @@ public sealed class AdaptivePowerService
         };
     }
 
-    internal static class NativeCpuTiming
+    private static (long Idle, long Total) GetSystemTimesTotals()
     {
-        [StructLayout(LayoutKind.Sequential)]
-        private struct FileTimeStruct
+        if (!NativeWin32.GetSystemTimes(out NativeWin32.FileTime idle, out NativeWin32.FileTime kernel, out NativeWin32.FileTime user))
         {
-            public uint Low;
-            public uint High;
-
-            public readonly long Value => ((long)High << 32) | Low;
+            return (0, 0);
         }
 
-        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        [DllImport("kernel32.dll", SetLastError = false)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetSystemTimes(out FileTimeStruct idle, out FileTimeStruct kernel, out FileTimeStruct user);
-
-        public static (long Idle, long Total) GetTimes()
-        {
-            if (!GetSystemTimes(out FileTimeStruct idle, out FileTimeStruct kernel, out FileTimeStruct user))
-            {
-                return (0, 0);
-            }
-
-            long idleValue = idle.Value;
-            long total = kernel.Value + user.Value;
-            return (idleValue, total);
-        }
+        return (idle.ToInt64(), kernel.ToInt64() + user.ToInt64());
     }
 }

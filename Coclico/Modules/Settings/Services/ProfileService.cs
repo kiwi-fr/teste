@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace Coclico.Services;
 
-public class AppProfile
+internal class AppProfile
 {
     public string Name { get; set; } = "Default";
 
@@ -19,12 +19,12 @@ public class AppProfile
 
     public List<InstalledProgramsService.FilterGroup> FilterGroups { get; set; } = [];
 
-    public string AvatarInitials => string.IsNullOrEmpty(Name) ? "?" : Name[0].ToString().ToUpper();
+    public string AvatarInitials => string.IsNullOrEmpty(Name) ? "?" : Name[0].ToString().ToUpperInvariant();
 
     public DateTime LastUsed => LastModified;
 }
 
-public class ProfileService
+internal class ProfileService
 {
     private static readonly string ProfilesDir = Path.Join(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Coclico", "profiles");
@@ -41,7 +41,7 @@ public class ProfileService
         var result = new List<AppProfile>();
         try
         {
-            foreach (string file in Directory.EnumerateFiles(ProfilesDir, "*.json").OrderBy(f => f))
+            foreach (string file in Directory.EnumerateFiles(ProfilesDir, "*.json").OrderBy(f => f, StringComparer.Ordinal))
             {
                 AppProfile? profile = Load(Path.GetFileNameWithoutExtension(file));
                 if (profile != null)
@@ -72,7 +72,7 @@ public class ProfileService
         try
         {
             string path = GetPath(name);
-            return !File.Exists(path) ? null : JsonSerializer.Deserialize<AppProfile>(await File.ReadAllTextAsync(path));
+            return !File.Exists(path) ? null : JsonSerializer.Deserialize<AppProfile>(await File.ReadAllTextAsync(path).ConfigureAwait(false));
         }
         catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Text.Json.JsonException or System.FormatException) { LoggingService.LogException(ex, "ProfileService.LoadAsync"); return null; }
     }
@@ -90,7 +90,7 @@ public class ProfileService
     {
         try
         {
-            await WriteProfileAtomicallyAsync(GetPath(profile.Name), profile);
+            await WriteProfileAtomicallyAsync(GetPath(profile.Name), profile).ConfigureAwait(false);
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "ProfileService.SaveAsync"); }
     }
@@ -150,7 +150,7 @@ public class ProfileService
     {
         profile.LastModified = DateTime.UtcNow;
         string tempPath = path + ".tmp";
-        await File.WriteAllTextAsync(tempPath, JsonSerializer.Serialize(profile, _opts));
+        await File.WriteAllTextAsync(tempPath, JsonSerializer.Serialize(profile, _opts)).ConfigureAwait(false);
         File.Move(tempPath, path, overwrite: true);
     }
 

@@ -103,7 +103,7 @@ public sealed class DiagnosticResourceKeyTests
 
     [Theory]
     [MemberData(nameof(AllDynamicKeys))]
-    public void DynamicKey_ExistsInBothLanguageFiles(string key)
+    public void DynamicKeyExistsInBothLanguageFiles(string key)
     {
         string repoRoot = XamlResourceValidationTests.FindRepoRoot();
         HashSet<string> fr = ExtractKeys(Path.Join(repoRoot, "Coclico", "Resources", "Lang", "fr.xaml"));
@@ -114,9 +114,9 @@ public sealed class DiagnosticResourceKeyTests
     }
 
     [Fact]
-    public void EveryDiagnosticsEnumValue_HasACategoryKey()
+    public void EveryDiagnosticsEnumValueHasACategoryKey()
     {
-        string[] categories = Enum.GetNames(typeof(Coclico.Modules.Diagnostics.Models.DiagnosticCategory));
+        string[] categories = Enum.GetNames<Coclico.Modules.Diagnostics.Models.DiagnosticCategory>();
         string repoRoot = XamlResourceValidationTests.FindRepoRoot();
         HashSet<string> fr = ExtractKeys(Path.Join(repoRoot, "Coclico", "Resources", "Lang", "fr.xaml"));
 
@@ -126,7 +126,7 @@ public sealed class DiagnosticResourceKeyTests
     }
 
     [Fact]
-    public void EveryRegisteredCheckId_HasACheckKey()
+    public void EveryRegisteredCheckIdHasACheckKey()
     {
         string[] checkIds =
         [

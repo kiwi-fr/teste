@@ -5,9 +5,9 @@ using System.Windows.Media;
 
 namespace Coclico.Converters;
 
-public class HexToBrushConverter : IValueConverter
+internal class HexToBrushConverter : IValueConverter
 {
-    private static readonly ConcurrentDictionary<string, SolidColorBrush> _cache = new();
+    private static readonly ConcurrentDictionary<string, SolidColorBrush> _cache = new(StringComparer.Ordinal);
     private static readonly SolidColorBrush FallbackBrush = CreateFrozenBrush(Colors.Gray);
 
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

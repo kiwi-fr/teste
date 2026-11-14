@@ -1,10 +1,11 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Coclico.Services;
 
-public sealed class ResourceGuardService : IDisposable
+internal sealed class ResourceGuardService : IDisposable
 {
-    public enum PressureLevel { Normal, Elevated, High, Critical }
+    internal enum PressureLevel { Normal, Elevated, High, Critical }
 
     public event Action<PressureLevel>? PressureChanged;
     public event Action<string>? GuardMessage;
@@ -27,6 +28,7 @@ public sealed class ResourceGuardService : IDisposable
     private static readonly TimeSpan BaseInterval = TimeSpan.FromSeconds(6);
     private const string Subsystem = "ResourceGuard";
 
+    [StructLayout(LayoutKind.Auto)]
     private readonly record struct Snapshot(
         double CpuPercent,
         long WorkingSetMb,
@@ -179,7 +181,7 @@ public sealed class ResourceGuardService : IDisposable
             case PressureLevel.Critical:
                 if (Interlocked.Increment(ref _consecutiveHigh) >= HighStreakForTrim)
                 {
-                    TrimSelfIfReady("Pression CRITIQUE  Working Set réduit");
+                    TrimSelfIfReady(Loc.Get("Guard_CriticalTrim"));
                     _ = Interlocked.Exchange(ref _consecutiveHigh, 0);
                 }
                 break;
@@ -187,7 +189,7 @@ public sealed class ResourceGuardService : IDisposable
             case PressureLevel.High:
                 if (Interlocked.Increment(ref _consecutiveHigh) >= HighStreakForTrim * 2)
                 {
-                    TrimSelfIfReady("Pression HAUTE optimisation mémoire");
+                    TrimSelfIfReady(Loc.Get("Guard_HighTrim"));
                     _ = Interlocked.Exchange(ref _consecutiveHigh, 0);
                 }
                 break;

@@ -3,14 +3,14 @@ using Microsoft.Win32;
 
 namespace Coclico.Services;
 
-public sealed record StartupEntry(
+internal sealed record StartupEntry(
     string Name,
     string Command,
     string Source,
     bool IsEnabled,
     bool CanToggle);
 
-public static class StartupManagerService
+internal static class StartupManagerService
 {
     private const string RunKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
     private const string ApprovedKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run";
@@ -108,7 +108,7 @@ public static class StartupManagerService
 
         try
         {
-            string keyPath = entry.Source == "Dossier" ? ApprovedFolderKeyPath : ApprovedKeyPath;
+            string keyPath = string.Equals(entry.Source, "Dossier", StringComparison.Ordinal) ? ApprovedFolderKeyPath : ApprovedKeyPath;
 
             using RegistryKey? approved = Registry.CurrentUser.CreateSubKey(keyPath, writable: true);
             if (approved == null)

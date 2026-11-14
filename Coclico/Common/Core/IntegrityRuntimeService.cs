@@ -7,7 +7,7 @@ using Timer = System.Timers.Timer;
 
 namespace Coclico.Services;
 
-public sealed class IntegrityRuntimeService : IDisposable
+internal sealed class IntegrityRuntimeService : IDisposable
 {
     private const string ManifestFileName = "integrity.json";
     private const string TrustPolicyResourceName = "Coclico.Security.trust-policy.json";
@@ -25,7 +25,7 @@ public sealed class IntegrityRuntimeService : IDisposable
     private readonly HashSet<string> _variablePaths = new(StringComparer.OrdinalIgnoreCase);
     private readonly Timer? _periodicTimer;
     private readonly FileSystemWatcher? _watcher;
-    private readonly object _gate = new();
+    private readonly Lock _gate = new();
     private readonly string _appVersion;
 
     private DateTime _lastWatcherTriggerUtc = DateTime.MinValue;
@@ -257,7 +257,7 @@ public sealed class IntegrityRuntimeService : IDisposable
     }
 }
 
-public static class IntegrityGate
+internal static class IntegrityGate
 {
     public static bool IsSensitiveOperationAllowed(string operationName, out string reason)
     {

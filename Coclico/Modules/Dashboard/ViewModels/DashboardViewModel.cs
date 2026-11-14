@@ -13,20 +13,20 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Coclico.ViewModels;
 
-public class ActivityEntry
+internal class ActivityEntry
 {
     public string Description { get; init; } = string.Empty;
     public string TimeText { get; init; } = string.Empty;
     public Brush AccentColor { get; init; } = Brushes.Gray;
 }
 
-public partial class DashboardViewModel : INotifyPropertyChanged, IDisposable
+internal partial class DashboardViewModel : INotifyPropertyChanged, IDisposable
 {
     private const int HistoryWindowSize = 100;
     private const string Subsystem = "Dashboard";
     private static readonly TimeSpan RefreshBaseInterval = TimeSpan.FromSeconds(2);
 
-    private readonly object _historyLock = new();
+    private readonly Lock _historyLock = new();
     private readonly Queue<double> _cpuHistory = new();
     private readonly Queue<double> _ramHistory = new();
     private readonly Action<CentralActivityLevel> _onActivityChanged;
@@ -179,28 +179,6 @@ public partial class DashboardViewModel : INotifyPropertyChanged, IDisposable
         Customization.CustomizationChanged += OnCustomizationChanged;
     }
 
-    public void AddActivity(string description, string hexColor = "#818CF8")
-    {
-        _ = (Application.Current?.Dispatcher?.BeginInvoke(() =>
-        {
-            var brush = new SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(hexColor));
-            brush.Freeze();
-            while (RecentActivities.Count >= 5)
-            {
-                RecentActivities.RemoveAt(RecentActivities.Count - 1);
-            }
-
-            RecentActivities.Insert(0, new ActivityEntry
-            {
-                Description = description,
-                TimeText = DateTime.Now.ToString("HH:mm"),
-                AccentColor = brush
-            });
-            OnPropertyChanged(nameof(HasNoActivities));
-        }));
-    }
-
     private void OnCustomizationChanged(object? sender, EventArgs e)
     {
         OnPropertyChanged(nameof(Customization));
@@ -228,24 +206,26 @@ public partial class DashboardViewModel : INotifyPropertyChanged, IDisposable
         OnPropertyChanged(nameof(CustomizationSettings));
     }
 
+    private static readonly TimeSpan TempFileMinAge = TimeSpan.FromHours(24);
+
     [RelayCommand]
     private async Task RunModeZenAsync()
     {
-        try { await RunModeAsync(MemoryCleanerService.CleanProfile.Quick, cleanTemp: true); }
+        try { await RunModeAsync(MemoryCleanerService.CleanProfile.Quick, cleanTemp: true).ConfigureAwait(false); }
         catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "DashboardViewModel.ModeZen"); }
     }
 
     [RelayCommand]
     private async Task RunModeGamerAsync()
     {
-        try { await RunModeAsync(MemoryCleanerService.CleanProfile.Deep, cleanTemp: false); }
+        try { await RunModeAsync(MemoryCleanerService.CleanProfile.Deep, cleanTemp: false).ConfigureAwait(false); }
         catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "DashboardViewModel.ModeGamer"); }
     }
 
     [RelayCommand]
     private async Task RunModeWorkAsync()
     {
-        try { await RunModeAsync(MemoryCleanerService.CleanProfile.Normal, cleanTemp: false); }
+        try { await RunModeAsync(MemoryCleanerService.CleanProfile.Normal, cleanTemp: false).ConfigureAwait(false); }
         catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "DashboardViewModel.ModeWork"); }
     }
 
@@ -253,19 +233,29 @@ public partial class DashboardViewModel : INotifyPropertyChanged, IDisposable
     {
         try
         {
-            _ = await MemoryCleanerService.CleanByProfileAsync(profile);
+            _ = await MemoryCleanerService.CleanByProfileAsync(profile).ConfigureAwait(false);
 
             if (cleanTemp)
             {
                 string temp = Path.GetTempPath();
                 await Task.Run(() =>
                 {
+                    DateTime cutoff = DateTime.UtcNow - TempFileMinAge;
                     foreach (string f in Directory.EnumerateFiles(temp, "*",
                         SearchOption.TopDirectoryOnly))
                     {
-                        try { File.Delete(f); } catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { LoggingService.LogException(ex, "DashboardViewModel.RunModeAsync"); }
+                        try
+                        {
+                            if (File.GetLastWriteTimeUtc(f) > cutoff)
+                            {
+                                continue;
+                            }
+
+                            File.Delete(f);
+                        }
+                        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { LoggingService.LogException(ex, "DashboardViewModel.RunModeAsync"); }
                     }
-                });
+                }).ConfigureAwait(false);
             }
 
             string key = Application.Current.Resources["Dashboard_ModeActivated"] as string ?? "Mode activé !";
@@ -299,7 +289,7 @@ public partial class DashboardViewModel : INotifyPropertyChanged, IDisposable
                         cpu = Math.Round(_cpuCounter.NextValue(), 1);
                     }
                 }
-                catch (Exception ex) when (ex is not System.OutOfMemoryException) { cpu = 0; LoggingService.LogException(ex, "DashboardVM.CpuSample"); }
+                catch (Exception ex) when (ex is not OutOfMemoryException) { cpu = 0; LoggingService.LogException(ex, "DashboardVM.CpuSample"); }
 
                 try
                 {
@@ -308,7 +298,7 @@ public partial class DashboardViewModel : INotifyPropertyChanged, IDisposable
                     ramUsed = Math.Round(info.UsedPhysBytes / (1024.0 * 1024 * 1024), 1);
                     CentralUnitService.Current.Variables.Publish(CentralVariables.RamInfo, info);
                 }
-                catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "DashboardVM.RamSample"); }
+                catch (Exception ex) when (ex is not OutOfMemoryException) { LoggingService.LogException(ex, "DashboardVM.RamSample"); }
 
                 try
                 {
@@ -316,7 +306,7 @@ public partial class DashboardViewModel : INotifyPropertyChanged, IDisposable
                     diskTotal = Math.Round(drive.TotalSize / (1024.0 * 1024 * 1024), 1);
                     diskUsed = Math.Round((drive.TotalSize - drive.TotalFreeSpace) / (1024.0 * 1024 * 1024), 1);
                 }
-                catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { LoggingService.LogException(ex, "DashboardVM.DiskSample"); }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { LoggingService.LogException(ex, "DashboardVM.DiskSample"); }
 
                 try
                 {
@@ -325,7 +315,7 @@ public partial class DashboardViewModel : INotifyPropertyChanged, IDisposable
                         ? $"{(int)up.TotalDays}j {up.Hours:D2}h {up.Minutes:D2}m"
                         : $"{up.Hours:D2}h {up.Minutes:D2}m {up.Seconds:D2}s";
                 }
-                catch (Exception ex) when (ex is not System.OutOfMemoryException) { uptime = "-"; }
+                catch (Exception ex) when (ex is not OutOfMemoryException) { uptime = "-"; }
 
                 try
                 {
@@ -334,8 +324,8 @@ public partial class DashboardViewModel : INotifyPropertyChanged, IDisposable
                         procs = (int)_procCounter.NextValue();
                     }
                 }
-                catch (Exception ex) when (ex is not System.OutOfMemoryException) { procs = 0; }
-            }, ct);
+                catch (Exception ex) when (ex is not OutOfMemoryException) { procs = 0; }
+            }, ct).ConfigureAwait(false);
 
             int apps = ServiceContainer.GetRequired<InstalledProgramsService>().GetInstalledAppsCount();
 
@@ -496,7 +486,7 @@ public partial class DashboardViewModel : INotifyPropertyChanged, IDisposable
             return;
         }
 
-        await _shortcutsService.ExecuteShortcutAsync(shortcut, tag => NavigationRequested?.Invoke(tag));
+        await _shortcutsService.ExecuteShortcutAsync(shortcut, tag => NavigationRequested?.Invoke(tag)).ConfigureAwait(false);
     }
 
     [RelayCommand]

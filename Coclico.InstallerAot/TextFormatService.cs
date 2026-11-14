@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Coclico.Installer;
 
-public static class TextFormatService
+internal static class TextFormatService
 {
     public static string Format(string? pattern, params object?[] args)
         => Format(null, pattern, args);

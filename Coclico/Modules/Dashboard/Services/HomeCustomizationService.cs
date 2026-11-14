@@ -6,16 +6,12 @@ using Coclico.Models;
 
 namespace Coclico.Services;
 
-public sealed class HomeCustomizationService
+internal sealed class HomeCustomizationService
 {
     private static readonly string CustomizationFilePath = Path.Join(
         SettingsService.GetUserDataDirectory(), "home_customization.json");
 
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
-
-    private static readonly SolidColorBrush MinimalistBg = Frozen(Color.FromRgb(14, 17, 24));
-    private static readonly SolidColorBrush MinimalistBorder = Frozen(Color.FromRgb(30, 38, 54));
-    private static readonly SolidColorBrush GlassBg = Frozen(Color.FromArgb(170, 18, 24, 42));
     private static readonly SolidColorBrush GlassBorder = Frozen(Color.FromArgb(120, 99, 102, 241));
 
     public HomeCustomizationSettings Settings { get; private set; } = new();

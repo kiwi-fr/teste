@@ -10,7 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Coclico.ViewModels;
 
-public class AppInstallItem : INotifyPropertyChanged
+internal class AppInstallItem : INotifyPropertyChanged
 {
     public required AppCatalogService.AppCatalogEntry Entry { get; init; }
 
@@ -66,7 +66,7 @@ public class AppInstallItem : INotifyPropertyChanged
     }
 }
 
-public class AppPackItem : INotifyPropertyChanged
+internal class AppPackItem : INotifyPropertyChanged
 {
     public required string Id { get; init; }
     public required string Name { get; init; }
@@ -119,7 +119,7 @@ public class AppPackItem : INotifyPropertyChanged
     }
 }
 
-public partial class AppsViewModel : INotifyPropertyChanged
+internal partial class AppsViewModel : INotifyPropertyChanged
 {
     private readonly AppCatalogService _catalog;
     private readonly WingetEngineService _winget;
@@ -143,7 +143,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         get;
         set
         {
-            if (field != value)
+            if (!string.Equals(field, value, StringComparison.Ordinal))
             {
                 field = value;
                 OnPropertyChanged();
@@ -153,15 +153,15 @@ public partial class AppsViewModel : INotifyPropertyChanged
         }
     } = "Installer";
 
-    public bool IsTabInstaller => CurrentTab == "Installer";
-    public bool IsTabPacks => CurrentTab == "Packs";
+    public bool IsTabInstaller => string.Equals(CurrentTab, "Installer", StringComparison.Ordinal);
+    public bool IsTabPacks => string.Equals(CurrentTab, "Packs", StringComparison.Ordinal);
 
     public string SelectedCategory
     {
         get;
         set
         {
-            if (field != value)
+            if (!string.Equals(field, value, StringComparison.Ordinal))
             {
                 field = value;
                 OnPropertyChanged();
@@ -175,7 +175,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         get;
         set
         {
-            if (field != value)
+            if (!string.Equals(field, value, StringComparison.Ordinal))
             {
                 field = value;
                 OnPropertyChanged();
@@ -258,7 +258,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
 
     public int SelectedCount => AllApps.Count(static a => a.IsSelected);
 
-    public string SelectedCountText => TextFormatService.Format(_loc?.Get("Installer_SelectedCount") ?? "{0} sélectionné(s)", SelectedCount);
+    public string SelectedCountText => TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, _loc?.Get("Installer_SelectedCount") ?? "{0} sélectionné(s)", SelectedCount);
 
     public bool HasSelected => SelectedCount > 0;
 
@@ -286,7 +286,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         _ = CheckWingetAsync();
         _ = Task.Run(async () =>
         {
-            try { await DetectInstalledAsync(); }
+            try { await DetectInstalledAsync().ConfigureAwait(false); }
             catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "AppsViewModel.DetectInstalledAsync"); }
         });
     }
@@ -303,7 +303,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         {
             item.PropertyChanged += (_, e) =>
             {
-                if (e.PropertyName == nameof(AppInstallItem.IsSelected))
+                if (string.Equals(e.PropertyName, nameof(AppInstallItem.IsSelected), StringComparison.Ordinal))
                 {
                     OnPropertyChanged(nameof(SelectedCount));
                     OnPropertyChanged(nameof(SelectedCountText));
@@ -355,7 +355,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
             {
                 item.PropertyChanged += (_, e) =>
                 {
-                    if (e.PropertyName == nameof(AppInstallItem.IsInstalled))
+                    if (string.Equals(e.PropertyName, nameof(AppInstallItem.IsInstalled), StringComparison.Ordinal))
                     {
                         pack.RefreshInstalledCount();
                     }
@@ -373,7 +373,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         string query = SearchQuery.Trim();
         foreach (AppInstallItem item in AllApps)
         {
-            bool categoryMatch = SelectedCategory == "Toutes" || item.Category == SelectedCategory;
+            bool categoryMatch = string.Equals(SelectedCategory, "Toutes", StringComparison.Ordinal) || string.Equals(item.Category, SelectedCategory, StringComparison.Ordinal);
             bool queryMatch = query.Length == 0
                 || item.Name.Contains(query, StringComparison.OrdinalIgnoreCase)
                 || item.Description.Contains(query, StringComparison.OrdinalIgnoreCase)
@@ -539,7 +539,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         }
 
         bool confirmed = Confirm?.Invoke(
-            TextFormatService.Format(L("Installer_Dialog_BatchInstallMsg", "Installer les {0} applications sélectionnées en séquence ?"), selected.Count),
+            TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, L("Installer_Dialog_BatchInstallMsg", "Installer les {0} applications sélectionnées en séquence ?"), selected.Count),
             L("Installer_Dialog_BatchInstallTitle", "Installation par lot")) ?? false;
         if (!confirmed)
         {
@@ -582,7 +582,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         }
 
         bool confirmed = Confirm?.Invoke(
-            TextFormatService.Format(L("Installer_Dialog_BatchInstallMsg", "Installer les {0} applications sélectionnées en séquence ?"), toInstall.Count),
+            TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, L("Installer_Dialog_BatchInstallMsg", "Installer les {0} applications sélectionnées en séquence ?"), toInstall.Count),
             pack.Name) ?? false;
         if (!confirmed)
         {
@@ -611,7 +611,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         }
 
         bool confirmed = Confirm?.Invoke(
-            TextFormatService.Format("Désinstaller {0} ?", item.Name),
+            TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, "Désinstaller {0} ?", item.Name),
             "Désinstallation") ?? false;
         if (!confirmed)
         {
@@ -619,7 +619,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         }
 
         IsOperating = true;
-        OperationStatus = TextFormatService.Format(L("Installer_Status_UninstallingPkg", "Désinstallation de {0}..."), item.Name);
+        OperationStatus = TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, L("Installer_Status_UninstallingPkg", "Désinstallation de {0}..."), item.Name);
         _cts = new CancellationTokenSource();
         item.IsBusy = true;
         item.Status = "Désinstallation...";
@@ -702,7 +702,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         }
         catch (Exception ex) when (ex is System.InvalidOperationException or System.OperationCanceledException)
         {
-            OperationStatus = TextFormatService.Format(L("Installer_Status_SearchError", "Erreur : {0}"), ex.Message);
+            OperationStatus = TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, L("Installer_Status_SearchError", "Erreur : {0}"), ex.Message);
             LoggingService.LogException(ex, "AppsViewModel.OnlineSearchAsync");
         }
         finally
@@ -722,7 +722,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
         IsOperating = true;
         _cts = new CancellationTokenSource();
         var progress = new Progress<string>(AppendLog);
-        OperationStatus = TextFormatService.Format(L("Installer_Status_InstallingPkg", "Installation de {0}..."), row.Name);
+        OperationStatus = TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, L("Installer_Status_InstallingPkg", "Installation de {0}..."), row.Name);
         AppendLog(OperationStatus);
 
         try
@@ -735,7 +735,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
                 UpdateWingetStatusText();
                 if (!ready)
                 {
-                    Notify?.Invoke("Impossible d'installer ou réparer WinGet.", "WinGet");
+                    Notify?.Invoke(Loc.Get("Apps_WingetRepairFailed"), "WinGet");
                     OperationStatus = "WinGet indisponible.";
                     return;
                 }
@@ -799,7 +799,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
                     UpdateWingetStatusText();
                     if (!ready)
                     {
-                        Notify?.Invoke("Impossible d'installer ou réparer WinGet. Les applications WinGet ne peuvent pas être installées.", "WinGet");
+                        Notify?.Invoke(Loc.Get("Apps_WingetRepairFailedLong"), "WinGet");
                         OperationStatus = "WinGet indisponible.";
                         return;
                     }
@@ -812,7 +812,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
                     item.IsBusy = true;
                     item.IsFailed = false;
                     item.Status = "Installation...";
-                    OperationStatus = TextFormatService.Format(L("Installer_Status_InstallingPkg", "Installation de {0}..."), item.Name);
+                    OperationStatus = TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, L("Installer_Status_InstallingPkg", "Installation de {0}..."), item.Name);
                     AppendLog(OperationStatus);
 
                     WingetEngineService.InstallResult result = await _winget.InstallAsync(item.Entry.WingetId, progress, _cts.Token).ConfigureAwait(true);
@@ -875,7 +875,7 @@ public partial class AppsViewModel : INotifyPropertyChanged
 
             _ = Task.Run(async () =>
             {
-                try { await DetectInstalledAsync(); }
+                try { await DetectInstalledAsync().ConfigureAwait(false); }
                 catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "AppsViewModel.DetectInstalledAsync"); }
             });
         }
@@ -918,10 +918,23 @@ public partial class AppsViewModel : INotifyPropertyChanged
             item.IsBusy = true;
             item.IsFailed = false;
             item.Status = "Téléchargement...";
-            OperationStatus = TextFormatService.Format(L("Installer_Status_InstallingPkg", "Téléchargement de {0}..."), item.Name);
+            OperationStatus = TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, L("Installer_Status_InstallingPkg", "Téléchargement de {0}..."), item.Name);
             AppendLog(OperationStatus);
 
             GitHubToolService.GithubToolResult result = await _github.InstallToolAsync(item.Name, item.Entry.Repo, item.Entry.AssetPattern, progress, ct).ConfigureAwait(true);
+            if (!result.Success && result.NeedsExplicitConfirmation && Confirm is not null)
+            {
+                bool installAnyway = Confirm(
+                    TextFormatService.Format(
+System.Globalization.CultureInfo.InvariantCulture, L("Installer_ConfirmUnverified", "{0} ne publie aucune somme de contrôle SHA-256.\n\nInstaller quand même ce téléchargement non vérifiable ?"),
+                        item.Name),
+                    L("Common_Confirmation", "Confirmation"));
+                if (installAnyway)
+                {
+                    result = await _github.InstallToolAsync(item.Name, item.Entry.Repo, item.Entry.AssetPattern, progress, ct, allowUnverified: true).ConfigureAwait(true);
+                }
+            }
+
             if (result.Success)
             {
                 item.IsInstalled = true;

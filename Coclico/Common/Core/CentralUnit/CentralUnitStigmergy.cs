@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace Coclico.Services;
 
-public sealed class CentralStigmergyModuleSnapshot
+internal sealed class CentralStigmergyModuleSnapshot
 {
     public required string Module { get; init; }
 
@@ -12,7 +12,7 @@ public sealed class CentralStigmergyModuleSnapshot
     public required long Uses { get; init; }
 }
 
-public sealed class CentralUnitStigmergy
+internal sealed class CentralUnitStigmergy
 {
     public static readonly TimeSpan DefaultTransitionHalfLife = TimeSpan.FromHours(6);
     public static readonly TimeSpan DefaultHourlyHalfLife = TimeSpan.FromDays(3);
@@ -35,14 +35,14 @@ public sealed class CentralUnitStigmergy
     private const int ExpiredStreakToShorten = 2;
     private const double EpsilonScore = 0.0001;
 
-    private readonly object _stateLock = new();
+    private readonly Lock _stateLock = new();
     private readonly TimeSpan _transitionHalfLife;
     private readonly TimeSpan _hourlyHalfLife;
     private readonly Dictionary<string, ModuleState> _modules = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, Dictionary<string, TransitionState>> _transitions = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<int, Dictionary<string, HourEntry>> _hourlyUsage = new();
     private readonly Dictionary<string, TtlState> _ttlStates = new(StringComparer.OrdinalIgnoreCase);
-    private readonly object _saveLock = new();
+    private readonly Lock _saveLock = new();
     private readonly string? _persistencePath;
     private string? _lastModule;
     private bool _dirty;

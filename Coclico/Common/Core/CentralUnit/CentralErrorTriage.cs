@@ -1,6 +1,6 @@
 namespace Coclico.Services;
 
-public sealed class CentralErrorEntry
+internal sealed class CentralErrorEntry
 {
     public required string Context { get; init; }
 
@@ -15,13 +15,13 @@ public sealed class CentralErrorEntry
     public long Count { get; init; }
 }
 
-public sealed class CentralErrorTriage
+internal sealed class CentralErrorTriage
 {
     private const int MaxDistinctEntries = 256;
 
     public static CentralErrorTriage Current { get; } = new();
 
-    private readonly object _stateLock = new();
+    private readonly Lock _stateLock = new();
     private readonly Dictionary<string, ErrorAggregate> _entries = new(StringComparer.Ordinal);
     private long _totalRecords;
 

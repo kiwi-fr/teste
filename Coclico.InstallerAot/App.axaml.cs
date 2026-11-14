@@ -6,7 +6,7 @@ using Avalonia.Markup.Xaml;
 
 namespace Coclico.Installer;
 
-public partial class App : Application
+internal partial class App : Application
 {
     public override void Initialize()
     {

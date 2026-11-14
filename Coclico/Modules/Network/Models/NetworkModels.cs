@@ -1,19 +1,19 @@
 namespace Coclico.Models.Network;
 
-public enum NetworkAdapterType
+internal enum NetworkAdapterType
 {
     Ethernet,
     Wireless80211,
     Other
 }
 
-public enum NetworkTuningCategory
+internal enum NetworkTuningCategory
 {
     TcpStack,
     Adapter
 }
 
-public sealed class NetworkAdapterInfo
+internal sealed class NetworkAdapterInfo
 {
     public required string Id { get; init; }
     public required string Name { get; init; }
@@ -55,7 +55,7 @@ public sealed class NetworkAdapterInfo
     };
 }
 
-public sealed class TcpGlobalSettings
+internal sealed class TcpGlobalSettings
 {
     public string AutoTuningLevel { get; set; } = "normal";
     public string ScalingHeuristics { get; set; } = "disabled";
@@ -66,7 +66,7 @@ public sealed class TcpGlobalSettings
     public string CongestionProvider { get; set; } = "ctcp";
 }
 
-public sealed class NetworkTuningParameter
+internal sealed class NetworkTuningParameter
 {
     public required string Id { get; init; }
     public required string NameKey { get; init; }
@@ -84,7 +84,7 @@ public sealed class NetworkTuningParameter
     public string CurrentToTarget => $"{CurrentValue} → {TargetValue}";
 }
 
-public sealed class NetworkTestReport
+internal sealed class NetworkTestReport
 {
     public DateTime Timestamp { get; init; } = DateTime.Now;
     public double DownloadMbps { get; set; }
@@ -105,7 +105,7 @@ public sealed class NetworkTestReport
     public string PacketLossDisplay => $"{PacketLossPercent:F1} %";
 }
 
-public sealed class NetworkTuningReport
+internal sealed class NetworkTuningReport
 {
     public NetworkTestReport? Before { get; set; }
     public NetworkTestReport? After { get; set; }
@@ -116,7 +116,7 @@ public sealed class NetworkTuningReport
     public string Summary { get; set; } = string.Empty;
 }
 
-public sealed class NetworkTuningBackup
+internal sealed class NetworkTuningBackup
 {
     public DateTime CapturedAt { get; set; }
     public string AdapterId { get; set; } = string.Empty;

@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace Coclico.Modules.UpdateCenter.Services;
 
-public class RestorePointService
+internal class RestorePointService
 {
     public const int DriverUpdateType = 12;
 
@@ -16,22 +16,32 @@ public class RestorePointService
             dwEventType = 100,
             dwRestorePointType = DriverUpdateType,
             llSequenceNumber = 0,
-
             szDescription = description
         };
-        return SRSetRestorePointW(ref state, out _);
+
+        bool succeeded = SRSetRestorePointW(ref state, out SmgrStatus status);
+        return succeeded && status.nStatus == 0 && status.llSequenceNumber != 0;
     }
 
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     private struct RestoreState
     {
         public int dwEventType;
         public int dwRestorePointType;
         public long llSequenceNumber;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string szDescription;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    private struct SmgrStatus
+    {
+        public int nStatus;
+        public long llSequenceNumber;
     }
 
     [DllImport("SrClient.dll", SetLastError = true, CharSet = CharSet.Unicode, EntryPoint = "SRSetRestorePointW")]
     [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool SRSetRestorePointW(ref RestoreState restorePoint, out long sequenceNumber);
+    private static extern bool SRSetRestorePointW(ref RestoreState restorePoint, out SmgrStatus status);
 }

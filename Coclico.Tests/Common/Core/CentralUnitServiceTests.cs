@@ -58,14 +58,14 @@ public sealed class CentralUnitServiceTests
     public void NotifyAiActivitySchedulesUnloadOnlyWhenInferenceIsIdle()
     {
         CentralUnitService.Current.SetAiInference(false);
-        CentralUnitService.Current.CancelAiUnload();
+        CentralUnitService.Current.Flags.CancelSchedule(CentralFlags.AiModelUnload);
         Assert.Equal(0, CentralUnitService.Current.GetStats().ScheduledFlags);
 
         CentralUnitService.Current.NotifyAiActivity();
         Assert.Equal(1, CentralUnitService.Current.GetStats().ScheduledFlags);
 
         CentralUnitService.Current.SetAiInference(true);
-        CentralUnitService.Current.CancelAiUnload();
+        CentralUnitService.Current.Flags.CancelSchedule(CentralFlags.AiModelUnload);
         CentralUnitService.Current.NotifyAiActivity();
         Assert.Equal(0, CentralUnitService.Current.GetStats().ScheduledFlags);
 

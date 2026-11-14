@@ -12,12 +12,27 @@ using Microsoft.Win32.SafeHandles;
 
 namespace Coclico.Installer.Services;
 
-public static class CudaRuntimeDownloader
+internal static class CudaRuntimeDownloader
 {
     private const string NugetFlatContainer = "https://api.nuget.org/v3-flatcontainer/";
 
     private const long ExpectedCublasLtBytes = 674667520;
     private const string ExpectedCublasLtSha256 = "B199D1FF892A81B7FD3D57BA1781549609B41500B36008FEF326038393AD46C7";
+
+    private static readonly Dictionary<string, (long Bytes, string Sha256)> PinnedDllHashes =
+        new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["cudart64_12.dll"] = (573952L, "C2C9A9C22A9BCBA90E261825968836787B331038047A26770CFFB7A583C28344"),
+            ["cublas64_12.dll"] = (113716224L, "9513540E4EC4C51EE9E7304138C2CC255C29A8C181F9E80C38EFA25738BECD99"),
+            ["cufft64_11.dll"] = (276121600L, "F4FEA9227B14843894AD5436725F9638B172171142C95291FC6AE7A493248221"),
+            ["nvrtc64_120_0.dll"] = (86728192L, "02D2D7EF4690BF1A55DDA1D3AC94C86CE8D16920071C87BCD3E70E94EF346E93"),
+            ["nvrtc64_120_0.alt.dll"] = (86794240L, "5464EA01B079D78042374DC7819684910C8E9D5C63000E2D2D5AA02298ECF2AE"),
+            ["ggml-base.dll"] = (541184L, "7BCF256FAC58E129F49F36C9D790F35E46EB10F70F9ECF798AC99BCC8431B12E"),
+            ["ggml.dll"] = (68096L, "96C1034540F7A7FC80D250AD3058057530C9DFFBEF7F844B9825316BC2133894"),
+            ["llama.dll"] = (2038784L, "A46BBF360A74913380C76155C11EDEA8F8FF0E4034A6F0B1C45950AD75A505E2"),
+            ["mtmd.dll"] = (667648L, "C81BFACA457EF82258CF6B208EB203D773CA1DD1A42B3E4B54EDABE13FB5AD15"),
+            ["ggml-cuda.dll"] = (444673536L, "1F0A9DD29D4287BE9FF3FE5D238808283A85786AC740F21BEBA7242C7A478FB4")
+        };
 
     private static readonly (string PackageId, string Label)[] NvidiaRuntimePackages =
     [
@@ -133,7 +148,9 @@ public static class CudaRuntimeDownloader
                     continue;
                 }
 
-                File.Copy(file, Path.Join(targetDir, Path.GetFileName(file)), overwrite: true);
+                string destination = Path.Join(targetDir, Path.GetFileName(file));
+                File.Copy(file, destination, overwrite: true);
+                await VerifyPinnedDllAsync(destination, label, ct).ConfigureAwait(false);
             }
         }
         finally
@@ -147,6 +164,28 @@ public static class CudaRuntimeDownloader
                 }
             }
             catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException) { _ = ex; }
+        }
+    }
+
+    private static async Task VerifyPinnedDllAsync(string filePath, string label, CancellationToken ct)
+    {
+        string fileName = Path.GetFileName(filePath);
+        if (!PinnedDllHashes.TryGetValue(fileName, out (long Bytes, string Sha256) pinned))
+        {
+            throw new InvalidDataException($"Fichier natif inattendu '{fileName}' ({label}).");
+        }
+
+        var info = new FileInfo(filePath);
+        if (info.Length != pinned.Bytes)
+        {
+            throw new InvalidDataException(
+                $"'{fileName}' invalide : {info.Length} octets au lieu de {pinned.Bytes}.");
+        }
+
+        string hash = await ComputeSha256Async(filePath, ct).ConfigureAwait(false);
+        if (!string.Equals(hash, pinned.Sha256, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidDataException($"'{fileName}' invalide : empreinte SHA-256 incorrecte.");
         }
     }
 

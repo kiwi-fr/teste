@@ -6,7 +6,7 @@ namespace Coclico.Tests;
 public class CentralUnitStigmergyTests
 {
     [Fact]
-    public void RecordTransition_WithoutFrom_RecordsUsageOnly()
+    public void RecordTransitionWithoutFromRecordsUsageOnly()
     {
         CentralUnitStigmergy sut = new();
 
@@ -22,7 +22,7 @@ public class CentralUnitStigmergyTests
     }
 
     [Fact]
-    public void RecordTransition_IgnoresSelfTransition()
+    public void RecordTransitionIgnoresSelfTransition()
     {
         CentralUnitStigmergy sut = new();
 
@@ -36,7 +36,7 @@ public class CentralUnitStigmergyTests
     }
 
     [Fact]
-    public void PredictedNextModules_RankedByProbability()
+    public void PredictedNextModulesRankedByProbability()
     {
         CentralUnitStigmergy sut = new();
 
@@ -59,7 +59,7 @@ public class CentralUnitStigmergyTests
     }
 
     [Fact]
-    public void PredictedNextModules_EmptyWithoutHistory()
+    public void PredictedNextModulesEmptyWithoutHistory()
     {
         CentralUnitStigmergy sut = new();
 
@@ -71,7 +71,7 @@ public class CentralUnitStigmergyTests
     }
 
     [Fact]
-    public async Task TransitionDecay_ShiftsRankingOverTime()
+    public async Task TransitionDecayShiftsRankingOverTime()
     {
         CentralUnitStigmergy sut = new(transitionHalfLife: TimeSpan.FromMilliseconds(80));
 
@@ -79,7 +79,7 @@ public class CentralUnitStigmergyTests
         sut.RecordTransition("dashboard", "ram");
         sut.RecordTransition("dashboard", "ram");
 
-        await Task.Delay(250);
+        await Task.Delay(250, TestContext.Current.CancellationToken);
 
         sut.RecordTransition("dashboard", "cleaning");
 
@@ -90,7 +90,7 @@ public class CentralUnitStigmergyTests
     }
 
     [Fact]
-    public void HourlyUsage_RanksModulesForCurrentHour()
+    public void HourlyUsageRanksModulesForCurrentHour()
     {
         CentralUnitStigmergy sut = new();
         int hour = DateTime.Now.Hour;
@@ -116,7 +116,7 @@ public class CentralUnitStigmergyTests
     }
 
     [Fact]
-    public void ModuleNames_NormalizedCaseInsensitive()
+    public void ModuleNamesNormalizedCaseInsensitive()
     {
         CentralUnitStigmergy sut = new();
 
@@ -130,7 +130,7 @@ public class CentralUnitStigmergyTests
     }
 
     [Fact]
-    public void AdaptedTtl_UnknownKey_ReturnsBase()
+    public void AdaptedTtlUnknownKeyReturnsBase()
     {
         CentralUnitStigmergy sut = new();
         TimeSpan baseTtl = TimeSpan.FromSeconds(60);
@@ -142,7 +142,7 @@ public class CentralUnitStigmergyTests
     }
 
     [Fact]
-    public void AdaptedTtl_ExtendsAfterFreshStreak()
+    public void AdaptedTtlExtendsAfterFreshStreak()
     {
         CentralUnitStigmergy sut = new();
         TimeSpan baseTtl = TimeSpan.FromSeconds(60);
@@ -164,7 +164,7 @@ public class CentralUnitStigmergyTests
     }
 
     [Fact]
-    public void AdaptedTtl_ShortensAfterExpiredStreak()
+    public void AdaptedTtlShortensAfterExpiredStreak()
     {
         CentralUnitStigmergy sut = new();
         TimeSpan baseTtl = TimeSpan.FromSeconds(60);
@@ -177,7 +177,7 @@ public class CentralUnitStigmergyTests
     }
 
     [Fact]
-    public void AdaptedTtl_StreaksResetOnOppositeOutcome()
+    public void AdaptedTtlStreaksResetOnOppositeOutcome()
     {
         CentralUnitStigmergy sut = new();
         TimeSpan baseTtl = TimeSpan.FromSeconds(60);
@@ -192,7 +192,7 @@ public class CentralUnitStigmergyTests
     }
 
     [Fact]
-    public void AdaptedTtl_FactorStaysWithinBounds()
+    public void AdaptedTtlFactorStaysWithinBounds()
     {
         CentralUnitStigmergy sut = new();
         TimeSpan baseTtl = TimeSpan.FromSeconds(60);
@@ -211,7 +211,7 @@ public class CentralUnitStigmergyTests
     }
 
     [Fact]
-    public void TtlCapacity_StaysBounded()
+    public void TtlCapacityStaysBounded()
     {
         CentralUnitStigmergy sut = new();
 
@@ -224,7 +224,7 @@ public class CentralUnitStigmergyTests
     }
 
     [Fact]
-    public void Clear_ResetsEverything()
+    public void ClearResetsEverything()
     {
         CentralUnitStigmergy sut = new();
 

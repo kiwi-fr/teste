@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Coclico.Models;
 
-public enum TileShape
+internal enum TileShape
 {
     Classic,
     Rounded,
@@ -10,14 +10,14 @@ public enum TileShape
     Square
 }
 
-public enum TileDensity
+internal enum TileDensity
 {
     Compact,
     Normal,
     Spacious
 }
 
-public enum HomeThemeStyle
+internal enum HomeThemeStyle
 {
     Classic,
     Glassmorphism,
@@ -25,7 +25,7 @@ public enum HomeThemeStyle
     VibrantNeon
 }
 
-public sealed class HomeCustomizationSettings
+internal sealed class HomeCustomizationSettings
 {
     public static readonly string[] DefaultSectionOrder =
     [

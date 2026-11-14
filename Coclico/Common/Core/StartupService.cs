@@ -3,7 +3,7 @@ using System.Security.Principal;
 
 namespace Coclico.Services;
 
-public class StartupProgress
+internal class StartupProgress
 {
     public string Status { get; set; } = string.Empty;
     public string SubDetail { get; set; } = string.Empty;
@@ -15,7 +15,7 @@ public class StartupProgress
     public string? SysInfo { get; set; }
 }
 
-public class StartupService
+internal class StartupService
 {
     public async Task RunStartupAsync(IProgress<StartupProgress>? progress = null, CancellationToken ct = default)
     {
@@ -40,16 +40,17 @@ public class StartupService
         bool isAdmin = IsAdministrator();
         string arch = RuntimeInformation.ProcessArchitecture.ToString().ToUpperInvariant();
 
-        Report(progress, 12,
-            "Démarrage des services...",
-            "Initialisation de l'environnement",
-            "Démarrage des services système",
-            cpuInfo: $"{Environment.ProcessorCount} Cœurs • {arch}",
-            sysInfo: BuildSystemInfo(isAdmin));
-
         await ServiceContainer.GetRequired<SettingsService>().LoadAsync().ConfigureAwait(false);
+        ct.ThrowIfCancellationRequested();
 
         LocalizationService? loc = ServiceContainer.GetOptional<LocalizationService>();
+
+        Report(progress, 12,
+            loc?.Get("Startup_Services") ?? "Démarrage des services...",
+            loc?.Get("Startup_ServicesSub") ?? "Initialisation de l'environnement",
+            loc?.Get("Startup_ServicesLog") ?? "Démarrage des services système",
+            cpuInfo: $"{Environment.ProcessorCount} Cœurs • {arch}",
+            sysInfo: BuildSystemInfo(isAdmin));
 
         Report(progress, 25,
             loc?.Get("Startup_MemOptimize") ?? "Optimisation de la mémoire...",
@@ -57,13 +58,12 @@ public class StartupService
             loc?.Get("Startup_MemAnalyze") ?? "Analyse de la mémoire vive",
             ramInfo: BuildRamInfo(loc));
 
-        TryRun(() => _ = ServiceContainer.GetOptional<ISmartMemoryDaemonService>(), "StartupService.MemoryDaemon");
         TryRun(() => ServiceContainer.GetRequired<ResourceGuardService>().Start(), "StartupService.ResourceGuard");
 
         Report(progress, 38,
-            "Configuration de l'affichage...",
-            "Accélération graphique matérielle",
-            "Initialisation de l'affichage",
+            loc?.Get("Startup_Display") ?? "Configuration de l'affichage...",
+            loc?.Get("Startup_DisplaySub") ?? "Accélération graphique matérielle",
+            loc?.Get("Startup_DisplayLog") ?? "Initialisation de l'affichage",
             gpuInfo: BuildGpuInfo());
 
         await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
@@ -76,14 +76,16 @@ public class StartupService
                     .SetLanguage(ServiceContainer.GetRequired<SettingsService>().Settings.Language),
                 "StartupService.SetLanguage");
         });
+        ct.ThrowIfCancellationRequested();
 
         Report(progress, 50,
-            "Vérification des services système...",
-            "Contrôle des services Windows",
-            "Vérification des services Windows");
+            loc?.Get("Startup_SysServices") ?? "Vérification des services système...",
+            loc?.Get("Startup_SysServicesSub") ?? "Contrôle des services Windows",
+            loc?.Get("Startup_SysServicesLog") ?? "Vérification des services Windows");
 
-        Task healthTask = Task.Run(() => ServiceContainer.GetRequired<StartupHealthService>().CheckAndRepairAsync());
-        _ = Task.Run(async () =>
+        Task healthTask = Task.Run(
+            () => ServiceContainer.GetRequired<StartupHealthService>().CheckAndRepairAsync());
+        Task scanTask = Task.Run(async () =>
         {
             try
             {
@@ -95,6 +97,10 @@ public class StartupService
                     _ = Coclico.Converters.FileIconConverter.PreloadAllAsync(iconPaths);
                 }
             }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
             catch (Exception ex) when (ex is not System.OutOfMemoryException)
             {
                 LoggingService.LogException(ex, "StartupService.AppsScan");
@@ -105,31 +111,25 @@ public class StartupService
         {
             await healthTask.ConfigureAwait(false);
             Report(progress, 52,
-                "Services système vérifiés",
-                "Services Windows opérationnels",
-                "Services système opérationnels");
+                loc?.Get("Startup_ServicesOk") ?? "Services système vérifiés",
+                loc?.Get("Startup_ServicesOkSub") ?? "Services Windows opérationnels",
+                loc?.Get("Startup_ServicesOkLog") ?? "Services système opérationnels");
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "StartupService.HealthCheck");
         }
+        ct.ThrowIfCancellationRequested();
 
         Report(progress, 64,
-            "Contrôle des composants...",
-            "Vérification de la connectivité",
-            "Vérification des composants réseau");
-
-        Report(progress, 66,
-            "Composants prêts",
-            "Modules système connectés",
-            "Composants prêts");
+            loc?.Get("Startup_Components") ?? "Contrôle des composants...",
+            loc?.Get("Startup_ComponentsSub") ?? "Modules système prêts",
+            loc?.Get("Startup_ComponentsLog") ?? "Composants prêts");
 
         Report(progress, 78,
-            "Recherche des mises à jour...",
-            "Vérification de la version",
-            "Recherche des mises à jour");
-
-        await TryAsync(() => Task.Delay(50, ct), "StartupService.UpdateCheck");
+            loc?.Get("Startup_CheckUpdates") ?? "Recherche des mises à jour...",
+            loc?.Get("Startup_VersionControl") ?? "Vérification de la version",
+            loc?.Get("Startup_CheckUpdates") ?? "Recherche des mises à jour");
 
         Report(progress, 80,
             loc?.Get("Startup_CheckUpdates") ?? "Vérification des mises à jour...",
@@ -141,21 +141,31 @@ public class StartupService
             loc?.Get("Startup_IndexApps") ?? "Indexation des programmes installés",
             loc?.Get("Startup_IndexApps") ?? "Indexation des programmes");
 
+        try
+        {
+            await scanTask.ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException)
+        {
+            LoggingService.LogException(ex, "StartupService.AppsScanAwait");
+        }
+
         Report(progress, 98,
             loc?.Get("Startup_Finalizing") ?? "Finalisation du démarrage...",
             loc?.Get("Startup_TrimFootprint") ?? "Optimisation de l'empreinte mémoire",
             loc?.Get("Startup_Finalizing") ?? "Finalisation du démarrage");
 
         TryRun(MemoryCleanerService.TrimSelfWorkingSet, "StartupService.TrimWorkingSet");
-
-        await Task.Delay(40, ct).ConfigureAwait(false);
+        ct.ThrowIfCancellationRequested();
 
         Report(progress, 100,
             loc?.Get("Startup_Ready") ?? "Prêt !",
             loc?.Get("Startup_Opening") ?? "Ouverture de Coclico...",
             loc?.Get("Startup_Done") ?? "Démarrage terminé");
-
-        await Task.Delay(60, ct).ConfigureAwait(false);
     }
 
     private static void Report(
@@ -194,18 +204,6 @@ public class StartupService
         }
     }
 
-    private static async Task TryAsync(Func<Task> action, string context)
-    {
-        try
-        {
-            await action().ConfigureAwait(false);
-        }
-        catch (Exception ex) when (ex is not System.OutOfMemoryException)
-        {
-            LoggingService.LogException(ex, context);
-        }
-    }
-
     private static bool IsAdministrator()
     {
         try
@@ -231,7 +229,7 @@ public class StartupService
         MemoryCleanerService.RamInfo ram = MemoryCleanerService.GetRamInfo();
         double availGb = ram.AvailPhysBytes / (1024.0 * 1024.0 * 1024.0);
         double totalGb = ram.TotalPhysBytes / (1024.0 * 1024.0 * 1024.0);
-        return TextFormatService.Format(loc?.Get("Startup_RamFree") ?? "{0:F1} Go Libre / {1:F0} Go", availGb, totalGb);
+        return TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, loc?.Get("Startup_RamFree") ?? "{0:F1} Go Libre / {1:F0} Go", availGb, totalGb);
     }
 
     private static string BuildGpuInfo()

@@ -104,8 +104,8 @@ public sealed class AiToolExecutionServiceSanitizerTests
 
         string result = service.SanitizeActionResponse(mixed, [action]);
 
-        Assert.Contains("Je lance", result);
-        Assert.DoesNotContain("Étape", result);
-        Assert.DoesNotContain("terminé", result);
+        Assert.Contains("Je lance", result, StringComparison.Ordinal);
+        Assert.DoesNotContain("Étape", result, StringComparison.Ordinal);
+        Assert.DoesNotContain("terminé", result, StringComparison.Ordinal);
     }
 }

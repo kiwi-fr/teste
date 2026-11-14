@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace Coclico.Installer.Models;
 
-public sealed record InstallerAiModel(
+internal sealed record InstallerAiModel(
     string Id,
     string DisplayName,
     string DescriptionFr,
@@ -18,7 +18,7 @@ public sealed record InstallerAiModel(
     public override string ToString() => DisplayName;
 }
 
-public static class InstallerAiCatalog
+internal static class InstallerAiCatalog
 {
     private static readonly IReadOnlyList<InstallerAiModel> FallbackModels =
     [

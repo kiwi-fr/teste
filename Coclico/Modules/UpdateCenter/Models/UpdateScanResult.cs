@@ -1,6 +1,6 @@
 namespace Coclico.Modules.UpdateCenter.Models;
 
-public sealed record UpdateScanResult
+internal sealed record UpdateScanResult
 {
     public required IReadOnlyList<UpdateItem> Items { get; init; }
     public required DateTimeOffset ScannedAt { get; init; }

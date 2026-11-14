@@ -1,6 +1,6 @@
 namespace Coclico.Services;
 
-public sealed class CentralWatchdogSnapshot
+internal sealed class CentralWatchdogSnapshot
 {
     public required string Subsystem { get; init; }
 
@@ -15,7 +15,7 @@ public sealed class CentralWatchdogSnapshot
     public bool IsStale { get; init; }
 }
 
-public sealed class CentralUnitWatchdog : IDisposable
+internal sealed class CentralUnitWatchdog : IDisposable
 {
     public static readonly TimeSpan DefaultCheckInterval = TimeSpan.FromSeconds(60);
 
@@ -26,7 +26,7 @@ public sealed class CentralUnitWatchdog : IDisposable
     private readonly CentralUnitFlagStore _flags;
     private readonly CentralUnitActivity _activity;
     private readonly TimeSpan _checkInterval;
-    private readonly object _stateLock = new();
+    private readonly Lock _stateLock = new();
     private readonly Dictionary<string, SubsystemState> _subsystems = new(StringComparer.Ordinal);
     private Action<CentralActivityLevel>? _levelChangedHandler;
     private CancellationTokenSource? _loopCts;

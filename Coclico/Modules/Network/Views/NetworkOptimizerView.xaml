@@ -15,7 +15,7 @@
             <Setter Property="BorderBrush" Value="{DynamicResource BorderSubtleBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="{DynamicResource CornerCard}"/>
-            <Setter Property="Padding" Value="18"/>
+            <Setter Property="Padding" Value="20"/>
             <Setter Property="Margin" Value="0,0,0,14"/>
         </Style>
 
@@ -42,7 +42,7 @@
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="8"
+                                CornerRadius="12"
                                 Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
@@ -61,17 +61,16 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Width="4" Height="22" Background="{DynamicResource ArchitecturalYellowBrush}" CornerRadius="2" Margin="0,0,10,0"/>
-                        <TextBlock Text="{DynamicResource Network_Title}" FontSize="20" FontWeight="Bold"
-                                   Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                        <Border Style="{StaticResource PageEyebrowDot}"/>
+                        <TextBlock Style="{StaticResource PageEyebrow}" Text="{DynamicResource Network_Eyebrow}"/>
                     </StackPanel>
-                    <TextBlock Text="{DynamicResource Network_Subtitle}" FontSize="11.5" Margin="14,6,0,0"
-                               Foreground="{DynamicResource TextHintBrush}"/>
+                    <TextBlock Text="{DynamicResource Network_Title}" Style="{StaticResource CoclicoPageTitle}"/>
+                    <TextBlock Text="{DynamicResource Network_Subtitle}" Style="{StaticResource PageHeaderSubtitle}" Margin="0,6,0,0"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
                     <Border Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}"
-                            BorderThickness="1" CornerRadius="8" Padding="10,6" Margin="0,0,8,0">
+                            BorderThickness="1" CornerRadius="12" Padding="10,6" Margin="0,0,8,0">
                         <StackPanel Orientation="Horizontal">
                             <ui:SymbolIcon Symbol="Timer24" FontSize="12" Foreground="{DynamicResource ArchitecturalYellowBrush}" Margin="0,0,6,0"/>
                             <TextBlock Text="{DynamicResource Network_LivePingLabel}" FontSize="10.5" FontWeight="SemiBold"
@@ -81,7 +80,7 @@
                         </StackPanel>
                     </Border>
                     <Border Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}"
-                            BorderThickness="1" CornerRadius="8" Padding="10,6">
+                            BorderThickness="1" CornerRadius="12" Padding="10,6">
                         <StackPanel Orientation="Horizontal">
                             <ui:SymbolIcon Symbol="TopSpeed24" FontSize="12" Foreground="{DynamicResource ArchitecturalYellowBrush}" Margin="0,0,6,0"/>
                             <TextBlock Text="{DynamicResource Network_LiveDownloadLabel}" FontSize="10.5" FontWeight="SemiBold"
@@ -132,7 +131,7 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-                    <Grid x:Name="AdapterInfoGrid" Margin="0,10,0,0">
+                    <Grid Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -222,6 +221,39 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                         <Border Width="4" Height="16" Background="{DynamicResource ArchitecturalYellowBrush}" CornerRadius="2" Margin="0,0,10,0"/>
+                        <TextBlock Text="{DynamicResource Network_ShieldTitle}" Style="{StaticResource SectionTitleStyle}"/>
+                    </StackPanel>
+                    <TextBlock Text="{DynamicResource Network_ShieldDesc}" FontSize="11.5" TextWrapping="Wrap"
+                               Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,10"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Command="{Binding ToggleShieldCommand}" Style="{StaticResource ActionButtonStyle}"
+                                Background="{DynamicResource PrimaryBrush}" BorderBrush="{DynamicResource PrimaryBrush}"
+                                ToolTip="{DynamicResource Network_ShieldTip}">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="Shield24" FontSize="14" Foreground="{DynamicResource ArchitecturalDarkTextBrush}" Margin="0,0,8,0"/>
+                                <TextBlock Text="{Binding ShieldButtonText}" Foreground="{DynamicResource ArchitecturalDarkTextBrush}"/>
+                            </StackPanel>
+                        </Button>
+                        <TextBlock Text="{DynamicResource Network_ShieldAdminRequired}" VerticalAlignment="Center" Margin="10,0,0,0"
+                                   FontSize="10.5" Foreground="{DynamicResource DangerBrush}"
+                                   Visibility="{Binding ShieldAdminOk, Converter={StaticResource BoolToVisInv}}"/>
+                    </StackPanel>
+                    <CheckBox Content="{DynamicResource Network_ShieldStrict}" IsChecked="{Binding ShieldStrict, Mode=TwoWay}"
+                              FontSize="11.5" Margin="0,8,0,0" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    <TextBlock Text="{DynamicResource Network_ShieldStrictWarn}" FontSize="10.5" TextWrapping="Wrap"
+                               Foreground="#e6a23c" Margin="22,2,0,0"
+                               Visibility="{Binding ShieldStrict, Converter={StaticResource BoolToVis}}"/>
+                    <CheckBox Content="{DynamicResource Network_ShieldHeuristics}" IsChecked="{Binding ShieldHeuristics, Mode=TwoWay}"
+                              FontSize="11.5" Margin="0,4,0,0" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    <TextBlock Text="{Binding ShieldStatsText}" FontSize="11" Margin="0,8,0,0"
+                               Foreground="{DynamicResource TextHintBrush}" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorderStyle}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <Border Width="4" Height="16" Background="{DynamicResource ArchitecturalYellowBrush}" CornerRadius="2" Margin="0,0,10,0"/>
                         <TextBlock Text="{DynamicResource Network_ResultsTitle}" Style="{StaticResource SectionTitleStyle}"/>
                     </StackPanel>
 
@@ -301,7 +333,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border Background="{DynamicResource BgElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}"
-                                        BorderThickness="1" CornerRadius="8" Padding="12,9" Margin="0,0,0,8">
+                                        BorderThickness="1" CornerRadius="12" Padding="12,9" Margin="0,0,0,8">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -311,7 +343,7 @@
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Text="{Binding DisplayName}" FontSize="12" FontWeight="SemiBold"
                                                            Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
-                                                <Border Background="#2A2E36" CornerRadius="4" Padding="6,2" Margin="8,0,0,0" VerticalAlignment="Center">
+                                                <Border Background="{DynamicResource BgHoverBrush}" CornerRadius="4" Padding="6,2" Margin="8,0,0,0" VerticalAlignment="Center">
                                                     <TextBlock Text="{Binding CategoryLabel}" FontSize="9" FontWeight="SemiBold"
                                                                Foreground="{DynamicResource TextSecondaryBrush}"/>
                                                 </Border>
@@ -321,7 +353,7 @@
                                             <TextBlock Text="{Binding CurrentToTarget}" FontSize="10.5" Margin="0,3,0,0"
                                                        Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"/>
                                         </StackPanel>
-                                        <Border Grid.Column="1" CornerRadius="6" Padding="10,5" VerticalAlignment="Center"
+                                        <Border Grid.Column="1" CornerRadius="9" Padding="10,5" VerticalAlignment="Center"
                                                 BorderThickness="1">
                                             <Border.Style>
                                                 <Style TargetType="Border">
@@ -329,7 +361,7 @@
                                                     <Setter Property="Background" Value="{DynamicResource BgCardBrush}"/>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding IsOptimal}" Value="True">
-                                                            <Setter Property="BorderBrush" Value="#10B981"/>
+                                                            <Setter Property="BorderBrush" Value="{DynamicResource SuccessBrush}"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>

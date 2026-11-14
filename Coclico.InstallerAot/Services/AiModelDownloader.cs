@@ -9,7 +9,7 @@ using Coclico.Installer.Models;
 
 namespace Coclico.Installer.Services;
 
-public static class AiModelDownloader
+internal static class AiModelDownloader
 {
     public static async Task DownloadModelAsync(string installDir, InstallerAiModel model, IProgress<InstallProgressReport> progress, CancellationToken ct = default)
     {

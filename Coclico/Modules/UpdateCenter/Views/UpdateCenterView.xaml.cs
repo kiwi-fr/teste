@@ -5,7 +5,7 @@ namespace Coclico.Modules.UpdateCenter.Views;
 
 public partial class UpdateCenterView : UserControl
 {
-    public UpdateCenterView(UpdateCenterViewModel viewModel)
+    internal UpdateCenterView(UpdateCenterViewModel viewModel)
     {
         DataContext = viewModel;
         InitializeComponent();

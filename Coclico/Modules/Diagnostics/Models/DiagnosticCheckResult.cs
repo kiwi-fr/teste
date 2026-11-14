@@ -1,6 +1,6 @@
 namespace Coclico.Modules.Diagnostics.Models;
 
-public sealed record DiagnosticCheckResult
+internal sealed record DiagnosticCheckResult
 {
     public required string CheckId { get; init; }
 

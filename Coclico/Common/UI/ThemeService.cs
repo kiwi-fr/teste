@@ -5,7 +5,7 @@ using Wpf.Ui.Appearance;
 
 namespace Coclico.Services;
 
-public class ThemeService : IDisposable
+internal class ThemeService : IDisposable
 {
     private static readonly Dictionary<string, string> PresetPalette = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -155,7 +155,7 @@ public class ThemeService : IDisposable
             Application.Current.Resources["BgCardColor"] = cardColor;
             Application.Current.Resources["BgDark"] = CreateBrush(bgWithAlpha);
             Application.Current.Resources["BgCard"] = CreateBrush(cardColor);
-            Application.Current.Resources["BorderStrongBrush"] = CreateBrush(mode == "Light" ? "#D4C7BF" : "#4A3337");
+            Application.Current.Resources["BorderStrongBrush"] = CreateBrush(string.Equals(mode, "Light", StringComparison.Ordinal) ? "#D4C7BF" : "#4A3337");
 
             Application.Current.Resources["TextPrimaryBrush"] = CreateBrush(textPrimary);
             Application.Current.Resources["TextSecondaryBrush"] = CreateBrush(textSecondary);

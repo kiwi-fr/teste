@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Coclico.Services;
 
-public sealed class CentralUnitStats
+internal sealed class CentralUnitStats
 {
     public CentralActivityLevel ActivityLevel { get; init; }
 
@@ -26,7 +26,7 @@ public sealed class CentralUnitStats
     public long RoutedRequests { get; init; }
 }
 
-public sealed class CentralUnitService : IDisposable
+internal sealed class CentralUnitService : IDisposable
 {
     public static readonly TimeSpan DefaultAiUnloadDelay = TimeSpan.FromSeconds(30);
 
@@ -45,11 +45,12 @@ public sealed class CentralUnitService : IDisposable
     private const int ExternalPressureRamPercent = 92;
     private const int ExternalPressureEnterSamples = 3;
     private const int ExternalPressureExitSamples = 2;
+    private const double CpuEwmaAlpha = 0.3;
 
     private static readonly TimeSpan PressureSampleInterval = TimeSpan.FromSeconds(20);
     private static readonly TimeSpan PressureSampleIntervalUnderPressure = TimeSpan.FromSeconds(45);
     private static readonly TimeSpan SuspensionPostponeDelay = TimeSpan.FromSeconds(30);
-    private static readonly ulong TicksPerSecond = 10_000_000UL;
+    private const ulong TicksPerSecond = 10_000_000UL;
 
     public static CentralUnitService Current { get; } = new();
 
@@ -58,7 +59,7 @@ public sealed class CentralUnitService : IDisposable
     public CentralUnitVariables Variables { get; } = new();
     public CentralUnitBus Bus { get; } = new();
 
-    private readonly object _stateLock = new();
+    private readonly Lock _stateLock = new();
     private CancellationTokenSource? _pressureCts;
     private Task? _pressureTask;
     private bool _initialized;
@@ -68,6 +69,7 @@ public sealed class CentralUnitService : IDisposable
     private int _externalCpuHighStreak;
     private int _externalCpuLowStreak;
     private double _lastCpuPercent;
+    private double? _cpuEwma;
     private bool _lastSampleValid;
     private ulong _lastIdleTicks;
     private ulong _lastTotalTicks;
@@ -169,11 +171,6 @@ public sealed class CentralUnitService : IDisposable
         }
 
         ScheduleAiUnload();
-    }
-
-    public void CancelAiUnload()
-    {
-        Flags.CancelSchedule(CentralFlags.AiModelUnload);
     }
 
     public CentralUnitStats GetStats()
@@ -334,6 +331,9 @@ public sealed class CentralUnitService : IDisposable
         double? externalCpuPercent = MeasureExternalCpuPercent();
         if (externalCpuPercent is double cpuPercent)
         {
+            _cpuEwma = _cpuEwma is double ewma
+                ? (CpuEwmaAlpha * cpuPercent) + ((1 - CpuEwmaAlpha) * ewma)
+                : cpuPercent;
             _lastCpuPercent = cpuPercent;
             Variables.Publish(CentralVariables.CpuPercent, Math.Round(cpuPercent, 1));
         }
@@ -344,7 +344,7 @@ public sealed class CentralUnitService : IDisposable
 
         lock (_stateLock)
         {
-            if (externalCpuPercent is double current)
+            if (_cpuEwma is double current)
             {
                 if (current >= ExternalPressureCpuEnterPercent)
                 {
@@ -397,7 +397,7 @@ public sealed class CentralUnitService : IDisposable
 
     private double? MeasureExternalCpuPercent()
     {
-        if (!GetSystemTimes(out NativeFileTime idleTime, out NativeFileTime kernelTime, out NativeFileTime userTime))
+        if (!NativeWin32.GetSystemTimes(out NativeWin32.FileTime idleTime, out NativeWin32.FileTime kernelTime, out NativeWin32.FileTime userTime))
         {
             return null;
         }
@@ -439,11 +439,11 @@ public sealed class CentralUnitService : IDisposable
     {
         try
         {
-            MemoryStatus status = new MemoryStatus
+            NativeWin32.MemoryStatusEx status = new NativeWin32.MemoryStatusEx
             {
-                Length = (uint)Marshal.SizeOf<MemoryStatus>()
+                Length = (uint)Marshal.SizeOf<NativeWin32.MemoryStatusEx>()
             };
-            return GlobalMemoryStatusEx(ref status) && status.MemoryLoad >= ExternalPressureRamPercent;
+            return NativeWin32.GlobalMemoryStatusEx(ref status) && status.MemoryLoad >= ExternalPressureRamPercent;
         }
         catch (Exception ex) when (ex is System.Runtime.InteropServices.COMException or System.InvalidOperationException)
         {
@@ -477,30 +477,9 @@ public sealed class CentralUnitService : IDisposable
         }
     }
 
-    private static ulong ToTicks(NativeFileTime fileTime)
+    private static ulong ToTicks(NativeWin32.FileTime fileTime)
     {
-        return ((ulong)fileTime.HighDateTime << 32) | fileTime.LowDateTime;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct NativeFileTime
-    {
-        public uint LowDateTime;
-        public uint HighDateTime;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct MemoryStatus
-    {
-        public uint Length;
-        public uint MemoryLoad;
-        public ulong TotalPhysical;
-        public ulong AvailablePhysical;
-        public ulong TotalPageFile;
-        public ulong AvailablePageFile;
-        public ulong TotalVirtual;
-        public ulong AvailableVirtual;
-        public ulong AvailableExtendedVirtual;
+        return (ulong)fileTime.ToInt64();
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -516,16 +495,6 @@ public sealed class CentralUnitService : IDisposable
     {
         public uint MemoryPriority;
     }
-
-    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-    [DllImport("kernel32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool GetSystemTimes(out NativeFileTime idleTime, out NativeFileTime kernelTime, out NativeFileTime userTime);
-
-    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-    [DllImport("kernel32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool GlobalMemoryStatusEx(ref MemoryStatus buffer);
 
     [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", SetLastError = true)]

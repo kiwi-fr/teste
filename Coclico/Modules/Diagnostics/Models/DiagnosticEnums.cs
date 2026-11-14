@@ -1,13 +1,13 @@
 namespace Coclico.Modules.Diagnostics.Models;
 
-public enum DiagnosticMode
+internal enum DiagnosticMode
 {
     Quick,
     Full,
     Targeted
 }
 
-public enum DiagnosticRunStatus
+internal enum DiagnosticRunStatus
 {
     Running,
     Completed,
@@ -25,14 +25,14 @@ public enum DiagnosticSeverity
     Critical = 4
 }
 
-public enum DiagnosticConfidence
+internal enum DiagnosticConfidence
 {
     Low = 0,
     Medium = 1,
     High = 2
 }
 
-public enum DiagnosticCheckStatus
+internal enum DiagnosticCheckStatus
 {
     Passed,
     Findings,
@@ -43,7 +43,7 @@ public enum DiagnosticCheckStatus
     Cancelled
 }
 
-public enum DiagnosticCategory
+internal enum DiagnosticCategory
 {
     Windows,
     Cpu,
@@ -58,7 +58,7 @@ public enum DiagnosticCategory
     Motherboard
 }
 
-public enum DiagnosticValueState
+internal enum DiagnosticValueState
 {
     Measured,
 

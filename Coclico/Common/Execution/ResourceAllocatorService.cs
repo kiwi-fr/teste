@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Coclico.Services;
 
-public sealed class ResourceAllocatorService : IResourceAllocator
+internal sealed class ResourceAllocatorService : IResourceAllocator
 {
     private const long BytesPerMb = 1024 * 1024;
 
@@ -54,11 +54,11 @@ public sealed class ResourceAllocatorService : IResourceAllocator
         {
             return Fail(processId, "Process has exited");
         }
-        catch (Exception ex) when (ex.HResult == unchecked((int)0x80004005))
+        catch (Exception ex) when (ex.HResult == unchecked((int)0x80070005))
         {
             return Fail(processId, "Access denied (system process)");
         }
-        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception)
         {
             LoggingService.LogException(ex, $"QoS.SetPriority PID={processId}");
             return Fail(processId, ex.Message);
@@ -72,6 +72,12 @@ public sealed class ResourceAllocatorService : IResourceAllocator
         {
             using var proc = Process.GetProcessById(processId);
             string name = proc.ProcessName;
+
+            if (ProtectedSystemProcesses.Contains(name))
+            {
+                return Fail(processId, $"Cannot modify affinity of critical system process '{name}'");
+            }
+
             proc.ProcessorAffinity = new IntPtr(affinityMask);
             LoggingService.LogDebug($"[QoS] PID {processId} ({name}) affinity → 0x{affinityMask:X}");
             LoggingService.LogDebug($"[ResourceAllocatorService.SetProcessorAffinity] Exit result=Success({name})");
@@ -149,7 +155,7 @@ public sealed class ResourceAllocatorService : IResourceAllocator
             using var proc = Process.GetProcessById(processId);
             return ToPriorityLevel(proc.PriorityClass);
         }
-        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or System.InvalidOperationException)
+        catch (Exception ex) when (ex is ArgumentException or System.ComponentModel.Win32Exception or System.InvalidOperationException)
         {
             return null;
         }
@@ -158,33 +164,30 @@ public sealed class ResourceAllocatorService : IResourceAllocator
     public IReadOnlyList<ProcessQosSnapshot> GetSystemSnapshot()
     {
         var result = new List<ProcessQosSnapshot>(256);
-        foreach (Process proc in Process.GetProcesses())
+        foreach (Process proc in ProcessSnapshotProvider.Capture())
         {
-            using (proc)
+            try
             {
+                PriorityLevel priority = PriorityLevel.Normal;
                 try
                 {
-                    PriorityLevel priority = PriorityLevel.Normal;
-                    try
-                    {
-                        priority = ToPriorityLevel(proc.PriorityClass);
-                    }
-                    catch (Exception exSwallow) when (exSwallow is not System.OutOfMemoryException)
-                    {
-                        LoggingService.LogException(exSwallow, "ResourceAllocatorService.SnapshotPriority");
-                    }
-
-                    result.Add(new ProcessQosSnapshot(
-                        Pid: proc.Id,
-                        Name: proc.ProcessName,
-                        Priority: priority,
-                        AffinityMask: proc.ProcessorAffinity.ToInt64(),
-                        WorkingSetMb: proc.WorkingSet64 / BytesPerMb));
+                    priority = ToPriorityLevel(proc.PriorityClass);
                 }
                 catch (Exception exSwallow) when (exSwallow is not System.OutOfMemoryException)
                 {
-                    LoggingService.LogException(exSwallow, "ResourceAllocatorService.SnapshotEntry");
+                    LoggingService.LogException(exSwallow, "ResourceAllocatorService.SnapshotPriority");
                 }
+
+                result.Add(new ProcessQosSnapshot(
+                    Pid: proc.Id,
+                    Name: proc.ProcessName,
+                    Priority: priority,
+                    AffinityMask: proc.ProcessorAffinity.ToInt64(),
+                    WorkingSetMb: proc.WorkingSet64 / BytesPerMb));
+            }
+            catch (Exception exSwallow) when (exSwallow is not System.OutOfMemoryException)
+            {
+                LoggingService.LogException(exSwallow, "ResourceAllocatorService.SnapshotEntry");
             }
         }
 

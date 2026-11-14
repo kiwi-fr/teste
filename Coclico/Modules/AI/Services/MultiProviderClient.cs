@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace Coclico.Services.AI;
 
-public sealed class MultiProviderClient
+internal sealed class MultiProviderClient
 {
     private static readonly HttpClient HttpClient = new(new HttpClientHandler
     {
@@ -23,7 +23,7 @@ public sealed class MultiProviderClient
     public static bool IsLocalEndpoint(string? endpoint)
     {
         if (!Uri.TryCreate(endpoint, UriKind.Absolute, out Uri? uri) ||
-            (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps) ||
+            (!string.Equals(uri.Scheme, Uri.UriSchemeHttp, StringComparison.Ordinal) && !string.Equals(uri.Scheme, Uri.UriSchemeHttps, StringComparison.Ordinal)) ||
             !uri.IsLoopback ||
             !string.IsNullOrEmpty(uri.UserInfo) ||
             !string.IsNullOrEmpty(uri.Query) ||
@@ -32,7 +32,7 @@ public sealed class MultiProviderClient
             return false;
         }
 
-        return string.IsNullOrEmpty(uri.AbsolutePath) || uri.AbsolutePath == "/";
+        return string.IsNullOrEmpty(uri.AbsolutePath) || string.Equals(uri.AbsolutePath, "/", StringComparison.Ordinal);
     }
 
     public async IAsyncEnumerable<string> StreamChatAsync(
@@ -60,7 +60,7 @@ public sealed class MultiProviderClient
             messages.Add(new { role = "assistant", content = assistant });
         }
 
-        var userPayload = new Dictionary<string, object?>
+        var userPayload = new Dictionary<string, object?>(StringComparer.Ordinal)
         {
             ["role"] = "user",
             ["content"] = userMessage
@@ -119,8 +119,10 @@ public sealed class MultiProviderClient
                 yield break;
             }
 
-            await using Stream stream = await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
-            using var reader = new StreamReader(stream, Encoding.UTF8);
+            Stream stream = await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
+            await using (stream.ConfigureAwait(false))
+            {
+                using var reader = new StreamReader(stream, Encoding.UTF8);
             string? line;
             while ((line = await reader.ReadLineAsync(ct).ConfigureAwait(false)) != null)
             {
@@ -142,6 +144,7 @@ public sealed class MultiProviderClient
                 {
                     yield return token;
                 }
+            }
             }
         }
     }

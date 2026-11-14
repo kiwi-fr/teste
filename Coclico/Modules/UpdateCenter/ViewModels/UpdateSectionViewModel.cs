@@ -6,7 +6,7 @@ using Coclico.Modules.UpdateCenter.Models;
 
 namespace Coclico.Modules.UpdateCenter.ViewModels;
 
-public sealed class UpdateSectionViewModel : INotifyPropertyChanged
+internal sealed class UpdateSectionViewModel : INotifyPropertyChanged
 {
     private bool _isExpanded;
     private bool _isBusy;

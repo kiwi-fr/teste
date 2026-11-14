@@ -19,7 +19,7 @@ public sealed class AdaptivePowerRulesTests
     }
 
     [Fact]
-    public void CpuLoadWindow_AveragesOnlyRecentSamples()
+    public void CpuLoadWindowAveragesOnlyRecentSamples()
     {
         CpuLoadWindow window = new(TimeSpan.FromMinutes(5));
         DateTime utc = new(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc);
@@ -33,7 +33,7 @@ public sealed class AdaptivePowerRulesTests
     }
 
     [Fact]
-    public void Evaluate_RespectsCooldown()
+    public void EvaluateRespectsCooldown()
     {
         DateTime utc = new(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc);
         AdaptivePowerConfig config = new() { Cooldown = TimeSpan.FromSeconds(90) };
@@ -47,7 +47,7 @@ public sealed class AdaptivePowerRulesTests
     }
 
     [Fact]
-    public void Evaluate_SustainedHighLoad_SwitchesToPerformance()
+    public void EvaluateSustainedHighLoadSwitchesToPerformance()
     {
         DateTime utc = new(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc);
         AdaptivePowerConfig config = new();
@@ -62,7 +62,7 @@ public sealed class AdaptivePowerRulesTests
     }
 
     [Fact]
-    public void Evaluate_SustainedLowLoad_SwitchesToEconomy()
+    public void EvaluateSustainedLowLoadSwitchesToEconomy()
     {
         DateTime utc = new(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc);
         AdaptivePowerConfig config = new();
@@ -77,7 +77,7 @@ public sealed class AdaptivePowerRulesTests
     }
 
     [Fact]
-    public void Evaluate_ModerateLoad_DoesNothing()
+    public void EvaluateModerateLoadDoesNothing()
     {
         DateTime utc = new(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc);
         AdaptivePowerConfig config = new();
@@ -91,7 +91,7 @@ public sealed class AdaptivePowerRulesTests
     }
 
     [Fact]
-    public void Evaluate_HighLoadOnPerformanceMode_DoesNotReapply()
+    public void EvaluateHighLoadOnPerformanceModeDoesNotReapply()
     {
         DateTime utc = new(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc);
         AdaptivePowerConfig config = new();

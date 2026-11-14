@@ -3,7 +3,7 @@ using Microsoft.Win32;
 
 namespace Coclico.Services;
 
-public sealed class DialogService : IDialogService
+internal sealed class DialogService : IDialogService
 {
     public void ShowMessage(string message, string title = "Coclico", Window? owner = null)
     {

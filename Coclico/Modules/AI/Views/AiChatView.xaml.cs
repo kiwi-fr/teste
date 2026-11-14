@@ -1,5 +1,4 @@
 using System.IO;
-using System.Net.Http;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -81,48 +80,46 @@ public partial class AiChatView : UserControl
             return;
         }
         _hardwareChecked = true;
-        AiGpuVendor vendor = await Task.Run(AiHardwareService.DetectVendor).ConfigureAwait(true);
-        bool cudaReady = await Task.Run(AiHardwareService.IsCudaRuntimeAvailable).ConfigureAwait(true);
-        await ApplyHardwareEnvironmentAsync(vendor, cudaReady);
+        AiHardwareEnvironment environment = await AiHardwareService
+            .EvaluateEnvironmentAsync(_aiService.UseGpu)
+            .ConfigureAwait(true);
+        await ApplyHardwareEnvironmentAsync(environment).ConfigureAwait(false);
     }
 
-    private async Task ApplyHardwareEnvironmentAsync(AiGpuVendor vendor, bool cudaReady)
+    private async Task ApplyHardwareEnvironmentAsync(AiHardwareEnvironment environment)
     {
         if (_aiService.CurrentProvider != AiProviderType.LocalGGUF || !_aiService.IsEnabled)
         {
             return;
         }
 
-        if (vendor == AiGpuVendor.Amd)
+        switch (environment.Recommendation)
         {
-            if (_aiService.UseGpu)
-            {
+            case AiHardwareRecommendation.DisableGpuForAmd:
                 MessageBox.Show(
-                    "Coclico a détecté une carte graphique AMD (" + AiHardwareService.GetGpuDisplayName() + ")." + Environment.NewLine + Environment.NewLine +
+                    "Coclico a détecté une carte graphique AMD (" + environment.GpuName + ")." + Environment.NewLine + Environment.NewLine +
                     "Il n'existe pas de runtime d'accélération IA officiel pour AMD sur Windows (ROCm est réservé à Linux)." + Environment.NewLine +
                     "Le Copilot s'exécute donc sur le processeur (AVX2), sans consommer de VRAM.",
                     "Coclico Copilot - Carte AMD détectée",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
-                await _aiService.SetHardwareModeAsync(false);
+                await _aiService.SetHardwareModeAsync(false).ConfigureAwait(false);
                 UpdateHardwareToggleUi();
                 UpdateStatus();
-            }
-            return;
-        }
+                break;
 
-        if (vendor == AiGpuVendor.Nvidia && _aiService.UseGpu && !cudaReady)
-        {
-            MessageBoxResult choice = MessageBox.Show(
-                "Coclico a détecté une carte NVIDIA (" + AiHardwareService.GetGpuDisplayName() + ") mais le runtime CUDA 12 est absent : le Copilot s'exécute actuellement sur le processeur (lent)." + Environment.NewLine + Environment.NewLine +
-                "Télécharger et installer le runtime CUDA maintenant (environ 1,4 Go) ?",
-                "Coclico Copilot - Runtime CUDA manquant",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
-            if (choice == MessageBoxResult.Yes)
-            {
-                await DownloadCudaRuntimeFromChatAsync();
-            }
+            case AiHardwareRecommendation.OfferCudaInstall:
+                MessageBoxResult choice = MessageBox.Show(
+                    "Coclico a détecté une carte NVIDIA (" + environment.GpuName + ") mais le runtime CUDA 12 est absent : le Copilot s'exécute actuellement sur le processeur (lent)." + Environment.NewLine + Environment.NewLine +
+                    "Télécharger et installer le runtime CUDA maintenant (environ 1,4 Go) ?",
+                    "Coclico Copilot - Runtime CUDA manquant",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+                if (choice == MessageBoxResult.Yes)
+                {
+                    await DownloadCudaRuntimeFromChatAsync().ConfigureAwait(false);
+                }
+                break;
         }
     }
 
@@ -140,8 +137,8 @@ public partial class AiChatView : UserControl
         });
         try
         {
-            await AiHardwareService.DownloadCudaRuntimeAsync(progress, CancellationToken.None);
-            ToastService.Show("✅ Runtime CUDA installé avec succès.");
+            await AiHardwareService.DownloadCudaRuntimeAsync(progress, CancellationToken.None).ConfigureAwait(false);
+            ToastService.Show(_loc?.Get("Ai_CudaInstalled") ?? "OK");
             MessageBox.Show(
                 "Runtime CUDA installé avec succès. Redémarrez Coclico pour activer l'accélération GPU (VRAM).",
                 "Coclico Copilot - CUDA installé",
@@ -150,7 +147,7 @@ public partial class AiChatView : UserControl
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
-            ToastService.Show($"Échec de l'installation du runtime CUDA : {ex.Message}");
+            ToastService.Show(TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, _loc?.Get("Ai_CudaInstallFailed") ?? "Erreur : {0}", ex.Message));
             MessageBox.Show(
                 "Échec de l'installation du runtime CUDA :" + Environment.NewLine + ex.Message,
                 "Coclico Copilot - Installation CUDA",
@@ -180,7 +177,7 @@ public partial class AiChatView : UserControl
     {
         IReadOnlyList<AiModelInfo> models = AiModelCatalog.GetModelsForProvider(_aiService.CurrentProvider);
         CmbModel.ItemsSource = models.Select(m => m.DisplayName).ToList();
-        AiModelInfo? current = models.FirstOrDefault(m => m.Id == _aiService.CurrentModel);
+        AiModelInfo? current = models.FirstOrDefault(m => string.Equals(m.Id, _aiService.CurrentModel, StringComparison.Ordinal));
         if (current == null || (_aiService.CurrentProvider == AiProviderType.LocalGGUF && !((_aiService as AiChatService)?.IsModelDownloaded(current.Id) ?? false)))
         {
             AiModelInfo? downloaded = models.FirstOrDefault(m => (_aiService as AiChatService)?.IsModelDownloaded(m.Id) == true);
@@ -202,14 +199,14 @@ public partial class AiChatView : UserControl
     {
         if (_aiService.CurrentProvider == AiProviderType.LocalGGUF)
         {
-            AiModelInfo modelInfo = AiModelCatalog.AllModels.FirstOrDefault(m => m.Id == _aiService.CurrentModel && m.Provider == AiProviderType.LocalGGUF)
+            AiModelInfo modelInfo = AiModelCatalog.AllModels.FirstOrDefault(m => string.Equals(m.Id, _aiService.CurrentModel, StringComparison.Ordinal) && m.Provider == AiProviderType.LocalGGUF)
                             ?? AiModelCatalog.GetDefaultModel(AiProviderType.LocalGGUF);
             bool isAvail = (_aiService as AiChatService)?.IsModelDownloaded(modelInfo.Id) ?? false;
             BannerDownloadLocal.Visibility = isAvail ? Visibility.Collapsed : Visibility.Visible;
             if (!isAvail)
             {
                 TxtBannerModelNotice.Text = TextFormatService.Format(
-                    TryFindResource("Ai_BannerModelMissing") as string ?? "Modèle local '{0}' non présent sur le disque (~{1} Mo).",
+System.Globalization.CultureInfo.InvariantCulture, TryFindResource("Ai_BannerModelMissing") as string ?? "Modèle local '{0}' non présent sur le disque (~{1} Mo).",
                     modelInfo.DisplayName, modelInfo.SizeEstimateMb);
             }
         }
@@ -226,7 +223,7 @@ public partial class AiChatView : UserControl
     {
         if (CmbProvider.SelectedValue is AiProviderType provider && provider != _aiService.CurrentProvider)
         {
-            await _aiService.SwitchProviderAsync(provider);
+            await _aiService.SwitchProviderAsync(provider).ConfigureAwait(false);
             RefreshModelsForCurrentProvider();
             UpdateHardwareToggleUi();
             UpdateStatus();
@@ -241,10 +238,10 @@ public partial class AiChatView : UserControl
         if (CmbModel.SelectedItem is string displayName)
         {
             IReadOnlyList<AiModelInfo> models = AiModelCatalog.GetModelsForProvider(_aiService.CurrentProvider);
-            AiModelInfo? match = models.FirstOrDefault(m => m.DisplayName == displayName);
-            if (match != null && match.Id != _aiService.CurrentModel)
+            AiModelInfo? match = models.FirstOrDefault(m => string.Equals(m.DisplayName, displayName, StringComparison.Ordinal));
+            if (match != null && !string.Equals(match.Id, _aiService.CurrentModel, StringComparison.Ordinal))
             {
-                await _aiService.SwitchProviderAsync(_aiService.CurrentProvider, match.Id);
+                await _aiService.SwitchProviderAsync(_aiService.CurrentProvider, match.Id).ConfigureAwait(false);
                 UpdateStatus();
                 UpdateBannerState();
             }
@@ -255,7 +252,7 @@ public partial class AiChatView : UserControl
     {
         if (!_aiService.IsEnabled)
         {
-            TxtStatusSubtitle.Text = "En veille (0 Mo RAM/VRAM)";
+            TxtStatusSubtitle.Text = _loc?.Get("Ai_StandbySubtitle") ?? "En veille (0 Mo RAM/VRAM)";
             UpdateHardwareToggleUi();
             return;
         }
@@ -287,7 +284,7 @@ public partial class AiChatView : UserControl
     {
         bool useGpu = _aiService.UseGpu;
         TxtHardwareIcon.Text = useGpu ? "⚡" : "💻";
-        TxtHardwareMode.Text = useGpu ? "GPU (VRAM)" : "CPU pur";
+        TxtHardwareMode.Text = useGpu ? Loc.Get("Ai_GpuLabel") : Loc.Get("Ai_CpuLabel");
         HardwarePill.Visibility = _aiService.CurrentProvider == AiProviderType.LocalGGUF
             ? Visibility.Visible
             : Visibility.Collapsed;
@@ -299,16 +296,16 @@ public partial class AiChatView : UserControl
     private async Task BtnMasterToggle_ClickAsync(object sender, RoutedEventArgs e)
     {
         bool newEnabled = !_aiService.IsEnabled;
-        await _aiService.SetEnabledAsync(newEnabled);
+        await _aiService.SetEnabledAsync(newEnabled).ConfigureAwait(false);
         UpdateMasterToggleUi();
         UpdateStatus();
         if (newEnabled)
         {
-            ToastService.Show("🟢 Copilot activé et opérationnel.");
+            ToastService.Show(_loc?.Get("Ai_CopilotActive") ?? "OK");
         }
         else
         {
-            ToastService.Show("💤 Copilot en veille. Mémoire vive déchargée (0 Mo).");
+            ToastService.Show(_loc?.Get("Ai_CopilotStandby") ?? "Veille");
         }
     }
 
@@ -334,7 +331,7 @@ public partial class AiChatView : UserControl
         }
 
         bool newGpu = !_aiService.UseGpu;
-        await _aiService.SetHardwareModeAsync(newGpu);
+        await _aiService.SetHardwareModeAsync(newGpu).ConfigureAwait(false);
         UpdateHardwareToggleUi();
         UpdateStatus();
         ToastService.Show(newGpu
@@ -347,9 +344,9 @@ public partial class AiChatView : UserControl
 
     private async Task BtnUnloadModel_ClickAsync(object sender, RoutedEventArgs e)
     {
-        await _aiService.UnloadAsync();
+        await _aiService.UnloadAsync().ConfigureAwait(false);
         UpdateStatus();
-        ToastService.Show("Modèle local déchargé. Mémoire vive libérée (0 Mo).");
+        ToastService.Show(_loc?.Get("Ai_ModelUnloaded") ?? "Déchargé");
     }
 
     private void BtnReset_Click(object sender, RoutedEventArgs e)
@@ -376,7 +373,7 @@ public partial class AiChatView : UserControl
     private async Task BtnClose_ClickAsync(object sender, RoutedEventArgs e)
     {
         CloseRequested?.Invoke(this, EventArgs.Empty);
-        await _aiService.UnloadAsync();
+        await _aiService.UnloadAsync().ConfigureAwait(false);
         UpdateStatus();
     }
 
@@ -409,7 +406,7 @@ public partial class AiChatView : UserControl
         }
         else
         {
-            ToastService.Show("Impossible de capturer l'écran.");
+            ToastService.Show(_loc?.Get("Ai_CaptureFailed") ?? "Erreur");
         }
     }
 
@@ -422,7 +419,7 @@ public partial class AiChatView : UserControl
         }
         else
         {
-            ToastService.Show("Aucune image trouvée dans le presse-papier.");
+            ToastService.Show(_loc?.Get("Ai_NoClipboardImage") ?? "Aucune image");
         }
     }
 
@@ -459,7 +456,7 @@ public partial class AiChatView : UserControl
         _ = await Dispatcher.InvokeAsync(() => card = AddActionCard(action));
         try
         {
-            AiActionResult result = await _toolService.ExecuteActionAsync(action with { Confirmed = true });
+            AiActionResult result = await _toolService.ExecuteActionAsync(action with { Confirmed = true }).ConfigureAwait(false);
             await Dispatcher.InvokeAsync(() =>
             {
                 if (card != null)
@@ -478,7 +475,7 @@ public partial class AiChatView : UserControl
                 {
                     UpdateActionCard(card, new AiActionResult(false, $"Erreur : {ex.Message}"));
                 }
-                ToastService.Show($"Erreur : {ex.Message}");
+                ToastService.Show(TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, _loc?.Get("Ai_ErrorPrefix") ?? "Erreur : {0}", ex.Message));
             });
         }
         finally
@@ -496,7 +493,7 @@ public partial class AiChatView : UserControl
 
     private async Task ChipCleanRam_ClickAsync(object sender, RoutedEventArgs e)
     {
-        await ExecuteDirectChipActionAsync(new AiActionRequest("CLEAN_RAM", null, "[ACTION:CLEAN_RAM]"), "⚡ Nettoyer la mémoire vive (RAM)");
+        await ExecuteDirectChipActionAsync(new AiActionRequest("CLEAN_RAM", null, "[ACTION:CLEAN_RAM]"), "⚡ Nettoyer la mémoire vive (RAM)").ConfigureAwait(false);
     }
 
     private void ChipCleanTemp_Click(object sender, RoutedEventArgs e)
@@ -504,7 +501,7 @@ public partial class AiChatView : UserControl
 
     private async Task ChipCleanTemp_ClickAsync(object sender, RoutedEventArgs e)
     {
-        await ExecuteDirectChipActionAsync(new AiActionRequest("CLEAN_TEMP", null, "[ACTION:CLEAN_TEMP]"), "🧹 Nettoyer les fichiers temporaires");
+        await ExecuteDirectChipActionAsync(new AiActionRequest("CLEAN_TEMP", null, "[ACTION:CLEAN_TEMP]"), "🧹 Nettoyer les fichiers temporaires").ConfigureAwait(false);
     }
 
     private void ChipScanSfc_Click(object sender, RoutedEventArgs e)
@@ -512,7 +509,7 @@ public partial class AiChatView : UserControl
 
     private async Task ChipScanSfc_ClickAsync(object sender, RoutedEventArgs e)
     {
-        await ExecuteDirectChipActionAsync(new AiActionRequest("SCAN_SFC", null, "[ACTION:SCAN_SFC]"), "🔍 Lancer un scan d'intégrité système (SFC)");
+        await ExecuteDirectChipActionAsync(new AiActionRequest("SCAN_SFC", null, "[ACTION:SCAN_SFC]"), "🔍 Lancer un scan d'intégrité système (SFC)").ConfigureAwait(false);
     }
 
     private void ChipScanDism_Click(object sender, RoutedEventArgs e)
@@ -520,7 +517,7 @@ public partial class AiChatView : UserControl
 
     private async Task ChipScanDism_ClickAsync(object sender, RoutedEventArgs e)
     {
-        await ExecuteDirectChipActionAsync(new AiActionRequest("SCAN_DISM", null, "[ACTION:SCAN_DISM]"), "🛠️ Réparer l'image Windows (DISM)");
+        await ExecuteDirectChipActionAsync(new AiActionRequest("SCAN_DISM", null, "[ACTION:SCAN_DISM]"), "🛠️ Réparer l'image Windows (DISM)").ConfigureAwait(false);
     }
 
     private void ChipScanDefender_Click(object sender, RoutedEventArgs e)
@@ -528,7 +525,7 @@ public partial class AiChatView : UserControl
 
     private async Task ChipScanDefender_ClickAsync(object sender, RoutedEventArgs e)
     {
-        await ExecuteDirectChipActionAsync(new AiActionRequest("DEFENDER_SCAN", null, "[ACTION:DEFENDER_SCAN]"), "🛡️ Lancer l'antivirus Windows Defender");
+        await ExecuteDirectChipActionAsync(new AiActionRequest("DEFENDER_SCAN", null, "[ACTION:DEFENDER_SCAN]"), "🛡️ Lancer l'antivirus Windows Defender").ConfigureAwait(false);
     }
 
     private void ChipDiagnose_Click(object sender, RoutedEventArgs e)
@@ -536,7 +533,7 @@ public partial class AiChatView : UserControl
 
     private async Task ChipDiagnose_ClickAsync(object sender, RoutedEventArgs e)
     {
-        await ExecuteDirectChipActionAsync(new AiActionRequest("DIAGNOSE_SYSTEM", null, "[ACTION:DIAGNOSE_SYSTEM]"), "📊 Diagnostic complet des performances");
+        await ExecuteDirectChipActionAsync(new AiActionRequest("DIAGNOSE_SYSTEM", null, "[ACTION:DIAGNOSE_SYSTEM]"), "📊 Diagnostic complet des performances").ConfigureAwait(false);
     }
 
     private void ChipsScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -570,7 +567,7 @@ public partial class AiChatView : UserControl
         if (e.Key == Key.Enter && !_isThinking)
         {
             e.Handled = true;
-            await SendAsync();
+            await SendAsync().ConfigureAwait(false);
         }
         else if (e.Key == Key.V && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
         {
@@ -588,7 +585,7 @@ public partial class AiChatView : UserControl
 
     private async Task BtnSend_ClickAsync(object sender, RoutedEventArgs e)
     {
-        await SendAsync();
+        await SendAsync().ConfigureAwait(false);
     }
 
     private async Task SendAsync()
@@ -602,11 +599,11 @@ public partial class AiChatView : UserControl
         if (attach != null)
         {
             IReadOnlyList<AiModelInfo> models = AiModelCatalog.GetModelsForProvider(_aiService.CurrentProvider);
-            AiModelInfo currentModelInfo = models.FirstOrDefault(m => m.Id == _aiService.CurrentModel)
+            AiModelInfo currentModelInfo = models.FirstOrDefault(m => string.Equals(m.Id, _aiService.CurrentModel, StringComparison.Ordinal))
                                    ?? AiModelCatalog.GetDefaultModel(_aiService.CurrentProvider);
             if (!currentModelInfo.SupportsVision)
             {
-                ToastService.Show("Le modèle actuel ne prend pas en charge les images. Sélectionnez Ollama avec un modèle de vision, par exemple Llama 3.2 Vision.");
+                ToastService.Show(_loc?.Get("Ai_VisionUnsupported") ?? "Modèle sans vision");
                 return;
             }
         }
@@ -628,7 +625,7 @@ public partial class AiChatView : UserControl
             if (AiToolExecutionService.IsDirectActionCommand(text, preDetected))
             {
                 var distinctPreActions = preDetected
-                    .GroupBy(a => AiToolExecutionService.NormalizeActionType(a.ActionType))
+                    .GroupBy(a => AiToolExecutionService.NormalizeActionType(a.ActionType), StringComparer.Ordinal)
                     .Select(g => g.First())
                     .ToList();
                 string confirmMsg = _toolService.GetDefaultActionConfirmation(distinctPreActions[0]);
@@ -640,7 +637,7 @@ public partial class AiChatView : UserControl
                     {
                         Border? card = null;
                         _ = await Dispatcher.InvokeAsync(() => card = AddActionCard(action));
-                        AiActionResult result = await _toolService.ExecuteActionAsync(action with { Confirmed = true }, ct);
+                        AiActionResult result = await _toolService.ExecuteActionAsync(action with { Confirmed = true }, ct).ConfigureAwait(false);
                         await Dispatcher.InvokeAsync(() =>
                         {
                             if (card != null)
@@ -659,7 +656,7 @@ public partial class AiChatView : UserControl
                     {
                         TextBlock errBlock = AddAiBubble();
                         errBlock.Foreground = new SolidColorBrush(Color.FromRgb(0xEF, 0x44, 0x44));
-                        errBlock.Text = $"Erreur : {ex.Message}";
+                        errBlock.Text = Loc.Format("Ai_ErrorPrefix", ex.Message);
                     });
                 }
                 finally
@@ -681,7 +678,7 @@ public partial class AiChatView : UserControl
                 text,
                 attach?.Base64Data,
                 attach?.MimeType,
-                ct))
+                ct).ConfigureAwait(false))
             {
                 _ = sb.Append(token);
                 string snap = _toolService.SanitizeStreamingText(_toolService.StripActionTags(AiActionParser.Clean(sb.ToString())));
@@ -704,7 +701,7 @@ public partial class AiChatView : UserControl
                 actions.AddRange(detected);
             }
             var distinctActions = actions
-                .GroupBy(a => AiToolExecutionService.NormalizeActionType(a.ActionType))
+                .GroupBy(a => AiToolExecutionService.NormalizeActionType(a.ActionType), StringComparer.Ordinal)
                 .Select(g => g.First())
                 .ToList();
             string cleanAiText = distinctActions.Count > 0
@@ -733,7 +730,7 @@ public partial class AiChatView : UserControl
                         using CancellationTokenRegistration reg = ct.Register(() => tcs.TrySetCanceled());
                         try
                         {
-                            confirmed = await tcs.Task;
+                            confirmed = await tcs.Task.ConfigureAwait(false);
                         }
                         catch (OperationCanceledException)
                         {
@@ -741,7 +738,7 @@ public partial class AiChatView : UserControl
                         }
                         if (!confirmed)
                         {
-                            ToastService.ShowInfo("Action refusée par l'utilisateur.");
+                            ToastService.ShowInfo(_loc?.Get("Ai_ActionDeniedToast") ?? "Refusée");
                             continue;
                         }
                     }
@@ -750,7 +747,7 @@ public partial class AiChatView : UserControl
                         _ = await Dispatcher.InvokeAsync(() => card = AddActionCard(proposedAction));
                     }
                     AiActionRequest action = proposedAction with { Confirmed = true };
-                    AiActionResult result = await _toolService.ExecuteActionAsync(action, ct);
+                    AiActionResult result = await _toolService.ExecuteActionAsync(action, ct).ConfigureAwait(false);
                     await Dispatcher.InvokeAsync(() =>
                     {
                         if (card != null)
@@ -781,7 +778,7 @@ public partial class AiChatView : UserControl
             {
                 TextBlock errBlock = AddAiBubble();
                 errBlock.Foreground = new SolidColorBrush(Color.FromRgb(0xEF, 0x44, 0x44));
-                errBlock.Text = $"Erreur : {ex.Message}";
+                errBlock.Text = Loc.Format("Ai_ErrorPrefix", ex.Message);
                 SetThinking(false);
             });
         }
@@ -856,84 +853,31 @@ public partial class AiChatView : UserControl
 
     private async Task BtnDownloadGguf_ClickAsync(object sender, RoutedEventArgs e)
     {
-        AiModelInfo modelInfo = AiModelCatalog.AllModels.FirstOrDefault(m => m.Id == _aiService.CurrentModel && m.Provider == AiProviderType.LocalGGUF)
+        AiModelInfo modelInfo = AiModelCatalog.AllModels.FirstOrDefault(m => string.Equals(m.Id, _aiService.CurrentModel, StringComparison.Ordinal) && m.Provider == AiProviderType.LocalGGUF)
                         ?? AiModelCatalog.GetDefaultModel(AiProviderType.LocalGGUF);
-        string? url = modelInfo.DownloadUrl;
-        if (string.IsNullOrWhiteSpace(url))
-        {
-            ToastService.Show("Aucune URL de téléchargement disponible pour ce modèle.");
-            return;
-        }
         string dest = (_aiService as AiChatService)?.GetLocalModelFullPath(modelInfo.Id)
                    ?? Path.Join(AppDomain.CurrentDomain.BaseDirectory, "resource", "model", modelInfo.Id);
-        string? dir = Path.GetDirectoryName(dest);
-        if (!string.IsNullOrEmpty(dir))
-        {
-            _ = Directory.CreateDirectory(dir);
-        }
         BtnDownloadGguf.IsEnabled = false;
         LocalDownloadProgress.Visibility = Visibility.Visible;
         LocalDownloadProgress.IsIndeterminate = true;
-        string tmp = dest + ".tmp";
+        var progress = new Progress<AiModelDownloadProgress>(p =>
+        {
+            LocalDownloadProgress.IsIndeterminate = false;
+            LocalDownloadProgress.Minimum = 0;
+            LocalDownloadProgress.Maximum = 100;
+            LocalDownloadProgress.Value = p.Percent;
+            TxtBannerModelNotice.Text = p.Message;
+        });
         try
         {
-            using var http = new HttpClient();
-            http.Timeout = TimeSpan.FromHours(2);
-            using HttpResponseMessage resp = await http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
-            _ = resp.EnsureSuccessStatusCode();
-            long? totalBytes = resp.Content.Headers.ContentLength;
-            LocalDownloadProgress.IsIndeterminate = !totalBytes.HasValue;
-            if (totalBytes.HasValue)
-            {
-                LocalDownloadProgress.Minimum = 0;
-                LocalDownloadProgress.Maximum = 100;
-            }
-            using Stream s = await resp.Content.ReadAsStreamAsync();
-            using var fs = new FileStream(tmp, FileMode.Create, FileAccess.Write, FileShare.None, 81920, true);
-            byte[] buffer = new byte[81920];
-            long totalRead = 0;
-            int read;
-            DateTime lastUiUpdate = DateTime.MinValue;
-            while ((read = await s.ReadAsync(buffer.AsMemory(0, buffer.Length))) > 0)
-            {
-                await fs.WriteAsync(buffer.AsMemory(0, read));
-                totalRead += read;
-                if (totalBytes.HasValue && totalBytes.Value > 0)
-                {
-                    DateTime now = DateTime.UtcNow;
-                    if ((now - lastUiUpdate).TotalMilliseconds > 200 || totalRead == totalBytes.Value)
-                    {
-                        lastUiUpdate = now;
-                        double pct = (double)totalRead / totalBytes.Value * 100.0;
-                        LocalDownloadProgress.Value = pct;
-                        TxtBannerModelNotice.Text = $"Téléchargement de {modelInfo.DisplayName} : {pct:F0}% ({totalRead / (1024 * 1024)} Mo / {totalBytes.Value / (1024 * 1024)} Mo)";
-                    }
-                }
-            }
-            fs.Close();
-            if (File.Exists(dest))
-            {
-                File.Delete(dest);
-            }
-            File.Move(tmp, dest);
+            await AiModelDownloadService.DownloadGgufModelAsync(modelInfo, dest, progress).ConfigureAwait(false);
             BannerDownloadLocal.Visibility = Visibility.Collapsed;
-            ToastService.Show($"Modèle {modelInfo.DisplayName} téléchargé avec succès !");
+            ToastService.Show(TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, _loc?.Get("Ai_ModelDownloaded") ?? "Modèle {0} téléchargé !", modelInfo.DisplayName));
             UpdateStatus();
         }
-        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Net.Http.HttpRequestException or System.Net.Sockets.SocketException)
+        catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Net.Http.HttpRequestException or System.Net.Sockets.SocketException or InvalidOperationException)
         {
-            try
-            {
-                if (File.Exists(tmp))
-                {
-                    File.Delete(tmp);
-                }
-            }
-            catch (Exception cleanupEx) when (cleanupEx is System.IO.IOException or System.UnauthorizedAccessException)
-            {
-                LoggingService.LogException(cleanupEx, "AiChatView.DownloadCleanup");
-            }
-            ToastService.Show($"Erreur téléchargement : {ex.Message}");
+            ToastService.Show(TextFormatService.Format(System.Globalization.CultureInfo.InvariantCulture, _loc?.Get("Ai_DownloadError") ?? "Erreur téléchargement : {0}", ex.Message));
             UpdateBannerState();
         }
         finally

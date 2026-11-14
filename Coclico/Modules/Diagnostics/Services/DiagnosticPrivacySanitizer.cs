@@ -3,7 +3,7 @@ namespace Coclico.Modules.Diagnostics.Services;
 using System.Text.RegularExpressions;
 using Coclico.Modules.Diagnostics.Models;
 
-public sealed partial class DiagnosticPrivacySanitizer
+internal sealed partial class DiagnosticPrivacySanitizer
 {
     [GeneratedRegex(@"(?i)[A-Z]:\\Users\\[^\\]+\\?")]
     private static partial Regex UserProfilePathRegex();

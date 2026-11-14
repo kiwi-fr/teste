@@ -35,7 +35,7 @@ public sealed class SecurityJournalTests : IDisposable
         journal.Append(DateTime.UtcNow, "2.2.2", "StartupCheck", "Integrity", "Valid", "None", "initial check");
         journal.Append(DateTime.UtcNow, "2.2.2", "PeriodicCheck", "Integrity", "Valid", "None", "periodic check");
         string[] lines = File.ReadAllLines(journalPath);
-        lines[1] = lines[1].Replace("Valid", "Altered");
+        lines[1] = lines[1].Replace("Valid", "Altered", StringComparison.Ordinal);
         File.WriteAllLines(journalPath, lines);
 
         var reloaded = new SecurityJournal(journalPath, key);
@@ -66,8 +66,8 @@ public sealed class SecurityJournalTests : IDisposable
     public void EntrySanitizationRemovesSeparators()
     {
         string line = SecurityJournal.BuildLine(DateTime.UtcNow, "2.2.2", "Event", "Comp", "Valid", "None", "a|b\nc");
-        Assert.DoesNotContain("|a|b", line);
-        Assert.DoesNotContain('\n', line);
+        Assert.DoesNotContain("|a|b", line, StringComparison.Ordinal);
+        Assert.DoesNotContain('\n', line, StringComparison.Ordinal);
         string[] fields = line.Split('|');
         Assert.Equal(7, fields.Length);
     }
@@ -98,7 +98,7 @@ public sealed class SecurityJournalTests : IDisposable
         File.WriteAllBytes(exportPath, tampered);
 
         Assert.False(SecurityJournal.VerifyExport(exportPath, key, out string tamperedReason));
-        Assert.Contains("modified", tamperedReason);
+        Assert.Contains("modified", tamperedReason, StringComparison.Ordinal);
 
         byte[] wrongKey = new byte[32];
         System.Security.Cryptography.RandomNumberGenerator.Fill(wrongKey);
@@ -117,7 +117,7 @@ public sealed class SecurityJournalTests : IDisposable
         var journal = new SecurityJournal(journalPath, key);
         journal.Append(DateTime.UtcNow, "2.2.2", "StartupCheck", "Integrity", "Valid", "None", "initial check");
         string[] lines = File.ReadAllLines(journalPath);
-        lines[1] = lines[1].Replace("Valid", "Altered");
+        lines[1] = lines[1].Replace("Valid", "Altered", StringComparison.Ordinal);
         File.WriteAllLines(journalPath, lines);
 
         var reloaded = new SecurityJournal(journalPath, key);
@@ -127,7 +127,7 @@ public sealed class SecurityJournalTests : IDisposable
         Assert.False(export.IsIntact);
 
         Assert.False(SecurityJournal.VerifyExport(exportPath, key, out string reason));
-        Assert.Contains("already broken", reason);
+        Assert.Contains("already broken", reason, StringComparison.Ordinal);
     }
 
     public void Dispose()

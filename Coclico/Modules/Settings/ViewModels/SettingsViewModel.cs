@@ -9,7 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Coclico.ViewModels;
 
-public partial class SettingsViewModel : INotifyPropertyChanged
+internal partial class SettingsViewModel : INotifyPropertyChanged
 {
     private readonly SettingsService _settings = ServiceContainer.GetRequired<SettingsService>();
     private readonly LocalizationService _loc = ServiceContainer.GetRequired<LocalizationService>();
@@ -48,7 +48,7 @@ public partial class SettingsViewModel : INotifyPropertyChanged
         get => _selectedLanguage;
         set
         {
-            if (_selectedLanguage == value)
+            if (string.Equals(_selectedLanguage, value, StringComparison.Ordinal))
             {
                 return;
             }
@@ -63,7 +63,7 @@ public partial class SettingsViewModel : INotifyPropertyChanged
 
     public bool IsFrench
     {
-        get => SelectedLanguage == "fr";
+        get => string.Equals(SelectedLanguage, "fr", StringComparison.Ordinal);
         set
         {
             if (value)
@@ -75,7 +75,7 @@ public partial class SettingsViewModel : INotifyPropertyChanged
 
     public bool IsEnglish
     {
-        get => SelectedLanguage == "en";
+        get => string.Equals(SelectedLanguage, "en", StringComparison.Ordinal);
         set
         {
             if (value)
@@ -96,7 +96,7 @@ public partial class SettingsViewModel : INotifyPropertyChanged
         get => _backgroundMode;
         set
         {
-            if (_backgroundMode == value)
+            if (string.Equals(_backgroundMode, value, StringComparison.Ordinal))
             {
                 return;
             }
@@ -112,19 +112,19 @@ public partial class SettingsViewModel : INotifyPropertyChanged
 
     public bool IsDarkMode
     {
-        get => _backgroundMode == "Dark";
+        get => string.Equals(_backgroundMode, "Dark", StringComparison.Ordinal);
         set { if (value) BackgroundMode = "Dark"; }
     }
 
     public bool IsLightMode
     {
-        get => _backgroundMode == "Light";
+        get => string.Equals(_backgroundMode, "Light", StringComparison.Ordinal);
         set { if (value) BackgroundMode = "Light"; }
     }
 
     public bool IsSystemMode
     {
-        get => _backgroundMode == "System";
+        get => string.Equals(_backgroundMode, "System", StringComparison.Ordinal);
         set { if (value) BackgroundMode = "System"; }
     }
 
@@ -284,7 +284,7 @@ public partial class SettingsViewModel : INotifyPropertyChanged
         get => _ollamaEndpoint;
         set
         {
-            if (_ollamaEndpoint == value)
+            if (string.Equals(_ollamaEndpoint, value, StringComparison.Ordinal))
             {
                 return;
             }
@@ -363,18 +363,6 @@ public partial class SettingsViewModel : INotifyPropertyChanged
         _ollamaEndpoint = s.OllamaEndpoint;
     }
 
-    private static string L(string key)
-        => Application.Current?.TryFindResource(key) as string
-           ?? ServiceContainer.GetOptional<LocalizationService>()?.Get(key)
-           ?? key;
-
-    [RelayCommand]
-    private void ApplyPreset(string preset)
-    {
-        SelectedPreset = preset;
-        _theme.ApplyPreset(preset);
-        CustomAccentHex = _settings.Settings.AccentColor;
-    }
 
     [RelayCommand]
     private void ApplyCustomAccent()
@@ -389,7 +377,7 @@ public partial class SettingsViewModel : INotifyPropertyChanged
         List<AppProfile> profiles = _profiles.GetAllProfiles();
         AppProfile? active = _activeProfile ?? profiles.FirstOrDefault();
         Profiles = profiles;
-        ActiveProfileName = active != null ? active.Name : L("Settings_NoProfile");
+        ActiveProfileName = active != null ? active.Name : Loc.Get("Settings_NoProfile");
         ActiveProfileInitials = active != null ? active.AvatarInitials : "?";
     }
 
@@ -404,7 +392,7 @@ public partial class SettingsViewModel : INotifyPropertyChanged
         _activeProfile = profile;
         _settings.ApplyFrom(profile.Settings);
         RefreshProfiles();
-        ToastService.Show($"Profil \"{profile.Name}\" activ\u00e9.");
+        ToastService.Show(Loc.Format("Settings_ProfileActivated", profile.Name));
     }
 
     [RelayCommand]
@@ -413,7 +401,7 @@ public partial class SettingsViewModel : INotifyPropertyChanged
         string name = NewProfileName.Trim();
         if (string.IsNullOrWhiteSpace(name))
         {
-            ToastService.ShowError(L("Settings_EnterProfileName"));
+            ToastService.ShowError(Loc.Get("Settings_EnterProfileName"));
             return;
         }
 
@@ -432,7 +420,7 @@ public partial class SettingsViewModel : INotifyPropertyChanged
         _profiles.Save(profile);
         NewProfileName = string.Empty;
         RefreshProfiles();
-        ToastService.Show(TextFormatService.Format(L("Settings_ProfileCreated"), name));
+        ToastService.Show(Loc.Format("Settings_ProfileCreated", name));
     }
 
     [RelayCommand]
@@ -441,17 +429,17 @@ public partial class SettingsViewModel : INotifyPropertyChanged
         if (SelectedProfile is AppProfile profile)
         {
             _profiles.Delete(profile.Name);
-            if (_activeProfile?.Name == profile.Name)
+            if (string.Equals(_activeProfile?.Name, profile.Name, StringComparison.Ordinal))
             {
                 _activeProfile = null;
             }
 
             RefreshProfiles();
-            ToastService.Show(TextFormatService.Format(L("Settings_ProfileDeleted"), profile.Name));
+            ToastService.Show(Loc.Format("Settings_ProfileDeleted", profile.Name));
         }
         else
         {
-            ToastService.ShowInfo(L("Settings_SelectProfileToDelete"));
+            ToastService.ShowInfo(Loc.Get("Settings_SelectProfileToDelete"));
         }
     }
 
@@ -460,28 +448,28 @@ public partial class SettingsViewModel : INotifyPropertyChanged
     {
         if (SelectedProfile is not AppProfile profile)
         {
-            ToastService.ShowInfo(L("Settings_SelectProfileToRename"));
+            ToastService.ShowInfo(Loc.Get("Settings_SelectProfileToRename"));
             return;
         }
 
         string newName = RenameProfileName.Trim();
         if (string.IsNullOrWhiteSpace(newName))
         {
-            ToastService.ShowError(L("Settings_EnterNewName"));
+            ToastService.ShowError(Loc.Get("Settings_EnterNewName"));
             return;
         }
 
         string oldName = profile.Name;
         _profiles.Rename(oldName, newName);
 
-        if (_activeProfile?.Name == oldName)
+        if (string.Equals(_activeProfile?.Name, oldName, StringComparison.Ordinal))
         {
             _activeProfile = _profiles.Load(newName);
         }
 
         RenameProfileName = string.Empty;
         RefreshProfiles();
-        ToastService.Show(TextFormatService.Format(L("Settings_ProfileRenamed"), newName));
+        ToastService.Show(Loc.Format("Settings_ProfileRenamed", newName));
     }
 
     public void RefreshCacheInfo()
@@ -494,7 +482,7 @@ public partial class SettingsViewModel : INotifyPropertyChanged
             long bytes = await Task.Run(() =>
                 ServiceContainer.GetRequired<ICacheService>().GetCacheSizeBytes()).ConfigureAwait(true);
 
-            bool isEn = _loc.CurrentLanguage == "en";
+            bool isEn = string.Equals(_loc.CurrentLanguage, "en", StringComparison.Ordinal);
             CacheSizeText = bytes >= 1_048_576
                 ? $"{bytes / 1_048_576.0:F1} {(isEn ? "MB" : "Mo")}"
                 : $"{bytes / 1024.0:F1} {(isEn ? "KB" : "Ko")}";
@@ -516,7 +504,7 @@ public partial class SettingsViewModel : INotifyPropertyChanged
         {
             await ServiceContainer.GetRequired<ICacheService>().ClearAsync().ConfigureAwait(true);
             RefreshCacheInfo();
-            ToastService.Show(L("Settings_CacheCleared"));
+            ToastService.Show(Loc.Get("Settings_CacheCleared"));
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
@@ -562,7 +550,8 @@ public partial class SettingsViewModel : INotifyPropertyChanged
             string? installerPath = null;
             string localSetupName = $"Coclico-{UpdateCheckService.GetCurrentVersion()}.exe";
 
-            var exePath = System.Reflection.Assembly.GetEntryAssembly()?.Location;
+            // AppContext.BaseDirectory : fiable aussi en single-file (Assembly.Location y est vide)
+            var exePath = AppContext.BaseDirectory;
             if (!string.IsNullOrEmpty(exePath))
             {
                 var exeDir = Path.GetDirectoryName(exePath);
@@ -591,7 +580,7 @@ public partial class SettingsViewModel : INotifyPropertyChanged
 
             if (string.IsNullOrEmpty(installerPath))
             {
-                var exePath2 = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                var exePath2 = AppContext.BaseDirectory;
                 if (!string.IsNullOrEmpty(exePath2))
                 {
                     var exeDir = Path.GetDirectoryName(exePath2);
@@ -656,29 +645,68 @@ public partial class SettingsViewModel : INotifyPropertyChanged
                     if (key != null)
                     {
                         var uninstallString = key.GetValue("UninstallString") as string;
-                        if (!string.IsNullOrEmpty(uninstallString))
+                        ParsedUninstallCommand? parsed = UninstallCommandParser.Parse(uninstallString);
+                        if (parsed != null && IsUninstallCommandAllowed(parsed))
                         {
-                            Process.Start(new ProcessStartInfo(uninstallString)
+                            if (parsed.IsUri || parsed.IsMsi)
                             {
-                                UseShellExecute = true,
-                                Verb = "runas"
-                            });
+                                _ = Process.Start(new ProcessStartInfo
+                                {
+                                    FileName = parsed.ExecutableOrUri,
+                                    Arguments = parsed.Arguments,
+                                    UseShellExecute = true
+                                });
+                            }
+                            else
+                            {
+                                string expandedExe = Environment.ExpandEnvironmentVariables(parsed.ExecutableOrUri);
+                                if (File.Exists(expandedExe))
+                                {
+                                    _ = Process.Start(new ProcessStartInfo
+                                    {
+                                        FileName = expandedExe,
+                                        Arguments = parsed.Arguments,
+                                        UseShellExecute = true
+                                    });
+                                }
+                            }
+
                             return;
                         }
                     }
                 }
                 catch (Exception ex) when (ex is System.Security.SecurityException or System.IO.IOException or System.UnauthorizedAccessException or System.ComponentModel.Win32Exception or System.InvalidOperationException) { LoggingService.LogException(ex, "SettingsViewModel.Uninstall.RegistryFallback"); }
 
-                ToastService.ShowError(L("Settings_Uninstall_Failed"));
+                ToastService.ShowError(Loc.Get("Settings_Uninstall_Failed"));
             }
         }
         catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.Security.SecurityException or System.ComponentModel.Win32Exception or System.InvalidOperationException)
         {
-            ToastService.ShowError($"{L("Settings_Uninstall_Error")}: {ex.Message}");
+            ToastService.ShowError($"{Loc.Get("Settings_Uninstall_Error")}: {ex.Message}");
         }
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
+
+    private static bool IsUninstallCommandAllowed(ParsedUninstallCommand parsed)
+    {
+        ISecurityPolicy policy = ServiceContainer.GetRequired<ISecurityPolicy>();
+
+        if (policy.IsCommandBlocked(parsed.ExecutableOrUri.ToLowerInvariant()))
+        {
+            return false;
+        }
+
+        string full = string.IsNullOrWhiteSpace(parsed.Arguments)
+            ? parsed.ExecutableOrUri
+            : $"{parsed.ExecutableOrUri} {parsed.Arguments}";
+        if (policy.IsCommandBlocked(full.ToLowerInvariant()))
+        {
+            return false;
+        }
+
+        return true;
+    }
 
     protected void OnPropertyChanged([CallerMemberName] string? name = null)
     {

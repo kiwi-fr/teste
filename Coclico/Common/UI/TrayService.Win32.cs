@@ -5,7 +5,7 @@ using System.Windows.Interop;
 
 namespace Coclico.Services;
 
-public partial class TrayService : IDisposable
+internal partial class TrayService : IDisposable
 {
     private const int ID_RESTORE = 1000;
     private const int ID_EXIT = 1001;
@@ -87,22 +87,6 @@ public partial class TrayService : IDisposable
         _ = Shell_NotifyIcon(NIM_MODIFY, ref nid);
     }
 
-    public void UpdateTooltip(string tip)
-    {
-        if (!IsInitialized || _hwndSource == null)
-        {
-            return;
-        }
-
-        var nid = new NOTIFYICONDATAW();
-        nid.cbSize = (uint)Marshal.SizeOf(nid);
-        nid.hWnd = _hwndSource.Handle;
-        nid.uID = _id;
-        nid.uFlags = NIF_TIP;
-        SetTip(ref nid, tip);
-        _ = Shell_NotifyIcon(NIM_MODIFY, ref nid);
-    }
-
     public void Dispose()
     {
         try
@@ -143,7 +127,7 @@ public partial class TrayService : IDisposable
 
     private static void SetBalloon(ref NOTIFYICONDATAW nid, string title, string text)
     {
-        nid.szInfo = new string(text);
+        nid.szInfo = new string(text.Length > 255 ? text[..255] : text);
         nid.szInfoTitle = new string(title.Length > 63 ? title[..63] : title);
         nid.dwInfoFlags = 0;
     }

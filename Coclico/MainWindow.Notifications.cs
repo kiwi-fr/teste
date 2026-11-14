@@ -78,7 +78,7 @@ public partial class MainWindow
     {
         if (count > 0)
         {
-            NotificationsBadgeText.Text = count > 99 ? "99+" : count.ToString();
+            NotificationsBadgeText.Text = count > 99 ? "99+" : count.ToString(System.Globalization.CultureInfo.InvariantCulture);
             NotificationsBadgeBorder.Visibility = Visibility.Visible;
         }
         else

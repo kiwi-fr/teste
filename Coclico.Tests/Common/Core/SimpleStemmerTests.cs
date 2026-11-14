@@ -12,20 +12,20 @@ public sealed class SimpleStemmerTests
     [InlineData("optimisation", "optimis")]
     [InlineData("universaux", "universal")]
     [InlineData("chateaux", "chateau")]
-    public void Stem_RemovesKnownSuffixes(string word, string expected)
+    public void StemRemovesKnownSuffixes(string word, string expected)
     {
         Assert.Equal(expected, SimpleStemmer.Stem(word));
     }
 
     [Fact]
-    public void Stem_PreservesShortWords()
+    public void StemPreservesShortWords()
     {
         Assert.Equal("abc", SimpleStemmer.Stem("abc"));
         Assert.Equal("de", SimpleStemmer.Stem("de"));
     }
 
     [Fact]
-    public void Stem_KeepsWordWhenRootWouldBeTooShort()
+    public void StemKeepsWordWhenRootWouldBeTooShort()
     {
         Assert.Equal("page", SimpleStemmer.Stem("page"));
     }
@@ -37,7 +37,7 @@ public sealed class SimpleStemmerTests
     [InlineData("with")]
     [InlineData("et")]
     [InlineData("ab")]
-    public void IsStopWord_DetectsCommonWords(string word)
+    public void IsStopWordDetectsCommonWords(string word)
     {
         Assert.True(SimpleStemmer.IsStopWord(word));
     }
@@ -46,13 +46,13 @@ public sealed class SimpleStemmerTests
     [InlineData("réglage")]
     [InlineData("système")]
     [InlineData("cleaner")]
-    public void IsStopWord_DoesNotFlagMeaningfulWords(string word)
+    public void IsStopWordDoesNotFlagMeaningfulWords(string word)
     {
         Assert.False(SimpleStemmer.IsStopWord(word));
     }
 
     [Fact]
-    public void IsStopWord_IsCaseInsensitive()
+    public void IsStopWordIsCaseInsensitive()
     {
         Assert.True(SimpleStemmer.IsStopWord("LE"));
         Assert.True(SimpleStemmer.IsStopWord("The"));

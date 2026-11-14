@@ -2,14 +2,18 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Coclico.Installer.Services;
 
-public static class DotnetRuntimeService
+internal static class DotnetRuntimeService
 {
     private const string DesktopRuntimeUrl = "https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/10.0.12/windowsdesktop-runtime-10.0.12-win-x64.exe";
+
+    private const long ExpectedInstallerBytes = 60032984L;
+    private const string ExpectedInstallerSha256 = "55A67D8476CDE95A9CC43A95803B4F54446E7C9251ED22AA6421D4908174AE84";
 
     public static bool IsDesktopRuntimeInstalled()
     {
@@ -71,10 +75,11 @@ public static class DotnetRuntimeService
 
         try
         {
-            await DownloadInstallerAsync(installerPath, progress, ct);
+            await DownloadInstallerAsync(installerPath, progress, ct).ConfigureAwait(false);
+            await VerifyInstallerAsync(installerPath, ct).ConfigureAwait(false);
 
             progress.Report(new InstallProgressReport(80, "Installation du runtime .NET 10...", "Une fenêtre Windows va s'afficher, patientez quelques minutes"));
-            await RunInstallerAsync(installerPath, logPath, progress, ct);
+            await RunInstallerAsync(installerPath, logPath, progress, ct).ConfigureAwait(false);
 
             progress.Report(new InstallProgressReport(100, "Runtime .NET 10 installé avec succès.", ""));
         }
@@ -99,21 +104,21 @@ public static class DotnetRuntimeService
         };
 
         using var response = await client.GetAsync(
-            DesktopRuntimeUrl, HttpCompletionOption.ResponseHeadersRead, ct);
+            DesktopRuntimeUrl, HttpCompletionOption.ResponseHeadersRead, ct).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
 
         long? totalBytes = response.Content.Headers.ContentLength;
 
-        await using var source = await response.Content.ReadAsStreamAsync(ct);
+        await using var source = await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
         await using var output = File.Create(destinationPath);
 
         var buffer = new byte[1024 * 1024];
         long downloadedBytes = 0;
         int bytesRead;
 
-        while ((bytesRead = await source.ReadAsync(buffer, ct)) > 0)
+        while ((bytesRead = await source.ReadAsync(buffer, ct).ConfigureAwait(false)) > 0)
         {
-            await output.WriteAsync(buffer.AsMemory(0, bytesRead), ct);
+            await output.WriteAsync(buffer.AsMemory(0, bytesRead), ct).ConfigureAwait(false);
             downloadedBytes += bytesRead;
 
             if (totalBytes > 0)
@@ -126,6 +131,29 @@ public static class DotnetRuntimeService
         }
     }
 
+    private static async Task VerifyInstallerAsync(string installerPath, CancellationToken ct)
+    {
+        var info = new FileInfo(installerPath);
+        if (info.Length != ExpectedInstallerBytes)
+        {
+            throw new InvalidDataException(
+                $"Installeur du runtime .NET 10 invalide : {info.Length} octets au lieu de {ExpectedInstallerBytes}.");
+        }
+
+        string hash = await ComputeSha256Async(installerPath, ct).ConfigureAwait(false);
+        if (!string.Equals(hash, ExpectedInstallerSha256, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidDataException("Installeur du runtime .NET 10 invalide : empreinte SHA-256 incorrecte.");
+        }
+    }
+
+    private static async Task<string> ComputeSha256Async(string filePath, CancellationToken ct)
+    {
+        await using var stream = File.OpenRead(filePath);
+        byte[] hash = await SHA256.HashDataAsync(stream, ct).ConfigureAwait(false);
+        return Convert.ToHexString(hash);
+    }
+
     private static async Task RunInstallerAsync(string installerPath, string logPath, IProgress<InstallProgressReport> progress, CancellationToken ct)
     {
         const int msiAlreadyRunning = 1618;
@@ -133,7 +161,7 @@ public static class DotnetRuntimeService
 
         for (int attempt = 1; attempt <= maxAttempts; attempt++)
         {
-            int exitCode = await RunInstallerOnceAsync(installerPath, logPath, ct);
+            int exitCode = await RunInstallerOnceAsync(installerPath, logPath, ct).ConfigureAwait(false);
 
             if (exitCode == msiAlreadyRunning)
             {
@@ -146,7 +174,7 @@ public static class DotnetRuntimeService
                 {
                     progress.Report(new InstallProgressReport(80,
                         $"Une autre installation Windows est en cours, nouvelle tentative dans 30 secondes... (tentative {attempt + 1}/{maxAttempts})", ""));
-                    await Task.Delay(TimeSpan.FromSeconds(30), ct);
+                    await Task.Delay(TimeSpan.FromSeconds(30), ct).ConfigureAwait(false);
                     continue;
                 }
             }
@@ -194,7 +222,7 @@ public static class DotnetRuntimeService
             throw new InvalidOperationException("Impossible de lancer l'installeur du runtime .NET 10.");
         }
 
-        await process.WaitForExitAsync(ct);
+        await process.WaitForExitAsync(ct).ConfigureAwait(false);
         return process.ExitCode;
     }
 }

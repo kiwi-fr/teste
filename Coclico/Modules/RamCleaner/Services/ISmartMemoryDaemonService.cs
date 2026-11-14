@@ -9,14 +9,14 @@ public enum AutoCleanMode
     Hybrid
 }
 
-public sealed record AutoCleanResultEventArgs(
+internal sealed record AutoCleanResultEventArgs(
     DateTime Timestamp,
     AutoCleanMode TriggerMode,
     long FreedBytes,
     string Summary
 );
 
-public interface ISmartMemoryDaemonService : IDisposable
+internal interface ISmartMemoryDaemonService : IDisposable
 {
     bool IsEnabled { get; }
 

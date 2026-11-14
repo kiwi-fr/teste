@@ -1,15 +1,15 @@
 using System.Diagnostics;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using Coclico.Modules.Diagnostics.Services;
 using Coclico.Services;
 
 namespace Coclico.Modules.Power.Services;
 
-public sealed record PowerSchemeInfo(string Guid, string Name, bool IsActive);
+internal sealed record PowerSchemeInfo(string Guid, string Name, bool IsActive);
 
-public sealed record PowerPlanSetupReport(
+internal sealed record PowerPlanSetupReport(
     bool Success,
     IReadOnlyDictionary<CoclicoPowerMode, string> PlanGuids,
     int AppliedSettings,
@@ -20,7 +20,7 @@ public sealed record PowerPlanSetupReport(
         new(false, new Dictionary<CoclicoPowerMode, string>(), 0, 0, [message]);
 }
 
-public sealed record PowerStateSummary(
+internal sealed record PowerStateSummary(
     string ActiveSchemeName,
     string ActiveSchemeGuid,
     CoclicoPowerMode? ActiveCoclicoMode,
@@ -28,7 +28,7 @@ public sealed record PowerStateSummary(
     bool HasBattery,
     bool IsOnAcPower);
 
-public sealed class CpuPowerService
+internal sealed class CpuPowerService
 {
     private static readonly Regex GuidRegex = new("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}", RegexOptions.Compiled);
 
@@ -51,7 +51,7 @@ public sealed class CpuPowerService
         {
             try
             {
-                return NativePower.HasBattery();
+                return NativeDiag.HasBattery();
             }
             catch (Exception ex) when (ex is not System.OutOfMemoryException)
             {
@@ -66,7 +66,7 @@ public sealed class CpuPowerService
         {
             try
             {
-                return NativePower.IsOnAcPower();
+                return NativeDiag.IsOnAcPower();
             }
             catch (Exception ex) when (ex is not System.OutOfMemoryException)
             {
@@ -89,7 +89,7 @@ public sealed class CpuPowerService
             }
 
             string name = ExtractSchemeName(line);
-            bool isActive = line.EndsWith("*", StringComparison.Ordinal);
+            bool isActive = line.EndsWith('*');
             schemes.Add(new PowerSchemeInfo(guidMatch.Value.ToLowerInvariant(), name, isActive));
         }
 
@@ -401,42 +401,4 @@ public sealed class CpuPowerService
         }
     }
 
-    internal static class NativePower
-    {
-        [StructLayout(LayoutKind.Sequential)]
-        private struct SYSTEM_POWER_STATUS
-        {
-            public byte ACLineStatus;
-            public byte BatteryFlag;
-            public byte BatteryLifePercent;
-            public byte Reserved1;
-            public int BatteryLifeTime;
-            public int BatteryFullLifeTime;
-        }
-
-        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-        [DllImport("kernel32.dll", SetLastError = false)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetSystemPowerStatus(out SYSTEM_POWER_STATUS status);
-
-        public static bool HasBattery()
-        {
-            if (!GetSystemPowerStatus(out SYSTEM_POWER_STATUS status))
-            {
-                return false;
-            }
-
-            return status.ACLineStatus is not 255 && status.BatteryFlag is not 128 and not 255;
-        }
-
-        public static bool IsOnAcPower()
-        {
-            if (!GetSystemPowerStatus(out SYSTEM_POWER_STATUS status))
-            {
-                return true;
-            }
-
-            return status.ACLineStatus == 1;
-        }
-    }
 }

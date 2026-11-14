@@ -2,21 +2,24 @@ using Coclico.Modules.UpdateCenter.Models;
 
 namespace Coclico.Modules.UpdateCenter.Services;
 
-public class UpdateScanService(
+internal class UpdateScanService(
     WingetUpdateService winget,
     DriverUpdateService drivers,
     SystemUpdateService system)
 {
     public virtual async Task<UpdateScanResult> ScanAllAsync(CancellationToken cancellationToken)
     {
-        var errors = new Dictionary<string, string>();
-        var items = new List<UpdateItem>();
+        Task<ScanChunk> wingetTask = RunList(() => winget.ScanAsync(cancellationToken));
+        Task<ScanChunk> driversTask = RunList(() => drivers.SearchWindowsUpdateDriverUpdatesAsync(cancellationToken));
+        Task<ScanChunk> systemTask = RunSingle(() => system.GetWindowsUpdateStatusAsync(cancellationToken));
 
-        await Task.WhenAll(
-            RunList(() => winget.ScanAsync(cancellationToken), UpdateKind.Application, items, errors),
-            RunList(() => drivers.SearchWindowsUpdateDriverUpdatesAsync(cancellationToken), UpdateKind.Driver, items, errors),
-            RunSingle(() => system.GetWindowsUpdateStatusAsync(cancellationToken), UpdateKind.Windows, items, errors)
-        ).ConfigureAwait(false);
+        await Task.WhenAll(wingetTask, driversTask, systemTask).ConfigureAwait(false);
+
+        var items = new List<UpdateItem>();
+        var errors = new Dictionary<string, string>(StringComparer.Ordinal);
+        Append(items, errors, UpdateKind.Application, wingetTask.Result);
+        Append(items, errors, UpdateKind.Driver, driversTask.Result);
+        Append(items, errors, UpdateKind.Windows, systemTask.Result);
 
         return new UpdateScanResult
         {
@@ -26,29 +29,21 @@ public class UpdateScanService(
         };
     }
 
-    private static async Task RunList(Func<Task<IReadOnlyList<UpdateItem>>> factory, UpdateKind kind, List<UpdateItem> items, Dictionary<string, string> errors)
+    private static void Append(List<UpdateItem> items, Dictionary<string, string> errors, UpdateKind kind, ScanChunk chunk)
     {
-        try
+        items.AddRange(chunk.Items);
+        if (chunk.Error is not null)
         {
-            items.AddRange(await factory().ConfigureAwait(false));
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception ex) when (ex is not OutOfMemoryException)
-        {
-            errors[kind.ToString()] = ex.Message;
+            errors[kind.ToString()] = chunk.Error;
         }
     }
 
-    private static async Task RunSingle(Func<Task<UpdateItem>> factory, UpdateKind kind, List<UpdateItem> items, Dictionary<string, string> errors)
+    private static async Task<ScanChunk> RunList(Func<Task<IReadOnlyList<UpdateItem>>> factory)
     {
         try
         {
-            var item = await factory().ConfigureAwait(false);
-            if (item is not null)
-                items.Add(item);
+            IReadOnlyList<UpdateItem>? scanned = await factory().ConfigureAwait(false);
+            return new ScanChunk(scanned is null ? [] : [.. scanned], null);
         }
         catch (OperationCanceledException)
         {
@@ -56,7 +51,26 @@ public class UpdateScanService(
         }
         catch (Exception ex) when (ex is not OutOfMemoryException)
         {
-            errors[kind.ToString()] = ex.Message;
+            return new ScanChunk([], ex.Message);
         }
     }
+
+    private static async Task<ScanChunk> RunSingle(Func<Task<UpdateItem>> factory)
+    {
+        try
+        {
+            UpdateItem? item = await factory().ConfigureAwait(false);
+            return new ScanChunk(item is null ? [] : [item], null);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex) when (ex is not OutOfMemoryException)
+        {
+            return new ScanChunk([], ex.Message);
+        }
+    }
+
+    private sealed record ScanChunk(List<UpdateItem> Items, string? Error);
 }

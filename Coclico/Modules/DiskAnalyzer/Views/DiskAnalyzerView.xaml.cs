@@ -24,7 +24,7 @@ public partial class DiskAnalyzerView : UserControl
 
     private readonly DispatcherTimer _resizeDebounce = new() { Interval = TimeSpan.FromMilliseconds(80) };
 
-    public DiskAnalyzerViewModel ViewModel { get; }
+    internal DiskAnalyzerViewModel ViewModel { get; }
 
     public DiskAnalyzerView()
     {
@@ -41,7 +41,7 @@ public partial class DiskAnalyzerView : UserControl
 
         ViewModel.BrowseFolder = current =>
         {
-            var dialog = new Microsoft.Win32.OpenFolderDialog { Title = L("Disk_StatusPickFolder") };
+            var dialog = new Microsoft.Win32.OpenFolderDialog { Title = Loc.Get("Disk_StatusPickFolder") };
             if (!string.IsNullOrWhiteSpace(current) && Directory.Exists(current))
             {
                 dialog.InitialDirectory = current;
@@ -68,12 +68,6 @@ public partial class DiskAnalyzerView : UserControl
         };
     }
 
-    private static string L(string key)
-    {
-        return Application.Current?.TryFindResource(key) as string
-            ?? ServiceContainer.GetOptional<LocalizationService>()?.Get(key)
-            ?? key;
-    }
 
     private static SolidColorBrush FrozenBrush(byte r, byte g, byte b)
     {
@@ -193,7 +187,7 @@ public partial class DiskAnalyzerView : UserControl
             availableSweep = 360.0 * totalSize / Math.Max(1, totalSize + freeBytes);
             SunburstCanvas.Children.Add(CreateSlice(cx, cy, innerRadius, innerRadius + ringWidth,
                 availableSweep, 360.0 - availableSweep,
-                FreeSpaceBrush, L("Disk_FreeSpace"), freeBytes, totalSize + freeBytes, null));
+                FreeSpaceBrush, Loc.Get("Disk_FreeSpace"), freeBytes, totalSize + freeBytes, null));
         }
 
         RenderLevel(root.Children, cx, cy, innerRadius, ringWidth, 0, availableSweep, 0, 0);

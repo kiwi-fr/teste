@@ -4,7 +4,7 @@ using Coclico.Modules.Diagnostics.Models;
 using Coclico.Modules.Diagnostics.Rules;
 using Coclico.Modules.Diagnostics.Services.Hardware;
 
-public sealed class PowerBatteryCheck : IDiagnosticCheck
+internal sealed class PowerBatteryCheck : IDiagnosticCheck
 {
     private readonly IHardwareTelemetryService _telemetry;
 

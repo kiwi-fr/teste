@@ -7,7 +7,7 @@ using Coclico.Modules.UpdateCenter.Services;
 
 namespace Coclico.Modules.UpdateCenter.ViewModels;
 
-public enum UpdateCenterState
+internal enum UpdateCenterState
 {
     Idle,
     Scanning,
@@ -15,7 +15,7 @@ public enum UpdateCenterState
     Updating
 }
 
-public sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
+internal sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
 {
     private static readonly TimeSpan AutoScanInterval = TimeSpan.FromMinutes(10);
 
@@ -85,7 +85,7 @@ public sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
         get => _lastScanSummary;
         private set
         {
-            if (_lastScanSummary == value) return;
+            if (string.Equals(_lastScanSummary, value, StringComparison.Ordinal)) return;
             _lastScanSummary = value;
             OnPropertyChanged();
         }
@@ -96,7 +96,7 @@ public sealed class UpdateCenterViewModel : INotifyPropertyChanged, IDisposable
         get => _searchText;
         set
         {
-            if (_searchText == value) return;
+            if (string.Equals(_searchText, value, StringComparison.Ordinal)) return;
             _searchText = value;
             OnPropertyChanged();
             foreach (var section in Sections)

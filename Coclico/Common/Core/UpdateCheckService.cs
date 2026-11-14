@@ -5,7 +5,7 @@ using Timer = System.Timers.Timer;
 
 namespace Coclico.Services;
 
-public class UpdateCheckService(
+internal class UpdateCheckService(
     UpdateManager updateManager,
     ILogger<UpdateCheckService> logger)
 {
@@ -15,7 +15,6 @@ public class UpdateCheckService(
     private Timer? _updateCheckTimer;
 
     public event EventHandler<UpdateAvailableEventArgs>? UpdateAvailable;
-    public event EventHandler<Exception>? CheckFailed;
 
     public bool IsRunning { get; private set; }
 
@@ -80,7 +79,6 @@ public class UpdateCheckService(
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             _logger.LogError($"Failed to check for updates: {ex.Message}");
-            CheckFailed?.Invoke(this, ex);
             return null;
         }
     }
@@ -94,7 +92,7 @@ public class UpdateCheckService(
     }
 }
 
-public class UpdateAvailableEventArgs(GitHubRelease release) : EventArgs
+internal class UpdateAvailableEventArgs(GitHubRelease release) : EventArgs
 {
     public GitHubRelease Release { get; } = release;
 }

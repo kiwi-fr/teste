@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 using Coclico.Security.Infrastructure;
-using FsCheck.Xunit;
+using Xunit;
 
 namespace Coclico.Tests;
 
@@ -13,34 +13,56 @@ public sealed class SecurityPropertyTests : IDisposable
         _ = Directory.CreateDirectory(_dir);
     }
 
-    [Property]
-    public bool Sha256OfFileAlwaysMatches64LowercaseHexDigits(string? content)
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("coclico")]
+    [InlineData("contenu avec accents: sécurité")]
+    public void Sha256OfFileAlwaysMatches64LowercaseHexDigits(string? content)
     {
         string path = Path.Join(_dir, "sha-input.bin");
         File.WriteAllText(path, content ?? string.Empty);
-        return Regex.IsMatch(FileIntegrityScanner.Sha256File(path), "^[0-9a-f]{64}$");
+        Assert.Matches("^[0-9a-f]{64}$", FileIntegrityScanner.Sha256File(path));
     }
 
-    [Property]
-    public bool PathsAcceptedByValidatorNeverContainColonOrLeadingSeparator(string? candidate)
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("safe/file.txt")]
+    [InlineData("../escape")]
+    [InlineData("/absolute")]
+    [InlineData("\\absolute")]
+    [InlineData("C:\\escape")]
+    [InlineData("folder:stream")]
+    public void PathsAcceptedByValidatorNeverContainColonOrLeadingSeparator(string? candidate)
     {
         if (candidate is null || !PathValidator.IsSafeRelativePath(candidate))
         {
-            return true;
+            return;
         }
 
-        return !candidate.Contains(':') && !candidate.StartsWith('/') && !candidate.StartsWith('\\');
+        Assert.DoesNotContain(':', candidate);
+        Assert.False(candidate.StartsWith('/') || candidate.StartsWith('\\'));
     }
 
-    [Property]
-    public bool EntriesAcceptedByArchiveGuardNeverContainColonOrLeadingSeparator(string? candidate)
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("safe/file.txt")]
+    [InlineData("../escape")]
+    [InlineData("/absolute")]
+    [InlineData("\\absolute")]
+    [InlineData("C:\\escape")]
+    [InlineData("folder:stream")]
+    public void EntriesAcceptedByArchiveGuardNeverContainColonOrLeadingSeparator(string? candidate)
     {
         if (candidate is null || !ArchiveGuard.IsSafeArchiveEntry(candidate))
         {
-            return true;
+            return;
         }
 
-        return !candidate.Contains(':') && !candidate.StartsWith('/') && !candidate.StartsWith('\\');
+        Assert.DoesNotContain(':', candidate);
+        Assert.False(candidate.StartsWith('/') || candidate.StartsWith('\\'));
     }
 
     public void Dispose()

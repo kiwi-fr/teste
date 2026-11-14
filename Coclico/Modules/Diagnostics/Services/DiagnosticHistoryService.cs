@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 using Coclico.Modules.Diagnostics.Models;
 using Coclico.Services;
 
-public sealed class DiagnosticHistoryService : IDiagnosticHistoryService
+internal sealed class DiagnosticHistoryService : IDiagnosticHistoryService
 {
     private const string Subsystem = "DiagnosticHistoryService";
     private const int MaxRunFilesScanned = 500;
@@ -48,7 +48,8 @@ public sealed class DiagnosticHistoryService : IDiagnosticHistoryService
         string filePath = Path.Join(_baseDirectory, FileNameFor(run.Id));
 
         string tempPath = filePath + ".tmp";
-        await using (FileStream stream = File.Create(tempPath))
+        FileStream stream = File.Create(tempPath);
+        await using (stream.ConfigureAwait(false))
         {
             await JsonSerializer.SerializeAsync(stream, run, SerializerOptions, cancellationToken)
                 .ConfigureAwait(false);

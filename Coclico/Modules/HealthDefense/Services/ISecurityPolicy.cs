@@ -1,6 +1,6 @@
 namespace Coclico.Services;
 
-public interface ISecurityPolicy
+internal interface ISecurityPolicy
 {
     bool IsCommandBlocked(string normalizedCmd);
 
@@ -9,6 +9,8 @@ public interface ISecurityPolicy
     bool IsProtectedPath(string lowerCasePath);
 
     bool IsApplicationAllowed(string appName, out string? resolvedPath);
+
+    bool IsAiLaunchAllowed(string targetPath);
 
     string? PolicyFilePath { get; }
 

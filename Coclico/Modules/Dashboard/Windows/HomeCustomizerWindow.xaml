@@ -66,7 +66,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <RadioButton x:Name="TabBtnShapes" Grid.Column="0" IsChecked="True" GroupName="PillTabs"
+                    <RadioButton Grid.Column="0" IsChecked="True" GroupName="PillTabs"
                                  Checked="TabBtn_Checked" Tag="0" Cursor="Hand">
                         <RadioButton.Template>
                             <ControlTemplate TargetType="RadioButton">
@@ -89,7 +89,7 @@
                         </RadioButton.Template>
                     </RadioButton>
 
-                    <RadioButton x:Name="TabBtnStyle" Grid.Column="1" GroupName="PillTabs"
+                    <RadioButton Grid.Column="1" GroupName="PillTabs"
                                  Checked="TabBtn_Checked" Tag="1" Cursor="Hand">
                         <RadioButton.Template>
                             <ControlTemplate TargetType="RadioButton">
@@ -112,7 +112,7 @@
                         </RadioButton.Template>
                     </RadioButton>
 
-                    <RadioButton x:Name="TabBtnOrder" Grid.Column="2" GroupName="PillTabs"
+                    <RadioButton Grid.Column="2" GroupName="PillTabs"
                                  Checked="TabBtn_Checked" Tag="2" Cursor="Hand">
                         <RadioButton.Template>
                             <ControlTemplate TargetType="RadioButton">
@@ -135,7 +135,7 @@
                         </RadioButton.Template>
                     </RadioButton>
 
-                    <RadioButton x:Name="TabBtnTiles" Grid.Column="3" GroupName="PillTabs"
+                    <RadioButton Grid.Column="3" GroupName="PillTabs"
                                  Checked="TabBtn_Checked" Tag="3" Cursor="Hand">
                         <RadioButton.Template>
                             <ControlTemplate TargetType="RadioButton">

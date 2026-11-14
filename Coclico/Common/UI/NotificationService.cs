@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace Coclico.Services;
 
-public sealed class NotificationEntry
+internal sealed class NotificationEntry
 {
     public required string Title { get; init; }
 
@@ -12,7 +12,7 @@ public sealed class NotificationEntry
     public DateTime Timestamp { get; init; }
 }
 
-public sealed class NotificationService
+internal sealed class NotificationService
 {
     private const int MaxHistoryEntries = 50;
 

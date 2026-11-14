@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace Coclico.Modules.Power.Services;
 
-public static class CpuPowerBenchmark
+internal static class CpuPowerBenchmark
 {
     public static double Run(TimeSpan duration, CancellationToken ct)
     {

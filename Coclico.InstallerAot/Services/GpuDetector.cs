@@ -3,7 +3,7 @@ using Microsoft.Win32;
 
 namespace Coclico.Installer.Services;
 
-public enum InstallerGpuVendor
+internal enum InstallerGpuVendor
 {
     Unknown,
     None,
@@ -12,9 +12,9 @@ public enum InstallerGpuVendor
     Intel
 }
 
-public static class GpuDetector
+internal static class GpuDetector
 {
-    public record GpuInfo(bool HasNvidia, string Name, InstallerGpuVendor Vendor = InstallerGpuVendor.Unknown)
+    internal record GpuInfo(bool HasNvidia, string Name, InstallerGpuVendor Vendor = InstallerGpuVendor.Unknown)
     {
         public bool HasAmd => Vendor == InstallerGpuVendor.Amd;
 

@@ -1,0 +1,7 @@
+/* Coclico AdBlock - sélecteurs cosmétiques génériques (complétés par les listes injectées en JS). */
+[class*="ad-banner" i], [id*="ad-banner" i],
+[class*="cookie-banner" i], [id*="cookie-consent" i], [class*="cookiebanner" i],
+[class*="popup-overlay" i], [class*="newsletter-modal" i],
+[class*="sponsored-content" i], [data-ad-slot], [data-adunit-path] {
+  display: none !important;
+}

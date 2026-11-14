@@ -6,7 +6,7 @@ using System.Windows.Media.Imaging;
 
 namespace Coclico.Services;
 
-public class UserAccountService
+internal class UserAccountService
 {
     private static readonly string[] _imageExtensions = [".jpg", ".jpeg", ".png", ".bmp", ".gif", ".webp"];
 
@@ -35,7 +35,7 @@ public class UserAccountService
 
             IsMicrosoftAccount = identity.Name.Contains("@");
 
-            Email = IsMicrosoftAccount ? identity.Name.ToLower() : string.Empty;
+            Email = IsMicrosoftAccount ? identity.Name.ToLowerInvariant() : string.Empty;
 
             LoadAvatar();
         }
@@ -129,7 +129,7 @@ public class UserAccountService
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string avatarsDir = Path.Join(appData, "Coclico", "avatars");
             _ = Directory.CreateDirectory(avatarsDir);
-            string dest = Path.Join(avatarsDir, UserName + Path.GetExtension(filePath).ToLower());
+            string dest = Path.Join(avatarsDir, UserName + Path.GetExtension(filePath).ToLowerInvariant());
 
             File.Copy(filePath, dest, true);
 

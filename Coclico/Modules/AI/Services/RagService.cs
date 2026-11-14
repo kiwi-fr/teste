@@ -4,7 +4,7 @@ using Coclico.Services.Algorithms;
 
 namespace Coclico.Services;
 
-public sealed class RagService
+internal sealed class RagService
 {
     private struct ChunkData
     {
@@ -21,7 +21,7 @@ public sealed class RagService
     private Dictionary<string, double> _idf = [];
     private double _avgLength;
 
-    private static readonly Regex HeaderRegex = new(@"^#{1,3}\s+(.+)$", RegexOptions.Multiline | RegexOptions.Compiled);
+    private static readonly Regex HeaderRegex = new(@"^#{1,3}\s+(.+)$", RegexOptions.Multiline | RegexOptions.Compiled | RegexOptions.ExplicitCapture);
     private static readonly Regex TokenizerRegex = new(@"[^\wàâäéèêëîïôùûüçœæ]+", RegexOptions.Compiled);
 
     public int ChunkCount => _data.Length;
@@ -88,12 +88,12 @@ public sealed class RagService
 
     private void BuildIdf()
     {
-        var df = new Dictionary<string, int>();
+        var df = new Dictionary<string, int>(StringComparer.Ordinal);
         int n = _data.Length;
 
         foreach (ref ChunkData d in _data.AsSpan())
         {
-            foreach (string token in Tokenize(d.Text).Distinct())
+            foreach (string token in Tokenize(d.Text).Distinct(StringComparer.Ordinal))
             {
                 df[token] = df.GetValueOrDefault(token) + 1;
             }
@@ -101,7 +101,7 @@ public sealed class RagService
 
         _idf = df.ToDictionary(
             kv => kv.Key,
-            kv => Math.Log(((n - kv.Value + 0.5) / (kv.Value + 0.5)) + 1));
+            kv => Math.Log(((n - kv.Value + 0.5) / (kv.Value + 0.5)) + 1), StringComparer.Ordinal);
     }
 
     private void BuildChunkVectors()
@@ -111,13 +111,13 @@ public sealed class RagService
             List<string> tokens = Tokenize(_data[i].Text);
             int count = Math.Max(1, tokens.Count);
 
-            var rawCounts = new Dictionary<string, int>(tokens.Count);
+            var rawCounts = new Dictionary<string, int>(tokens.Count, StringComparer.Ordinal);
             foreach (string t in tokens)
             {
                 rawCounts[t] = rawCounts.TryGetValue(t, out int c) ? c + 1 : 1;
             }
 
-            var tf = new Dictionary<string, double>(rawCounts.Count);
+            var tf = new Dictionary<string, double>(rawCounts.Count, StringComparer.Ordinal);
             foreach ((string term, int cnt) in rawCounts)
             {
                 tf[term] = (double)cnt / count;
@@ -181,15 +181,15 @@ public sealed class RagService
         double avgLen = Math.Max(1.0, _avgLength);
 
         int qCount = Math.Max(1, queryTokens.Count);
-        var distinctQueryTerms = new HashSet<string>(queryTokens);
+        var distinctQueryTerms = new HashSet<string>(queryTokens, StringComparer.Ordinal);
 
-        var queryTermFrequency = new Dictionary<string, double>(distinctQueryTerms.Count);
+        var queryTermFrequency = new Dictionary<string, double>(distinctQueryTerms.Count, StringComparer.Ordinal);
         foreach (string token in queryTokens)
         {
             queryTermFrequency[token] = queryTermFrequency.GetValueOrDefault(token) + 1.0 / qCount;
         }
 
-        var queryTfIdf = new Dictionary<string, double>(distinctQueryTerms.Count);
+        var queryTfIdf = new Dictionary<string, double>(distinctQueryTerms.Count, StringComparer.Ordinal);
         double queryNorm = 0;
         foreach (string term in distinctQueryTerms)
         {

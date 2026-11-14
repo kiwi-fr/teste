@@ -4,7 +4,7 @@ using Microsoft.Win32;
 
 namespace Coclico.Installer.Services;
 
-public record SystemRequirementStatus(
+internal record SystemRequirementStatus(
     bool HasDotNet10,
     string DotNet10Version,
     bool HasNvidiaGpu,
@@ -12,7 +12,7 @@ public record SystemRequirementStatus(
     long AvailableDiskSpaceBytes,
     string TargetDriveLetter);
 
-public static class SystemRequirementService
+internal static class SystemRequirementService
 {
     public static SystemRequirementStatus CheckRequirements(string targetPath)
     {

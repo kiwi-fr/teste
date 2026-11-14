@@ -11,7 +11,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Coclico.ViewModels;
 
-public sealed class DriveRow : INotifyPropertyChanged
+internal sealed class DriveRow : INotifyPropertyChanged
 {
     private Brush _cardBrush = Brushes.Transparent;
 
@@ -41,7 +41,7 @@ public sealed class DriveRow : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
 }
 
-public sealed class ZoneRow
+internal sealed class ZoneRow
 {
     public required string Label { get; init; }
     public required string SizeText { get; init; }
@@ -51,13 +51,13 @@ public sealed class ZoneRow
     public required DiskItemNode? Node { get; init; }
 }
 
-public sealed class Crumb
+internal sealed class Crumb
 {
     public required string Label { get; init; }
     public required DiskItemNode Node { get; init; }
 }
 
-public sealed class DuplicateFileRow : INotifyPropertyChanged
+internal sealed class DuplicateFileRow : INotifyPropertyChanged
 {
     private bool _isSelected;
 
@@ -83,7 +83,7 @@ public sealed class DuplicateFileRow : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
 }
 
-public sealed class DuplicateGroupRow
+internal sealed class DuplicateGroupRow
 {
     public required string FileName { get; init; }
     public required string CountText { get; init; }
@@ -91,14 +91,14 @@ public sealed class DuplicateGroupRow
     public required IReadOnlyList<DuplicateFileRow> Files { get; init; }
 }
 
-public sealed class LargeFileRow
+internal sealed class LargeFileRow
 {
     public required string FileName { get; init; }
     public required string Path { get; init; }
     public required string SizeText { get; init; }
 }
 
-public sealed record Zone(
+internal sealed record Zone(
     string Name,
     string FullName,
     long Size,
@@ -106,7 +106,7 @@ public sealed record Zone(
     IReadOnlyList<Zone> Children,
     DiskItemNode? Node);
 
-public enum SunburstRender
+internal enum SunburstRender
 {
     Clear,
     LiveFadeIn,
@@ -116,10 +116,9 @@ public enum SunburstRender
     Animated
 }
 
-public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
+internal partial class DiskAnalyzerViewModel : INotifyPropertyChanged
 {
     private const int MaxZonesPerRing = 30;
-    private const double MinSegmentAngle = 1.0;
     private const int RingCount = 3;
     private const int LiveRenderIntervalMs = 250;
     private const int DuplicateGroupsShown = 100;
@@ -159,14 +158,14 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
 
     public bool IsScanning { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } }
 
-    public string ScanStatusText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = L("Disk_SelectDrive");
+    public string ScanStatusText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = Loc.Get("Disk_SelectDrive");
 
-    public string CenterTitleText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "Coclico";
-    public string CenterSizeText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
-    public string CenterHintText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string CenterTitleText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "Coclico";
+    public string CenterSizeText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string CenterHintText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
 
-    public string ZonesTitleText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = L("Disk_Zones");
-    public string ZonesSubTitleText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string ZonesTitleText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = Loc.Get("Disk_Zones");
+    public string ZonesSubTitleText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
 
     public IReadOnlyList<ZoneRow>? Zones
     {
@@ -180,8 +179,8 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
         private set { field = value; OnPropertyChanged(); }
     }
 
-    public string SelectedNameText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = "---";
-    public string SelectedDetailsText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string SelectedNameText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = "---";
+    public string SelectedDetailsText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
     public bool CanOpenExplorer { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } }
 
     public IReadOnlyList<DuplicateGroupRow>? DuplicatesGroups
@@ -204,8 +203,8 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
 
     public bool IsDuplicatesScanning { get; private set { if (field == value) return; field = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsNotDuplicatesScanning)); } }
     public bool IsNotDuplicatesScanning => !IsDuplicatesScanning;
-    public string DuplicatesSummaryText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
-    public string DuplicatesStatusText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string DuplicatesSummaryText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string DuplicatesStatusText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
 
     public string LargeRoot
     {
@@ -227,14 +226,14 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
 
     public bool IsLargeScanning { get; private set { if (field == value) return; field = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsNotLargeScanning)); } }
     public bool IsNotLargeScanning => !IsLargeScanning;
-    public string LargeStatusText { get; private set { if (field == value) return; field = value; OnPropertyChanged(); } } = string.Empty;
+    public string LargeStatusText { get; private set { if (string.Equals(field, value, StringComparison.Ordinal)) return; field = value; OnPropertyChanged(); } } = string.Empty;
 
     public string CurrentMode
     {
         get;
         private set
         {
-            if (field == value) return;
+            if (string.Equals(field, value, StringComparison.Ordinal)) return;
             field = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(IsSpaceMode));
@@ -249,9 +248,9 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
         }
     } = "Space";
 
-    public bool IsSpaceMode => CurrentMode == "Space";
-    public bool IsDuplicatesMode => CurrentMode == "Duplicates";
-    public bool IsLargeFilesMode => CurrentMode == "LargeFiles";
+    public bool IsSpaceMode => string.Equals(CurrentMode, "Space", StringComparison.Ordinal);
+    public bool IsDuplicatesMode => string.Equals(CurrentMode, "Duplicates", StringComparison.Ordinal);
+    public bool IsLargeFilesMode => string.Equals(CurrentMode, "LargeFiles", StringComparison.Ordinal);
 
     private static Brush ResourceBrush(string key, Brush fallback)
     {
@@ -269,12 +268,6 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
     public bool IsCurrentRoot => _root != null && ReferenceEquals(_current, _root);
     public long DriveFreeBytes => _driveFreeBytes;
 
-    private static string L(string key)
-    {
-        return Application.Current?.TryFindResource(key) as string
-            ?? ServiceContainer.GetOptional<LocalizationService>()?.Get(key)
-            ?? key;
-    }
 
     public static Color ShadeColor(Color baseColor, int depth)
     {
@@ -414,16 +407,16 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
         _scanCts = scanCts;
         IsScanning = true;
         _liveRenderShown = false;
-        ScanStatusText = L("Disk_StatusAnalyzing");
+        ScanStatusText = Loc.Get("Disk_StatusAnalyzing");
         _root = null;
         _current = null;
         _history.Clear();
         _liveRoot = null;
         SunburstRenderRequested?.Invoke(SunburstRender.Clear);
         Zones = null;
-        ZonesTitleText = L("Disk_Zones");
+        ZonesTitleText = Loc.Get("Disk_Zones");
         ZonesSubTitleText = string.Empty;
-        CenterTitleText = L("Disk_StatusScanning");
+        CenterTitleText = Loc.Get("Disk_StatusScanning");
         CenterSizeText = string.Empty;
         CenterHintText = string.Empty;
 
@@ -437,7 +430,7 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
             DriveInfo drive = new(rootPath);
             _driveFreeBytes = drive.AvailableFreeSpace;
 
-            DiskItemNode root = await DiskAnalyzerService.ScanAsync(rootPath, progress, node => OnScanWaveCompleted(node, scanCts), scanCts.Token);
+            DiskItemNode root = await DiskAnalyzerService.ScanAsync(rootPath, progress, node => OnScanWaveCompleted(node, scanCts), scanCts.Token).ConfigureAwait(false);
             if (!ReferenceEquals(_scanCts, scanCts))
             {
                 return;
@@ -454,7 +447,7 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
             UpdateZonesList();
             SunburstRenderRequested?.Invoke(SunburstRender.Animated);
 
-            ScanStatusText = TextFormatService.Format(L("Disk_StatusDone"), DiskItemNode.FormatSize(root.SizeBytes), $"{root.FileCount:N0}");
+            ScanStatusText = Loc.Format("Disk_StatusDone", DiskItemNode.FormatSize(root.SizeBytes), $"{root.FileCount:N0}");
         }
         catch (OperationCanceledException)
         {
@@ -463,7 +456,7 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
                 return;
             }
 
-            ScanStatusText = L("Disk_StatusCancelled");
+            ScanStatusText = Loc.Get("Disk_StatusCancelled");
         }
         catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException or System.OperationCanceledException)
         {
@@ -472,7 +465,7 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
                 return;
             }
 
-            ScanStatusText = L("Disk_StatusError") + ex.Message;
+            ScanStatusText = Loc.Get("Disk_StatusError") + ex.Message;
         }
         finally
         {
@@ -568,7 +561,7 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
             if (rest > 0)
             {
                 children.Add(new Zone(
-                    $"{L("Disk_Others")} ({sorted.Count - Math.Min(MaxZonesPerRing, sorted.Count)})",
+                    $"{Loc.Get("Disk_Others")} ({sorted.Count - Math.Min(MaxZonesPerRing, sorted.Count)})",
                     node.FullName,
                     rest,
                     0,
@@ -592,7 +585,7 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
         if (zone == null)
         {
             CenterTitleText = "Coclico";
-            CenterSizeText = L("Disk_StatusPickDrive");
+            CenterSizeText = Loc.Get("Disk_StatusPickDrive");
             CenterHintText = string.Empty;
             return;
         }
@@ -601,7 +594,7 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
         CenterTitleText = name;
         CenterSizeText = DiskItemNode.FormatSize(zone.Size);
         CenterHintText = IsScanning ? "analyse en cours..." :
-            IsCurrentRoot ? L("Disk_HintZoom") : L("Disk_HintUp");
+            IsCurrentRoot ? Loc.Get("Disk_HintZoom") : Loc.Get("Disk_HintUp");
     }
 
     private void UpdateBreadcrumb()
@@ -664,12 +657,12 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
         if (zone == null)
         {
             Zones = null;
-            ZonesTitleText = L("Disk_Zones");
+            ZonesTitleText = Loc.Get("Disk_Zones");
             ZonesSubTitleText = string.Empty;
             return;
         }
 
-        ZonesTitleText = TextFormatService.Format(L("Disk_ZonesFor"), zone.Name.ToUpperInvariant());
+        ZonesTitleText = Loc.Format("Disk_ZonesFor", zone.Name.ToUpperInvariant());
         long total = Math.Max(1, zone.Size);
         ZonesSubTitleText = $"{zone.Children.Count:N0} éléments · {zone.Files:N0} fichiers · {DiskItemNode.FormatSize(zone.Size)}";
         var rows = new List<ZoneRow>();
@@ -770,6 +763,12 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
             return;
         }
 
+        if (!File.Exists(_current.FullName) && !Directory.Exists(_current.FullName))
+        {
+            LoggingService.LogWarning($"[DiskAnalyzer] Cible introuvable : '{_current.FullName}'");
+            return;
+        }
+
         try
         {
             Process.Start(new ProcessStartInfo { FileName = _current.FullName, UseShellExecute = true });
@@ -782,7 +781,7 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
 
     private void SetMode(string mode)
     {
-        if (CurrentMode == mode)
+        if (string.Equals(CurrentMode, mode, StringComparison.Ordinal))
         {
             return;
         }
@@ -829,7 +828,7 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
     private void DuplicatesCancel()
     {
         _duplicatesCts?.Cancel();
-        DuplicatesSummaryText = L("Disk_DupCancelling");
+        DuplicatesSummaryText = Loc.Get("Disk_DupCancelling");
     }
 
     private async Task RunDuplicatesScanAsync()
@@ -837,7 +836,7 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
         string root = DuplicatesRoot?.Trim() ?? string.Empty;
         if (string.IsNullOrWhiteSpace(root) || !Directory.Exists(root))
         {
-            DuplicatesSummaryText = L("Disk_StatusFolderMissing");
+            DuplicatesSummaryText = Loc.Get("Disk_StatusFolderMissing");
             return;
         }
 
@@ -854,30 +853,30 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
         CancellationToken ct = _duplicatesCts.Token;
 
         DuplicatesGroups = null;
-        DuplicatesSummaryText = L("Disk_DupInventoryPlain");
+        DuplicatesSummaryText = Loc.Get("Disk_DupInventoryPlain");
         IsDuplicatesScanning = true;
 
         var progress = new Progress<DuplicateScanProgress>(p =>
         {
             DuplicatesSummaryText = p.Phase switch
             {
-                1 => TextFormatService.Format(L("Disk_DupInventory"), $"{p.FilesExamined:N0}"),
-                2 => TextFormatService.Format(L("Disk_DupQuickHash"), $"{p.FilesExamined:N0}"),
-                3 => L("Disk_DupVerify"),
-                _ => L("Disk_DupDone")
+                1 => Loc.Format("Disk_DupInventory", $"{p.FilesExamined:N0}"),
+                2 => Loc.Format("Disk_DupQuickHash", $"{p.FilesExamined:N0}"),
+                3 => Loc.Get("Disk_DupVerify"),
+                _ => Loc.Get("Disk_DupDone")
             };
         });
 
         try
         {
             IReadOnlyList<DuplicateGroup> groups = await DuplicateFinderService.FindDuplicatesAsync(
-                new DuplicateScanOptions(root, minSize, DuplicateGroupsShown), progress, ct);
+                new DuplicateScanOptions(root, minSize, DuplicateGroupsShown), progress, ct).ConfigureAwait(false);
 
             List<DuplicateGroupRow> rows = groups.Select(g => new DuplicateGroupRow
             {
                 FileName = g.FileName,
                 CountText = $"{g.FileCount} fichiers identiques",
-                WastedText = TextFormatService.Format(L("Disk_Wasted"), DiskItemNode.FormatSize(g.WastedBytes)),
+                WastedText = Loc.Format("Disk_Wasted", DiskItemNode.FormatSize(g.WastedBytes)),
                 Files = g.Paths.Select(p => new DuplicateFileRow
                 {
                     Path = p,
@@ -890,18 +889,18 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
             DuplicatesGroups = rows;
             long wasted = groups.Sum(g => g.WastedBytes);
             DuplicatesSummaryText = rows.Count == 0
-                ? L("Disk_DupNone")
-                : TextFormatService.Format(L("Disk_DupSummary"), rows.Count, DiskItemNode.FormatSize(wasted));
+                ? Loc.Get("Disk_DupNone")
+                : Loc.Format("Disk_DupSummary", rows.Count, DiskItemNode.FormatSize(wasted));
             DuplicatesStatusText = "";
         }
         catch (OperationCanceledException)
         {
-            DuplicatesSummaryText = L("Disk_DupCancelled");
+            DuplicatesSummaryText = Loc.Get("Disk_DupCancelled");
         }
         catch (Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
         {
             LoggingService.LogException(ex, "DiskAnalyzerViewModel.DuplicatesScan");
-            DuplicatesSummaryText = L("Disk_DupError");
+            DuplicatesSummaryText = Loc.Get("Disk_DupError");
         }
         finally
         {
@@ -935,7 +934,7 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
 
         if (targets.Count == 0)
         {
-            DuplicatesStatusText = L("Disk_StatusNoFiles");
+            DuplicatesStatusText = Loc.Get("Disk_StatusNoFiles");
             return;
         }
 
@@ -951,7 +950,7 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
         }
 
         bool confirm = Confirm?.Invoke(
-            TextFormatService.Format(L("Disk_DupConfirmDelete"), targets.Count, DiskItemNode.FormatSize(bytes)),
+            Loc.Format("Disk_DupConfirmDelete", targets.Count, DiskItemNode.FormatSize(bytes)),
             "Suppression des doublons sélectionnés") ?? false;
 
         if (!confirm)
@@ -963,18 +962,18 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
         {
             if (RecycleBinHelper.SendToRecycleBin(targets))
             {
-                ToastService.Show(TextFormatService.Format(L("Disk_BinSentMany"), targets.Count));
-                await RunDuplicatesScanAsync();
+                ToastService.Show(Loc.Format("Disk_BinSentMany", targets.Count));
+                await RunDuplicatesScanAsync().ConfigureAwait(false);
             }
             else
             {
-                DuplicatesStatusText = L("Disk_BinRefusedSome");
+                DuplicatesStatusText = Loc.Get("Disk_BinRefusedSome");
             }
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "DiskAnalyzerViewModel.DeleteDuplicates");
-            DuplicatesStatusText = L("Disk_DupDeleteError");
+            DuplicatesStatusText = Loc.Get("Disk_DupDeleteError");
         }
     }
 
@@ -985,7 +984,7 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
     private void LargeCancel()
     {
         _largeCts?.Cancel();
-        LargeStatusText = L("Disk_StatusDupCancel");
+        LargeStatusText = Loc.Get("Disk_StatusDupCancel");
     }
 
     private async Task RunLargeScanAsync()
@@ -993,7 +992,7 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
         string root = LargeRoot?.Trim() ?? string.Empty;
         if (string.IsNullOrWhiteSpace(root) || !Directory.Exists(root))
         {
-            LargeStatusText = L("Disk_StatusFolderMissing");
+            LargeStatusText = Loc.Get("Disk_StatusFolderMissing");
             return;
         }
 
@@ -1009,12 +1008,12 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
         CancellationToken ct = _largeCts.Token;
 
         LargeFiles = null;
-        LargeStatusText = L("Disk_LargeScanning");
+        LargeStatusText = Loc.Get("Disk_LargeScanning");
         IsLargeScanning = true;
 
         try
         {
-            IReadOnlyList<LargeFileEntry> files = await DuplicateFinderService.FindLargestFilesAsync(root, count, null, ct);
+            IReadOnlyList<LargeFileEntry> files = await DuplicateFinderService.FindLargestFilesAsync(root, count, null, ct).ConfigureAwait(false);
 
             var rows = files.Select(f => new LargeFileRow
             {
@@ -1026,17 +1025,17 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
             _largeFiles = rows;
             LargeFiles = rows;
             LargeStatusText = files.Count == 0
-                ? L("Disk_StatusNoFiles")
-                : TextFormatService.Format(L("Disk_LargeDone"), files.Count, DiskItemNode.FormatSize(files[0].SizeBytes));
+                ? Loc.Get("Disk_StatusNoFiles")
+                : Loc.Format("Disk_LargeDone", files.Count, DiskItemNode.FormatSize(files[0].SizeBytes));
         }
         catch (OperationCanceledException)
         {
-            LargeStatusText = L("Disk_StatusCancelled");
+            LargeStatusText = Loc.Get("Disk_StatusCancelled");
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "DiskAnalyzerViewModel.LargeScan");
-            LargeStatusText = L("Disk_LargeError");
+            LargeStatusText = Loc.Get("Disk_LargeError");
         }
         finally
         {
@@ -1074,11 +1073,11 @@ public partial class DiskAnalyzerViewModel : INotifyPropertyChanged
         {
             if (!RecycleBinHelper.SendToRecycleBin([path]))
             {
-                LargeStatusText = L("Disk_BinRefusedOne");
+                LargeStatusText = Loc.Get("Disk_BinRefusedOne");
                 return;
             }
 
-            ToastService.Show(L("Disk_BinSentOne"));
+            ToastService.Show(Loc.Get("Disk_BinSentOne"));
             if (_largeFiles.Count > 0)
             {
                 _ = _largeFiles.RemoveAll(r => string.Equals(r.Path, path, StringComparison.OrdinalIgnoreCase));

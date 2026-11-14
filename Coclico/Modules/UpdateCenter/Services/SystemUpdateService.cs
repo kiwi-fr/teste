@@ -2,7 +2,7 @@ using Coclico.Modules.UpdateCenter.Models;
 
 namespace Coclico.Modules.UpdateCenter.Services;
 
-public class SystemUpdateService(SecureProcessRunner runner)
+internal class SystemUpdateService(SecureProcessRunner runner)
 {
     public virtual async Task<UpdateItem> GetWindowsUpdateStatusAsync(CancellationToken cancellationToken)
     {

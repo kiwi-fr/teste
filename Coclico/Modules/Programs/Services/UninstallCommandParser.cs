@@ -3,13 +3,13 @@ using System.Linq;
 
 namespace Coclico.Services;
 
-public sealed record ParsedUninstallCommand(
+internal sealed record ParsedUninstallCommand(
     string ExecutableOrUri,
     string Arguments,
     bool IsUri,
     bool IsMsi);
 
-public static class UninstallCommandParser
+internal static class UninstallCommandParser
 {
     public static ParsedUninstallCommand? Parse(string? rawCommand)
     {

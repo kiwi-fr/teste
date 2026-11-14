@@ -45,11 +45,6 @@ internal static class WmiHelper
             ? TryConvertInt64(value)
             : null;
 
-    public static double? GetDouble(IDictionary<string, object?> row, string property)
-        => row.TryGetValue(property, out object? value) && value is not null && !Convert.IsDBNull(value)
-            ? TryConvertDouble(value)
-            : null;
-
     private static long? TryConvertInt64(object value)
     {
         try
@@ -62,15 +57,4 @@ internal static class WmiHelper
         }
     }
 
-    private static double? TryConvertDouble(object value)
-    {
-        try
-        {
-            return Convert.ToDouble(value, System.Globalization.CultureInfo.InvariantCulture);
-        }
-        catch (Exception ex) when (ex is not System.OutOfMemoryException)
-        {
-            return null;
-        }
-    }
 }

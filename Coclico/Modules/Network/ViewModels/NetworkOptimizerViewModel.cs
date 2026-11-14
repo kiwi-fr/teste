@@ -8,13 +8,18 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Coclico.ViewModels;
 
-public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
+internal class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
 {
     private const int MaxLogEntries = 200;
 
     private readonly INetworkOptimizerService _netService;
     private readonly NetworkMonitorService? _monitorService;
     private readonly IDisposable? _monitorSubscription;
+    private readonly PacketFilterService? _packetFilter;
+    private bool _shieldOn;
+    private bool _shieldStrict;
+    private bool _shieldHeuristics;
+    private string _shieldStatsText = "--";
     private CancellationTokenSource? _cts;
     private NetworkAdapterInfo? _selectedAdapter;
     private bool _isBusy;
@@ -35,13 +40,10 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
     public IAsyncRelayCommand FullTuningCommand { get; }
     public IAsyncRelayCommand RestoreCommand { get; }
     public IRelayCommand CancelCommand { get; }
+    public IRelayCommand ToggleShieldCommand { get; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private static string L(string key)
-    {
-        return Application.Current?.TryFindResource(key) as string ?? key;
-    }
 
     private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
     {
@@ -52,6 +54,15 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
     {
         _netService = ServiceContainer.GetOptional<INetworkOptimizerService>() ?? new NetworkOptimizerService();
         _monitorService = ServiceContainer.GetOptional<NetworkMonitorService>();
+        _packetFilter = ServiceContainer.GetOptional<PacketFilterService>();
+        if (_packetFilter != null)
+        {
+            _packetFilter.StatsChanged += OnShieldStats;
+            ShieldOn = _packetFilter.IsRunning;
+            var ps = ServiceContainer.GetOptional<SettingsService>();
+            ShieldStrict = _packetFilter.Strict = ps?.Settings.PacketShieldStrict ?? true;
+            ShieldHeuristics = _packetFilter.HeuristicsEnabled = ps?.Settings.PacketShieldHeuristics ?? true;
+        }
 
         if (_monitorService != null)
         {
@@ -71,8 +82,129 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
         FullTuningCommand = new AsyncRelayCommand(() => RunTuningAsync(NetworkTuningMode.Full), () => IsNotBusy);
         RestoreCommand = new AsyncRelayCommand(RestoreAsync, () => IsNotBusy);
         CancelCommand = new RelayCommand(() => _cts?.Cancel());
+        ToggleShieldCommand = new RelayCommand(ToggleShield);
 
         _ = RefreshAsync();
+    }
+
+    public bool ShieldAdminOk => _packetFilter?.IsAdmin ?? false;
+
+    public bool ShieldOn
+    {
+        get => _shieldOn;
+        private set
+        {
+            if (_shieldOn != value)
+            {
+                _shieldOn = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ShieldButtonText));
+            }
+        }
+    }
+
+    public string ShieldButtonText => ShieldOn ? Loc.Get("Network_ShieldStop") : Loc.Get("Network_ShieldStart");
+
+    public bool ShieldStrict
+    {
+        get => _shieldStrict;
+        set
+        {
+            if (_shieldStrict != value)
+            {
+                _shieldStrict = value;
+                if (_packetFilter != null) _packetFilter.Strict = value;
+                var s = ServiceContainer.GetOptional<SettingsService>();
+                if (s != null)
+                {
+                    s.Settings.PacketShieldStrict = value;
+                    s.Save();
+                }
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public bool ShieldHeuristics
+    {
+        get => _shieldHeuristics;
+        set
+        {
+            if (_shieldHeuristics != value)
+            {
+                _shieldHeuristics = value;
+                if (_packetFilter != null) _packetFilter.HeuristicsEnabled = value;
+                var s = ServiceContainer.GetOptional<SettingsService>();
+                if (s != null)
+                {
+                    s.Settings.PacketShieldHeuristics = value;
+                    s.Save();
+                }
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public string ShieldStatsText
+    {
+        get => _shieldStatsText;
+        private set
+        {
+            if (!string.Equals(_shieldStatsText, value, StringComparison.Ordinal))
+            {
+                _shieldStatsText = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    private void ToggleShield()
+    {
+        if (_packetFilter == null) return;
+        try
+        {
+            if (_packetFilter.IsRunning)
+            {
+                _packetFilter.Stop();
+                ShieldOn = false;
+                AddLog(Loc.Get("Network_ShieldStoppedLog"));
+            }
+            else
+            {
+                if (!_packetFilter.IsAdmin)
+                {
+                    StatusText = Loc.Get("Network_ShieldAdminRequired");
+                    AddLog(Loc.Get("Network_ShieldAdminRequired"));
+                    return;
+                }
+
+                _packetFilter.Start();
+                ShieldOn = true;
+                AddLog(Loc.Get("Network_ShieldStartedLog"));
+            }
+
+
+            var s = ServiceContainer.GetOptional<SettingsService>();
+            if (s != null)
+            {
+                s.Settings.PacketShieldEnabled = _packetFilter.IsRunning;
+                s.Save();
+            }
+        }
+        catch (Exception ex)
+        {
+            LoggingService.LogException(ex, "NetworkOptimizerViewModel.ToggleShield");
+            StatusText = ex.Message;
+        }
+    }
+
+    private void OnShieldStats(PacketFilterStats stats)
+    {
+        SafeInvokeOnDispatcher(() =>
+        {
+            ShieldStatsText = $"Paquets vus : {stats.PacketsSeen:N0} — analysés : {stats.PacketsAnalyzed:N0} — inspectés : {stats.Inspected:N0} — bloqués (listes) : {stats.TrackersBlocked:N0} — bloqués (heuristiques) : {stats.HeuristicBlocked:N0}" +
+                (stats.LastBlockReason != null ? $" — dernier blocage : {stats.LastBlockReason}" : string.Empty);
+        });
     }
     public NetworkAdapterInfo? SelectedAdapter
     {
@@ -132,7 +264,7 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
         get => _statusText;
         private set
         {
-            if (_statusText != value)
+            if (!string.Equals(_statusText, value, StringComparison.Ordinal))
             {
                 _statusText = value;
                 OnPropertyChanged();
@@ -144,7 +276,7 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
         get => _livePingText;
         private set
         {
-            if (_livePingText != value)
+            if (!string.Equals(_livePingText, value, StringComparison.Ordinal))
             {
                 _livePingText = value;
                 OnPropertyChanged();
@@ -156,7 +288,7 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
         get => _liveDownloadText;
         private set
         {
-            if (_liveDownloadText != value)
+            if (!string.Equals(_liveDownloadText, value, StringComparison.Ordinal))
             {
                 _liveDownloadText = value;
                 OnPropertyChanged();
@@ -329,14 +461,14 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
                 TuningParameters.Clear();
                 foreach (NetworkTuningParameter p in status)
                 {
-                    p.DisplayName = L(p.NameKey);
-                    p.Description = L(p.DescriptionKey);
+                    p.DisplayName = Loc.Get(p.NameKey);
+                    p.Description = Loc.Get(p.DescriptionKey);
                     p.CategoryLabel = p.Category switch
                     {
-                        NetworkTuningCategory.TcpStack => L("Network_CatTcp"),
-                        _ => L("Network_CatAdapter")
+                        NetworkTuningCategory.TcpStack => Loc.Get("Network_CatTcp"),
+                        _ => Loc.Get("Network_CatAdapter")
                     };
-                    p.StatusText = p.IsOptimal ? L("Network_StatusOk") : L("Network_StatusTodo");
+                    p.StatusText = p.IsOptimal ? Loc.Get("Network_StatusOk") : Loc.Get("Network_StatusTodo");
                     p.StatusColorHex = p.IsOptimal ? "#10B981" : "#F59E0B";
                     TuningParameters.Add(p);
                 }
@@ -355,32 +487,32 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
         IsBusy = true;
         _cts = new CancellationTokenSource();
         ProgressValue = 0;
-        StatusText = L("Network_TestRunning");
-        AddLog(L("Network_TestStarted"));
+        StatusText = Loc.Get("Network_TestRunning");
+        AddLog(Loc.Get("Network_TestStarted"));
 
         try
         {
             NetworkTestReport report = await _netService.RunCompleteTestAsync(
                 4,
-                (stage, run) => AddLog(stage == "down"
-                    ? TextFormatService.Format(L("Network_TestRun"), run, L("Network_MetricDownload"))
-                    : TextFormatService.Format(L("Network_TestRun"), run, L("Network_MetricUpload"))),
+                (stage, run) => AddLog(string.Equals(stage, "down"
+, StringComparison.Ordinal) ? Loc.Format("Network_TestRun", run, Loc.Get("Network_MetricDownload"))
+                    : Loc.Format("Network_TestRun", run, Loc.Get("Network_MetricUpload"))),
                 p => ProgressValue = p,
                 _cts.Token).ConfigureAwait(false);
 
             BeforeTest = report;
             AfterTest = null;
-            StatusText = TextFormatService.Format(L("Network_TestDone"), report.DownloadDisplay, report.UploadDisplay, report.LatencyDisplay);
+            StatusText = Loc.Format("Network_TestDone", report.DownloadDisplay, report.UploadDisplay, report.LatencyDisplay);
             AddLog($"↓ {report.DownloadDisplay} · ↑ {report.UploadDisplay} · {report.LatencyDisplay} · {report.JitterDisplay}");
         }
         catch (OperationCanceledException)
         {
-            StatusText = L("Network_Cancelled");
+            StatusText = Loc.Get("Network_Cancelled");
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "NetworkOptimizerViewModel.RunTestAsync");
-            StatusText = L("Network_TestError");
+            StatusText = Loc.Get("Network_TestError");
         }
         finally
         {
@@ -395,8 +527,8 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
         _cts = new CancellationTokenSource();
         ProgressValue = 0;
         bool isAuto = mode == NetworkTuningMode.AutoTested;
-        StatusText = isAuto ? L("Network_AutoTestedRunning") : L("Network_FullRunning");
-        AddLog(isAuto ? L("Network_AutoTestedStarted") : L("Network_FullStarted"));
+        StatusText = isAuto ? Loc.Get("Network_AutoTestedRunning") : Loc.Get("Network_FullRunning");
+        AddLog(isAuto ? Loc.Get("Network_AutoTestedStarted") : Loc.Get("Network_FullStarted"));
 
         try
         {
@@ -416,13 +548,13 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
         }
         catch (OperationCanceledException)
         {
-            StatusText = L("Network_Cancelled");
-            AddLog(L("Network_Cancelled"));
+            StatusText = Loc.Get("Network_Cancelled");
+            AddLog(Loc.Get("Network_Cancelled"));
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "NetworkOptimizerViewModel.RunTuningAsync");
-            StatusText = L("Network_TuningError");
+            StatusText = Loc.Get("Network_TuningError");
         }
         finally
         {
@@ -434,20 +566,20 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
     private async Task RestoreAsync()
     {
         IsBusy = true;
-        StatusText = L("Network_RestoreRunning");
-        AddLog(L("Network_RestoreStarted"));
+        StatusText = Loc.Get("Network_RestoreRunning");
+        AddLog(Loc.Get("Network_RestoreStarted"));
 
         try
         {
             bool ok = await _netService.RestoreInitialValuesAsync(SelectedAdapter?.Id, AddLog).ConfigureAwait(false);
-            StatusText = ok ? L("Network_RestoreDone") : L("Network_RestoreNone");
+            StatusText = ok ? Loc.Get("Network_RestoreDone") : Loc.Get("Network_RestoreNone");
             AddLog(StatusText);
             await LoadTuningStatusAsync().ConfigureAwait(false);
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException)
         {
             LoggingService.LogException(ex, "NetworkOptimizerViewModel.RestoreAsync");
-            StatusText = L("Network_TuningError");
+            StatusText = Loc.Get("Network_TuningError");
         }
         finally
         {
@@ -457,6 +589,7 @@ public class NetworkOptimizerViewModel : INotifyPropertyChanged, IDisposable
 
     public void Dispose()
     {
+        if (_packetFilter != null) _packetFilter.StatsChanged -= OnShieldStats;
         _cts?.Cancel();
         _cts?.Dispose();
         _monitorSubscription?.Dispose();

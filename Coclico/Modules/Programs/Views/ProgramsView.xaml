@@ -22,14 +22,14 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
-                        <Border x:Name="Bd" CornerRadius="8"
+                        <Border x:Name="Bd" CornerRadius="12"
                                 Padding="{TemplateBinding Padding}"
                                 BorderThickness="1" BorderBrush="Transparent"
                                 Background="Transparent">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <Border x:Name="BadgeBd" CornerRadius="10" Margin="8,0,0,0"
-                                        Padding="7,2" Background="#18FFFFFF"
+                                <Border x:Name="BadgeBd" CornerRadius="14" Margin="8,0,0,0"
+                                        Padding="7,2" Background="{DynamicResource OverlayLight}"
                                         VerticalAlignment="Center">
                                     <TextBlock x:Name="BadgeTxt" Text="{TemplateBinding Tag}"
                                                FontSize="11" FontWeight="Bold"
@@ -39,17 +39,17 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bd" Property="Background" Value="#1AFFFFFF"/>
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource OverlayLight}"/>
                                 <Setter Property="Foreground" Value="White"/>
                                 <Setter TargetName="BadgeTxt" Property="Foreground" Value="White"/>
                             </Trigger>
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ArchitecturalYellowBrush}"/>
                                 <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource ArchitecturalYellowBrush}"/>
-                                <Setter Property="Foreground" Value="#0A0A0C"/>
+                                <Setter Property="Foreground" Value="{DynamicResource ArchitecturalDarkTextBrush}"/>
                                 <Setter Property="FontWeight" Value="Bold"/>
                                 <Setter TargetName="BadgeBd" Property="Background" Value="#33000000"/>
-                                <Setter TargetName="BadgeTxt" Property="Foreground" Value="#0A0A0C"/>
+                                <Setter TargetName="BadgeTxt" Property="Foreground" Value="{DynamicResource ArchitecturalDarkTextBrush}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -67,7 +67,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Bd" Background="{TemplateBinding Background}"
-                                CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                CornerRadius="9" Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -92,29 +92,29 @@
 
             <StackPanel Grid.Column="0" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,6" VerticalAlignment="Center">
-                    <Border Width="3" Height="3" CornerRadius="1.5" Background="{DynamicResource TextHintBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                    <TextBlock Text="{DynamicResource Programs_HeaderBadge}" FontSize="10.5" FontWeight="Bold" Foreground="{DynamicResource TextHintBrush}" VerticalAlignment="Center"/>
+                    <Border Style="{StaticResource PageEyebrowDot}"/>
+                    <TextBlock Text="{DynamicResource Programs_HeaderBadge}" Style="{StaticResource PageEyebrow}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <Border Width="4" Height="30" Background="{DynamicResource ArchitecturalYellowBrush}" CornerRadius="2" Margin="0,0,12,0"/>
-                    <TextBlock Text="{DynamicResource Menu_Programs}" FontSize="24" FontWeight="Bold"
-                               Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{DynamicResource Menu_Programs}" Style="{StaticResource CoclicoPageTitle}"
+                               VerticalAlignment="Center"/>
 
-                    <Border Margin="12,0,0,0" Padding="10,3" CornerRadius="6"
-                            Background="#1AFFC700" BorderBrush="#33FFC700" BorderThickness="1"
+                    <Border Margin="12,0,0,0" Padding="10,3" CornerRadius="9"
+                            Background="{DynamicResource WarnBgBrush}" BorderBrush="{DynamicResource WarnBorderBrush}" BorderThickness="1"
                             VerticalAlignment="Center">
                         <TextBlock Text="{Binding HeaderStatsText}" FontSize="11" FontWeight="Bold"
                                    Foreground="{DynamicResource ArchitecturalYellowBrush}"/>
                     </Border>
                 </StackPanel>
                 <TextBlock Text="{DynamicResource Programs_Subtitle}"
-                           FontSize="12.5" Foreground="{DynamicResource TextSecondaryBrush}" Margin="16,4,0,0"/>
+                           Style="{StaticResource PageHeaderSubtitle}" Margin="16,4,0,0"/>
             </StackPanel>
 
             <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
 
-                <Border Background="{DynamicResource BgPanelBrush}" CornerRadius="8"
+                <Border Background="{DynamicResource BgPanelBrush}" CornerRadius="12"
                         BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                         Padding="3" Margin="0,0,12,0">
                     <StackPanel Orientation="Horizontal">
@@ -205,7 +205,7 @@
                 </StackPanel>
 
                 <Grid Grid.Column="6" VerticalAlignment="Center">
-                    <ui:TextBox x:Name="SearchBox"
+                    <ui:TextBox
                                 PlaceholderText="{DynamicResource Programs_SearchPlaceholder}"
                                 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 Height="34" Padding="10,0,32,0"/>
@@ -235,7 +235,7 @@
                     Background="{DynamicResource BgSurfaceBrush}">
                 <Grid Margin="12">
 
-                    <ListView x:Name="ProgramsGrid"
+                    <ListView
                               ItemsSource="{Binding FilteredPrograms}"
                               Visibility="{Binding IsGridMode, Converter={StaticResource BoolToVis}}"
                               VirtualizingPanel.IsVirtualizing="True"
@@ -263,7 +263,7 @@
                             <DataTemplate>
                                 <Border x:Name="CardBorder" Width="270" Height="126" Margin="5"
                                         MouseLeftButtonDown="ProgramItem_Click"
-                                        CornerRadius="10"
+                                        CornerRadius="14"
                                         BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                                         Cursor="Hand"
                                         Background="{DynamicResource BgCardBrush}">
@@ -280,7 +280,7 @@
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Border Width="46" Height="46" CornerRadius="10"
+                                            <Border Width="46" Height="46" CornerRadius="14"
                                                     BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                                                     Background="{DynamicResource BgElevatedBrush}">
                                                 <Grid>
@@ -314,7 +314,7 @@
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Border Grid.Column="0" CornerRadius="6" Padding="7,3"
+                                            <Border Grid.Column="0" CornerRadius="9" Padding="7,3"
                                                     Background="{Binding CategoryBgBrush}">
                                                 <TextBlock Text="{Binding CategoryDisplayName}" FontSize="9" FontWeight="Bold"
                                                            Foreground="{Binding CategoryFgBrush}"/>
@@ -325,8 +325,8 @@
                                                        VerticalAlignment="Center" FontFamily="Consolas, Courier New"/>
                                         </Grid>
 
-                                        <Border Grid.RowSpan="3" CornerRadius="10" Margin="-12,-10"
-                                                Background="#E008050F"
+                                        <Border Grid.RowSpan="3" CornerRadius="14" Margin="-12,-10"
+                                                Background="{DynamicResource OverlayDangerBrush}"
                                                 Visibility="{Binding IsLaunching, Converter={StaticResource BoolToVis}}">
                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                 <ui:ProgressRing Width="18" Height="18" IsIndeterminate="True"
@@ -355,7 +355,7 @@
                         </Grid.RowDefinitions>
 
                         <Border Grid.Row="0" Background="{DynamicResource BgElevatedBrush}"
-                                CornerRadius="8" Padding="14,8" Margin="0,0,0,6">
+                                CornerRadius="12" Padding="14,8" Margin="0,0,0,6">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="42"/>
@@ -378,7 +378,7 @@
                             </Grid>
                         </Border>
 
-                        <ListView Grid.Row="1" x:Name="ProgramsList"
+                        <ListView Grid.Row="1"
                                   ItemsSource="{Binding FilteredPrograms}"
                                   VirtualizingPanel.IsVirtualizing="True"
                                   VirtualizingPanel.VirtualizationMode="Recycling"
@@ -405,7 +405,7 @@
                                 <DataTemplate>
                                     <Border x:Name="RowBorder" Padding="12,8" Margin="0,2"
                                             MouseLeftButtonDown="ProgramItem_Click"
-                                            CornerRadius="8"
+                                            CornerRadius="12"
                                             BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                                             Cursor="Hand"
                                             Background="{DynamicResource BgCardBrush}">
@@ -419,7 +419,7 @@
                                                 <ColumnDefinition Width="80"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Border Grid.Column="0" Width="34" Height="34" CornerRadius="8"
+                                            <Border Grid.Column="0" Width="34" Height="34" CornerRadius="12"
                                                     BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
                                                     Background="{DynamicResource BgElevatedBrush}">
                                                 <Grid>
@@ -443,14 +443,14 @@
                                             </StackPanel>
 
                                             <Border Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                                    CornerRadius="6" Padding="8,3"
+                                                    CornerRadius="9" Padding="8,3"
                                                     Background="{Binding CategoryBgBrush}">
                                                 <TextBlock Text="{Binding CategoryDisplayName}" FontSize="10" FontWeight="Bold"
                                                            Foreground="{Binding CategoryFgBrush}"/>
                                             </Border>
 
                                             <Border Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                                    CornerRadius="6" Padding="7,2"
+                                                    CornerRadius="9" Padding="7,2"
                                                     Background="{DynamicResource BgElevatedBrush}"
                                                     BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1">
                                                 <TextBlock Text="{Binding Source}" FontSize="10" FontWeight="SemiBold"
@@ -464,8 +464,8 @@
                                                        FontFamily="Consolas, Courier New"/>
 
                                             <Border Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                    Background="#1A6366F1" CornerRadius="6" Padding="10,4"
-                                                    BorderBrush="#336366F1" BorderThickness="1">
+                                                    Background="{DynamicResource VioletBgBrush}" CornerRadius="9" Padding="10,4"
+                                                    BorderBrush="{DynamicResource VioletBorderBrush}" BorderThickness="1">
                                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                                     <ui:SymbolIcon Symbol="Play24" FontSize="12" Foreground="{DynamicResource PrimaryBrush}"
                                                                    Margin="0,0,4,0" VerticalAlignment="Center"/>
@@ -474,8 +474,8 @@
                                                 </StackPanel>
                                             </Border>
 
-                                            <Border Grid.ColumnSpan="6" CornerRadius="8" Margin="-12,-8"
-                                                    Background="#CC08050F"
+                                            <Border Grid.ColumnSpan="6" CornerRadius="12" Margin="-12,-8"
+                                                    Background="{DynamicResource OverlayDangerBrush}"
                                                     Visibility="{Binding IsLaunching, Converter={StaticResource BoolToVis}}">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                     <ui:ProgressRing Width="18" Height="18" IsIndeterminate="True" Foreground="{StaticResource SuccessBrush}"/>
@@ -497,7 +497,7 @@
                     </Grid>
 
                     <Grid Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}}">
-                        <Border CornerRadius="10" Background="#E008050F"/>
+                        <Border CornerRadius="14" Background="{DynamicResource OverlayDangerBrush}"/>
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <ui:ProgressRing IsIndeterminate="True" Width="44" Height="44"
                                              Foreground="{DynamicResource PrimaryBrush}"/>
@@ -536,7 +536,7 @@
 
                         <Grid Margin="0,0,0,16">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <Border Width="28" Height="28" CornerRadius="7" Margin="0,0,8,0"
+                                <Border Width="28" Height="28" CornerRadius="10" Margin="0,0,8,0"
                                         Background="{DynamicResource BgElevatedBrush}"
                                         BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1">
                                     <ui:SymbolIcon Symbol="Apps24" FontSize="14"
@@ -572,7 +572,7 @@
                                            Stretch="Uniform" Margin="8"
                                            Visibility="{Binding SelectedProgram.HasIcon, Converter={StaticResource BoolToVis}}"/>
                                     <TextBlock Text="{Binding SelectedProgram.Name, Converter={StaticResource FirstCharConverter}}"
-                                               FontSize="22" FontWeight="Black" Foreground="{DynamicResource TextAccentBrush}"
+                                               FontSize="26" FontWeight="Black" Foreground="{DynamicResource TextAccentBrush}"
                                                HorizontalAlignment="Center" VerticalAlignment="Center"
                                                Visibility="{Binding SelectedProgram.HasIcon, Converter={StaticResource BoolToVisInv}}"/>
                                 </Grid>
@@ -669,7 +669,7 @@
                             </Button>
                         </Grid>
 
-                        <Border CornerRadius="10" Padding="14,12" Margin="0,0,0,12"
+                        <Border CornerRadius="14" Padding="14,12" Margin="0,0,0,12"
                                 Background="{DynamicResource BgElevatedBrush}"
                                 BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1">
                             <StackPanel>
@@ -681,7 +681,7 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{DynamicResource Programs_Category}" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"/>
 
-                                    <Border Grid.Column="1" HorizontalAlignment="Left" CornerRadius="6" Padding="8,4"
+                                    <Border Grid.Column="1" HorizontalAlignment="Left" CornerRadius="9" Padding="8,4"
                                             Background="{Binding SelectedProgram.CategoryBgBrush}"
                                             BorderBrush="{Binding SelectedProgram.CategoryFgBrush}" BorderThickness="0.8"
                                             VerticalAlignment="Center"
@@ -725,8 +725,8 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{DynamicResource Programs_Source}" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"/>
-                                    <Border Grid.Column="1" HorizontalAlignment="Left" CornerRadius="6" Padding="6,2"
-                                            Background="#20FFFFFF">
+                                    <Border Grid.Column="1" HorizontalAlignment="Left" CornerRadius="9" Padding="6,2"
+                                            Background="{DynamicResource OverlaySoftBrush}">
                                         <TextBlock Text="{Binding SelectedProgram.Source}" FontSize="10" FontWeight="SemiBold"
                                                    Foreground="{DynamicResource TextSecondaryBrush}"/>
                                     </Border>
@@ -750,7 +750,7 @@
                             </StackPanel>
                         </Border>
 
-                        <Border CornerRadius="10" Padding="12,10" Margin="0,0,0,16"
+                        <Border CornerRadius="14" Padding="12,10" Margin="0,0,0,16"
                                 Background="{DynamicResource BgElevatedBrush}"
                                 BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1">
                             <StackPanel>
@@ -778,7 +778,7 @@
 
         <Grid Grid.RowSpan="3" Panel.ZIndex="3000"
               Visibility="{Binding IsManualAddOpen, Converter={StaticResource BoolToVis}}">
-            <Border Background="#CC000000">
+            <Border Background="{DynamicResource OverlayBlackBrush}">
                 <Border.InputBindings>
                     <MouseBinding MouseAction="LeftClick" Command="{Binding CloseManualAddCommand}"/>
                 </Border.InputBindings>
@@ -811,7 +811,7 @@
 
         <Grid Grid.RowSpan="3" Panel.ZIndex="3001"
               Visibility="{Binding IsGenericInputOpen, Converter={StaticResource BoolToVis}}">
-            <Border Background="#CC000000">
+            <Border Background="{DynamicResource OverlayBlackBrush}">
                 <Border.InputBindings>
                     <MouseBinding MouseAction="LeftClick" Command="{Binding CloseGenericInputCommand}"/>
                 </Border.InputBindings>

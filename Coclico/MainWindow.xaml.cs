@@ -32,35 +32,19 @@ public partial class MainWindow : FluentWindow
         public static readonly TimeSpan WindowFadeIn = TimeSpan.FromMilliseconds(400);
     }
 
-    private static string L(string key) => Application.Current?.TryFindResource(key) as string ?? ServiceContainer.GetOptional<LocalizationService>()?.Get(key) ?? key;
 
+    private Storyboard? _ambientStoryboard;
     private TrayService? _trayService;
     private readonly UserAccountService _userService;
     private readonly KeyboardShortcutsService _hotkeyService = ServiceContainer.GetRequired<KeyboardShortcutsService>();
 
     private readonly Dictionary<string, UIElement> _viewCache = new(StringComparer.OrdinalIgnoreCase);
+    private readonly List<string> _viewCacheOrder = [];
 
+    private int _lastHourlyPreloadHour = -1;
     private bool _isChatOpen;
     private bool _isDropdownOpen;
     private GitHubRelease? _pendingUpdate;
-
-    public RadioButton? FindNavButton(string? tag)
-    {
-        return tag switch
-        {
-            "Home" => NavHome,
-            "Programs" => NavPrograms,
-            "DiskAnalyzer" => NavDisk,
-            "HealthDefense" => NavHealthDefense,
-            "Network" => NavNetwork,
-            "Installer" => NavInstaller,
-            "Cleaning" => NavCleaning,
-            "RamCleaner" => NavRamCleaner,
-            "Settings" => NavSettings,
-            "Help" => NavHelp,
-            _ => null
-        };
-    }
 
     public MainWindow()
     {
@@ -76,7 +60,7 @@ public partial class MainWindow : FluentWindow
         {
             _viewCache.Remove("Home");
             LoggingService.LogException(ex, "MainWindow.DashboardInit");
-            MainContentFrame.Content = CreateErrorFallback(L("MainWindow_DashboardLoadError"));
+            MainContentFrame.Content = CreateErrorFallback(Loc.Get("MainWindow_DashboardLoadError"));
         }
 
         RecordStigmergyTransition("Home");
@@ -106,7 +90,6 @@ public partial class MainWindow : FluentWindow
         try
         {
             VersionText.Text = "v" + UpdateCheckService.GetCurrentVersion();
-            ApplyVersionTexts();
 
             ServiceContainer.GetRequired<UpdateCheckService>().UpdateAvailable += OnUpdateAvailable;
         }
@@ -114,9 +97,6 @@ public partial class MainWindow : FluentWindow
 
         ToastService.Initialize(RootSnackbarPresenter);
         InitializeNotifications();
-
-        UserNameText.Text = _userService.DisplayName;
-        UserNameText.Visibility = Visibility.Collapsed;
 
         StateChanged += MainWindow_StateChanged;
         IsVisibleChanged += MainWindow_IsVisibleChanged;
@@ -152,14 +132,34 @@ public partial class MainWindow : FluentWindow
             {
                 CentralUnitService.Current.SetWindowVisible(true);
                 CentralUnitService.Current.SetTrayMinimized(false);
+                ResumeAmbientStoryboard();
             }
             else
             {
                 CentralUnitService.Current.SetWindowVisible(false);
                 CentralUnitService.Current.SetTrayMinimized(true);
+                PauseAmbientStoryboard();
             }
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.IsVisibleChanged"); }
+    }
+
+    private void PauseAmbientStoryboard()
+    {
+        try
+        {
+            _ambientStoryboard?.Pause(this);
+        }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.PauseAmbientStoryboard"); }
+    }
+
+    private void ResumeAmbientStoryboard()
+    {
+        try
+        {
+            _ambientStoryboard?.Resume(this);
+        }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.ResumeAmbientStoryboard"); }
     }
 
     private void MainWindow_StateChanged(object? sender, EventArgs e)
@@ -168,10 +168,12 @@ public partial class MainWindow : FluentWindow
         {
             try { MemoryCleanerService.TrimSelfWorkingSet(); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.MainWindow_StateChanged.TrimWorkingSet"); }
             try { CentralUnitService.Current.SetWindowVisible(false); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.MainWindow_StateChanged.SetWindowVisible"); }
+            PauseAmbientStoryboard();
         }
         else if (IsVisible)
         {
             try { CentralUnitService.Current.SetWindowVisible(true); } catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.MainWindow_StateChanged.SetWindowVisible"); }
+            ResumeAmbientStoryboard();
         }
         UpdateWindowModeButton();
     }
@@ -187,8 +189,19 @@ public partial class MainWindow : FluentWindow
 
         try
         {
+            _ambientStoryboard = (Storyboard)FindResource("AmbientStoryboard");
+            _ambientStoryboard.Begin(this, true);
+            if (!IsVisible)
+            {
+                PauseAmbientStoryboard();
+            }
+        }
+        catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.MainWindow_Loaded.AmbientStoryboard"); }
+
+        try
+        {
             AppSettings? settings = ServiceContainer.GetOptional<SettingsService>()?.Settings;
-            WindowState = settings != null && settings.LaunchMode == "Maximized" ? WindowState.Maximized : WindowState.Normal;
+            WindowState = settings != null && string.Equals(settings.LaunchMode, "Maximized", StringComparison.Ordinal) ? WindowState.Maximized : WindowState.Normal;
             UpdateWindowModeButton();
 
             LocalizationService? locService = ServiceContainer.GetOptional<LocalizationService>();
@@ -239,14 +252,14 @@ public partial class MainWindow : FluentWindow
     {
         try
         {
-            if (shortcut.Action == "ToggleAi" || shortcut.ActionType == "AiChat")
+            if (string.Equals(shortcut.Action, "ToggleAi", StringComparison.Ordinal) || string.Equals(shortcut.ActionType, "AiChat", StringComparison.Ordinal))
             {
                 ToggleChatPanel(!_isChatOpen);
             }
-            else if (shortcut.Action == "RamClean" || shortcut.ActionType == "RamClean")
+            else if (string.Equals(shortcut.Action, "RamClean", StringComparison.Ordinal) || string.Equals(shortcut.ActionType, "RamClean", StringComparison.Ordinal))
             {
                 _ = MemoryCleanerService.FullCleanAsync(true);
-                ToastService.Show(L("MainWindow_RamCleanedShortcut"));
+                ToastService.Show(Loc.Get("MainWindow_RamCleanedShortcut"));
             }
         }
         catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.OnHotkeyTriggered"); }
@@ -259,6 +272,13 @@ public partial class MainWindow : FluentWindow
             if (ServiceContainer.GetRequired<SettingsService>().Settings.MinimizeToTray)
             {
                 e.Cancel = true;
+                _trayService ??= ServiceContainer.GetRequired<TrayService>();
+                if (!_trayService.IsInitialized)
+                {
+                    try { _trayService.Initialize(this); }
+                    catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.OnClosing.InitializeTray"); }
+                }
+
                 Hide();
                 try { CentralUnitService.Current.SetTrayMinimized(true); }
                 catch (Exception ex) when (ex is not System.OutOfMemoryException) { LoggingService.LogException(ex, "MainWindow.OnClosing.SetTrayMinimized"); }
@@ -318,14 +338,14 @@ public partial class MainWindow : FluentWindow
     private void BtnElevateAdmin_Click(object sender, RoutedEventArgs e)
     {
         System.Windows.MessageBoxResult result = System.Windows.MessageBox.Show(
-            L("MainWindow_ElevateAdminPrompt"),
-            L("MainWindow_ElevateAdminTitle"),
+            Loc.Get("MainWindow_ElevateAdminPrompt"),
+            Loc.Get("MainWindow_ElevateAdminTitle"),
             System.Windows.MessageBoxButton.YesNo,
             System.Windows.MessageBoxImage.Question);
 
         if (result == System.Windows.MessageBoxResult.Yes && !App.RestartAsAdmin())
         {
-            ToastService.ShowWarning(L("MainWindow_ElevateAdminFailed"));
+            ToastService.ShowWarning(Loc.Get("MainWindow_ElevateAdminFailed"));
         }
     }
 
@@ -371,16 +391,7 @@ public partial class MainWindow : FluentWindow
 
     private void OnLanguageChanged(string? lang)
     {
-        Dispatcher.Invoke(() =>
-        {
-            UpdateWindowModeButton();
-            ApplyVersionTexts();
-        });
-    }
-
-    private void ApplyVersionTexts()
-    {
-        TxtStudioSubtitle.Text = string.Empty;
+        Dispatcher.Invoke(UpdateWindowModeButton);
     }
 
     private void UpdateWindowModeButton()

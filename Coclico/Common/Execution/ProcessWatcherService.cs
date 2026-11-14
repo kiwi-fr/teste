@@ -2,14 +2,14 @@ using System.Management;
 
 namespace Coclico.Services;
 
-public sealed class ProcessWatcherService : IDisposable
+internal sealed class ProcessWatcherService : IDisposable
 {
     private const string StartQuery = "SELECT * FROM __InstanceCreationEvent WITHIN 3 WHERE TargetInstance ISA 'Win32_Process'";
     private const string StopQuery = "SELECT * FROM __InstanceDeletionEvent WITHIN 3 WHERE TargetInstance ISA 'Win32_Process'";
 
     private ManagementEventWatcher? _startWatcher;
     private ManagementEventWatcher? _stopWatcher;
-    private readonly object _watcherLock = new();
+    private readonly Lock _watcherLock = new();
 
     private EventHandler<string>? _processStarted;
     public event EventHandler<string>? ProcessStarted
