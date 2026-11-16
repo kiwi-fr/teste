@@ -68,7 +68,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="LLamaSharp" Version="0.26.0" />
+    <PackageReference Include="LLamaSharp" Version="0.30.0" />
     <PackageReference Include="LLamaSharp.Backend.Cpu" Version="0.26.0" />
     <PackageReference Include="Meziantou.Analyzer" Version="3.0.339">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
