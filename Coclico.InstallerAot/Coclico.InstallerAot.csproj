@@ -62,7 +62,7 @@
   </ItemGroup>
     <ItemGroup>
     <PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="2.88.9" GeneratePathProperty="true" />
-    <PackageReference Include="HarfBuzzSharp.NativeAssets.Win32" Version="8.3.1.1" GeneratePathProperty="true" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.Win32" Version="14.4.0.101" GeneratePathProperty="true" />
     <!-- ANGLE retire : aucun UseAngle dans le code, l'installeur rend en Skia logiciel -->
   </ItemGroup>
   <ItemGroup>
